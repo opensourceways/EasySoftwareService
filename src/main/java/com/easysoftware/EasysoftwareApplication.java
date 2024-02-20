@@ -13,7 +13,7 @@ import com.baomidou.mybatisplus.autoconfigure.DdlApplicationRunner;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.easysoftware.*"})
-@MapperScan("com.easysoftware.mapper")
+@MapperScan("com.easysoftware.infrastructure.mapper")
 public class EasysoftwareApplication {
 
 	public static void main(String[] args) {
@@ -23,5 +23,5 @@ public class EasysoftwareApplication {
 	@Bean
  	public DdlApplicationRunner ddlApplicationRunner(@Autowired(required = false) List ddlList) {
         return new DdlApplicationRunner(ddlList);
- }
+    }
 }
