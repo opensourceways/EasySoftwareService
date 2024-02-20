@@ -44,7 +44,7 @@ RUN dnf install -y wget \
     && wget https://mirrors.tuna.tsinghua.edu.cn/Adoptium/17/jre/x64/linux/OpenJDK17U-jre_x64_linux_hotspot_17.0.10_7.tar.gz \
     && tar -zxvf OpenJDK17U-jre_x64_linux_hotspot_17.0.10_7.tar.gz
 
-RUN && rm -rf /usr/bin/gdb* \
+RUN rm -rf /usr/bin/gdb* \
     && rm -rf /usr/share/gdb \
     && rm -rf /usr/share/gcc-10.3.1 \
 	&& yum remove gdb-gdbserver findutils passwd shadow -y \
@@ -59,4 +59,4 @@ EXPOSE 8080
 
 USER easysoftware
 
-CMD java -jar ${WORKSPACE}/target/EasySoftware-0.0.1-SNAPSHOT.jar --spring.config.location=${APPLICATION_PATH}
+CMD java -jar ${WORKSPACE}/target/easysoftware-0.0.1-SNAPSHOT.jar --spring.config.location=${APPLICATION_PATH}
