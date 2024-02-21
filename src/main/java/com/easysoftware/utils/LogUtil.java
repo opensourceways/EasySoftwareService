@@ -1,6 +1,7 @@
 package com.easysoftware.utils;
 
 import com.easysoftware.vo.ManagementLog;
+import com.easysoftware.vo.ResultVo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.aspectj.lang.JoinPoint;
@@ -14,7 +15,6 @@ import lombok.SneakyThrows;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 
 public class LogUtil {
     private static final Logger logger = LoggerFactory.getLogger(LogUtil.class);
@@ -39,11 +39,11 @@ public class LogUtil {
         log.setAppIP(ClientUtil.getClientIpAddress(request));
 
         if (returnObject instanceof ResponseEntity) {
-            ResponseEntity responseEntity = (ResponseEntity) returnObject;
-            log.setStatus(responseEntity.getStatusCodeValue());
-            if (responseEntity.getBody() instanceof HashMap) {
-                HashMap<String, Object> body = (HashMap) responseEntity.getBody();
-                Object msg = (body.get("msg") == null) ? body.get("message") : body.get("msg");
+            ResponseEntity<Object> responseEntity = (ResponseEntity<Object>) returnObject;
+            log.setStatus(responseEntity.getStatusCode().value());
+            if (responseEntity.getBody() instanceof ResultVo) {
+                ResultVo body = (ResultVo) responseEntity.getBody();
+                Object msg = body.getMsg();
                 log.setMessage((msg == null) ? "" : msg.toString());
             }
         }
