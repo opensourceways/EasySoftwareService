@@ -71,7 +71,7 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
 
         List<String> deletedNames = new ArrayList<>(); 
         for (String name : existedNames) {
-            boolean deleted = appPkgGateway.delete(names);
+            boolean deleted = appPkgGateway.delete(name);
             if (deleted) {
                 deletedNames.add(name);
             }
