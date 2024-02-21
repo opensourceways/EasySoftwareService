@@ -23,7 +23,7 @@ public class ManagementLogAOP {
     private HttpServletResponse response;
 
     //定义切点
-    @Pointcut("execution(* com.easysoftware.adapter.*.*(..))")
+    @Pointcut("execution(* com.easysoftware.adapter.query.*.*(..))")
     public void pointcut() {
     }
 

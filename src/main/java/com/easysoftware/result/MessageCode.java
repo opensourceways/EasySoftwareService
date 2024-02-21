@@ -18,8 +18,14 @@ import java.util.stream.Collectors;
 public enum MessageCode {
     // client exception
     EC0001("EC0001", "Request Error", "请求异常"),
-    EC0005("EC0002", "Wrong parameter", "参数错误"),
-    EC0009("EC0003", "Unsupported community", "不支持该community"),
+    EC0002("EC0002", "Wrong parameter", "参数错误"),
+    EC0003("EC0003", "Unsupported community", "不支持该community"),
+    EC0004("EC0004", "Update failed", "更新失败"),
+    EC0005("EC0005", "Delete failed", "删除失败"),
+    EC0006("EC0006", "Insert failed", "插入失败"),
+    EC0007("EC0007", "query failed", "查找失败"),
+    EC0008("EC0008", "Item existed", "项目已存在"),
+    EC0009("EC0009", "Item not existed", "项目不存在"),
 
     // self service exception
     ES0001("ES0001", "Internal Server Error", "服务异常");
