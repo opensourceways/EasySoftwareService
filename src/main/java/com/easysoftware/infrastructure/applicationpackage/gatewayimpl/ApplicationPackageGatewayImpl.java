@@ -20,9 +20,9 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
     private ApplicationPackageDOMapper appPkgMapper;
 
     @Override
-    public boolean delete(List<String> names) {
+    public boolean delete(String name) {
         QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
-        wrapper.in("name", names);
+        wrapper.eq("name", name);
         int mark = appPkgMapper.delete(wrapper);
         return mark == 1;
     }
