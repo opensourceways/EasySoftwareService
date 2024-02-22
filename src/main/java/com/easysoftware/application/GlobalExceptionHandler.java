@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.easysoftware.domain.common.exception.EnumValidException;
 import com.easysoftware.result.MessageCode;
 import com.easysoftware.result.Result;
 
@@ -21,7 +22,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Object> exception(MethodArgumentNotValidException e) {
-        logger.error(MessageCode.EC0001.getMsgEn(), e);
+        logger.error(MessageCode.EC0002.getMsgEn());
+        return Result.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
+    }
+
+    @ExceptionHandler(EnumValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> exception(EnumValidException e) {
+        logger.error(MessageCode.EC0002.getMsgEn());
         MessageCode messageCode = MessageCode.msgCodeMap.get(e.getMessage());
         return Result.fail(HttpStatus.BAD_REQUEST, messageCode);
     }

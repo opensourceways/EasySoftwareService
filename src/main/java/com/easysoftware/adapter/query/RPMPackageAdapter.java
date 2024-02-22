@@ -3,6 +3,7 @@ package com.easysoftware.adapter.query;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,27 +28,27 @@ public class RPMPackageAdapter {
     @Autowired
     private RPMPackageService rPMPkgService;
 
-    @PostMapping("")
-    public String insertRPMPkg(@Valid @RequestBody InputRPMPackage inputrPMPackage) {
-        String res = rPMPkgService.insertRPMPkg(inputrPMPackage);
-        return res;
-    }
+    // @PostMapping("")
+    // public ResponseEntity<Object> insertRPMPkg(@Valid @RequestBody InputRPMPackage inputrPMPackage) {
+    //     ResponseEntity<Object> res = rPMPkgService.insertRPMPkg(inputrPMPackage);
+    //     return res;
+    // }
 
-    @PutMapping()
-    public String updateRPMPkg(@Valid @RequestBody InputRPMPackage inputrPMPackage) {
-        String res = rPMPkgService.updateRPMPkg(inputrPMPackage);
-        return res;
-    }
+    // @PutMapping()
+    // public ResponseEntity<Object> updateRPMPkg(@Valid @RequestBody InputRPMPackage inputrPMPackage) {
+    //     ResponseEntity<Object> res = rPMPkgService.updateRPMPkg(inputrPMPackage);
+    //     return res;
+    // }
 
-    @DeleteMapping(value = "/{names}")
-    public String deleteRPMPkg(@PathVariable List<String> names) {
-        String res = rPMPkgService.deleteRPMPkg(names);
-        return res;
-    }
+    // @DeleteMapping(value = "/{names}")
+    // public ResponseEntity<Object> deleteRPMPkg(@PathVariable List<String> names) {
+    //     ResponseEntity<Object> res = rPMPkgService.deleteRPMPkg(names);
+    //     return res;
+    // }
 
     @GetMapping()
-    public String searchRPMPkg(@Valid RPMPackageSearchCondition condition) {
-        String res = rPMPkgService.searchRPMPkg(condition);
+    public ResponseEntity<Object> searchRPMPkg(@Valid RPMPackageSearchCondition condition) {
+        ResponseEntity<Object> res = rPMPkgService.searchRPMPkg(condition);
         return res;
     }
 }
