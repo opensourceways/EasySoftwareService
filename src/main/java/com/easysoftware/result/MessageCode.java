@@ -26,6 +26,7 @@ public enum MessageCode {
     EC0007("EC0007", "query failed", "查找失败"),
     EC0008("EC0008", "Item existed", "项目已存在"),
     EC0009("EC0009", "Item not existed", "项目不存在"),
+    EC00010("EC00010", "Request exceeds the limit", "请求超过限制"),
 
     // self service exception
     ES0001("ES0001", "Internal Server Error", "服务异常");
