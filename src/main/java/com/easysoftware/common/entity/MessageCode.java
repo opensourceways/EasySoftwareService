@@ -9,7 +9,7 @@
  Create: 2024
 */
 
-package com.easysoftware.result;
+package com.easysoftware.common.entity;
 
 import java.util.Arrays;
 import java.util.Map;

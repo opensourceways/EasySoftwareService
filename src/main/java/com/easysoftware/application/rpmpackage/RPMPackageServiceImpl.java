@@ -5,13 +5,15 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.easysoftware.application.rpmpackage.dto.InputRPMPackage;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
+import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
-import com.easysoftware.domain.common.utils.HttpResult;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 
@@ -23,7 +25,7 @@ public class RPMPackageServiceImpl implements RPMPackageService {
     RPMPackageGateway rPMPkgGateway;
 
     @Override
-    public String deleteRPMPkg(List<String> names) {
+    public ResponseEntity<Object> deleteRPMPkg(List<String> names) {
         List<String> existedNames = new ArrayList<>();
         for (String name : names) {
             boolean found = rPMPkgGateway.existRPM(name);
@@ -42,47 +44,47 @@ public class RPMPackageServiceImpl implements RPMPackageService {
 
         String msg = String.format("请求删除的数据: %s, 在数据库中的数据: %s, 成功删除的数据: %s"
                 , names.toString(), existedNames.toString(), deletedNames.toString());
-        return HttpResult.ok(msg, null);
+        return ResultUtil.success(HttpStatus.OK);
     }
 
     @Override
-    public String insertRPMPkg(InputRPMPackage inputrPMPackage) {
+    public ResponseEntity<Object> insertRPMPkg(InputRPMPackage inputrPMPackage) {
         // 数据库中是否已存在该包
         boolean found = rPMPkgGateway.existRPM(inputrPMPackage.getName());
         if (found) {
-            return HttpResult.fail(HttpStatus.BAD_REQUEST.value(), "请求的包已存在", null);
+            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0008);
         }
         RPMPackage rPMPkg = new RPMPackage();
         BeanUtils.copyProperties(inputrPMPackage, rPMPkg);
 
         boolean succeed = rPMPkgGateway.save(rPMPkg);
         if (!succeed) {
-            return HttpResult.fail(HttpStatus.BAD_REQUEST.value(), "新增数据失败", null);
+            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0006);
         }
-        return HttpResult.ok("新增1条数据", null);
+        return ResultUtil.success(HttpStatus.OK);
     }
 
     @Override
-    public String searchRPMPkg(RPMPackageSearchCondition condition) {
+    public ResponseEntity<Object> searchRPMPkg(RPMPackageSearchCondition condition) {
         List<RPMPackage> res = rPMPkgGateway.queryByName(condition);
-        return HttpResult.ok("完成查询数据", res);
+        return ResultUtil.success(HttpStatus.OK, res);
     }
 
     @Override
-    public String updateRPMPkg(InputRPMPackage inputrPMPackage) {
+    public ResponseEntity<Object> updateRPMPkg(InputRPMPackage inputrPMPackage) {
         // 数据库中是否已存在该包
         boolean found = rPMPkgGateway.existRPM(inputrPMPackage.getName());
         if (!found) {
-            return HttpResult.fail(HttpStatus.BAD_REQUEST.value(), "请求的包不存在", null);
+            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0009);
         }
         RPMPackage rPMPkg = new RPMPackage();
         BeanUtils.copyProperties(inputrPMPackage, rPMPkg);
 
         boolean succeed = rPMPkgGateway.update(rPMPkg);
         if (!succeed) {
-            return HttpResult.fail(HttpStatus.BAD_REQUEST.value(), "更新数据失败", null);
+            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0004);
         }
-        return HttpResult.ok("更新1条数据", null);
+        return ResultUtil.success(HttpStatus.OK);
     }
     
 }
