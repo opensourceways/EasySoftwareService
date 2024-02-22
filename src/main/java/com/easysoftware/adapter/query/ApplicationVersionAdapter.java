@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.easysoftware.aop.LimitRequest;
 import com.easysoftware.application.applicationversion.ApplicationVersionService;
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
 import com.easysoftware.application.applicationversion.dto.InputApplicationVersion;
@@ -26,24 +27,28 @@ public class ApplicationVersionAdapter {
     private ApplicationVersionService appVersionService;
 
     @PostMapping("")
+    @LimitRequest(callTime = 10, callCount = 30)
     public ResponseEntity<Object> insertAppVersion(@Valid @RequestBody InputApplicationVersion inputAppVersion) {
         ResponseEntity<Object> res = appVersionService.insertAppVersion(inputAppVersion);
         return res;
     }
 
     @PutMapping()
+    @LimitRequest()
     public ResponseEntity<Object> updateAppVersion(@Valid @RequestBody InputApplicationVersion inputAppVersion) {
         ResponseEntity<Object> res = appVersionService.updateAppVersion(inputAppVersion);
         return res;
     }
 
     @DeleteMapping(value = "/{names}")
+    @LimitRequest()
     public ResponseEntity<Object> deleteAppVersion(@PathVariable List<String> names) {
         ResponseEntity<Object> res = appVersionService.deleteAppVersion(names);
         return res;
     }
 
     @GetMapping()
+    @LimitRequest()
     public ResponseEntity<Object> searchAppVersion(@Valid ApplicationVersionSearchCondition condition) {
         ResponseEntity<Object> res = appVersionService.searchAppVersion(condition);
         return res;
