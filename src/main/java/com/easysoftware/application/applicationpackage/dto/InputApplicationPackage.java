@@ -1,4 +1,7 @@
 package com.easysoftware.application.applicationpackage.dto;
+import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
+import com.easysoftware.common.exception.enumvalid.EnumValue;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -32,4 +35,7 @@ public class InputApplicationPackage {
 
     @Size(max = 10000, message = "the length of dependencyPkgs can not exceed 10000")
     private String dependencyPkgs;
+
+    @EnumValue(enumClass = AppCategoryEnum.class, enumMethod = "isValidCategory")
+    private String appCategory;
 }

@@ -58,17 +58,19 @@ public class RPMPackage {
 
     private String name;
 
-    private String pkgOrApp;
-
     private String timeBuild;
 
     private String arch;
-
-    private String pkgType;
 
     private String osName;
 
     private String osVer;
     
     private String osType;
+
+    private String files;
+
+    private String provides;
+
+    private String requires;
 }
