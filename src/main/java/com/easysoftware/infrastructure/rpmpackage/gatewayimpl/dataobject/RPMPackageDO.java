@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("rpm_package")
+@TableName("rpm_pkg_base")
 public class RPMPackageDO {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -72,17 +72,19 @@ public class RPMPackageDO {
 
     private String name;
 
-    private String pkgOrApp;
-
     private String timeBuild;
 
     private String arch;
-
-    private String pkgType;
 
     private String osName;
 
     private String osVer;
 
     private String osType;
+
+    private String files;
+
+    private String provides;
+
+    private String requires;
 }

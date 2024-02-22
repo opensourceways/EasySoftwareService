@@ -13,7 +13,7 @@ import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.applicationversion.ApplicationVersion;
 import com.easysoftware.domain.applicationversion.gateway.ApplicationVersionGateway;
-import com.easysoftware.domain.compatible.gateway.CompatibleGateway;
+// import com.easysoftware.domain.compatible.gateway.CompatibleGateway;
 
 import jakarta.annotation.Resource;
 
@@ -22,8 +22,8 @@ public class ApplicationVersionServiceImpl implements ApplicationVersionService 
     @Resource
     ApplicationVersionGateway AppVersionGateway;
 
-    @Resource
-    CompatibleGateway compatibleGateway;
+    // @Resource
+    // CompatibleGateway compatibleGateway;
 
     public String getCompatible(String name) {
         return null;
