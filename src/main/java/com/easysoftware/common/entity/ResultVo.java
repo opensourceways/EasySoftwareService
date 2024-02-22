@@ -1,4 +1,4 @@
-package com.easysoftware.vo;
+package com.easysoftware.common.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.easysoftware.domain.common.exception;
+package com.easysoftware.common.exception;
 
 public class MyJacksonException extends RuntimeException {
     private static final long serialVersionUID = 1L;

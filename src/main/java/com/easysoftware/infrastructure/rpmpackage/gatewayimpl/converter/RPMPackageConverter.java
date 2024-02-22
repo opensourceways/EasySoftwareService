@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
+import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
-import com.easysoftware.domain.common.utils.UuidUtil;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;

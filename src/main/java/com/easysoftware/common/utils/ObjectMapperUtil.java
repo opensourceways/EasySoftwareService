@@ -1,6 +1,6 @@
-package com.easysoftware.domain.common.utils;
+package com.easysoftware.common.utils;
 
-import com.easysoftware.domain.common.exception.MyJacksonException;
+import com.easysoftware.common.exception.MyJacksonException;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;

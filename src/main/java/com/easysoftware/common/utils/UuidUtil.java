@@ -1,4 +1,4 @@
-package com.easysoftware.domain.common.utils;
+package com.easysoftware.common.utils;
 
 import java.util.UUID;
 
