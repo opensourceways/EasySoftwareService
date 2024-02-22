@@ -18,7 +18,6 @@ public class MyErrorController implements ErrorController{
 
     @RequestMapping(value = ERROR_PATH)
     public ResponseEntity<Object> errorHtml(HttpServletRequest request, HttpServletResponse response) {
-        int status = response.getStatus();
         return ResultUtil.fail(HttpStatus.NOT_FOUND, MessageCode.EC0001);
     }
 }

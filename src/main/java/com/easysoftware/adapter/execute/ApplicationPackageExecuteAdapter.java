@@ -1,11 +1,10 @@
-package com.easysoftware.adapter.query;
+package com.easysoftware.adapter.execute;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,14 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.easysoftware.application.applicationpackage.ApplicationPackageService;
-import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.dto.InputApplicationPackage;
 
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/apppkg")
-public class ApplicationPackageAdapter {
+public class ApplicationPackageExecuteAdapter {
     @Autowired
     private ApplicationPackageService appPkgService;
 
@@ -42,11 +40,4 @@ public class ApplicationPackageAdapter {
         ResponseEntity<Object> res = appPkgService.deleteAppPkg(names);
         return res;
     }
-
-    @GetMapping()
-    public ResponseEntity<Object> searchAppPkg(@Valid ApplicationPackageSearchCondition condition) {
-        ResponseEntity<Object> res = appPkgService.searchAppPkg(condition);
-        return res;
-    }
-    
 }
