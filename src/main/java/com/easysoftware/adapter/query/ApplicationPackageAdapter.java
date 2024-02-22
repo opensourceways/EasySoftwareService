@@ -3,6 +3,7 @@ package com.easysoftware.adapter.query;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,26 +26,26 @@ public class ApplicationPackageAdapter {
     private ApplicationPackageService appPkgService;
 
     @PostMapping("")
-    public String insertAppPkg(@Valid @RequestBody InputApplicationPackage inputAppPackage) {
-        String res = appPkgService.insertAppPkg(inputAppPackage);
+    public ResponseEntity<Object> insertAppPkg(@Valid @RequestBody InputApplicationPackage inputAppPackage) {
+        ResponseEntity<Object> res = appPkgService.insertAppPkg(inputAppPackage);
         return res;
     }
 
     @PutMapping()
-    public String updateAppPkg(@Valid @RequestBody InputApplicationPackage inputAppPackage) {
-        String res = appPkgService.updateAppPkg(inputAppPackage);
+    public ResponseEntity<Object> updateAppPkg(@Valid @RequestBody InputApplicationPackage inputAppPackage) {
+        ResponseEntity<Object> res = appPkgService.updateAppPkg(inputAppPackage);
         return res;
     }
 
     @DeleteMapping(value = "/{names}")
-    public String deleteAppPkg(@PathVariable List<String> names) {
-        String res = appPkgService.deleteAppPkg(names);
+    public ResponseEntity<Object> deleteAppPkg(@PathVariable List<String> names) {
+        ResponseEntity<Object> res = appPkgService.deleteAppPkg(names);
         return res;
     }
 
     @GetMapping()
-    public String searchAppPkg(@Valid ApplicationPackageSearchCondition condition) {
-        String res = appPkgService.searchAppPkg(condition);
+    public ResponseEntity<Object> searchAppPkg(@Valid ApplicationPackageSearchCondition condition) {
+        ResponseEntity<Object> res = appPkgService.searchAppPkg(condition);
         return res;
     }
     
