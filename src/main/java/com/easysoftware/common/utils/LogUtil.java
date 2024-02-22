@@ -1,7 +1,7 @@
-package com.easysoftware.utils;
+package com.easysoftware.common.utils;
 
-import com.easysoftware.vo.ManagementLog;
-import com.easysoftware.vo.ResultVo;
+import com.easysoftware.aop.ManagementLog;
+import com.easysoftware.common.entity.ResultVo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.aspectj.lang.JoinPoint;

@@ -11,8 +11,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import com.easysoftware.result.MessageCode;
-import com.easysoftware.result.Result;
+import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.utils.ResultUtil;
 
 @Aspect
 @Component
@@ -27,7 +27,7 @@ public class LimitRequestAspect {
     @Around(value = "exudeService(limitRequest)", argNames = "joinPoint,limitRequest")
     public Object before(ProceedingJoinPoint joinPoint, LimitRequest limitRequest) throws Throwable {
         if (!isAllowed(joinPoint.getSignature().getName(), limitRequest)) {
-            return Result.fail(HttpStatus.TOO_MANY_REQUESTS, MessageCode.EC00010);
+            return ResultUtil.fail(HttpStatus.TOO_MANY_REQUESTS, MessageCode.EC00010);
         }
 
         return joinPoint.proceed();

@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
+import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.applicationversion.ApplicationVersion;
-import com.easysoftware.domain.common.utils.UuidUtil;
 import com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobject.ApplicationVersionDO;
 
 public class ApplicationVersionConvertor {

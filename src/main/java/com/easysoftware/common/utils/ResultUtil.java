@@ -9,18 +9,18 @@
  Create: 2024
 */
 
-package com.easysoftware.result;
+package com.easysoftware.common.utils;
 
 import java.util.HashMap;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.easysoftware.vo.ResultMsgVo;
-import com.easysoftware.vo.ResultVo;
+import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.entity.ResultMsgVo;
+import com.easysoftware.common.entity.ResultVo;
 
-
-public class Result {
+public class ResultUtil {
     public static ResponseEntity<Object> success(HttpStatus status) {
         ResultVo res = new ResultVo()
                 .setCode(status.value())
