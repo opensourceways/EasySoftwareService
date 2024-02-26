@@ -35,9 +35,9 @@ public class RPMPackageExecuteAdapter {
         return res;
     }
 
-    @DeleteMapping(value = "/{names}")
-    public ResponseEntity<Object> deleteRPMPkg(@PathVariable List<String> names) {
-        ResponseEntity<Object> res = rPMPkgService.deleteRPMPkg(names);
+    @DeleteMapping(value = "/{ids}")
+    public ResponseEntity<Object> deleteRPMPkg(@PathVariable List<String> ids) {
+        ResponseEntity<Object> res = rPMPkgService.deleteRPMPkg(ids);
         return res;
     }
 }
