@@ -97,6 +97,12 @@
 			<scope>test</scope>
 		</dependency>
 
+        <dependency>
+            <groupId>com.github.shalousun</groupId>
+            <artifactId>common-util</artifactId>
+            <version>1.9.2</version>
+        </dependency>
+
 	</dependencies>
 
 	<build>

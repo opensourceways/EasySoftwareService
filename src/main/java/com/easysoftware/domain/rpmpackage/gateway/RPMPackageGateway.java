@@ -4,11 +4,13 @@ import java.util.List;
 
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
+import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 
 public interface RPMPackageGateway {
-    boolean existRPM(String name);
+    boolean existRPM(RPMPackageUnique unique);
+    boolean existRPM(String id);
     boolean save(RPMPackage appPkg);
     boolean update(RPMPackage appPkg);
-    boolean delete(String name);
+    boolean delete(String id);
     List<RPMPackage> queryByName(RPMPackageSearchCondition condition);
 }
