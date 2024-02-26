@@ -31,4 +31,11 @@ public class GlobalExceptionHandler {
         logger.error(MessageCode.EC0002.getMsgEn());
         return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
     }
+
+    @ExceptionHandler(AppPkgIconException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> exception(AppPkgIconException e) {
+        logger.error(MessageCode.EC0009.getMsgEn());
+        return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0009);
+    }
 }

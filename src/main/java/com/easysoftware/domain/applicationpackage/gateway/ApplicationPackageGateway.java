@@ -11,5 +11,6 @@ public interface ApplicationPackageGateway {
     boolean update(ApplicationPackage appPkg);
     boolean delete(String name);
     List<ApplicationPackage> queryByName(ApplicationPackageSearchCondition condition);
+    byte[] getAppPkgIcon(String name);
 }
 
