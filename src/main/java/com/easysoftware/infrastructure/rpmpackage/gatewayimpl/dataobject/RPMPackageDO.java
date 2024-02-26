@@ -87,4 +87,8 @@ public class RPMPackageDO {
     private String provides;
 
     private String requires;
+
+    private String baseUrl;
+
+    private String rpmCategory;
 }
