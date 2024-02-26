@@ -12,7 +12,7 @@
 package com.easysoftware.common.utils;
 
 import java.util.HashMap;
-
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -36,6 +36,10 @@ public class ResultUtil {
                         .setMsgEn(msgCode.getMsgEn())
                         .setMsgZh(msgCode.getMsgZh()));
         return new ResponseEntity<>(res, status);
+    }
+
+    public static ResponseEntity<Object> success(HttpStatus status, HttpHeaders headers, Object data) {
+        return new ResponseEntity<>(data, headers, status);
     }
 
     public static ResponseEntity<Object> success(HttpStatus status, Object data) {
