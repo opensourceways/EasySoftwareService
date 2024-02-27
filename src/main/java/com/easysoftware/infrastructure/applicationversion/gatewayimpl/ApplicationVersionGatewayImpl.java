@@ -64,6 +64,7 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
 
         QueryWrapper<ApplicationVersionDO> wrapper = new QueryWrapper<>();
         if ("all".equals(name)) {
+            wrapper = null;
         } else {
             wrapper.eq("name", name);
         }
