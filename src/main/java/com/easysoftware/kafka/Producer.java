@@ -7,10 +7,9 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
-
-@Repository
+@Service
 public class Producer {
     @Value("${bootstrap.servers}")
     String bootstrapServers;

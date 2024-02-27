@@ -2,6 +2,7 @@ package com.easysoftware.kafka;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -14,17 +15,21 @@ import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
+import com.easysoftware.application.applicationversion.ApplicationVersionService;
+import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.domain.applicationversion.ApplicationVersion;
 import com.easysoftware.domain.applicationversion.gateway.ApplicationVersionGateway;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.easysoftware.infrastructure.applicationversion.gatewayimpl.converter.ApplicationVersionConvertor;
+import com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobject.ApplicationVersionDO;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 
-@Repository
+@Service
 public class MyConsumer {
     @Value("${consumer.topic.name}")
     String topicNames;
@@ -44,12 +49,13 @@ public class MyConsumer {
     @Value("${consumer.enableAutoCommit}")
     String enableAutoCommit;
 
+    @Autowired
+    private ApplicationVersionService appVersionService;
 
     @Resource
     ApplicationVersionGateway AppVersionGateway;
 
     private static ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-    private static ObjectMapper objectMapper = new ObjectMapper();
     private static final Logger logger = LoggerFactory.getLogger(MyConsumer.class); 
     protected ArrayList<KafkaConsumer<String,String>>  KafkaConsumerList= new ArrayList<>();
     public static KafkaConsumer<String, String> consumer;
@@ -71,7 +77,7 @@ public class MyConsumer {
     public void KafkaToMysql() {
         for (KafkaConsumer<String, String> customer : KafkaConsumerList) {
             ConsumerRecords<String, String> poll = customer.poll(2);
-            dealData(poll);
+            dealDataByBatch(poll);
             customer.commitSync();
         }
     }
@@ -80,7 +86,7 @@ public class MyConsumer {
         for (ConsumerRecord<String, String> record : records) {
             String value = record.value();
             try {
-                ApplicationVersion appVersion = objectMapper.readValue(value, ApplicationVersion.class);
+                ApplicationVersion appVersion = ObjectMapperUtil.jsonToObject(value, ApplicationVersion.class);
                 boolean found = AppVersionGateway.existApp(appVersion.getName());
                 if (found) {
                     logger.info(String.format("The software %s is existed", appVersion.getName()));
@@ -93,6 +99,32 @@ public class MyConsumer {
                 logger.error(e.getMessage() + ":" + value, e);
             }
         }
+    }
+
+    public void dealDataByBatch(ConsumerRecords<String, String> records) {
+        Collection<ApplicationVersionDO> appList = new ArrayList<>();
+        int partition = 0;
+        long offset = 0;
+        for (ConsumerRecord<String, String> record : records) {
+            String value = record.value();
+            try {
+                ApplicationVersion appVersion = ObjectMapperUtil.jsonToObject(value, ApplicationVersion.class);
+                boolean found = AppVersionGateway.existApp(appVersion.getName());
+                if (found) {
+                    logger.info(String.format("The software %s is existed", appVersion.getName()));
+                    continue;
+                }
+                ApplicationVersionDO appVersionDO = ApplicationVersionConvertor.toDataObjectForCreate(appVersion);
+                appList.add(appVersionDO);
+                partition = record.partition();
+                offset = record.offset();
+
+            } catch (Exception e) {
+                logger.error(e.getMessage() + ":" + value, e);
+            }
+        }
+        logger.info("partation: " + partition + ", offset: " + offset);
+        appVersionService.saveBatch(appList);
     }
 
     public void initConsumer() {
