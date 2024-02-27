@@ -59,6 +59,14 @@ public class ObjectMapperUtil {
         }
     }
 
+    public static <T> T jsonToObject(String json, Class<T> valueType) {
+        try {
+            return objectMapper.readValue(json, valueType);
+        } catch (Exception e) {
+            throw new MyJacksonException("字符串转化Java对象时异常");
+        }
+    }
+
     public static String writeValueAsStringForNull(Object obj) {
         objectMapper
                 .getSerializerProvider()
