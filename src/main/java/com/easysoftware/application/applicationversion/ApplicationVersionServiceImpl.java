@@ -3,22 +3,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
 import com.easysoftware.application.applicationversion.dto.InputApplicationVersion;
 import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
+import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.applicationversion.ApplicationVersion;
 import com.easysoftware.domain.applicationversion.gateway.ApplicationVersionGateway;
 import com.easysoftware.domain.compatible.gateway.CompatibleGateway;
+import com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobject.ApplicationVersionDO;
+import com.easysoftware.infrastructure.mapper.ApplicationVersionDOMapper;
+import com.easysoftware.kafka.Producer;
 
 import jakarta.annotation.Resource;
 
 @Service
-public class ApplicationVersionServiceImpl implements ApplicationVersionService {
+public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersionDOMapper, ApplicationVersionDO> implements ApplicationVersionService {
+    @Autowired
+    Producer kafkaProducer;
+
+    @Value("${producer.topic}")
+    String topicAppVersion;
+
     @Resource
     ApplicationVersionGateway AppVersionGateway;
 
@@ -39,10 +53,13 @@ public class ApplicationVersionServiceImpl implements ApplicationVersionService 
         ApplicationVersion AppVersion = new ApplicationVersion();
         BeanUtils.copyProperties(inputAppVersion, AppVersion);
 
-        boolean succeed = AppVersionGateway.save(AppVersion);
-        if (!succeed) {
-            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0006);
-        }
+        kafkaProducer.sendMess(topicAppVersion, UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(AppVersion));
+
+        // boolean succeed = AppVersionGateway.save(AppVersion);
+        // if (!succeed) {
+        //     return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0006);
+        // }
+
         // 同步更新兼容版本状态
         // InputCompatible inputCompatible = new InputCompatible();
         // inputCompatible.setName(inputAppVersion.getName());
