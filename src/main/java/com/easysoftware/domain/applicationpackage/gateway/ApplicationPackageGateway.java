@@ -3,6 +3,8 @@ package com.easysoftware.domain.applicationpackage.gateway;
 import java.util.List;
 
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
+import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
+import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 
 public interface ApplicationPackageGateway {
@@ -10,7 +12,6 @@ public interface ApplicationPackageGateway {
     boolean save(ApplicationPackage appPkg);
     boolean update(ApplicationPackage appPkg);
     boolean delete(String name);
-    List<ApplicationPackage> queryByName(ApplicationPackageSearchCondition condition);
-    byte[] getAppPkgIcon(String name);
+    List<ApplicationPackageMenuVo> queryMenuByName(ApplicationPackageSearchCondition condition);
+    List<ApplicationPackageDetailVo> queryDetailByName(ApplicationPackageSearchCondition condition);
 }
-

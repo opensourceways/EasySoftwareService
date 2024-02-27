@@ -1,4 +1,4 @@
-package com.easysoftware.application.applicationpackage.dto;
+package com.easysoftware.application.domainpackage.dto;
 import org.hibernate.validator.constraints.URL;
 
 import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InputApplicationPackage {
+public class InputDomainPackage {
     @Size(max = 10000, message = "the length of description can not exceed 10000")
     public String description;
 
