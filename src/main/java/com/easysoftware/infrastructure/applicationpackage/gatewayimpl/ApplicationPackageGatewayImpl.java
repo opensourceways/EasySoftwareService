@@ -1,19 +1,15 @@
 package com.easysoftware.infrastructure.applicationpackage.gatewayimpl;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Base64;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
-import com.easysoftware.common.exception.AppPkgIconException;
+import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
+import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter.ApplicationPackageConvertor;
@@ -65,7 +61,23 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
     }
 
     @Override
-    public List<ApplicationPackage> queryByName(ApplicationPackageSearchCondition condition) {
+    public List<ApplicationPackageMenuVo> queryMenuByName(ApplicationPackageSearchCondition condition) {
+        int pageNum = condition.getPageNum();
+        int pageSize = condition.getPageSize();
+
+        Page<ApplicationPackageDO> page = new Page<>(pageNum, pageSize);
+
+        QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
+
+        Page<ApplicationPackageDO> resPage = appPkgMapper.selectPage(page, wrapper);
+        List<ApplicationPackageDO> appDOs = resPage.getRecords();
+        List<ApplicationPackageMenuVo> res = ApplicationPackageConvertor.toMenu(appDOs);
+
+        return res;
+    }
+
+    @Override
+    public List<ApplicationPackageDetailVo> queryDetailByName(ApplicationPackageSearchCondition condition) {
         int pageNum = condition.getPageNum();
         int pageSize = condition.getPageSize();
         String name = condition.getName();
@@ -73,29 +85,12 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         Page<ApplicationPackageDO> page = new Page<>(pageNum, pageSize);
 
         QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
-        if ("all".equals(name)) {
-        } else {
-            wrapper.eq("name", name);
-        }
-        
+        wrapper.eq("name", name);
+
         Page<ApplicationPackageDO> resPage = appPkgMapper.selectPage(page, wrapper);
         List<ApplicationPackageDO> appDOs = resPage.getRecords();
-        List<ApplicationPackage> res = ApplicationPackageConvertor.toEntity(appDOs);
-        
+        List<ApplicationPackageDetailVo> res = ApplicationPackageConvertor.toDetail(appDOs);
+
         return res;
     }
-
-    @Override
-    public byte[] getAppPkgIcon(String name) {
-        byte[] fileContent = null;
-        try {
-            File file = new File(apppkgIconPath + File.separator + name + ".png");
-            fileContent = Files.readAllBytes(file.toPath());
-        } catch (Exception e) {
-            throw new AppPkgIconException();
-        }
-        return fileContent;
-    }
 }
-
-

@@ -1,12 +1,12 @@
 package com.easysoftware.common.exception.enumvalid;
 
 public enum AppCategoryEnum {
-    BigData("bigdata"),
-    AI("ai"),
-    Storage("storage"),
-    Database("database"),
-    Cloud("cloud"),
-    Hpc("hpc");
+    BigData("大数据"),
+    AI("AI"),
+    Storage("分布式存储"),
+    Database("数据库"),
+    Cloud("云服务"),
+    Hpc("HPC");
 
     private String alias;
 

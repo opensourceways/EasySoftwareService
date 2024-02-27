@@ -1,10 +1,4 @@
-package com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject;
-
-import java.io.Serial;
-import java.sql.Timestamp;
-
-import com.baomidou.mybatisplus.annotation.TableName;
-
+package com.easysoftware.application.applicationpackage.vo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,11 +6,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("application_package")
-public class ApplicationPackageDO {
-    @Serial
-    private static final long serialVersionUID = 1L;
-
+public class ApplicationPackageDetailVo {
     public String description;
 
     public String name;
@@ -25,25 +15,15 @@ public class ApplicationPackageDO {
 
     private String download;
 
-    private String appCategory;
-
     private String environment;
 
     private String installation;
 
     private String similarPkgs;
 
+    private String appCategory;
+
     private String dependencyPkgs;
-
-    private String id;
-
-    private Timestamp createAt;
-
-    private Timestamp updateAt;
-
-    private String type;
-
-    private String iconUrl;
 
     private String appVer;
 
@@ -74,4 +54,6 @@ public class ApplicationPackageDO {
     private String srcDownloadUrl;
 
     private String binDownloadUrl;
+
+    private String type;
 }

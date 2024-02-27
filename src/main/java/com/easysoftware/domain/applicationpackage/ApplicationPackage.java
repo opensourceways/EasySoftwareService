@@ -19,18 +19,49 @@ public class ApplicationPackage {
 
     public String license;
 
-
     private String download;
 
     private String environment;
-    
 
     private String installation;
-
 
     private String similarPkgs;
 
     private String appCategory;
 
     private String dependencyPkgs;
+
+    private String iconUrl;
+
+    private String appVer;
+
+    private String osSupport;
+
+    private String os;
+
+    private String arch;
+
+    private String maintainerId;
+
+    private String maintainerEmail;
+
+    private String maintainerGiteeId;
+
+    private String maintainerUpdateAt;
+
+    private String securityLevel;
+
+    private String safeLabel;
+
+    private String downloadCount;
+
+    private String appSize;
+
+    private String srcRepo;
+
+    private String srcDownloadUrl;
+
+    private String binDownloadUrl;
+
+    private String type;
 }
