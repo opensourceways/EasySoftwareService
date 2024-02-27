@@ -1,13 +1,19 @@
 package com.easysoftware.infrastructure.applicationpackage.gatewayimpl;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Base64;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
+import com.easysoftware.common.exception.AppPkgIconException;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter.ApplicationPackageConvertor;
@@ -18,6 +24,9 @@ import com.easysoftware.infrastructure.mapper.ApplicationPackageDOMapper;
 public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway {
     @Autowired
     private ApplicationPackageDOMapper appPkgMapper;
+
+    @Value("${apppkg.icon.path}")
+    private String apppkgIconPath;
 
     @Override
     public boolean delete(String name) {
@@ -74,6 +83,18 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         List<ApplicationPackage> res = ApplicationPackageConvertor.toEntity(appDOs);
         
         return res;
+    }
+
+    @Override
+    public byte[] getAppPkgIcon(String name) {
+        byte[] fileContent = null;
+        try {
+            File file = new File(apppkgIconPath + File.separator + name + ".png");
+            fileContent = Files.readAllBytes(file.toPath());
+        } catch (Exception e) {
+            throw new AppPkgIconException();
+        }
+        return fileContent;
     }
 }
 

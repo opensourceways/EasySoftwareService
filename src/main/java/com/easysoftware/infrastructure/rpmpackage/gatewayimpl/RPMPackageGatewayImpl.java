@@ -1,41 +1,62 @@
 package com.easysoftware.infrastructure.rpmpackage.gatewayimpl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.management.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
+import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter.ApplicationPackageConvertor;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
 import com.easysoftware.infrastructure.mapper.RPMPackageDOMapper;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.converter.RPMPackageConverter;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.power.common.util.StringUtil;
 
 @Component
 public class RPMPackageGatewayImpl implements RPMPackageGateway {
     @Autowired
     private RPMPackageDOMapper rPMPkgMapper;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
 
     @Override
-    public boolean delete(String name) {
+    public boolean delete(String id) {
         QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
-        wrapper.eq("name", name);
+        wrapper.eq("id", id);
         int mark = rPMPkgMapper.delete(wrapper);
         return mark == 1;
     }
 
     @Override
-    public boolean existRPM(String name) {
-        QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
-        wrapper.eq("name", name);
+    public boolean existRPM(RPMPackageUnique unique) {
+        Map<String, Object> map = objectMapper.convertValue(unique, HashMap.class);
+
+        Map<String, Object> underlineMap = new HashMap<>();
+        for (String key : map.keySet()) {
+            String underlineKey = StringUtil.camelToUnderline(key);
+            underlineMap.put(underlineKey, map.get(key));
+        }
+        
+        QueryWrapper<RPMPackageDO> wrapper = Wrappers.query();
+        wrapper.setEntityClass(RPMPackageDO.class);
+        wrapper.allEq(underlineMap, false);
         return rPMPkgMapper.exists(wrapper);
     }
 
@@ -76,6 +97,13 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
 
         int mark = rPMPkgMapper.update(rPMPkgDO, wrapper);
         return mark == 1;
+    }
+
+    @Override
+    public boolean existRPM(String id) {
+        QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
+        wrapper.eq("id", id);
+        return rPMPkgMapper.exists(wrapper);
     }
     
 }

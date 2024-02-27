@@ -1,4 +1,4 @@
-package com.easysoftware.application;
+package com.easysoftware.common.exception;
 
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,8 +21,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Object> exception(MethodArgumentNotValidException e) {
-        logger.error(MessageCode.EC0001.getMsgEn(), e);
-        MessageCode messageCode = MessageCode.msgCodeMap.get(e.getMessage());
-        return ResultUtil.fail(HttpStatus.BAD_REQUEST, messageCode);
+        logger.error(MessageCode.EC0002.getMsgEn());
+        return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
+    }
+
+    @ExceptionHandler(EnumValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> exception(EnumValidException e) {
+        logger.error(MessageCode.EC0002.getMsgEn());
+        return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
+    }
+
+    @ExceptionHandler(AppPkgIconException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> exception(AppPkgIconException e) {
+        logger.error(MessageCode.EC0009.getMsgEn());
+        return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0009);
     }
 }

@@ -1,11 +1,10 @@
-package com.easysoftware.adapter.query;
+package com.easysoftware.adapter.execute;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,14 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.easysoftware.aop.LimitRequest;
 import com.easysoftware.application.applicationversion.ApplicationVersionService;
-import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
 import com.easysoftware.application.applicationversion.dto.InputApplicationVersion;
 
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/appVersion")
-public class ApplicationVersionAdapter {
+public class ApplicationVersionExecuteAdapter {
     @Autowired
     private ApplicationVersionService appVersionService;
 
@@ -46,12 +44,4 @@ public class ApplicationVersionAdapter {
         ResponseEntity<Object> res = appVersionService.deleteAppVersion(names);
         return res;
     }
-
-    @GetMapping()
-    @LimitRequest()
-    public ResponseEntity<Object> searchAppVersion(@Valid ApplicationVersionSearchCondition condition) {
-        ResponseEntity<Object> res = appVersionService.searchAppVersion(condition);
-        return res;
-    }
-    
 }

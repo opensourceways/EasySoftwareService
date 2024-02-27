@@ -18,10 +18,10 @@ import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.applicationversion.ApplicationVersion;
 import com.easysoftware.domain.applicationversion.gateway.ApplicationVersionGateway;
-import com.easysoftware.domain.compatible.gateway.CompatibleGateway;
 import com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobject.ApplicationVersionDO;
 import com.easysoftware.infrastructure.mapper.ApplicationVersionDOMapper;
 import com.easysoftware.kafka.Producer;
+// import com.easysoftware.domain.compatible.gateway.CompatibleGateway;
 
 import jakarta.annotation.Resource;
 
@@ -36,8 +36,8 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
     @Resource
     ApplicationVersionGateway AppVersionGateway;
 
-    @Resource
-    CompatibleGateway compatibleGateway;
+    // @Resource
+    // CompatibleGateway compatibleGateway;
 
     public String getCompatible(String name) {
         return null;

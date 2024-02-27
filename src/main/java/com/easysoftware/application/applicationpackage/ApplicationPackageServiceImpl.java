@@ -1,9 +1,16 @@
 package com.easysoftware.application.applicationpackage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +22,8 @@ import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
 
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 public class ApplicationPackageServiceImpl implements ApplicationPackageService {
@@ -83,5 +92,12 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
                 , names.toString(), existedNames.toString(), deletedNames.toString());
         return ResultUtil.success(HttpStatus.OK);
     }
-    
+
+    @Override
+    public ResponseEntity<Object> searchAppPkgIcon(String name) {
+        byte[] data = appPkgGateway.getAppPkgIcon(name);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+        return ResultUtil.success(HttpStatus.OK, headers, data);
+    }
 }

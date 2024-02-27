@@ -29,7 +29,7 @@ public class ApplicationPackageDO {
 
     private String download;
 
-
+    private String appCategory;
 
     private String environment;
     
