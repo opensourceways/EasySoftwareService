@@ -1,11 +1,15 @@
 package com.easysoftware.infrastructure.rpmpackage.gatewayimpl.converter;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
+import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
@@ -25,6 +29,29 @@ public class RPMPackageConverter {
             RPMPackage rPMPkg = toEntity(rPMPkgDO);
             res.add(rPMPkg);
         }
+        return res;
+    }
+
+    public static List<RPMPackageDetailVo> toDetail(List<RPMPackageDO> rPMPkgDOs) {
+        List<RPMPackageDetailVo> res = new ArrayList<>();
+        for (RPMPackageDO rpm: rPMPkgDOs) {
+            RPMPackageDetailVo detail = new RPMPackageDetailVo();
+            BeanUtils.copyProperties(rpm, detail);
+
+            System.out.println();
+            res.add(detail);
+        }
+        return res;
+    }
+    
+    public static List<RPMPackageMenuVo> toMenu(List<RPMPackageDO> rPMPkgDOs) {
+        List<RPMPackageMenuVo> res = new ArrayList<>();
+        for (RPMPackageDO rpm: rPMPkgDOs) {
+            RPMPackageMenuVo menu = new RPMPackageMenuVo();
+            BeanUtils.copyProperties(rpm, menu);
+            res.add(menu);
+        }
+
         return res;
     }
 
