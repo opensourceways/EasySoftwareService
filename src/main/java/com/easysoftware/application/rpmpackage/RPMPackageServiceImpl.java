@@ -8,14 +8,14 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.application.rpmpackage.dto.InputRPMPackage;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ResultUtil;
-import com.easysoftware.domain.applicationpackage.ApplicationPackage;
-import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
 import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
@@ -26,6 +26,12 @@ import jakarta.annotation.Resource;
 public class RPMPackageServiceImpl implements RPMPackageService {
     @Resource
     RPMPackageGateway rPMPkgGateway;
+
+    @Override
+    public List<RPMPackageMenuVo> queryAllRPMPkgMenu(RPMPackageSearchCondition condition) {
+        List<RPMPackageMenuVo> rPMMenu = rPMPkgGateway.queryMenuByName(condition);
+        return rPMMenu;
+    }
 
     @Override
     public ResponseEntity<Object> deleteRPMPkg(List<String> ids) {
@@ -74,7 +80,7 @@ public class RPMPackageServiceImpl implements RPMPackageService {
 
     @Override
     public ResponseEntity<Object> searchRPMPkg(RPMPackageSearchCondition condition) {
-        List<RPMPackage> res = rPMPkgGateway.queryByName(condition);
+        List<RPMPackageDetailVo> res = rPMPkgGateway.queryDetailByName(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }
 

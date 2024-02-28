@@ -11,70 +11,60 @@ import lombok.NoArgsConstructor;
 public class RPMPackage {
     @Serial
     private static final long serialVersionUID = 1L;
-  
-    private String headerEnd;
-
-    private String sizeInstalled;
-
-    private String timeFile;
-
-    private String sizePackage;
-
-    private String description;
-
-    private String checksumPkgid;
-
-    private String locationHref;
-
-    private String rpmBuildhost;
-
-    private String checksumType;
-
-    private String sizeArchive;
-
-    private String rpmVendor;
-
-    private String checksum;
-
-    private String rpmGroup;
-
-    private String headerStart;
-
-    private String summary;
-
-    private String versionRel;
-
-    private String versionVer;
-
-    private String packager;
-
-    private String url;
-
-    private String versionEpoch;
-
-    private String rpmSourcerpm;
-
-    private String rpmLicense;
-
+    
     private String name;
 
-    private String timeBuild;
+    private String version;
+
+    private String os;
 
     private String arch;
 
-    private String osName;
+    private String rpmCategory;
 
-    private String osVer;
-    
-    private String osType;
+    private String rpmUpdateAt;
 
-    private String files;
+    private String srcRepo;
 
-    private String provides;
+    private String rpmSize;
+
+    private String binDownloadUrl;
+
+    private String srcDownloadUrl;
+
+    private String summary;
+
+    private String osSupport;
+
+    private String repo;
+
+    private String repoType;
+
+    private String installation;
+
+    private String description;
 
     private String requires;
+    
+    private String provides;
 
-    private String baseUrl;
+    private String conflicts;
 
-    private String rpmCategory;
+    private String changeLog;
+
+    private String maintanierId;
+
+    private String maintianerEmail;
+
+    private String maintainerGiteeId;
+
+    private String maintainerUpdateAt;
+
+    private String maintainerStatus;
+
+    private String upStream;
+
+    private String security;
+
+    private String similarPkgs;
 }

@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
 import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
@@ -61,22 +63,16 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     }
 
     @Override
-    public List<RPMPackage> queryByName(RPMPackageSearchCondition condition) {
-        int pageNum = condition.getPageNum();
-        int pageSize = condition.getPageSize();
-        String name = condition.getName();
-
-        Page<RPMPackageDO> page = new Page<>(pageNum, pageSize);
+    public List<RPMPackageDetailVo> queryDetailByName(RPMPackageSearchCondition condition) {
+        Page<RPMPackageDO> page = createPage(condition);
 
         QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
-        if ("all".equals(name)) {
-        } else {
-            wrapper.eq("name", name);
-        }
-        
+        String name = condition.getName();
+        wrapper.eq("name", name);
+             
         Page<RPMPackageDO> resPage = rPMPkgMapper.selectPage(page, wrapper);
         List<RPMPackageDO> rPMDOs = resPage.getRecords();
-        List<RPMPackage> res = RPMPackageConverter.toEntity(rPMDOs);
+        List<RPMPackageDetailVo> res = RPMPackageConverter.toDetail(rPMDOs);
         
         return res;
     }
@@ -104,6 +100,26 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
         wrapper.eq("id", id);
         return rPMPkgMapper.exists(wrapper);
+    }
+
+    @Override
+    public List<RPMPackageMenuVo> queryMenuByName(RPMPackageSearchCondition condition) {
+        Page<RPMPackageDO> page = createPage(condition);
+
+        QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
+
+        Page<RPMPackageDO> resPage = rPMPkgMapper.selectPage(page, wrapper);
+        List<RPMPackageDO> rpmDOs = resPage.getRecords();
+        List<RPMPackageMenuVo> res = RPMPackageConverter.toMenu(rpmDOs);
+
+        return res;
+    }
+
+    private Page<RPMPackageDO> createPage(RPMPackageSearchCondition condition) {
+        int pageNum = condition.getPageNum();
+        int pageSize = condition.getPageSize();
+        Page<RPMPackageDO> page = new Page<>(pageNum, pageSize);
+        return page;
     }
     
 }

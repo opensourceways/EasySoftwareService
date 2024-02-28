@@ -12,89 +12,57 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InputRPMPackage {
-    @Size(max = 255, message = "the length of headerEnd can not exceed 255")
-    private String headerEnd;
-
-    @Size(max = 255, message = "the length of sizeInstalled can not exceed 255")
-    private String sizeInstalled;
-    
-    @Size(max = 255, message = "the length of timeFile can not exceed 255")
-    private String timeFile;
-    
-    @Size(max = 255, message = "the length of sizePackage can not exceed 255")
-    private String sizePackage;
-
-    @Size(max = 6000, message = "the length of description can not exceed 6000")
-    private String description;
-    
-    @Size(max = 255, message = "the length of checksumPkgid can not exceed 255")
-    private String checksumPkgid;
-    
-    @Size(max = 255, message = "the length of locationHref can not exceed 255")
-    private String locationHref;
-    
-    @Size(max = 255, message = "the length of rpmBuildhost can not exceed 255")
-    private String rpmBuildhost;
-    
-    @Size(max = 255, message = "the length of checksumType can not exceed 255")
-    private String checksumType;
-    
-    @Size(max = 255, message = "the length of sizeArchive can not exceed 255")
-    private String sizeArchive;
-    
-    @Size(max = 255, message = "the length of rpmVendor can not exceed 255")
-    private String rpmVendor;
-    
-    @Size(max = 255, message = "the length of checksum can not exceed 255")
-    private String checksum;
-    
-    @Size(max = 255, message = "the length of rpmGroup can not exceed 255")
-    private String rpmGroup;
-
-    @Size(max = 255, message = "the length of headerStart can not exceed 255")
-    private String headerStart;
-    
-    @Size(max = 255, message = "the length of summary can not exceed 255")
-    private String summary;
-    
-    @Size(max = 255, message = "the length of versionRel can not exceed 255")
-    private String versionRel;
-    
-    @Size(max = 255, message = "the length of versionVer can not exceed 255")
-    private String versionVer;
-    
-    @Size(max = 255, message = "the length of packager can not exceed 255")
-    private String packager;
-    
-    @Size(max = 255, message = "the length of url can not exceed 255")
-    private String url;
-    
-    @Size(max = 255, message = "the length of versionEpoch can not exceed 255")
-    private String versionEpoch;
-    
-    @Size(max = 255, message = "the length of rpmSourcerpm can not exceed 255")
-    private String rpmSourcerpm;
-
-    @Size(max = 1000, message = "the length of rpmLicense can not exceed 255")
-    private String rpmLicense;
-
     @Size(max = 255, message = "the length of name can not exceed 255")
+    @NotBlank
     private String name;
-    
-    @Size(max = 255, message = "the length of timeBuild can not exceed 255")
-    private String timeBuild;
-    
+
+    @Size(max = 255, message = "the length of id can not exceed 255")
+    private String id;
+
+    @Size(max = 255, message = "the length of version can not exceed 255")
+    private String version;
+
+    @Size(max = 255, message = "the length of os can not exceed 255")
+    private String os;
+
     @Size(max = 255, message = "the length of arch can not exceed 255")
     private String arch;
 
-    @Size(max = 255, message = "the length of osName can not exceed 255")
-    private String osName;
-    
-    @Size(max = 255, message = "the length of osVer can not exceed 255")
-    private String osVer;
-    
-    @Size(max = 255, message = "the length of osType can not exceed 255")
-    private String osType;
+    @Size(max = 255, message = "the length of rpmCategory can not exceed 255")
+    private String rpmCategory;
+
+    @Size(max = 255, message = "the length of rpmUpdateAt can not exceed 255")
+    private String rpmUpdateAt;
+
+    @Size(max = 255, message = "the length of srcRepo can not exceed 255")
+    private String srcRepo;
+
+    @Size(max = 255, message = "the length of rpmSize can not exceed 255")
+    private String rpmSize;
+
+    @Size(max = 255, message = "the length of binDownloadUrl can not exceed 255")
+    private String binDownloadUrl;
+
+    @Size(max = 255, message = "the length of srcDownloadUrl can not exceed 255")
+    private String srcDownloadUrl;
+
+    @Size(max = 255, message = "the length of summary can not exceed 255")
+    private String summary;
+
+    @Size(max = 255, message = "the length of osSupport can not exceed 255")
+    private String osSupport;
+
+    @Size(max = 255, message = "the length of repo can not exceed 255")
+    private String repo;
+
+    @Size(max = 255, message = "the length of repoType can not exceed 255")
+    private String repoType;
+
+    @Size(max = 10000, message = "the length of installation can not exceed 10000")
+    private String installation;
+
+    @Size(max = 10000, message = "the length of description can not exceed 10000")
+    private String description;
 
     @Size(max = 100_0000, message = "the length of requires can not exceed 100_0000")
     private String requires;
@@ -102,15 +70,33 @@ public class InputRPMPackage {
     @Size(max = 100_0000, message = "the length of provides can not exceed 100_0000")
     private String provides;
 
-    @Size(max = 100_0000, message = "the length of files can not exceed 100_0000")
-    private String files;
+    @Size(max = 100_0000, message = "the length of conflicts can not exceed 100_0000")
+    private String conflicts;
 
-    @Size(max = 255, message = "the length of baseUrl can not exceed 255")
-    private String baseUrl;
+    @Size(max = 100_0000, message = "the length of changeLog can not exceed 100_0000")
+    private String changeLog;
 
-    @Size(max = 255, message = "the length of rpmCategory can not exceed 255")
-    private String rpmCategory;
+    @Size(max = 255, message = "the length of maintanierId can not exceed 255")
+    private String maintanierId;
 
-    @Size(max = 255, message = "the length of id can not exceed 255")
-    private String id;
+    @Size(max = 255, message = "the length of maintianerEmail can not exceed 255")
+    private String maintianerEmail;
+
+    @Size(max = 255, message = "the length of maintainerGiteeId can not exceed 255")
+    private String maintainerGiteeId;
+
+    @Size(max = 255, message = "the length of maintainerUpdateAt can not exceed 255")
+    private String maintainerUpdateAt;
+
+    @Size(max = 255, message = "the length of maintainerStatus can not exceed 255")
+    private String maintainerStatus;
+
+    @Size(max = 255, message = "the length of upStream can not exceed 255")
+    private String upStream;
+
+    @Size(max = 255, message = "the length of security can not exceed 255")
+    private String security;
+
+    @Size(max = 1000, message = "the length of similarPkgs can not exceed 1000")
+    private String similarPkgs;
 }

@@ -13,22 +13,23 @@ import org.springframework.stereotype.Service;
 
 import com.easysoftware.application.applicationpackage.ApplicationPackageService;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
-import com.easysoftware.application.applicationpackage.dto.InputApplicationPackage;
-import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.application.domainpackage.dto.DomainSearchCondition;
 import com.easysoftware.application.domainpackage.vo.DomainPackageMenuVo;
-import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.application.rpmpackage.RPMPackageService;
+import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
 import com.easysoftware.common.utils.ResultUtil;
-import com.easysoftware.domain.applicationpackage.ApplicationPackage;
-import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
 import jakarta.annotation.Resource;
 
 @Service
 public class DomainPackageServiceImpl implements DomainPackageService {
     @Resource
     ApplicationPackageService appPkgService;
+
+    @Resource
+    RPMPackageService rPMPkgService;
 
     @Override
     public ResponseEntity<Object> searchDomain(DomainSearchCondition condition) {
@@ -48,6 +49,11 @@ public class DomainPackageServiceImpl implements DomainPackageService {
 
             List<Map<String, Object>> res = groupByCategory(domainMenuList);
             return ResultUtil.success(HttpStatus.OK, res);
+        } else if ("rpmpkg".equals(condition.getName())) {
+            RPMPackageSearchCondition rPMCon = new RPMPackageSearchCondition();
+            BeanUtils.copyProperties(condition, rPMCon);
+            List<RPMPackageMenuVo> appMenuList = rPMPkgService.queryAllRPMPkgMenu(rPMCon);
+            return ResultUtil.success(HttpStatus.OK, appMenuList);
         }
         return null;
     }
