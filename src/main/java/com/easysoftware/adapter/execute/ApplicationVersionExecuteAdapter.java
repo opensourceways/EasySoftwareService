@@ -25,7 +25,7 @@ public class ApplicationVersionExecuteAdapter {
     private ApplicationVersionService appVersionService;
 
     @PostMapping("")
-    @LimitRequest(callTime = 10, callCount = 30)
+    @LimitRequest(callTime = 1, callCount = 10)
     public ResponseEntity<Object> insertAppVersion(@Valid @RequestBody InputApplicationVersion inputAppVersion) {
         ResponseEntity<Object> res = appVersionService.insertAppVersion(inputAppVersion);
         return res;

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,15 +17,22 @@ import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDeta
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
+import com.easysoftware.common.utils.HttpClientUtil;
+import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
+import com.fasterxml.jackson.databind.JsonNode;
+
 import jakarta.annotation.Resource;
 
 @Service
 public class ApplicationPackageServiceImpl implements ApplicationPackageService {
     @Resource
     ApplicationPackageGateway appPkgGateway;
+
+    @Value("${api.repoMaintainer}")
+    String repoMaintainerApi;
 
     @Override
     public ResponseEntity<Object> insertAppPkg(InputApplicationPackage inputAppPkg) {
@@ -35,7 +43,15 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
         }
         ApplicationPackage appPkg = new ApplicationPackage();
         BeanUtils.copyProperties(inputAppPkg, appPkg);
-
+        String response = HttpClientUtil.getHttpClient(String.format(repoMaintainerApi, appPkg.getName()));
+        if (response != null) {
+            JsonNode info = ObjectMapperUtil.toJsonNode(response);
+            if (info.get("code").asInt() == 200 && !info.get("data").isNull()) {
+                JsonNode infoData = info.get("data");
+                appPkg.setMaintainerGiteeId(infoData.get("gitee_id").asText());
+                appPkg.setMaintainerEmail(infoData.get("email").asText());
+            }
+        }
         boolean succeed = appPkgGateway.save(appPkg);
         if (!succeed) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0006);
