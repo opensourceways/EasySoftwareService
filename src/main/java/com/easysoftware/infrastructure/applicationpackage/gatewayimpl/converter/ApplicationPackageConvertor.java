@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
+import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
+import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
@@ -15,6 +17,26 @@ public class ApplicationPackageConvertor {
         ApplicationPackage appPkg = new ApplicationPackage();
         BeanUtils.copyProperties(appPkgDO, appPkg);
         return appPkg;
+    }
+
+    public static List<ApplicationPackageDetailVo> toDetail(List<ApplicationPackageDO> appPkgDOs) {
+        List<ApplicationPackageDetailVo> res = new ArrayList<>();
+        for (ApplicationPackageDO app: appPkgDOs) {
+            ApplicationPackageDetailVo menu = new ApplicationPackageDetailVo();
+            BeanUtils.copyProperties(app, menu);
+            res.add(menu);
+        }
+        return res;
+    }
+
+    public static List<ApplicationPackageMenuVo> toMenu(List<ApplicationPackageDO> appPkgDOs) {
+        List<ApplicationPackageMenuVo> res = new ArrayList<>();
+        for (ApplicationPackageDO app: appPkgDOs) {
+            ApplicationPackageMenuVo menu = new ApplicationPackageMenuVo();
+            BeanUtils.copyProperties(app, menu);
+            res.add(menu);
+        }
+        return res;
     }
 
     public static List<ApplicationPackage> toEntity(List<ApplicationPackageDO> appDOs) {
