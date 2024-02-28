@@ -123,8 +123,10 @@ public class MyConsumer {
                 logger.error(e.getMessage() + ":" + value, e);
             }
         }
-        logger.info("partation: " + partition + ", offset: " + offset);
-        appVersionService.saveBatch(appList);
+        if (!appList.isEmpty()) {
+            logger.info("partation: " + partition + ", offset: " + offset);
+            appVersionService.saveBatch(appList);
+        }
     }
 
     public void initConsumer() {

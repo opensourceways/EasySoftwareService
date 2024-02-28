@@ -177,4 +177,12 @@ public class ObjectMapperUtil {
             throw new MyJacksonException("转换json树异常！！");
         }
     }
+
+    public static JsonNode toJsonNode(String content) {
+        try {
+            return objectMapper.readTree(content);
+        } catch (JsonProcessingException var2) {
+            throw new MyJacksonException("JSON 转化异常！");
+        }
+    }
 }
