@@ -101,16 +101,14 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
 
     @Override
     public ResponseEntity<Object> searchAppPkg(ApplicationPackageSearchCondition condition) {
-
-        // 查找详情页
-        List<ApplicationPackageDetailVo> res = appPkgGateway.queryDetailByName(condition);
+        Map<String, Object> res = appPkgGateway.queryDetailByName(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
     @Override
-    public List<ApplicationPackageMenuVo> queryAllAppPkgMenu(ApplicationPackageSearchCondition condition) {
-        List<ApplicationPackageMenuVo> menuList = appPkgGateway.queryMenuByName(condition);
+    public Map<String, Object> queryAllAppPkgMenu(ApplicationPackageSearchCondition condition) {
+        Map<String, Object> res = appPkgGateway.queryMenuByName(condition);
 
-        return menuList;
+        return res;
     }
 }

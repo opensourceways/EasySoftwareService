@@ -2,6 +2,7 @@ package com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -34,6 +35,8 @@ public class ApplicationPackageConvertor {
         for (ApplicationPackageDO app: appPkgDOs) {
             ApplicationPackageMenuVo menu = new ApplicationPackageMenuVo();
             BeanUtils.copyProperties(app, menu);
+            menu.setTags(List.of(app.getType()));
+            menu.setCategory(app.getAppCategory());
             res.add(menu);
         }
         return res;
