@@ -73,7 +73,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         IPage<RPMPackageDO> resPage = rPMPkgMapper.selectPage(page, wrapper);
         List<RPMPackageDO> rPMDOs = resPage.getRecords();
         List<RPMPackageDetailVo> rPMDetails = RPMPackageConverter.toDetail(rPMDOs);
-        long total = resPage.getPages();
+        long total = resPage.getTotal();
 
         Map<String, Object> res = Map.ofEntries(
             Map.entry("total", total),
@@ -116,7 +116,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         IPage<RPMPackageDO> resPage = rPMPkgMapper.selectPage(page, wrapper);
         List<RPMPackageDO> rpmDOs = resPage.getRecords();
         List<RPMPackageMenuVo> rPMMenus = RPMPackageConverter.toMenu(rpmDOs);
-        long total = resPage.getPages();
+        long total = resPage.getTotal();
 
         Map<String, Object> res = Map.ofEntries(
             Map.entry("total", total),
