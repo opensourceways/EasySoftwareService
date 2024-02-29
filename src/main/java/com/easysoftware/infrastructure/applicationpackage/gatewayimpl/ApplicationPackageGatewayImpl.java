@@ -76,7 +76,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
 
         IPage<ApplicationPackageDO> resPage = appPkgMapper.selectPage(page, wrapper);
         List<ApplicationPackageDO> appDOs = resPage.getRecords();
-        long total = resPage.getPages();
+        long total = resPage.getTotal();
         List<ApplicationPackageMenuVo> menus = ApplicationPackageConvertor.toMenu(appDOs);
 
         Map<String, Object> res = new HashMap<>();
@@ -95,7 +95,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         IPage<ApplicationPackageDO> resPage = appPkgMapper.selectPage(page, wrapper);
         List<ApplicationPackageDO> appDOs = resPage.getRecords();
         List<ApplicationPackageDetailVo> appDetails = ApplicationPackageConvertor.toDetail(appDOs);
-        long total = resPage.getPages();
+        long total = resPage.getTotal();
 
         Map<String, Object> res = Map.ofEntries(
             Map.entry("total", total),
