@@ -2,6 +2,7 @@ package com.easysoftware.application.rpmpackage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -28,8 +29,8 @@ public class RPMPackageServiceImpl implements RPMPackageService {
     RPMPackageGateway rPMPkgGateway;
 
     @Override
-    public List<RPMPackageMenuVo> queryAllRPMPkgMenu(RPMPackageSearchCondition condition) {
-        List<RPMPackageMenuVo> rPMMenu = rPMPkgGateway.queryMenuByName(condition);
+    public Map<String, Object> queryAllRPMPkgMenu(RPMPackageSearchCondition condition) {
+        Map<String, Object> rPMMenu = rPMPkgGateway.queryMenuByName(condition);
         return rPMMenu;
     }
 
@@ -80,7 +81,7 @@ public class RPMPackageServiceImpl implements RPMPackageService {
 
     @Override
     public ResponseEntity<Object> searchRPMPkg(RPMPackageSearchCondition condition) {
-        List<RPMPackageDetailVo> res = rPMPkgGateway.queryDetailByName(condition);
+        Map<String, Object> res = rPMPkgGateway.queryDetailByName(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }
 

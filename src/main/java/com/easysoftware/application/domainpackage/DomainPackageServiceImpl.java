@@ -15,7 +15,6 @@ import com.easysoftware.application.applicationpackage.ApplicationPackageService
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.application.domainpackage.dto.DomainSearchCondition;
-import com.easysoftware.application.domainpackage.vo.DomainPackageMenuVo;
 import com.easysoftware.application.rpmpackage.RPMPackageService;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
@@ -36,36 +35,32 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         if ("apppkg".equals(condition.getName())) {
             ApplicationPackageSearchCondition appCon = new ApplicationPackageSearchCondition();
             BeanUtils.copyProperties(condition, appCon);
-            List<ApplicationPackageMenuVo> appMenuList = appPkgService.queryAllAppPkgMenu(appCon);
-            List<DomainPackageMenuVo> domainMenuList = new ArrayList<>();
+            Map<String, Object> map = appPkgService.queryAllAppPkgMenu(appCon);
+            List<ApplicationPackageMenuVo> appMenus = (List<ApplicationPackageMenuVo>) map.get("list");
             
-            for (ApplicationPackageMenuVo appMenu : appMenuList) {
-                DomainPackageMenuVo domainMenu = new DomainPackageMenuVo();
-                BeanUtils.copyProperties(appMenu, domainMenu);
-                domainMenu.setCategory(appMenu.getAppCategory());
-                domainMenu.setTags(new ArrayList<String>(Arrays.asList(appMenu.getType())));
-                domainMenuList.add(domainMenu);
-            }
-
-            List<Map<String, Object>> res = groupByCategory(domainMenuList);
+            List<Map<String, Object>> appCate = groupByCategory(appMenus);
+            Map res = Map.ofEntries(
+                Map.entry("total", map.get("total")),
+                Map.entry("list", appCate)
+            );
             return ResultUtil.success(HttpStatus.OK, res);
         } else if ("rpmpkg".equals(condition.getName())) {
             RPMPackageSearchCondition rPMCon = new RPMPackageSearchCondition();
             BeanUtils.copyProperties(condition, rPMCon);
-            List<RPMPackageMenuVo> appMenuList = rPMPkgService.queryAllRPMPkgMenu(rPMCon);
+            Map<String, Object> appMenuList = rPMPkgService.queryAllRPMPkgMenu(rPMCon);
             return ResultUtil.success(HttpStatus.OK, appMenuList);
         }
         return null;
     }
 
-    private List<Map<String, Object>> groupByCategory(List<DomainPackageMenuVo> menuList) {
-        Map<String, List<DomainPackageMenuVo>> map = new HashMap<>();
+    private List<Map<String, Object>> groupByCategory(List<ApplicationPackageMenuVo> menuList) {
+        Map<String, List<ApplicationPackageMenuVo>> map = new HashMap<>();
         for (AppCategoryEnum categoryEnum : AppCategoryEnum.values()) {
             String category = categoryEnum.getAlias();
             map.put(category, new ArrayList<>());
         }
     
-        for (DomainPackageMenuVo menu: menuList) {
+        for (ApplicationPackageMenuVo menu: menuList) {
             map.get(menu.getCategory()).add(menu);
         }
     

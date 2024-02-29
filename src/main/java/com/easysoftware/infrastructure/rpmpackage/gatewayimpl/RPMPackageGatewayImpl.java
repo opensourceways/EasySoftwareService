@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
@@ -63,16 +64,21 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     }
 
     @Override
-    public List<RPMPackageDetailVo> queryDetailByName(RPMPackageSearchCondition condition) {
+    public Map<String, Object> queryDetailByName(RPMPackageSearchCondition condition) {
         Page<RPMPackageDO> page = createPage(condition);
-
         QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
         String name = condition.getName();
         wrapper.eq("name", name);
              
-        Page<RPMPackageDO> resPage = rPMPkgMapper.selectPage(page, wrapper);
+        IPage<RPMPackageDO> resPage = rPMPkgMapper.selectPage(page, wrapper);
         List<RPMPackageDO> rPMDOs = resPage.getRecords();
-        List<RPMPackageDetailVo> res = RPMPackageConverter.toDetail(rPMDOs);
+        List<RPMPackageDetailVo> rPMDetails = RPMPackageConverter.toDetail(rPMDOs);
+        long total = resPage.getPages();
+
+        Map<String, Object> res = Map.ofEntries(
+            Map.entry("total", total),
+            Map.entry("list", rPMDetails)
+        );
         
         return res;
     }
@@ -103,15 +109,19 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     }
 
     @Override
-    public List<RPMPackageMenuVo> queryMenuByName(RPMPackageSearchCondition condition) {
+    public Map<String, Object> queryMenuByName(RPMPackageSearchCondition condition) {
         Page<RPMPackageDO> page = createPage(condition);
-
         QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
 
-        Page<RPMPackageDO> resPage = rPMPkgMapper.selectPage(page, wrapper);
+        IPage<RPMPackageDO> resPage = rPMPkgMapper.selectPage(page, wrapper);
         List<RPMPackageDO> rpmDOs = resPage.getRecords();
-        List<RPMPackageMenuVo> res = RPMPackageConverter.toMenu(rpmDOs);
+        List<RPMPackageMenuVo> rPMMenus = RPMPackageConverter.toMenu(rpmDOs);
+        long total = resPage.getPages();
 
+        Map<String, Object> res = Map.ofEntries(
+            Map.entry("total", total),
+            Map.entry("list", rPMMenus)
+        );
         return res;
     }
 
