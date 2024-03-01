@@ -17,6 +17,7 @@ import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDeta
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
+import com.easysoftware.common.utils.ApiUtil;
 import com.easysoftware.common.utils.HttpClientUtil;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
@@ -34,6 +35,9 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
     @Value("${api.repoMaintainer}")
     String repoMaintainerApi;
 
+    @Value("${api.repoInfo}")
+    String repoInfoApi;
+
     @Override
     public ResponseEntity<Object> insertAppPkg(InputApplicationPackage inputAppPkg) {
         // 数据库中是否已存在该包
@@ -43,15 +47,8 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
         }
         ApplicationPackage appPkg = new ApplicationPackage();
         BeanUtils.copyProperties(inputAppPkg, appPkg);
-        String response = HttpClientUtil.getHttpClient(String.format(repoMaintainerApi, appPkg.getName()));
-        if (response != null) {
-            JsonNode info = ObjectMapperUtil.toJsonNode(response);
-            if (info.get("code").asInt() == 200 && !info.get("data").isNull()) {
-                JsonNode infoData = info.get("data");
-                appPkg.setMaintainerGiteeId(infoData.get("gitee_id").asText());
-                appPkg.setMaintainerEmail(infoData.get("email").asText());
-            }
-        }
+        appPkg = addAppPkgInfo(appPkg);
+
         boolean succeed = appPkgGateway.save(appPkg);
         if (!succeed) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0006);
@@ -68,6 +65,8 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
         }
         ApplicationPackage appPkg = new ApplicationPackage();
         BeanUtils.copyProperties(inputAppPkg, appPkg);
+
+        appPkg = addAppPkgInfo(appPkg);
 
         boolean succeed = appPkgGateway.update(appPkg);
         if (!succeed) {
@@ -112,5 +111,21 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
         List<ApplicationPackageMenuVo> menuList = appPkgGateway.queryMenuByName(condition);
 
         return menuList;
+    }
+
+    public ApplicationPackage addAppPkgInfo(ApplicationPackage appPkg) {
+        Map<String, String> maintainer = ApiUtil.getApiResponse(String.format(repoMaintainerApi, appPkg.getName()));
+        appPkg.setMaintainerGiteeId(maintainer.get("gitee_id"));
+        appPkg.setMaintainerEmail(maintainer.get("email"));
+
+        Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, appPkg.getName(), "docker_openeuler"));
+        appPkg.setOs(info.get("os"));
+        appPkg.setAppVer(info.get("latest_version") + "-" + info.get("os_version"));
+        appPkg.setArch(info.get("arch"));
+        appPkg.setAppSize(info.get("appSize"));
+        appPkg.setBinDownloadUrl(info.get("binDownloadUrl"));
+        appPkg.setSrcDownloadUrl(info.get("srcDownloadUrl"));
+        appPkg.setSrcRepo(info.get("srcRepo"));
+        return appPkg;
     }
 }

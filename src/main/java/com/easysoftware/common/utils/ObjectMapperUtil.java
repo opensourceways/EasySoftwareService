@@ -4,6 +4,7 @@ import com.easysoftware.common.exception.MyJacksonException;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
@@ -184,5 +185,10 @@ public class ObjectMapperUtil {
         } catch (JsonProcessingException var2) {
             throw new MyJacksonException("JSON 转化异常！");
         }
+    }
+
+    public static <T> Map<String, T> jsonToMap(JsonNode obj) {
+        Map<String, T> res = objectMapper.convertValue(obj, new TypeReference<Map<String, T>>() {});
+        return res;
     }
 }
