@@ -17,7 +17,7 @@ import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenu
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
-import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter.ApplicationPackageConvertor;
+import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter.ApplicationPackageConverter;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
 import com.easysoftware.infrastructure.mapper.ApplicationPackageDOMapper;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
@@ -49,7 +49,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
 
     @Override
     public boolean save(ApplicationPackage appPkg) {
-        ApplicationPackageDO appPkgDO = ApplicationPackageConvertor.toDataObjectForCreate(appPkg);
+        ApplicationPackageDO appPkgDO = ApplicationPackageConverter.toDataObjectForCreate(appPkg);
         int mark = appPkgMapper.insert(appPkgDO);
         return mark == 1;
     }
@@ -57,7 +57,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
 
     @Override
     public boolean update(ApplicationPackage appPkg) {
-        ApplicationPackageDO appPkgDO = ApplicationPackageConvertor.toDataObjectForUpdate(appPkg);
+        ApplicationPackageDO appPkgDO = ApplicationPackageConverter.toDataObjectForUpdate(appPkg);
 
         UpdateWrapper<ApplicationPackageDO> wrapper = new UpdateWrapper<>();
         wrapper.eq("name", appPkg.getName());
@@ -77,7 +77,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         IPage<ApplicationPackageDO> resPage = appPkgMapper.selectPage(page, wrapper);
         List<ApplicationPackageDO> appDOs = resPage.getRecords();
         long total = resPage.getTotal();
-        List<ApplicationPackageMenuVo> menus = ApplicationPackageConvertor.toMenu(appDOs);
+        List<ApplicationPackageMenuVo> menus = ApplicationPackageConverter.toMenu(appDOs);
 
         Map<String, Object> res = new HashMap<>();
         res.put("total", total);
@@ -94,7 +94,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
 
         IPage<ApplicationPackageDO> resPage = appPkgMapper.selectPage(page, wrapper);
         List<ApplicationPackageDO> appDOs = resPage.getRecords();
-        List<ApplicationPackageDetailVo> appDetails = ApplicationPackageConvertor.toDetail(appDOs);
+        List<ApplicationPackageDetailVo> appDetails = ApplicationPackageConverter.toDetail(appDOs);
         long total = resPage.getTotal();
 
         Map<String, Object> res = Map.ofEntries(
