@@ -2,7 +2,13 @@ package com.easysoftware.application.epkgpackage.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class InputEPKGPackage {
     @Size(max = 255, message = "the length of name can not exceed 255")
     @NotBlank
@@ -69,7 +75,7 @@ public class InputEPKGPackage {
     private String changeLog;
 
     @Size(max = 100_0000, message = "the length of path can not exceed 100_0000")
-    private String path;
+    private String files;
 
     @Size(max = 255, message = "the length of maintanierId can not exceed 255")
     private String maintanierId;

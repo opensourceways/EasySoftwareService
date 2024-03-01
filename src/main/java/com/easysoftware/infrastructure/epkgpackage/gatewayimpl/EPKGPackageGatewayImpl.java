@@ -1,5 +1,6 @@
 package com.easysoftware.infrastructure.epkgpackage.gatewayimpl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
@@ -26,6 +29,7 @@ import com.easysoftware.infrastructure.mapper.RPMPackageDOMapper;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.converter.RPMPackageConverter;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.power.common.util.StringUtil;
 
 @Component
 public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
@@ -37,20 +41,33 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
 
     @Override
     public boolean delete(String id) {
-        // TODO Auto-generated method stub
-        return false;
+        QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
+        wrapper.eq("id", id);
+        int mark = ePKGPkgMapper.delete(wrapper);
+        return mark == 1;
     }
 
     @Override
-    public boolean existRPM(EPKGPackageUnique unique) {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean existEPKG(EPKGPackageUnique unique) {
+        Map<String, Object> map = objectMapper.convertValue(unique, HashMap.class);
+
+        Map<String, Object> underlineMap = new HashMap<>();
+        for (String key : map.keySet()) {
+            String underlineKey = StringUtil.camelToUnderline(key);
+            underlineMap.put(underlineKey, map.get(key));
+        }
+        
+        QueryWrapper<EPKGPackageDO> wrapper = Wrappers.query();
+        wrapper.setEntityClass(EPKGPackageDO.class);
+        wrapper.allEq(underlineMap, false);
+        return ePKGPkgMapper.exists(wrapper);
     }
 
     @Override
-    public boolean existRPM(String id) {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean existEPKG(String id) {
+        QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
+        wrapper.eq("id", id);
+        return ePKGPkgMapper.exists(wrapper);
     }
 
     @Override
@@ -91,15 +108,21 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
     }
 
     @Override
-    public boolean save(EPKGPackage appPkg) {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean save(EPKGPackage epkg) {
+        EPKGPackageDO epkgPackageDO = EPKGPackageConverter.toDataObjectForCreate(epkg);
+        int mark = ePKGPkgMapper.insert(epkgPackageDO);
+        return mark == 1;
     }
 
     @Override
-    public boolean update(EPKGPackage appPkg) {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean update(EPKGPackage epkg) {
+        EPKGPackageDO epkgPackageDO = EPKGPackageConverter.toDataObjectForUpdate(epkg);
+
+        UpdateWrapper<EPKGPackageDO> wrapper = new UpdateWrapper<>();
+        wrapper.eq("name", epkg.getName());
+
+        int mark = ePKGPkgMapper.update(epkgPackageDO, wrapper);
+        return mark == 1;
     }
     
     private Page<EPKGPackageDO> createPage(EPKGPackageSearchCondition condition) {
