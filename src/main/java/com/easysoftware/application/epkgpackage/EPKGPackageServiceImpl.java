@@ -1,16 +1,24 @@
 package com.easysoftware.application.epkgpackage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.dto.InputEPKGPackage;
+import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ResultUtil;
+import com.easysoftware.domain.epkgpackage.EPKGPackage;
+import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
 import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
+import com.easysoftware.domain.rpmpackage.RPMPackage;
+import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 
 import jakarta.annotation.Resource;
@@ -21,14 +29,48 @@ public class EPKGPackageServiceImpl implements EPKGPackageService {
     EPKGPackageGateway ePKGPackageGateway;
     
     @Override
-    public ResponseEntity<Object> deleteEPKGPkg(List<String> names) {
-        // TODO Auto-generated method stub
-        return null;
+    public ResponseEntity<Object> deleteEPKGPkg(List<String> ids) {
+        List<String> existedNames = new ArrayList<>();
+        for (String id : ids) {
+            boolean found = ePKGPackageGateway.existEPKG(id);
+            if (found) {
+                existedNames.add(id);
+            }
+        }
+
+        List<String> deletedNames = new ArrayList<>();
+        for (String id : existedNames) {
+            boolean deleted = ePKGPackageGateway.delete(id);
+            if (deleted) {
+                deletedNames.add(id);
+            }
+        }
+
+        String msg = String.format("请求删除的数据: %s, 在数据库中的数据: %s, 成功删除的数据: %s"
+                , ids.toString(), existedNames.toString(), deletedNames.toString());
+        return ResultUtil.success(HttpStatus.OK, msg);
     }
 
     @Override
-    public ResponseEntity<Object> insertEPKGPkg(InputEPKGPackage input) {
-       return null;
+    public ResponseEntity<Object> insertEPKGPkg(InputEPKGPackage inputEPKGPackage) {
+       if (StringUtils.isNotBlank(inputEPKGPackage.getId())) {
+            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
+        }
+        // 数据库中是否已存在该包
+        EPKGPackageUnique unique = new EPKGPackageUnique();
+        BeanUtils.copyProperties(inputEPKGPackage, unique);
+        boolean found = ePKGPackageGateway.existEPKG(unique);
+        if (found) {
+            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0008);
+        }
+        EPKGPackage epkgPkg = new EPKGPackage();
+        BeanUtils.copyProperties(inputEPKGPackage, epkgPkg);
+
+        boolean succeed = ePKGPackageGateway.save(epkgPkg);
+        if (!succeed) {
+            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0006);
+        }
+        return ResultUtil.success(HttpStatus.OK);
     }
 
     @Override
@@ -44,9 +86,23 @@ public class EPKGPackageServiceImpl implements EPKGPackageService {
     }
 
     @Override
-    public ResponseEntity<Object> updateEPKGPkg(InputEPKGPackage inputrPMPackage) {
-        // TODO Auto-generated method stub
-        return null;
+    public ResponseEntity<Object> updateEPKGPkg(InputEPKGPackage inputEPKGPackage) {
+        if (StringUtils.isBlank(inputEPKGPackage.getId())) {
+            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
+        }
+        // 数据库中是否已存在该包
+        boolean found = ePKGPackageGateway.existEPKG(inputEPKGPackage.getId());
+        if (!found) {
+            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0009);
+        }
+        EPKGPackage epkgPkg = new EPKGPackage();
+        BeanUtils.copyProperties(inputEPKGPackage, epkgPkg);
+
+        boolean succeed = ePKGPackageGateway.update(epkgPkg);
+        if (!succeed) {
+            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0004);
+        }
+        return ResultUtil.success(HttpStatus.OK);
     }
     
 }

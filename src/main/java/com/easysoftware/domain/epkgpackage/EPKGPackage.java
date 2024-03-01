@@ -20,13 +20,13 @@ public class EPKGPackage {
 
     private String arch;
 
-    private String rpmCategory;
+    private String epkgCategory;
 
-    private String rpmUpdateAt;
+    private String epkgUpdateAt;
 
     private String srcRepo;
 
-    private String rpmSize;
+    private String epkgSize;
 
     private String binDownloadUrl;
 
@@ -67,4 +67,6 @@ public class EPKGPackage {
     private String security;
 
     private String similarPkgs;
+
+    private String files;
 }

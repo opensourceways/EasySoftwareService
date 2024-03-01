@@ -1,6 +1,7 @@
 package com.easysoftware.infrastructure.epkgpackage.gatewayimpl.dataobject;
 
 import java.io.Serial;
+import java.sql.Timestamp;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -16,6 +17,12 @@ public class EPKGPackageDO {
     @Serial
     private static final long serialVersionUID = 1L;
     
+    private String id;
+
+    private Timestamp updateAt;
+
+    private Timestamp createAt;
+
     private String name;
 
     private String version;
@@ -71,4 +78,6 @@ public class EPKGPackageDO {
     private String security;
 
     private String similarPkgs;
+
+    private String files;
 }
