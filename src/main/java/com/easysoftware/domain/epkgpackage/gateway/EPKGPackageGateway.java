@@ -10,8 +10,8 @@ import com.easysoftware.domain.rpmpackage.RPMPackage;
 import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 
 public interface EPKGPackageGateway {
-    boolean existRPM(EPKGPackageUnique unique);
-    boolean existRPM(String id);
+    boolean existEPKG(EPKGPackageUnique unique);
+    boolean existEPKG(String id);
     boolean save(EPKGPackage appPkg);
     boolean update(EPKGPackage appPkg);
     boolean delete(String id);
