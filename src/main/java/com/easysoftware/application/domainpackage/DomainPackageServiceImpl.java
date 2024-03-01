@@ -16,6 +16,8 @@ import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSea
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.application.domainpackage.dto.DomainSearchCondition;
 import com.easysoftware.application.domainpackage.vo.DomainPackageMenuVo;
+import com.easysoftware.application.epkgpackage.EPKGPackageService;
+import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.RPMPackageService;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
@@ -33,6 +35,9 @@ public class DomainPackageServiceImpl implements DomainPackageService {
 
     @Resource
     RPMPackageService rPMPkgService;
+
+    @Resource
+    EPKGPackageService epkgPackageService;
 
     @Resource
     RPMPackageGateway rpmPackageGateway;
@@ -54,13 +59,19 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         } else if ("rpmpkg".equals(condition.getName())) {
             RPMPackageSearchCondition rPMCon = new RPMPackageSearchCondition();
             BeanUtils.copyProperties(condition, rPMCon);
-            Map<String, Object> appMenuList = rPMPkgService.queryAllRPMPkgMenu(rPMCon);
-            return ResultUtil.success(HttpStatus.OK, appMenuList);
+            Map<String, Object> rpmMenuList = rPMPkgService.queryAllRPMPkgMenu(rPMCon);
+            return ResultUtil.success(HttpStatus.OK, rpmMenuList);
+        } else if ("epkgpkg".equals(condition.getName())) {
+            EPKGPackageSearchCondition eCon = new EPKGPackageSearchCondition();
+            BeanUtils.copyProperties(condition, eCon);
+            Map<String, Object> epkgMenu = epkgPackageService.queryAllEPKGPkgMenu(eCon);
+            return ResultUtil.success(HttpStatus.OK, epkgMenu);
         } else if ("all".equals(condition.getName())) {
             ResponseEntity<Object> res = searchAllEntity(condition);
             return res;
+        } else {
+            return null;
         }
-        return null;
     }
 
     private ResponseEntity<Object> searchAllEntity(DomainSearchCondition condition) {

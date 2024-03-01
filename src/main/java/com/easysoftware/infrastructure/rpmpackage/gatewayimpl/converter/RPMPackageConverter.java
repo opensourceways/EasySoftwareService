@@ -38,7 +38,6 @@ public class RPMPackageConverter {
             RPMPackageDetailVo detail = new RPMPackageDetailVo();
             BeanUtils.copyProperties(rpm, detail);
 
-            System.out.println();
             res.add(detail);
         }
         return res;

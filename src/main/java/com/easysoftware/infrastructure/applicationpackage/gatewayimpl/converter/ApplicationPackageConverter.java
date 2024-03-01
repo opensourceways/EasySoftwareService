@@ -13,7 +13,7 @@ import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
 
-public class ApplicationPackageConvertor {
+public class ApplicationPackageConverter {
     public static ApplicationPackage toEntity(ApplicationPackageDO appPkgDO) {
         ApplicationPackage appPkg = new ApplicationPackage();
         BeanUtils.copyProperties(appPkgDO, appPkg);
