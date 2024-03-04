@@ -50,7 +50,7 @@ public class EPKGPackageDetailVo {
 
     private String changeLog;
 
-    private String path;
+    private String files;
 
     private String maintanierId;
 
