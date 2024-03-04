@@ -1,6 +1,7 @@
 package com.easysoftware.application.applicationversion;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
 import com.easysoftware.application.applicationversion.dto.InputApplicationVersion;
 import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.utils.ApiUtil;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.common.utils.UuidUtil;
@@ -21,7 +23,6 @@ import com.easysoftware.domain.applicationversion.gateway.ApplicationVersionGate
 import com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobject.ApplicationVersionDO;
 import com.easysoftware.infrastructure.mapper.ApplicationVersionDOMapper;
 import com.easysoftware.kafka.Producer;
-// import com.easysoftware.domain.compatible.gateway.CompatibleGateway;
 
 import jakarta.annotation.Resource;
 
@@ -33,11 +34,11 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
     @Value("${producer.topic}")
     String topicAppVersion;
 
+    @Value("${api.repoInfo}")
+    String repoInfoApi;
+
     @Resource
     ApplicationVersionGateway AppVersionGateway;
-
-    // @Resource
-    // CompatibleGateway compatibleGateway;
 
     public String getCompatible(String name) {
         return null;
@@ -52,24 +53,9 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
         }
         ApplicationVersion AppVersion = new ApplicationVersion();
         BeanUtils.copyProperties(inputAppVersion, AppVersion);
+        AppVersion = addAppPkgInfo(AppVersion);
 
         kafkaProducer.sendMess(topicAppVersion, UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(AppVersion));
-
-        // boolean succeed = AppVersionGateway.save(AppVersion);
-        // if (!succeed) {
-        //     return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0006);
-        // }
-
-        // 同步更新兼容版本状态
-        // InputCompatible inputCompatible = new InputCompatible();
-        // inputCompatible.setName(inputAppVersion.getName());
-        // inputCompatible.setUpstreamVersion(inputAppVersion.getVersion());
-        // inputCompatible.setCompatibleVersion("compatibleVersion");
-        // String status = "ok" ;
-        // inputCompatible.setStatus(status);
-        // Compatible Compatible = new Compatible();
-        // BeanUtils.copyProperties(inputCompatible, Compatible);
-        // boolean succee = compatibleGateway.save(Compatible);
 
         return ResultUtil.success(HttpStatus.OK);
     }
@@ -89,6 +75,7 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
         }
         ApplicationVersion AppVersion = new ApplicationVersion();
         BeanUtils.copyProperties(inputAppVersion, AppVersion);
+        AppVersion = addAppPkgInfo(AppVersion);
 
         boolean succeed = AppVersionGateway.update(AppVersion);
         if (!succeed) {
@@ -120,4 +107,23 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
         return ResultUtil.success(HttpStatus.OK, msg);
     }
     
+    public ApplicationVersion addAppPkgInfo(ApplicationVersion appVer) {
+        Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, appVer.getName(), "app_openeuler"));
+        appVer.setCompatibleVersion(info.get("latest_version"));
+
+        info = ApiUtil.getApiResponse(String.format(repoInfoApi, appVer.getName(), "app_up"));
+        appVer.setUpstreamVersion(info.get("latest_version"));
+
+        info = ApiUtil.getApiResponse(String.format(repoInfoApi, appVer.getName(), "app_openeuler_ci"));
+        appVer.setCiVersion(info.get("latest_version"));
+
+        if (appVer.getCompatibleVersion() == null) {
+            appVer.setStatus("MISSING");
+        } else if (appVer.getUpstreamVersion().equals(appVer.getCompatibleVersion())) {
+            appVer.setStatus("OK");
+        } else {
+            appVer.setStatus("OUTDATED");
+        }
+        return appVer;
+    }
 }
