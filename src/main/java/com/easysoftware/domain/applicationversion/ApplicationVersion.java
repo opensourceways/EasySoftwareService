@@ -13,8 +13,11 @@ public class ApplicationVersion {
     @Serial
     private static final long serialVersionUID = 1L;
     public String name;
-    public String version;
     public String homepage;
     public String backend;
+    public String upstreamVersion;
+    public String compatibleVersion;
+    public String ciVersion;
+    public String status;
     private String id;
 }
