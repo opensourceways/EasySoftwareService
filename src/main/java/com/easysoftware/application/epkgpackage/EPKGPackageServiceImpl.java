@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.dto.InputEPKGPackage;
 import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.utils.Base64Util;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.epkgpackage.EPKGPackage;
 import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
@@ -53,7 +54,9 @@ public class EPKGPackageServiceImpl implements EPKGPackageService {
 
     @Override
     public ResponseEntity<Object> insertEPKGPkg(InputEPKGPackage inputEPKGPackage) {
-       if (StringUtils.isNotBlank(inputEPKGPackage.getId())) {
+        inputEPKGPackage = Base64Util.decode(inputEPKGPackage);
+
+        if (StringUtils.isNotBlank(inputEPKGPackage.getId())) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
         }
         // 数据库中是否已存在该包
@@ -63,6 +66,8 @@ public class EPKGPackageServiceImpl implements EPKGPackageService {
         if (found) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0008);
         }
+        
+
         EPKGPackage epkgPkg = new EPKGPackage();
         BeanUtils.copyProperties(inputEPKGPackage, epkgPkg);
 
@@ -87,6 +92,8 @@ public class EPKGPackageServiceImpl implements EPKGPackageService {
 
     @Override
     public ResponseEntity<Object> updateEPKGPkg(InputEPKGPackage inputEPKGPackage) {
+        inputEPKGPackage = Base64Util.decode(inputEPKGPackage);
+        
         if (StringUtils.isBlank(inputEPKGPackage.getId())) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
         }
