@@ -18,12 +18,9 @@ import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenu
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
 import com.easysoftware.common.utils.ApiUtil;
-import com.easysoftware.common.utils.HttpClientUtil;
-import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
-import com.fasterxml.jackson.databind.JsonNode;
 
 import jakarta.annotation.Resource;
 
@@ -118,7 +115,7 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
         appPkg.setMaintainerGiteeId(maintainer.get("gitee_id"));
         appPkg.setMaintainerEmail(maintainer.get("email"));
 
-        Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, appPkg.getName(), "docker_openeuler"));
+        Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, appPkg.getName(), "app_openeuler"));
         appPkg.setOs(info.get("os"));
         appPkg.setAppVer(info.get("latest_version") + "-" + info.get("os_version"));
         appPkg.setArch(info.get("arch"));
