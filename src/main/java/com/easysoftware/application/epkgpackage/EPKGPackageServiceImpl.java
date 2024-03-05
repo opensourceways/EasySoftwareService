@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.dto.InputEPKGPackage;
 import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.utils.ApiUtil;
 import com.easysoftware.common.utils.Base64Util;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.epkgpackage.EPKGPackage;
@@ -28,6 +30,12 @@ import jakarta.annotation.Resource;
 public class EPKGPackageServiceImpl implements EPKGPackageService {
     @Resource
     EPKGPackageGateway ePKGPackageGateway;
+
+    @Value("${api.repoMaintainer}")
+    String repoMaintainerApi;
+
+    @Value("${api.repoInfo}")
+    String repoInfoApi;
     
     @Override
     public ResponseEntity<Object> deleteEPKGPkg(List<String> ids) {
@@ -70,6 +78,7 @@ public class EPKGPackageServiceImpl implements EPKGPackageService {
 
         EPKGPackage epkgPkg = new EPKGPackage();
         BeanUtils.copyProperties(inputEPKGPackage, epkgPkg);
+        epkgPkg = addEPKGInfo(epkgPkg);
 
         boolean succeed = ePKGPackageGateway.save(epkgPkg);
         if (!succeed) {
@@ -104,6 +113,7 @@ public class EPKGPackageServiceImpl implements EPKGPackageService {
         }
         EPKGPackage epkgPkg = new EPKGPackage();
         BeanUtils.copyProperties(inputEPKGPackage, epkgPkg);
+        epkgPkg = addEPKGInfo(epkgPkg);
 
         boolean succeed = ePKGPackageGateway.update(epkgPkg);
         if (!succeed) {
@@ -111,5 +121,19 @@ public class EPKGPackageServiceImpl implements EPKGPackageService {
         }
         return ResultUtil.success(HttpStatus.OK);
     }
-    
+
+    public EPKGPackage addEPKGInfo(EPKGPackage epkgPkg) {
+        Map<String, String> maintainer = ApiUtil.getApiResponse(String.format(repoMaintainerApi, epkgPkg.getName()));
+        epkgPkg.setMaintainerGiteeId(maintainer.get("gitee_id"));
+        epkgPkg.setMaintianerEmail(maintainer.get("email"));
+
+        Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, epkgPkg.getName(), "rpm_openeuler"));
+        epkgPkg.setOs(info.get("os"));
+        epkgPkg.setArch(info.get("arch"));
+        epkgPkg.setBinDownloadUrl(info.get("binDownloadUrl"));
+        epkgPkg.setSrcDownloadUrl(info.get("srcDownloadUrl"));
+        epkgPkg.setSrcRepo(info.get("srcRepo"));
+        epkgPkg.setEpkgSize(info.get("appSize"));
+        return epkgPkg;
+    }
 }
