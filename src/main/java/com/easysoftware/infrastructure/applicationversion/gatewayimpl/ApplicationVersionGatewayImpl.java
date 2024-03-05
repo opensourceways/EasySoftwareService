@@ -1,6 +1,8 @@
 package com.easysoftware.infrastructure.applicationversion.gatewayimpl;
 
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -55,7 +57,7 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
     }
 
     @Override
-    public List<ApplicationVersion> queryByName(ApplicationVersionSearchCondition condition) {
+    public Map<String, Object> queryByName(ApplicationVersionSearchCondition condition) {
         int pageNum = condition.getPageNum();
         int pageSize = condition.getPageSize();
         String name = condition.getName();
@@ -63,15 +65,16 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
         Page<ApplicationVersionDO> page = new Page<>(pageNum, pageSize);
 
         QueryWrapper<ApplicationVersionDO> wrapper = new QueryWrapper<>();
-        if ("all".equals(name)) {
-            wrapper = null;
-        } else {
-            wrapper.eq("name", name);
-        }
-        
+        wrapper = name == null ? null :  wrapper.eq("name", name);
+
         Page<ApplicationVersionDO> resPage = appVersionMapper.selectPage(page, wrapper);
         List<ApplicationVersionDO> appDOs = resPage.getRecords();
-        List<ApplicationVersion> res = ApplicationVersionConvertor.toEntity(appDOs);
+        List<ApplicationVersion> appDetails = ApplicationVersionConvertor.toEntity(appDOs);
+
+        Map<String, Object> res = Map.ofEntries(
+            Map.entry("total", resPage.getTotal()),
+            Map.entry("list", appDetails)
+        );
         
         return res;
     }
