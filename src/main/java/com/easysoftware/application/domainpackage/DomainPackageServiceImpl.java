@@ -21,7 +21,6 @@ import com.easysoftware.application.epkgpackage.EPKGPackageService;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.RPMPackageService;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
-import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
@@ -52,6 +51,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     public ResponseEntity<Object> searchDomain(DomainSearchCondition condition) {
         String name = condition.getName();
         String entity = condition.getEntity();
+
         // 搜索domain页面 
         if (StringUtils.isBlank(entity) && StringUtils.isNotBlank(name)) {
             return searchDomainPage(condition);
@@ -106,6 +106,10 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         } else if ("rpmpkg".equals(condition.getName())) {
             RPMPackageSearchCondition rPMCon = new RPMPackageSearchCondition();
             BeanUtils.copyProperties(condition, rPMCon);
+            rPMCon.setName("");
+            rPMCon.setRpmCategory(condition.getCategory());
+
+            
             Map<String, Object> rpmMenuList = rPMPkgService.queryAllRPMPkgMenu(rPMCon);
             return ResultUtil.success(HttpStatus.OK, rpmMenuList);
         } else if ("epkgpkg".equals(condition.getName())) {

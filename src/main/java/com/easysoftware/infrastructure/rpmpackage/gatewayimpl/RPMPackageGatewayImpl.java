@@ -66,10 +66,8 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     @Override
     public Map<String, Object> queryDetailByName(RPMPackageSearchCondition condition) {
         Page<RPMPackageDO> page = createPage(condition);
-        QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
-        String name = condition.getName();
-        wrapper.eq("name", name);
-             
+        QueryWrapper<RPMPackageDO> wrapper = RPMPackageConverter.createQueryWrapper(new RPMPackageDO(), condition);
+        
         IPage<RPMPackageDO> resPage = rPMPkgMapper.selectPage(page, wrapper);
         List<RPMPackageDO> rPMDOs = resPage.getRecords();
         List<RPMPackageDetailVo> rPMDetails = RPMPackageConverter.toDetail(rPMDOs);
@@ -111,7 +109,8 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     @Override
     public Map<String, Object> queryMenuByName(RPMPackageSearchCondition condition) {
         Page<RPMPackageDO> page = createPage(condition);
-        QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
+        QueryWrapper<RPMPackageDO> wrapper = RPMPackageConverter.createQueryWrapper(new RPMPackageDO(), condition);
+        // QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
 
         IPage<RPMPackageDO> resPage = rPMPkgMapper.selectPage(page, wrapper);
         List<RPMPackageDO> rpmDOs = resPage.getRecords();
@@ -131,5 +130,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         Page<RPMPackageDO> page = new Page<>(pageNum, pageSize);
         return page;
     }
+
+    
     
 }
