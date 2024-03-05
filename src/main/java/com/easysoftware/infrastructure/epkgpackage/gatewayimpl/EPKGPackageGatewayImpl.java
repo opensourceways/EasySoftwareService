@@ -19,6 +19,7 @@ import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
+import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.domain.epkgpackage.EPKGPackage;
 import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
 import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
@@ -73,10 +74,8 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
     @Override
     public Map<String, Object> queryDetailByName(EPKGPackageSearchCondition condition) {
         Page<EPKGPackageDO> page = createPage(condition);
-        QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
-        String name = condition.getName();
-        wrapper.eq("name", name);
-             
+        QueryWrapper<EPKGPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new EPKGPackageDO(), 
+                condition, "epkg_update_at");
         IPage<EPKGPackageDO> resPage = ePKGPkgMapper.selectPage(page, wrapper);
         List<EPKGPackageDO> rPMDOs = resPage.getRecords();
         List<EPKGPackageDetailVo> rPMDetails = EPKGPackageConverter.toDetail(rPMDOs);
@@ -93,8 +92,8 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
     @Override
     public Map<String, Object> queryMenuByName(EPKGPackageSearchCondition condition) {
         Page<EPKGPackageDO> page = createPage(condition);
-        QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
-
+        QueryWrapper<EPKGPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new EPKGPackageDO(), 
+                condition, "epkg_update_at");
         IPage<EPKGPackageDO> resPage = ePKGPkgMapper.selectPage(page, wrapper);
         List<EPKGPackageDO> rpmDOs = resPage.getRecords();
         List<EPKGPackageMenuVo> rPMMenus = EPKGPackageConverter.toMenu(rpmDOs);
