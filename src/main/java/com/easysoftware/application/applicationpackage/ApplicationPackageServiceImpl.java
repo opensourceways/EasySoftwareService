@@ -1,7 +1,6 @@
 package com.easysoftware.application.applicationpackage;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,10 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.dto.InputApplicationPackage;
-import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
-import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
-import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
 import com.easysoftware.common.utils.ApiUtil;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
@@ -34,6 +30,12 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
 
     @Value("${api.repoInfo}")
     String repoInfoApi;
+
+    @Value("${obs.endpoint}")
+    String obsEndpoint;
+
+    @Value("${obs.bucket}")
+    String obsBucketName;
 
     @Override
     public ResponseEntity<Object> insertAppPkg(InputApplicationPackage inputAppPkg) {
@@ -121,6 +123,12 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
         appPkg.setBinDownloadUrl(info.get("binDownloadUrl"));
         appPkg.setSrcDownloadUrl(info.get("srcDownloadUrl"));
         appPkg.setSrcRepo(info.get("srcRepo"));
+        appPkg.setIconUrl(generateUrl(appPkg.getName() + ".png"));
         return appPkg;
+    }
+
+    private String generateUrl(String objectKey) {
+        String publicUrl = "https://" + obsBucketName + "." + obsEndpoint + "/" + objectKey;
+        return publicUrl;
     }
 }

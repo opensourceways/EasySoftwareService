@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.utils.ApiUtil;
 import com.easysoftware.common.utils.Base64Util;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
@@ -28,6 +30,12 @@ import jakarta.annotation.Resource;
 public class RPMPackageServiceImpl implements RPMPackageService {
     @Resource
     RPMPackageGateway rPMPkgGateway;
+
+    @Value("${api.repoMaintainer}")
+    String repoMaintainerApi;
+
+    @Value("${api.repoInfo}")
+    String repoInfoApi;
 
     @Override
     public Map<String, Object> queryAllRPMPkgMenu(RPMPackageSearchCondition condition) {
@@ -74,6 +82,7 @@ public class RPMPackageServiceImpl implements RPMPackageService {
         }
         RPMPackage rPMPkg = new RPMPackage();
         BeanUtils.copyProperties(inputrPMPackage, rPMPkg);
+        rPMPkg = addRPMPkgInfo(rPMPkg);
 
         boolean succeed = rPMPkgGateway.save(rPMPkg);
         if (!succeed) {
@@ -102,11 +111,27 @@ public class RPMPackageServiceImpl implements RPMPackageService {
         }
         RPMPackage rPMPkg = new RPMPackage();
         BeanUtils.copyProperties(inputrPMPackage, rPMPkg);
+        rPMPkg = addRPMPkgInfo(rPMPkg);
 
         boolean succeed = rPMPkgGateway.update(rPMPkg);
         if (!succeed) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0004);
         }
         return ResultUtil.success(HttpStatus.OK);
+    }
+
+    public RPMPackage addRPMPkgInfo(RPMPackage rPMPkg) {
+        Map<String, String> maintainer = ApiUtil.getApiResponse(String.format(repoMaintainerApi, rPMPkg.getName()));
+        rPMPkg.setMaintainerGiteeId(maintainer.get("gitee_id"));
+        rPMPkg.setMaintianerEmail(maintainer.get("email"));
+
+        Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, rPMPkg.getName(), "rpm_openeuler"));
+        rPMPkg.setOs(info.get("os"));
+        rPMPkg.setArch(info.get("arch"));
+        rPMPkg.setBinDownloadUrl(info.get("binDownloadUrl"));
+        rPMPkg.setSrcDownloadUrl(info.get("srcDownloadUrl"));
+        rPMPkg.setSrcRepo(info.get("srcRepo"));
+        rPMPkg.setRpmSize(info.get("appSize"));
+        return rPMPkg;
     }
 }
