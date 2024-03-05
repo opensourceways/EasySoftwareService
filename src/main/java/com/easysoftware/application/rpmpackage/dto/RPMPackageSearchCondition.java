@@ -1,6 +1,11 @@
 package com.easysoftware.application.rpmpackage.dto;
 
 import org.hibernate.validator.constraints.Range;
+
+import com.easysoftware.common.constant.PackageConstant;
+import com.easysoftware.common.exception.enumvalid.EnumValue;
+import com.easysoftware.common.exception.enumvalid.TimeOrderEnum;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -15,9 +20,27 @@ public class RPMPackageSearchCondition {
     @NotBlank
     private String name;
 
-    @Range(min = 1, max = 10000, message = "page must be greater than 0 and less than 10000 ")
+    @Range(min = PackageConstant.MIN_PAGE_NUM, max = PackageConstant.MAX_PAGE_NUM)
     private Integer pageNum = 1;
 
-    @Range(min = 5, max = 50, message = "page must be greater than 5 and less than 50 ")
+    @Range(min = PackageConstant.MIN_PAGE_SIZE, max = PackageConstant.MAX_PAGE_SIZE)
     private Integer pageSize = 10;
+
+    @Size(max = 50)
+    private String version;
+
+    @Size(max = 50)
+    private String os;
+
+    @Size(max = 50)
+    private String arch;
+
+    @Size(max = 50)
+    private String rpmCategory;
+
+    @Size(max = 50)
+    private String rpmUpdateAt;
+
+    @EnumValue(enumClass = TimeOrderEnum.class, enumMethod = "isValidCategory")
+    private String timeOrder = "desc";
 }
