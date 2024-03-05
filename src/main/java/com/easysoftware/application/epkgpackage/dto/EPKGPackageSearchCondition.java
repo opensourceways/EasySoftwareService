@@ -3,6 +3,8 @@ package com.easysoftware.application.epkgpackage.dto;
 import org.hibernate.validator.constraints.Range;
 
 import com.easysoftware.common.constant.PackageConstant;
+import com.easysoftware.common.exception.enumvalid.EnumValue;
+import com.easysoftware.common.exception.enumvalid.TimeOrderEnum;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -23,4 +25,22 @@ public class EPKGPackageSearchCondition {
 
     @Range(min = PackageConstant.MIN_PAGE_SIZE, max = PackageConstant.MAX_PAGE_SIZE)
     private Integer pageSize = 10;
+
+    @Size(max = 50)
+    private String version;
+
+    @Size(max = 50)
+    private String os;
+
+    @Size(max = 50)
+    private String arch;
+
+    @Size(max = 50)
+    private String epkgCategory;
+
+    @Size(max = 50)
+    private String epkgUpdateAt;
+
+    @EnumValue(enumClass = TimeOrderEnum.class, enumMethod = "isValidCategory")
+    private String timeOrder;
 }
