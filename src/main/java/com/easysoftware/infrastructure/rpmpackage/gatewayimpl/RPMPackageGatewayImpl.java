@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
+import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
 import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
@@ -66,8 +67,8 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     @Override
     public Map<String, Object> queryDetailByName(RPMPackageSearchCondition condition) {
         Page<RPMPackageDO> page = createPage(condition);
-        QueryWrapper<RPMPackageDO> wrapper = RPMPackageConverter.createQueryWrapper(new RPMPackageDO(), condition);
-        
+        QueryWrapper<RPMPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new RPMPackageDO(), 
+                condition, "rpm_update_at");
         IPage<RPMPackageDO> resPage = rPMPkgMapper.selectPage(page, wrapper);
         List<RPMPackageDO> rPMDOs = resPage.getRecords();
         List<RPMPackageDetailVo> rPMDetails = RPMPackageConverter.toDetail(rPMDOs);
@@ -109,9 +110,8 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     @Override
     public Map<String, Object> queryMenuByName(RPMPackageSearchCondition condition) {
         Page<RPMPackageDO> page = createPage(condition);
-        QueryWrapper<RPMPackageDO> wrapper = RPMPackageConverter.createQueryWrapper(new RPMPackageDO(), condition);
-        // QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
-
+        QueryWrapper<RPMPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new RPMPackageDO(), 
+                condition, "rpm_update_at");
         IPage<RPMPackageDO> resPage = rPMPkgMapper.selectPage(page, wrapper);
         List<RPMPackageDO> rpmDOs = resPage.getRecords();
         List<RPMPackageMenuVo> rPMMenus = RPMPackageConverter.toMenu(rpmDOs);
