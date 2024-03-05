@@ -62,7 +62,7 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
 
     @Override
     public ResponseEntity<Object> searchAppVersion(ApplicationVersionSearchCondition condition) {
-        List<ApplicationVersion> res = AppVersionGateway.queryByName(condition);
+        Map<String, Object> res = AppVersionGateway.queryByName(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
