@@ -55,7 +55,7 @@ public @interface EnumValue {
             try {
                 Method method = enumClass.getMethod(enumMethod, valueClass);
                 if (!Boolean.TYPE.equals(method.getReturnType()) && !Boolean.class.equals(method.getReturnType())) {
-                    throw new com.easysoftware.common.exception.EnumValidException();
+                    throw new EnumValidException();
                     }
  
                 if(!Modifier.isStatic(method.getModifiers())) {
