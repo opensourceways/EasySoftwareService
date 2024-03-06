@@ -1,6 +1,8 @@
 package com.easysoftware.common.utils;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -33,6 +35,7 @@ public class QueryWrapperUtil {
             }
 
             String vStr = (String) value;
+            vStr = StringUtils.trimToEmpty(vStr);
             if (StringUtils.isBlank(vStr)) {
                 continue;
             }
@@ -47,8 +50,37 @@ public class QueryWrapperUtil {
             }
 
             String undLine = StringUtil.camelToUnderline(field.getName());
-            wrapper.eq(undLine, vStr);
+            
+            //","代表该字段有多个参数
+            if (vStr.contains(",")) {
+                List<String> items = splitStr(vStr);
+                if (items.size() == 0) {
+                    continue;
+                }
+                wrapper.in(undLine, items);
+            } else {
+                vStr = StringUtils.trimToEmpty(vStr);
+                wrapper.eq(undLine, vStr);
+            }
+            
         }
         return wrapper;
+    }
+
+    private static List<String> splitStr(String vStr) {
+        List<String> res = new ArrayList<>();
+
+        String[] sps = StringUtils.split(vStr, ",");
+        if (sps.length == 0) {
+            return res;
+        }
+
+        for (String sp : sps) {
+            if (StringUtils.isBlank(StringUtils.trimToEmpty(sp))) {
+                continue;
+            }
+            res.add(sp);
+        }
+        return res;
     }
 }
