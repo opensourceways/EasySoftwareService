@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.Range;
 
 import com.easysoftware.common.constant.PackageConstant;
 import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
+import com.easysoftware.common.exception.enumvalid.DomainNameEnum;
 import com.easysoftware.common.exception.enumvalid.EnumValue;
 import com.easysoftware.common.exception.enumvalid.TimeOrderEnum;
 
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DomainSearchCondition {
-    @Size(max = 50)
+    @EnumValue(enumClass = DomainNameEnum.class, enumMethod = "isValidCategory")
     private String name;
 
     @Size(max = 50)

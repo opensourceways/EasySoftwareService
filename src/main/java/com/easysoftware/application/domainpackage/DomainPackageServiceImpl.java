@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.easysoftware.application.applicationpackage.ApplicationPackageService;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
+import com.easysoftware.application.domainpackage.dto.DomainColumnCondition;
 import com.easysoftware.application.domainpackage.dto.DomainSearchCondition;
 import com.easysoftware.application.domainpackage.vo.DomainPackageMenuVo;
 import com.easysoftware.application.epkgpackage.EPKGPackageService;
@@ -212,5 +213,18 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         }
     
         return res;
+    }
+
+    @Override
+    public ResponseEntity<Object> searchColumn(DomainColumnCondition condition) {
+        if ("rpmpkg".equals(condition.getName())) {
+            List<String> res = rpmPackageGateway.queryColumn(condition.getColumn());
+            return ResultUtil.success(HttpStatus.OK, res);
+        } else if ("epkgpkg".equals(condition.getName())) {
+            List<String> res = epkgPackageGateway.queryColumn(condition.getColumn());
+            return ResultUtil.success(HttpStatus.OK, res);
+        } else {
+            return null;
+        }
     }
 }

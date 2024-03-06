@@ -14,6 +14,8 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.easysoftware.common.entity.MessageCode;
+
 public class HttpClientUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(LogUtil.class);
@@ -32,7 +34,7 @@ public class HttpClientUtil {
             reader.close();
             return response.toString();
         } catch (Exception e) {
-            logger.error("exception", e);
+            logger.error(MessageCode.EC0001.getMsgEn(), e);
         }
         return null;
     }
@@ -58,7 +60,7 @@ public class HttpClientUtil {
             reader.close();
             return response.toString();
         } catch (Exception e) {
-            logger.error("exception", e);
+            logger.error(MessageCode.EC0001.getMsgEn(), e);
         }
         return null;
     }
@@ -71,7 +73,7 @@ public class HttpClientUtil {
             String responseBody = EntityUtils.toString(response.getEntity());
             return responseBody;
         } catch (Exception e) {
-            logger.error("exception", e);
+            logger.error(MessageCode.EC0001.getMsgEn(), e);
         }
         return null;
     }

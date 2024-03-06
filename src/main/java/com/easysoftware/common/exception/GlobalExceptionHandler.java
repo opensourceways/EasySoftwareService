@@ -21,7 +21,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Object> exception(MethodArgumentNotValidException e) {
-        System.out.println(e);
         logger.error(MessageCode.EC0002.getMsgEn());
         return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
     }

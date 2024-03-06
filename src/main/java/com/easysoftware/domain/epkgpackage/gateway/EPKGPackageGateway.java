@@ -1,5 +1,6 @@
 package com.easysoftware.domain.epkgpackage.gateway;
 
+import java.util.List;
 import java.util.Map;
 
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
@@ -17,4 +18,5 @@ public interface EPKGPackageGateway {
     boolean delete(String id);
     Map<String, Object> queryDetailByName(EPKGPackageSearchCondition condition);
     Map<String, Object> queryMenuByName(EPKGPackageSearchCondition condition);
+    List<String> queryColumn(String column);
 }

@@ -16,4 +16,5 @@ public interface RPMPackageGateway {
     boolean delete(String id);
     Map<String, Object> queryDetailByName(RPMPackageSearchCondition condition);
     Map<String, Object> queryMenuByName(RPMPackageSearchCondition condition);
+    List<String> queryColumn(String column);
 }

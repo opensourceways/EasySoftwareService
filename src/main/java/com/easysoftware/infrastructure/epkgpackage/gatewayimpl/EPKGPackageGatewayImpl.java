@@ -130,4 +130,13 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
         Page<EPKGPackageDO> page = new Page<>(pageNum, pageSize);
         return page;
     }
+
+    @Override
+    public List<String> queryColumn(String column) {
+        QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
+        wrapper.select("distinct " + column);
+        List<EPKGPackageDO> rpmColumn = ePKGPkgMapper.selectList(wrapper);
+        List<String> res = EPKGPackageConverter.toColumn(rpmColumn, column);
+        return res;
+    }
 }
