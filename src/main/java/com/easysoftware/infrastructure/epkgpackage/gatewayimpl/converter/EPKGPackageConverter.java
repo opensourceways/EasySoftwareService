@@ -42,12 +42,15 @@ public class EPKGPackageConverter {
             Field field = EPKGPackageDO.class.getDeclaredField(column);
             field.setAccessible(true);
             for (EPKGPackageDO epkgDO : epkgDOs) {
-                    Object obj = field.get(epkgDO);
-                    if (! (obj instanceof String)) {
-                        continue;
-                    }
-                    String value = (String) field.get(epkgDO);
-                    res.add(value);
+                if (epkgDO == null) {
+                    continue;
+                }
+                Object obj = field.get(epkgDO);
+                if (! (obj instanceof String)) {
+                    continue;
+                }
+                String value = (String) field.get(epkgDO);
+                res.add(value);
             }
         } catch (Exception e) {
             logger.error(MessageCode.EC00011.getMsgEn(), e);

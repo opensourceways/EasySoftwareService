@@ -40,12 +40,15 @@ public class RPMPackageConverter {
             Field field = RPMPackageDO.class.getDeclaredField(column);
             field.setAccessible(true);
             for (RPMPackageDO rPMPkgDO : rPMPkgDOs) {
-                    Object obj = field.get(rPMPkgDO);
-                    if (! (obj instanceof String)) {
-                        continue;
-                    }
-                    String value = (String) field.get(rPMPkgDO);
-                    res.add(value);
+                if (rPMPkgDO == null) {
+                    continue;
+                }
+                Object obj = field.get(rPMPkgDO);
+                if (! (obj instanceof String)) {
+                    continue;
+                }
+                String value = (String) field.get(rPMPkgDO);
+                res.add(value);
             }
         } catch (Exception e) {
             logger.error(MessageCode.EC00011.getMsgEn(), e);
