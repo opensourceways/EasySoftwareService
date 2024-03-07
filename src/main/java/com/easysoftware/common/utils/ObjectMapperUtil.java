@@ -187,7 +187,7 @@ public class ObjectMapperUtil {
         }
     }
 
-    public static <T> Map<String, T> jsonToMap(JsonNode obj) {
+    public static <T> Map<String, T> jsonToMap(Object obj) {
         Map<String, T> res = objectMapper.convertValue(obj, new TypeReference<Map<String, T>>() {});
         return res;
     }
