@@ -133,10 +133,14 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
 
     @Override
     public List<String> queryColumn(String column) {
+        column = "category".equals(column) ? "epkg_category" : column;
         QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
         wrapper.select("distinct " + column);
         List<EPKGPackageDO> rpmColumn = ePKGPkgMapper.selectList(wrapper);
+
+        column = StringUtil.underlineToCamel(column);
         List<String> res = EPKGPackageConverter.toColumn(rpmColumn, column);
+        
         return res;
     }
 }
