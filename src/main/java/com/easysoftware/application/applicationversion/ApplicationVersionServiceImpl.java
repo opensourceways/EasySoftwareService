@@ -26,7 +26,7 @@ import com.easysoftware.kafka.Producer;
 
 import jakarta.annotation.Resource;
 
-@Service
+@Service("ApplicationVersionService")
 public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersionDOMapper, ApplicationVersionDO> implements ApplicationVersionService {
     @Autowired
     Producer kafkaProducer;
@@ -55,7 +55,9 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
         BeanUtils.copyProperties(inputAppVersion, AppVersion);
         AppVersion = addAppPkgInfo(AppVersion);
 
-        kafkaProducer.sendMess(topicAppVersion, UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(AppVersion));
+        Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(AppVersion);
+        kafkaMsg.put("table", "ApplicationVersion");
+        kafkaProducer.sendMess(topicAppVersion + "_version", UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(kafkaMsg));
 
         return ResultUtil.success(HttpStatus.OK);
     }
@@ -125,5 +127,21 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
             appVer.setStatus("OUTDATED");
         }
         return appVer;
+    }
+
+    @Override
+    public boolean existApp(String name){
+        return AppVersionGateway.existApp(name);
+    }
+
+    @Override
+    public void saveDataObject(String dataObject) {
+        ApplicationVersion appVer = ObjectMapperUtil.jsonToObject(dataObject, ApplicationVersion.class);
+        AppVersionGateway.save(appVer);
+    }
+
+    @Override
+    public void saveDataObjectBatch(ArrayList<String> dataObject) {
+        saveBatch(AppVersionGateway.convertBatch(dataObject));
     }
 }
