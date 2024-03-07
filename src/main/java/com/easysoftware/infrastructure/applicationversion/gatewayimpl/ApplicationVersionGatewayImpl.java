@@ -1,5 +1,7 @@
 package com.easysoftware.infrastructure.applicationversion.gatewayimpl;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +11,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
+import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.domain.applicationversion.ApplicationVersion;
 import com.easysoftware.domain.applicationversion.gateway.ApplicationVersionGateway;
 import com.easysoftware.infrastructure.applicationversion.gatewayimpl.converter.ApplicationVersionConvertor;
@@ -77,6 +80,17 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
         );
         
         return res;
+    }
+
+    @Override
+    public Collection<ApplicationVersionDO> convertBatch(Collection<String> dataObject){
+        Collection<ApplicationVersionDO> ObjList = new ArrayList<>();
+        for (String obj : dataObject) {
+            ApplicationVersion appVer = ObjectMapperUtil.jsonToObject(obj, ApplicationVersion.class);
+            ApplicationVersionDO appVersionDO = ApplicationVersionConvertor.toDataObjectForUpdate(appVer);
+            ObjList.add(appVersionDO);
+        }
+        return ObjList;
     }
 }
 
