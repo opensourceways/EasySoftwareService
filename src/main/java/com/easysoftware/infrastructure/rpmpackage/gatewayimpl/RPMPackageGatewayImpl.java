@@ -133,10 +133,14 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
 
     @Override
     public List<String> queryColumn(String column) {
+        column = "category".equals(column) ? "rpm_category" : column;
         QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
         wrapper.select("distinct " + column);
         List<RPMPackageDO> rpmColumn = rPMPkgMapper.selectList(wrapper);
+
+        column = StringUtil.underlineToCamel(column);
         List<String> res = RPMPackageConverter.toColumn(rpmColumn, column);
+
         return res;
     }
 }
