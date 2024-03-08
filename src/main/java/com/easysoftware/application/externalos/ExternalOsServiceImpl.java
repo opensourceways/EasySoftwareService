@@ -57,7 +57,7 @@ public class ExternalOsServiceImpl implements ExternalOsService {
 
     @Override
     public ResponseEntity<Object> insertPkgMap(InputExternalOs input) {
-        input = Base64Util.decode(input);
+        // input = Base64Util.decode(input);
 
         // 若数据库中已经存在该数据，则请求失败
         if (StringUtils.isNotBlank(input.getId())) {
@@ -76,7 +76,7 @@ public class ExternalOsServiceImpl implements ExternalOsService {
 
     @Override
     public ResponseEntity<Object> updatePkgMap(InputExternalOs input) {
-        input = Base64Util.decode(input);
+        // input = Base64Util.decode(input);
 
         if (StringUtils.isBlank(input.getId())) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);

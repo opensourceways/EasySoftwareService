@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class EPKGPackageDetailVo {
     private String name;
 
+    private String id;
+
     private String version;
 
     private String os;
@@ -54,7 +56,7 @@ public class EPKGPackageDetailVo {
 
     private String maintanierId;
 
-    private String maintianerEmail;
+    private String maintainerEmail;
 
     private String maintainerGiteeId;
 

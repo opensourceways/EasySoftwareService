@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.Range;
 
 import com.easysoftware.common.constant.PackageConstant;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,8 +22,10 @@ public class DomainColumnCondition {
     private Integer pageSize = 10;
 
     @Size(max = 50)
+    @NotBlank
     private String name;
 
     @Size(max = 50)
+    @NotBlank
     private String column;
 }

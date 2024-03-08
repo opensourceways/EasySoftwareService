@@ -62,7 +62,7 @@ public class EPKGPackageServiceImpl implements EPKGPackageService {
 
     @Override
     public ResponseEntity<Object> insertEPKGPkg(InputEPKGPackage inputEPKGPackage) {
-        inputEPKGPackage = Base64Util.decode(inputEPKGPackage);
+        // inputEPKGPackage = Base64Util.decode(inputEPKGPackage);
 
         if (StringUtils.isNotBlank(inputEPKGPackage.getId())) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
@@ -101,7 +101,7 @@ public class EPKGPackageServiceImpl implements EPKGPackageService {
 
     @Override
     public ResponseEntity<Object> updateEPKGPkg(InputEPKGPackage inputEPKGPackage) {
-        inputEPKGPackage = Base64Util.decode(inputEPKGPackage);
+        // inputEPKGPackage = Base64Util.decode(inputEPKGPackage);
         
         if (StringUtils.isBlank(inputEPKGPackage.getId())) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
@@ -125,7 +125,7 @@ public class EPKGPackageServiceImpl implements EPKGPackageService {
     public EPKGPackage addEPKGInfo(EPKGPackage epkgPkg) {
         Map<String, String> maintainer = ApiUtil.getApiResponse(String.format(repoMaintainerApi, epkgPkg.getName()));
         epkgPkg.setMaintainerGiteeId(maintainer.get("gitee_id"));
-        epkgPkg.setMaintianerEmail(maintainer.get("email"));
+        epkgPkg.setMaintainerEmail(maintainer.get("email"));
 
         Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, epkgPkg.getName(), "rpm_openeuler"));
         epkgPkg.setOs(info.get("os"));

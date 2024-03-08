@@ -54,7 +54,7 @@ public class RPMPackage {
 
     private String maintanierId;
 
-    private String maintianerEmail;
+    private String maintainerEmail;
 
     private String maintainerGiteeId;
 
