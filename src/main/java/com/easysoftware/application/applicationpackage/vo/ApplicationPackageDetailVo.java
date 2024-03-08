@@ -7,11 +7,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApplicationPackageDetailVo {
-    public String description;
+    private String description;
 
-    public String name;
+    private String id;
 
-    public String license;
+    private String name;
+
+    private String license;
 
     private String download;
 
