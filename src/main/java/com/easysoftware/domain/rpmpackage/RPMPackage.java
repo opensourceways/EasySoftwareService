@@ -52,7 +52,7 @@ public class RPMPackage {
 
     private String changeLog;
 
-    private String maintanierId;
+    private String maintainerId;
 
     private String maintianerEmail;
 

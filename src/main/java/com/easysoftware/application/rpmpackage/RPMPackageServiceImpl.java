@@ -123,6 +123,7 @@ public class RPMPackageServiceImpl implements RPMPackageService {
     public RPMPackage addRPMPkgInfo(RPMPackage rPMPkg) {
         Map<String, String> maintainer = ApiUtil.getApiResponse(String.format(repoMaintainerApi, rPMPkg.getName()));
         rPMPkg.setMaintainerGiteeId(maintainer.get("gitee_id"));
+        rPMPkg.setMaintainerId(maintainer.get("gitee_id"));
         rPMPkg.setMaintianerEmail(maintainer.get("email"));
 
         Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, rPMPkg.getName(), "rpm_openeuler"));

@@ -65,7 +65,7 @@ public class RPMPackageDO {
 
     private String changeLog;
 
-    private String maintanierId;
+    private String maintainerId;
 
     private String maintianerEmail;
 
