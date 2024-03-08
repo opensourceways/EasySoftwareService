@@ -35,6 +35,7 @@ public class DomainPackageQueryAdapterTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
+    
     private MockMvc mockMvc;
 
     @Autowired
@@ -66,7 +67,45 @@ public class DomainPackageQueryAdapterTest {
                 log.debug("name: {}, column: {}, data: {}", name, column, res);
             }
         }
+    }
 
-        
+    @Test
+    void test_domain_search() throws Exception {
+        List<String> names = List.of("epkgpkg", "rpmpkg");
+        List<String> verisons = List.of("1.4.3.36-3");
+        List<String> oses = List.of("openEuler-22.03");
+        List<String> arches = List.of("aarch,");
+        List<String> categories = List.of("Unspecified");
+        List<String> tiemOrders = List.of("asc", "desc");
+
+        for (String version : verisons) {
+            for (String name : names) {
+                for (String os : oses) {
+                    for (String arch : arches) {
+                        for (String category : categories) {
+                            for (String timeOrder : tiemOrders) {
+                                MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/domain")
+                                        .param("name", name)
+                                        .param("os", os)
+                                        .param("arch", arch)
+                                        .param("version", version)
+                                        .param("category", category)
+                                        .param("timeOrder", timeOrder)
+                                        .accept(MediaType.APPLICATION_JSON))
+                                        .andReturn();
+    
+                                String content = result.getResponse().getContentAsString(Charset.defaultCharset());
+                                Map<String, Object> res = objectMapper.readValue(content, Map.class);
+                                int code = (int) res.get("code");
+                                assertEquals(code, 200);
+                                log.debug("name: {}, os: {}, arch: {}, category: {}, timeOrder: {}, res: {}", name, os, 
+                                        arch, category, timeOrder, res);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
+

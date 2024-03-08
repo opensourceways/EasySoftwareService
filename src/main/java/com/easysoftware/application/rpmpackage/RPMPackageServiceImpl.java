@@ -68,7 +68,7 @@ public class RPMPackageServiceImpl implements RPMPackageService {
 
     @Override
     public ResponseEntity<Object> insertRPMPkg(InputRPMPackage inputrPMPackage) {
-        inputrPMPackage = Base64Util.decode(inputrPMPackage);
+        // inputrPMPackage = Base64Util.decode(inputrPMPackage);
 
         if (StringUtils.isNotBlank(inputrPMPackage.getId())) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
@@ -99,7 +99,7 @@ public class RPMPackageServiceImpl implements RPMPackageService {
 
     @Override
     public ResponseEntity<Object> updateRPMPkg(InputRPMPackage inputrPMPackage) {
-        inputrPMPackage = Base64Util.decode(inputrPMPackage);
+        // inputrPMPackage = Base64Util.decode(inputrPMPackage);
 
         if (StringUtils.isBlank(inputrPMPackage.getId())) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
@@ -124,7 +124,7 @@ public class RPMPackageServiceImpl implements RPMPackageService {
         Map<String, String> maintainer = ApiUtil.getApiResponse(String.format(repoMaintainerApi, rPMPkg.getName()));
         rPMPkg.setMaintainerGiteeId(maintainer.get("gitee_id"));
         rPMPkg.setMaintainerId(maintainer.get("gitee_id"));
-        rPMPkg.setMaintianerEmail(maintainer.get("email"));
+        rPMPkg.setMaintainerEmail(maintainer.get("email"));
 
         Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, rPMPkg.getName(), "rpm_openeuler"));
         rPMPkg.setOs(info.get("os"));

@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 public class RPMPackageDetailVo {
     private String name;
 
+    private String id;
+
     private String version;
 
     private String os;
@@ -50,7 +52,7 @@ public class RPMPackageDetailVo {
 
     private String maintainerId;
 
-    private String maintianerEmail;
+    private String maintainerEmail;
 
     private String maintainerGiteeId;
 

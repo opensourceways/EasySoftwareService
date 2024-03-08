@@ -34,6 +34,9 @@ public class DomainSearchCondition {
     @Size(max = 50)
     private String category;
 
+    @Size(max = 50)
+    private String version;
+
     @EnumValue(enumClass = TimeOrderEnum.class, enumMethod = "isValidCategory")
     private String timeOrder;
 
