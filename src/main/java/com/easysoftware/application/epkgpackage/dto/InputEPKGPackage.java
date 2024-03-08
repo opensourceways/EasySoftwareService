@@ -77,8 +77,8 @@ public class InputEPKGPackage {
     @Size(max = 100_0000, message = "the length of path can not exceed 100_0000")
     private String files;
 
-    @Size(max = 255, message = "the length of maintanierId can not exceed 255")
-    private String maintanierId;
+    @Size(max = 255, message = "the length of maintainerId can not exceed 255")
+    private String maintainerId;
 
     @Size(max = 255, message = "the length of maintianerEmail can not exceed 255")
     private String maintianerEmail;
