@@ -113,6 +113,7 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
     public ApplicationPackage addAppPkgInfo(ApplicationPackage appPkg) {
         Map<String, String> maintainer = ApiUtil.getApiResponse(String.format(repoMaintainerApi, appPkg.getName()));
         appPkg.setMaintainerGiteeId(maintainer.get("gitee_id"));
+        appPkg.setMaintainerId(maintainer.get("gitee_id"));
         appPkg.setMaintainerEmail(maintainer.get("email"));
 
         Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, appPkg.getName(), "app_openeuler"));

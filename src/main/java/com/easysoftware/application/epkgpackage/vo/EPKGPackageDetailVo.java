@@ -52,7 +52,7 @@ public class EPKGPackageDetailVo {
 
     private String files;
 
-    private String maintanierId;
+    private String maintainerId;
 
     private String maintianerEmail;
 

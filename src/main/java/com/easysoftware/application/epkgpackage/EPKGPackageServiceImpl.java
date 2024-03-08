@@ -125,6 +125,7 @@ public class EPKGPackageServiceImpl implements EPKGPackageService {
     public EPKGPackage addEPKGInfo(EPKGPackage epkgPkg) {
         Map<String, String> maintainer = ApiUtil.getApiResponse(String.format(repoMaintainerApi, epkgPkg.getName()));
         epkgPkg.setMaintainerGiteeId(maintainer.get("gitee_id"));
+        epkgPkg.setMaintainerId(maintainer.get("gitee_id"));
         epkgPkg.setMaintianerEmail(maintainer.get("email"));
 
         Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, epkgPkg.getName(), "rpm_openeuler"));
