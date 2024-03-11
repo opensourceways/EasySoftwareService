@@ -54,7 +54,7 @@ public class EPKGPackageDetailVo {
 
     private String maintainerId;
 
-    private String maintianerEmail;
+    private String maintainerEmail;
 
     private String maintainerGiteeId;
 

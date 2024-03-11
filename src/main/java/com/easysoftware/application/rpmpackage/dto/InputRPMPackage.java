@@ -79,8 +79,8 @@ public class InputRPMPackage {
     @Size(max = 255, message = "the length of maintainerId can not exceed 255")
     private String maintainerId;
 
-    @Size(max = 255, message = "the length of maintianerEmail can not exceed 255")
-    private String maintianerEmail;
+    @Size(max = 255, message = "the length of maintainerEmail can not exceed 255")
+    private String maintainerEmail;
 
     @Size(max = 255, message = "the length of maintainerGiteeId can not exceed 255")
     private String maintainerGiteeId;
