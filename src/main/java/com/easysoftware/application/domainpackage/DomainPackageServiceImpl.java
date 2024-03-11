@@ -68,7 +68,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         String entity = conditon.getEntity();
         DomainPackageMenuVo domain = new DomainPackageMenuVo();
         domain.setTags(new ArrayList<String>());
-        domain.getTags().add("image");
+        domain.getTags().add("IMAGE");
 
         RPMPackageUnique unique = new RPMPackageUnique();
         unique.setName(entity);
@@ -137,7 +137,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
             DomainPackageMenuVo domain = new DomainPackageMenuVo();
             BeanUtils.copyProperties(app, domain);
             domain.setTags(new ArrayList<String>());
-            domain.getTags().add("image");
+            domain.getTags().add("IMAGE");
 
             String name = domain.getName();
 
