@@ -128,13 +128,13 @@ public class EPKGPackageServiceImpl implements EPKGPackageService {
         epkgPkg.setMaintainerId(maintainer.get("gitee_id"));
         epkgPkg.setMaintainerEmail(maintainer.get("email"));
 
-        Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, epkgPkg.getName(), "rpm_openeuler"));
-        epkgPkg.setOs(info.get("os"));
-        epkgPkg.setArch(info.get("arch"));
-        epkgPkg.setBinDownloadUrl(info.get("binDownloadUrl"));
-        epkgPkg.setSrcDownloadUrl(info.get("srcDownloadUrl"));
-        epkgPkg.setSrcRepo(info.get("srcRepo"));
-        epkgPkg.setEpkgSize(info.get("appSize"));
+        // Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, epkgPkg.getName(), "rpm_openeuler"));
+        // epkgPkg.setOs(info.get("os"));
+        // epkgPkg.setArch(info.get("arch"));
+        // epkgPkg.setBinDownloadUrl(info.get("binDownloadUrl"));
+        // epkgPkg.setSrcDownloadUrl(info.get("srcDownloadUrl"));
+        // epkgPkg.setSrcRepo(info.get("srcRepo"));
+        // epkgPkg.setEpkgSize(info.get("appSize"));
         return epkgPkg;
     }
 }
