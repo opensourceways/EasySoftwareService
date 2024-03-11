@@ -126,13 +126,13 @@ public class RPMPackageServiceImpl implements RPMPackageService {
         rPMPkg.setMaintainerId(maintainer.get("gitee_id"));
         rPMPkg.setMaintainerEmail(maintainer.get("email"));
 
-        Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, rPMPkg.getName(), "rpm_openeuler"));
-        rPMPkg.setOs(info.get("os"));
-        rPMPkg.setArch(info.get("arch"));
-        rPMPkg.setBinDownloadUrl(info.get("binDownloadUrl"));
-        rPMPkg.setSrcDownloadUrl(info.get("srcDownloadUrl"));
-        rPMPkg.setSrcRepo(info.get("srcRepo"));
-        rPMPkg.setRpmSize(info.get("appSize"));
+        // Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, rPMPkg.getName(), "rpm_openeuler"));
+        // rPMPkg.setOs(info.get("os"));
+        // rPMPkg.setArch(info.get("arch"));
+        // rPMPkg.setBinDownloadUrl(info.get("binDownloadUrl"));
+        // rPMPkg.setSrcDownloadUrl(info.get("srcDownloadUrl"));
+        // rPMPkg.setSrcRepo(info.get("srcRepo"));
+        // rPMPkg.setRpmSize(info.get("appSize"));
         return rPMPkg;
     }
 }
