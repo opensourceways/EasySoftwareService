@@ -6,6 +6,7 @@ public enum AppCategoryEnum {
     Storage("分布式存储"),
     Database("数据库"),
     Cloud("云服务"),
+    Other("其他"),
     Hpc("HPC");
 
     private String alias;
