@@ -93,7 +93,6 @@ public class HttpClientUtil {
             httpPost.setEntity(stringEntity);
             HttpResponse response = httpClient.execute(httpPost);
             String responseBody = EntityUtils.toString(response.getEntity());
-            logger.info("responseBody" + responseBody);
             return responseBody;
         } catch (Exception e) {
             throw new RuntimeException(MessageCode.EC0001.getMsgEn());

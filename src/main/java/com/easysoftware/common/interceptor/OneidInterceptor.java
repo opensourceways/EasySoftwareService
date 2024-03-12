@@ -34,11 +34,11 @@ public class OneidInterceptor implements HandlerInterceptor {
     @Value("${cookie.token.name}")
     private String cookieTokenName;
 
-    @Value("${cookie.token.domains}")
-    private String allowDomains;
+    // @Value("${cookie.token.domains}")
+    // private String allowDomains;
 
-    @Value("${cookie.token.secures}")
-    private String cookieSecures;
+    // @Value("${cookie.token.secures}")
+    // private String cookieSecures;
 
     @Value("${oneid.tokenBasePassword}")
     private String oneidTokenBasePassword;
@@ -46,8 +46,8 @@ public class OneidInterceptor implements HandlerInterceptor {
     @Value("${oneid.permissionApi}")
     private String permissionApi;
 
-    @Value("${rsa.authing.privateKey}")
-    private String rsaAuthingPrivateKey;
+    // @Value("${rsa.authing.privateKey}")
+    // private String rsaAuthingPrivateKey;
 
     @Value("${oneid.manage.apiBody}")
     private String manageApiBody;
@@ -83,11 +83,11 @@ public class OneidInterceptor implements HandlerInterceptor {
             throw new AuthException("unauthorized");
         }
 
-        // 校验domain
-        String verifyDomainMsg = verifyDomain(httpServletRequest);
-        if (!verifyDomainMsg.equals("success")) {
-            throw new AuthException(verifyDomainMsg);
-        }
+        // // 校验domain
+        // String verifyDomainMsg = verifyDomain(httpServletRequest);
+        // if (!verifyDomainMsg.equals("success")) {
+        //     throw new AuthException(verifyDomainMsg);
+        // }
 
         // 校验cookie
         Cookie tokenCookie = verifyCookie(httpServletRequest);
@@ -95,40 +95,40 @@ public class OneidInterceptor implements HandlerInterceptor {
             throw new AuthException("unauthorized");
         }
 
-        // 解密cookie中加密的token
-        String token = tokenCookie.getValue();
-        try {
-            RSAPrivateKey privateKey = RSAUtil.getPrivateKey(rsaAuthingPrivateKey);
-            token = RSAUtil.privateDecrypt(token, privateKey);
-        } catch (Exception e) {
-            throw new AuthException("unauthorized");
-        }
+        // // 解密cookie中加密的token
+        // String token = tokenCookie.getValue();
+        // try {
+        //     RSAPrivateKey privateKey = RSAUtil.getPrivateKey(rsaAuthingPrivateKey);
+        //     token = RSAUtil.privateDecrypt(token, privateKey);
+        // } catch (Exception e) {
+        //     throw new AuthException("unauthorized");
+        // }
 
-        // 解析token
-        String userId;
-        Date issuedAt;
-        Date expiresAt;
-        String permission;
-        String verifyToken;
-        try {
-            DecodedJWT decode = JWT.decode(token);
-            userId = decode.getAudience().get(0);
-            issuedAt = decode.getIssuedAt();
-            expiresAt = decode.getExpiresAt();
-            String permissionTemp = decode.getClaim("permission").asString();
-            permission = new String(Base64.getDecoder().decode(permissionTemp.getBytes()));
-            verifyToken = decode.getClaim("verifyToken").asString();
-        } catch (JWTDecodeException j) {
-            throw new AuthException("token error");
-        }
+        // // 解析token
+        // String userId;
+        // Date issuedAt;
+        // Date expiresAt;
+        // String permission;
+        // String verifyToken;
+        // try {
+        //     DecodedJWT decode = JWT.decode(token);
+        //     userId = decode.getAudience().get(0);
+        //     issuedAt = decode.getIssuedAt();
+        //     expiresAt = decode.getExpiresAt();
+        //     String permissionTemp = decode.getClaim("permission").asString();
+        //     permission = new String(Base64.getDecoder().decode(permissionTemp.getBytes()));
+        //     verifyToken = decode.getClaim("verifyToken").asString();
+        // } catch (JWTDecodeException j) {
+        //     throw new AuthException("token error");
+        // }
 
-        // 校验token
-        String verifyTokenMsg = verifyToken(headJwtTokenMd5, token, verifyToken, userId, issuedAt, expiresAt,
-                permission);
-        logger.info(verifyTokenMsg);
-        if (!verifyTokenMsg.equals("success")) {
-            throw new AuthException(verifyTokenMsg);
-        }
+        // // 校验token
+        // String verifyTokenMsg = verifyToken(headJwtTokenMd5, token, verifyToken, userId, issuedAt, expiresAt,
+        //         permission);
+        // logger.info(verifyTokenMsg);
+        // if (!verifyTokenMsg.equals("success")) {
+        //     throw new AuthException(verifyTokenMsg);
+        // }
 
         // 校验查看版本兼容页面的权限
         if (compatibleToken != null && compatibleToken.required()) {
@@ -154,27 +154,27 @@ public class OneidInterceptor implements HandlerInterceptor {
             Object o, Exception e) throws Exception {
     }
 
-    private String verifyToken(String headerToken, String token, String verifyToken,
-            String userId, Date issuedAt, Date expiresAt, String permission) {
-        try {
-            if (!headerToken.equals(verifyToken)) {
-                return "unauthorized";
-            }
+    // private String verifyToken(String headerToken, String token, String verifyToken,
+    //         String userId, Date issuedAt, Date expiresAt, String permission) {
+    //     try {
+    //         if (!headerToken.equals(verifyToken)) {
+    //             return "unauthorized";
+    //         }
 
-            if (expiresAt.before(new Date())) {
-                return "token expires";
-            }
+    //         if (expiresAt.before(new Date())) {
+    //             return "token expires";
+    //         }
 
-            // token 签名密码验证
-            String password = permission + oneidTokenBasePassword;
-            JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(password)).build();
-            jwtVerifier.verify(token);
+    //         // token 签名密码验证
+    //         String password = permission + oneidTokenBasePassword;
+    //         JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(password)).build();
+    //         jwtVerifier.verify(token);
 
-        } catch (Exception e) {
-            return "unauthorized";
-        }
-        return "success";
-    }
+    //     } catch (Exception e) {
+    //         return "unauthorized";
+    //     }
+    //     return "success";
+    // }
 
     /**
      * 校验header中的token
@@ -194,7 +194,7 @@ public class OneidInterceptor implements HandlerInterceptor {
             jwtVerifier.verify(headerToken);
             return DigestUtils.md5DigestAsHex(headerToken.getBytes());
         } catch (Exception e) {
-            logger.error("verify h eadertoken exception", e);
+            logger.error("verify headertoken exception", e);
             return "unauthorized";
         }
     }
@@ -261,45 +261,45 @@ public class OneidInterceptor implements HandlerInterceptor {
         return cookie;
     }
 
-    /**
-     * 校验domain
-     *
-     * @param httpServletRequest request
-     * @return 是否可访问
-     */
-    private String verifyDomain(HttpServletRequest httpServletRequest) {
-        String referer = httpServletRequest.getHeader("referer");
-        String origin = httpServletRequest.getHeader("origin");
-        String[] domains = allowDomains.split(";");
+    // /**
+    //  * 校验domain
+    //  *
+    //  * @param httpServletRequest request
+    //  * @return 是否可访问
+    //  */
+    // private String verifyDomain(HttpServletRequest httpServletRequest) {
+    //     String referer = httpServletRequest.getHeader("referer");
+    //     String origin = httpServletRequest.getHeader("origin");
+    //     String[] domains = allowDomains.split(";");
 
-        boolean checkReferer = checkDomain(domains, referer);
-        boolean checkOrigin = checkDomain(domains, origin);
+    //     boolean checkReferer = checkDomain(domains, referer);
+    //     boolean checkOrigin = checkDomain(domains, origin);
 
-        if (!checkReferer && !checkOrigin) {
-            return "unauthorized";
-        }
-        return "success";
-    }
+    //     if (!checkReferer && !checkOrigin) {
+    //         return "unauthorized";
+    //     }
+    //     return "success";
+    // }
 
-    private boolean checkDomain(String[] domains, String input) {
-        if (StringUtils.isBlank(input))
-            return true;
-        int fromIndex;
-        int endIndex;
-        if (input.startsWith("http://")) {
-            fromIndex = 7;
-            endIndex = input.indexOf(":", fromIndex);
-        } else {
-            fromIndex = 8;
-            endIndex = input.indexOf("/", fromIndex);
-            endIndex = endIndex == -1 ? input.length() : endIndex;
-        }
-        String substring = input.substring(0, endIndex);
-        for (String domain : domains) {
-            if (substring.endsWith(domain))
-                return true;
-        }
-        return false;
-    }
+    // private boolean checkDomain(String[] domains, String input) {
+    //     if (StringUtils.isBlank(input))
+    //         return true;
+    //     int fromIndex;
+    //     int endIndex;
+    //     if (input.startsWith("http://")) {
+    //         fromIndex = 7;
+    //         endIndex = input.indexOf(":", fromIndex);
+    //     } else {
+    //         fromIndex = 8;
+    //         endIndex = input.indexOf("/", fromIndex);
+    //         endIndex = endIndex == -1 ? input.length() : endIndex;
+    //     }
+    //     String substring = input.substring(0, endIndex);
+    //     for (String domain : domains) {
+    //         if (substring.endsWith(domain))
+    //             return true;
+    //     }
+    //     return false;
+    // }
 
 }
