@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 
-@RestControllerAdvice()
+@RestControllerAdvice
 public class GlobalExceptionHandler {
     private static final Logger logger =  LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
@@ -37,5 +37,24 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> exception(AppPkgIconException e) {
         logger.error(MessageCode.EC0009.getMsgEn());
         return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0009);
+    }
+
+    @ExceptionHandler(AuthException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<Object> exception(AuthException e) {
+        logger.error(e.getMessage());
+        return ResultUtil.fail(HttpStatus.UNAUTHORIZED, MessageCode.EC00012, e.getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<Object> exception(Exception e) {
+        return ResultUtil.fail(HttpStatus.INTERNAL_SERVER_ERROR, MessageCode.ES0001);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<Object> exception(RuntimeException e) {
+        return ResultUtil.fail(HttpStatus.INTERNAL_SERVER_ERROR, MessageCode.ES0001, e.getMessage());
     }
 }
