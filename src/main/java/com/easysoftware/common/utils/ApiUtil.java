@@ -9,7 +9,7 @@ public class ApiUtil {
     
     public static Map<String, String> getApiResponse(String url) {
         Map<String, String> res = new HashMap<>();
-        String response = HttpClientUtil.getHttpClient(url);
+        String response = HttpClientUtil.getHttpClient(url, null, null, null);
         if (response != null) {
             JsonNode info = ObjectMapperUtil.toJsonNode(response);
             if (info.get("code").asInt() == 200 && !info.get("data").isNull()) {

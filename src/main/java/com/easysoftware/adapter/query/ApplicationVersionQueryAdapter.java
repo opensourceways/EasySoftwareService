@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.easysoftware.aop.LimitRequest;
 import com.easysoftware.application.applicationversion.ApplicationVersionService;
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
+import com.easysoftware.common.interceptor.CompatibleToken;
+import com.easysoftware.common.interceptor.OneidToken;
 
 import jakarta.validation.Valid;
 
@@ -20,6 +22,8 @@ public class ApplicationVersionQueryAdapter {
 
     @GetMapping()
     @LimitRequest()
+    @OneidToken
+    @CompatibleToken
     public ResponseEntity<Object> searchAppVersion(@Valid ApplicationVersionSearchCondition condition) {
         ResponseEntity<Object> res = appVersionService.searchAppVersion(condition);
         return res;

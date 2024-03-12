@@ -9,6 +9,8 @@ import java.net.URL;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
@@ -65,16 +67,36 @@ public class HttpClientUtil {
         return null;
     }
 
-    public static String getHttpClient(String uri) {
+    public static String getHttpClient(String uri, String token, String userToken, String cookie) {
         HttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(uri);
+
+        if (token != null) httpGet.addHeader("token", token);
+        if (userToken != null) httpGet.addHeader("user-token", userToken);
+        if (cookie != null) httpGet.addHeader("Cookie", "_Y_G_=" + cookie);
+
         try {
             HttpResponse response = httpClient.execute(httpGet);
             String responseBody = EntityUtils.toString(response.getEntity());
             return responseBody;
         } catch (Exception e) {
-            logger.error(MessageCode.EC0001.getMsgEn(), e);
+            throw new RuntimeException(MessageCode.EC0001.getMsgEn());
         }
-        return null;
+    }
+
+    public static String postHttpClient(String uri, String requestBody) {
+        HttpClient httpClient = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost(uri);
+        try {
+            httpPost.setHeader("Content-Type", "application/json");
+            StringEntity stringEntity = new StringEntity(requestBody);
+            httpPost.setEntity(stringEntity);
+            HttpResponse response = httpClient.execute(httpPost);
+            String responseBody = EntityUtils.toString(response.getEntity());
+            logger.info("responseBody" + responseBody);
+            return responseBody;
+        } catch (Exception e) {
+            throw new RuntimeException(MessageCode.EC0001.getMsgEn());
+        }
     }
 }
