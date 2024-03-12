@@ -12,7 +12,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.easysoftware.common.exception.AuthException;
 import com.easysoftware.common.utils.HttpClientUtil;
 import com.easysoftware.common.utils.ObjectMapperUtil;
-import com.easysoftware.common.utils.RSAUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,8 +39,8 @@ public class OneidInterceptor implements HandlerInterceptor {
     // @Value("${cookie.token.secures}")
     // private String cookieSecures;
 
-    @Value("${oneid.tokenBasePassword}")
-    private String oneidTokenBasePassword;
+    // @Value("${oneid.tokenBasePassword}")
+    // private String oneidTokenBasePassword;
 
     @Value("${oneid.permissionApi}")
     private String permissionApi;
@@ -77,11 +76,11 @@ public class OneidInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        String headerToken = httpServletRequest.getHeader("token");
-        String headJwtTokenMd5 = verifyHeaderToken(headerToken);
-        if (StringUtils.isBlank(headJwtTokenMd5) || headJwtTokenMd5.equals("unauthorized") ) {
-            throw new AuthException("unauthorized");
-        }
+        // String headerToken = httpServletRequest.getHeader("token");
+        // String headJwtTokenMd5 = verifyHeaderToken(headerToken);
+        // if (StringUtils.isBlank(headJwtTokenMd5) || headJwtTokenMd5.equals("unauthorized") ) {
+        //     throw new AuthException("unauthorized");
+        // }
 
         // // 校验domain
         // String verifyDomainMsg = verifyDomain(httpServletRequest);
@@ -176,28 +175,28 @@ public class OneidInterceptor implements HandlerInterceptor {
     //     return "success";
     // }
 
-    /**
-     * 校验header中的token
-     *
-     * @param headerToken header中的token
-     * @return 校验正确返回token的MD5值
-     */
-    private String verifyHeaderToken(String headerToken) {
-        try {
-            if (StringUtils.isBlank(headerToken)) {
-                return "unauthorized";
-            }
+    // /**
+    //  * 校验header中的token
+    //  *
+    //  * @param headerToken header中的token
+    //  * @return 校验正确返回token的MD5值
+    //  */
+    // private String verifyHeaderToken(String headerToken) {
+    //     try {
+    //         if (StringUtils.isBlank(headerToken)) {
+    //             return "unauthorized";
+    //         }
 
-            // token 签名密码验证
-            String password = oneidTokenBasePassword;
-            JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(password)).build();
-            jwtVerifier.verify(headerToken);
-            return DigestUtils.md5DigestAsHex(headerToken.getBytes());
-        } catch (Exception e) {
-            logger.error("verify headertoken exception", e);
-            return "unauthorized";
-        }
-    }
+    //         // token 签名密码验证
+    //         String password = oneidTokenBasePassword;
+    //         JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(password)).build();
+    //         jwtVerifier.verify(headerToken);
+    //         return DigestUtils.md5DigestAsHex(headerToken.getBytes());
+    //     } catch (Exception e) {
+    //         logger.error("verify headertoken exception", e);
+    //         return "unauthorized";
+    //     }
+    // }
 
     /**
      * 校验用户操作权限
