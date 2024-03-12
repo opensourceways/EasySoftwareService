@@ -38,7 +38,7 @@ public class DomainSearchCondition {
     private String version;
 
     @EnumValue(enumClass = TimeOrderEnum.class, enumMethod = "isValidCategory")
-    private String timeOrder;
+    private String timeOrder = "desc";
 
     @Range(min = PackageConstant.MIN_PAGE_NUM, max = PackageConstant.MAX_PAGE_NUM)
     private Integer pageNum = 1;
