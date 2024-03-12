@@ -24,6 +24,7 @@ import com.easysoftware.application.rpmpackage.RPMPackageService;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
 import com.easysoftware.common.utils.ResultUtil;
+import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
 import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
 import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
 import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
@@ -48,6 +49,9 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     @Resource
     EPKGPackageGateway epkgPackageGateway;
 
+    @Resource
+    ApplicationPackageGateway applicationPackageGateway;
+
     @Override
     public ResponseEntity<Object> searchDomain(DomainSearchCondition condition) {
         String name = condition.getName();
@@ -68,7 +72,11 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         String entity = conditon.getEntity();
         DomainPackageMenuVo domain = new DomainPackageMenuVo();
         domain.setTags(new ArrayList<String>());
-        domain.getTags().add("IMAGE");
+
+        boolean appExisted = applicationPackageGateway.existApp(entity);
+        if (appExisted) {
+            domain.getTags().add("IMAGE");
+        }
 
         RPMPackageUnique unique = new RPMPackageUnique();
         unique.setName(entity);
@@ -179,7 +187,8 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         }
     
         for (DomainPackageMenuVo menu: menuList) {
-            map.get(menu.getCategory()).add(menu);
+            String cate = StringUtils.trimToEmpty(menu.getCategory());
+            map.get(cate).add(menu);
         }
     
         List<Map<String, Object>> res = new ArrayList<>();
