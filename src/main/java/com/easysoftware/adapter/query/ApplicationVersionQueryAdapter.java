@@ -22,8 +22,8 @@ public class ApplicationVersionQueryAdapter {
 
     @GetMapping()
     @LimitRequest()
-    @OneidToken
-    @CompatibleToken
+    // @OneidToken
+    // @CompatibleToken
     public ResponseEntity<Object> searchAppVersion(@Valid ApplicationVersionSearchCondition condition) {
         ResponseEntity<Object> res = appVersionService.searchAppVersion(condition);
         return res;
