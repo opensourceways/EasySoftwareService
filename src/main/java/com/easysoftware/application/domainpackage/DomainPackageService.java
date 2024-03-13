@@ -8,4 +8,5 @@ import com.easysoftware.application.domainpackage.dto.DomainSearchCondition;
 public interface DomainPackageService {
     ResponseEntity<Object> searchDomain(DomainSearchCondition condition);
     ResponseEntity<Object> searchColumn(DomainColumnCondition condition);
+    ResponseEntity<Object> queryStat();
 }

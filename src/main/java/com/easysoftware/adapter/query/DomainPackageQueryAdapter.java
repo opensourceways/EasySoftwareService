@@ -36,4 +36,11 @@ public class DomainPackageQueryAdapter {
         return res;
     }
 
+    @GetMapping("/stat")
+    public ResponseEntity<Object> queryStat() {
+        ResponseEntity<Object> res = domainService.queryStat();
+        return res;
+    }
+
+
 }
