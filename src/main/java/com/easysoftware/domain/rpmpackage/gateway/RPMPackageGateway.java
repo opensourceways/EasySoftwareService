@@ -17,4 +17,5 @@ public interface RPMPackageGateway {
     Map<String, Object> queryDetailByName(RPMPackageSearchCondition condition);
     Map<String, Object> queryMenuByName(RPMPackageSearchCondition condition);
     List<String> queryColumn(String column);
+    long queryTableLength();
 }

@@ -15,4 +15,5 @@ public interface ApplicationPackageGateway {
     boolean delete(String name);
     Map<String, Object> queryMenuByName(ApplicationPackageSearchCondition condition);
     Map<String, Object> queryDetailByName(ApplicationPackageSearchCondition condition);
+    long queryTableLength();
 }

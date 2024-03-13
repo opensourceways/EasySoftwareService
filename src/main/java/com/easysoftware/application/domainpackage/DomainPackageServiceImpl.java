@@ -236,4 +236,17 @@ public class DomainPackageServiceImpl implements DomainPackageService {
             return null;
         }
     }
+
+    @Override
+    public ResponseEntity<Object> queryStat() {
+        Long rpmNum = rpmPackageGateway.queryTableLength();
+        Long appNum = applicationPackageGateway.queryTableLength();
+        Long epkgNum = epkgPackageGateway.queryTableLength();
+
+        Map<String, Long> res = Map.ofEntries(
+            Map.entry("apppkg", appNum),
+            Map.entry("total", rpmNum + epkgNum)
+        );
+        return ResultUtil.success(HttpStatus.OK, res);
+    }
 }

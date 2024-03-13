@@ -19,4 +19,5 @@ public interface EPKGPackageGateway {
     Map<String, Object> queryDetailByName(EPKGPackageSearchCondition condition);
     Map<String, Object> queryMenuByName(EPKGPackageSearchCondition condition);
     List<String> queryColumn(String column);
+    long queryTableLength();
 }

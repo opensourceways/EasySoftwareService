@@ -29,6 +29,7 @@ public enum MessageCode {
     EC00010("EC00010", "Request exceeds the limit", "请求超过限制"),
     EC00011("EC00011", "Failed to retrieve field using reflection", "无法通过反射获取字段"),
     EC00012("EC00012", "Unauthorized", "身份认证失败"),
+    EC00013("EC00013", "Unable to connect to database", "无法连接数据库"),
 
     // self service exception
     ES0001("ES0001", "Internal Server Error", "服务异常");

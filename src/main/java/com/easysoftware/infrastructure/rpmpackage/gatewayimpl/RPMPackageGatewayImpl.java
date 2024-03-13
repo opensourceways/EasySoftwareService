@@ -1,5 +1,7 @@
 package com.easysoftware.infrastructure.rpmpackage.gatewayimpl;
 
+import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
+import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
@@ -31,7 +34,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.power.common.util.StringUtil;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class RPMPackageGatewayImpl implements RPMPackageGateway {
     @Autowired
     private RPMPackageDOMapper rPMPkgMapper;
@@ -142,5 +148,10 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         List<String> res = RPMPackageConverter.toColumn(rpmColumn, column);
 
         return res;
+    }
+
+    @Override
+    public long queryTableLength() {
+        return rPMPkgMapper.selectCount(null);
     }
 }
