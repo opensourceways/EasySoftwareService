@@ -58,4 +58,6 @@ public class ApplicationPackageDetailVo {
     private String binDownloadUrl;
 
     private String type;
+
+    private String iconUrl;
 }

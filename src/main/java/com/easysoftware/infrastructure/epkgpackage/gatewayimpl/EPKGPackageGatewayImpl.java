@@ -143,4 +143,9 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
         
         return res;
     }
+
+    @Override
+    public long queryTableLength() {
+        return ePKGPkgMapper.selectCount(null);
+    }
 }

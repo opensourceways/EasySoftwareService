@@ -110,4 +110,9 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         Page<ApplicationPackageDO> page = new Page<>(pageNum, pageSize);
         return page;
     }
+
+    @Override
+    public long queryTableLength() {
+        return appPkgMapper.selectCount(null);
+    }
 }
