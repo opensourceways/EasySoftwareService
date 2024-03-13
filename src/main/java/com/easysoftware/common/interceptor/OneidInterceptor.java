@@ -91,7 +91,12 @@ public class OneidInterceptor implements HandlerInterceptor {
         // 校验cookie
         Cookie tokenCookie = verifyCookie(httpServletRequest);
         if (tokenCookie == null) {
-            throw new AuthException("unauthorized");
+            throw new AuthException("unauthorized, missing cookie");
+        }
+
+        String userToken = httpServletRequest.getHeader("token");
+        if (userToken == null) {
+            throw new AuthException("unauthorized, missing token");
         }
 
         // // 解密cookie中加密的token
@@ -131,7 +136,7 @@ public class OneidInterceptor implements HandlerInterceptor {
 
         // 校验查看版本兼容页面的权限
         if (compatibleToken != null && compatibleToken.required()) {
-            String verifyUserMsg = verifyUser(compatibleToken, httpServletRequest, tokenCookie);
+            String verifyUserMsg = verifyUser(compatibleToken, httpServletRequest, tokenCookie, userToken);
             if (!verifyUserMsg.equals("success")) {
                 throw new AuthException(verifyUserMsg);
             }
@@ -202,31 +207,31 @@ public class OneidInterceptor implements HandlerInterceptor {
      * 校验用户操作权限
      */
     private String verifyUser(CompatibleToken compatibleToken, HttpServletRequest httpServletRequest,
-            Cookie tokenCookie) {
-        try {
-            if (compatibleToken != null && compatibleToken.required()) {
-                List<String> pers = getUserPermission(httpServletRequest, tokenCookie);
-                for (String per : pers) {
-                    if (per.equalsIgnoreCase("easysoftwareread")) {
-                        return "success";
-                    }
+            Cookie tokenCookie, String userToken) {
+        if (compatibleToken != null && compatibleToken.required()) {
+            List<String> pers = getUserPermission(httpServletRequest, tokenCookie, userToken);
+            for (String per : pers) {
+                if (per.equalsIgnoreCase("easysoftwareread")) {
+                    return "success";
                 }
             }
-        } catch (Exception e) {
-            logger.error("verify user exception", e);
-            throw new RuntimeException();
         }
         return "No permission";
     }
 
     @SneakyThrows
-    private List<String> getUserPermission(HttpServletRequest httpServletRequest, Cookie tokenCookie) {
+    private List<String> getUserPermission(HttpServletRequest httpServletRequest, Cookie tokenCookie, String userToken) {
         String token = getManageToken();
-        String userToken = httpServletRequest.getHeader("token");
+        System.out.println(token);
         String tokenCookieValue = tokenCookie.getValue();
         String response = HttpClientUtil.getHttpClient(permissionApi, token, userToken, tokenCookieValue);
-        JsonNode res = ObjectMapperUtil.toJsonNode(response);
-        JsonNode permissions = res.get("data").get("permissions");
+        System.out.println("response = " + response);
+        JsonNode resJson = ObjectMapperUtil.toJsonNode(response);
+        System.out.println("resJson = " + resJson);
+        if (!resJson.has("data")) {
+            throw new AuthException(resJson.get("message").asText());
+        }
+        JsonNode permissions = resJson.get("data").get("permissions");
         List<String> list = new ArrayList<>();
         for (JsonNode per : permissions) {
             list.add(per.asText());
@@ -237,8 +242,8 @@ public class OneidInterceptor implements HandlerInterceptor {
     @SneakyThrows
     private String getManageToken() {
         String response = HttpClientUtil.postHttpClient(manageTokenApi, manageApiBody);
-        JsonNode res = ObjectMapperUtil.toJsonNode(response);
-        return res.get("token").asText();
+        JsonNode resJson = ObjectMapperUtil.toJsonNode(response);
+        return resJson.get("token").asText();
     }
 
     /**
