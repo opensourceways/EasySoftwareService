@@ -1,6 +1,6 @@
 package com.easysoftware.common.utils;
 
-import com.easysoftware.aop.ManagementLog;
+import com.easysoftware.common.aop.ManagementLog;
 import com.easysoftware.common.entity.ResultVo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

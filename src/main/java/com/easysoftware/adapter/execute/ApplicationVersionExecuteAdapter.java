@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.easysoftware.aop.LimitRequest;
 import com.easysoftware.application.applicationversion.ApplicationVersionService;
 import com.easysoftware.application.applicationversion.dto.InputApplicationVersion;
+import com.easysoftware.common.aop.LimitRequest;
 
 import jakarta.validation.Valid;
 

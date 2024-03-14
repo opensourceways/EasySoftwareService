@@ -1,4 +1,4 @@
-package com.easysoftware.aop;
+package com.easysoftware.common.aop;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -23,7 +23,7 @@ public class ManagementLogAOP {
     private HttpServletResponse response;
 
     //定义切点
-    @Pointcut("execution(* com.easysoftware.adapter.query.*.*(..))")
+    @Pointcut("execution(* com.easysoftware.adapter.query.*.*(..)) || execution(* com.easysoftware.adapter.execute.*.*(..))")
     public void pointcut() {
     }
 

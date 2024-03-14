@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.dto.InputApplicationPackage;
+import com.easysoftware.common.constant.MapConstant;
 import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.obs.ObsService;
 import com.easysoftware.common.utils.ApiUtil;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
@@ -25,17 +28,20 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
     @Resource
     ApplicationPackageGateway appPkgGateway;
 
+    @Autowired
+    ObsService obsService;
+
     @Value("${api.repoMaintainer}")
     String repoMaintainerApi;
 
     @Value("${api.repoInfo}")
     String repoInfoApi;
 
-    @Value("${obs.endpoint}")
-    String obsEndpoint;
+    @Value("${api.repoDownload}")
+    String repoDownloadApi;
 
-    @Value("${obs.bucket}")
-    String obsBucketName;
+    @Value("${api.repoSig}")
+    String repoSigApi;
 
     @Override
     public ResponseEntity<Object> insertAppPkg(InputApplicationPackage inputAppPkg) {
@@ -47,6 +53,8 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
         ApplicationPackage appPkg = new ApplicationPackage();
         BeanUtils.copyProperties(inputAppPkg, appPkg);
         appPkg = addAppPkgInfo(appPkg);
+        appPkg = addAppkgRepoSig(appPkg);
+        appPkg = addAppkgRepoDownload(appPkg);
 
         boolean succeed = appPkgGateway.save(appPkg);
         if (!succeed) {
@@ -66,6 +74,8 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
         BeanUtils.copyProperties(inputAppPkg, appPkg);
 
         appPkg = addAppPkgInfo(appPkg);
+        appPkg = addAppkgRepoSig(appPkg);
+        appPkg = addAppkgRepoDownload(appPkg);
 
         boolean succeed = appPkgGateway.update(appPkg);
         if (!succeed) {
@@ -111,12 +121,12 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
     }
 
     public ApplicationPackage addAppPkgInfo(ApplicationPackage appPkg) {
-        Map<String, String> maintainer = ApiUtil.getApiResponse(String.format(repoMaintainerApi, appPkg.getName()));
+        Map<String, String> maintainer = ApiUtil.getApiResponseMaintainer(String.format(repoMaintainerApi, appPkg.getName()));
         appPkg.setMaintainerGiteeId(maintainer.get("gitee_id"));
-        appPkg.setMaintainerId(maintainer.get("gitee_id"));
+        appPkg.setMaintainerId(maintainer.get("id"));
         appPkg.setMaintainerEmail(maintainer.get("email"));
 
-        Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, appPkg.getName(), "app_openeuler"));
+        Map<String, String> info = ApiUtil.getApiResponseMap(String.format(repoInfoApi, appPkg.getName(), "app_openeuler"));
         appPkg.setOs(info.get("os"));
         appPkg.setAppVer(info.get("latest_version") + "-" + info.get("os_version"));
         appPkg.setArch(info.get("arch"));
@@ -124,12 +134,22 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
         appPkg.setBinDownloadUrl(info.get("binDownloadUrl"));
         appPkg.setSrcDownloadUrl(info.get("srcDownloadUrl"));
         appPkg.setSrcRepo(info.get("srcRepo"));
-        appPkg.setIconUrl(generateUrl(appPkg.getName() + ".png"));
+        appPkg.setIconUrl(obsService.generateUrl(appPkg.getName()));
         return appPkg;
     }
 
-    private String generateUrl(String objectKey) {
-        String publicUrl = "https://" + obsBucketName + "." + obsEndpoint + "/" + objectKey;
-        return publicUrl;
+    public ApplicationPackage addAppkgRepoDownload(ApplicationPackage appPkg) {
+        String resp = ApiUtil.getApiResponseData(String.format(repoDownloadApi, appPkg.getName()));
+        appPkg.setDownloadCount(resp);
+        return appPkg;
+    }
+
+    public ApplicationPackage addAppkgRepoSig(ApplicationPackage appPkg) {
+        String resp = ApiUtil.getApiResponseData(String.format(repoSigApi, appPkg.getName()));
+        if (resp != null && MapConstant.CATEGORY_MAP.containsKey(resp)) {
+            appPkg.setAppCategory(MapConstant.CATEGORY_MAP.get(resp));
+        }
+        appPkg.setAppCategory(MapConstant.CATEGORY_MAP.get("Other"));
+        return appPkg;
     }
 }

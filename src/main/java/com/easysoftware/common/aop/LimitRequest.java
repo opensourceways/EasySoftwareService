@@ -1,4 +1,4 @@
-package com.easysoftware.aop;
+package com.easysoftware.common.aop;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.easysoftware.aop.LimitRequest;
 import com.easysoftware.application.applicationversion.ApplicationVersionService;
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
+import com.easysoftware.common.aop.LimitRequest;
 import com.easysoftware.common.interceptor.CompatibleToken;
 import com.easysoftware.common.interceptor.OneidToken;
 

@@ -110,13 +110,13 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
     }
     
     public ApplicationVersion addAppPkgInfo(ApplicationVersion appVer) {
-        Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, appVer.getName(), "app_openeuler"));
+        Map<String, String> info = ApiUtil.getApiResponseMap(String.format(repoInfoApi, appVer.getName(), "app_openeuler"));
         appVer.setCompatibleVersion(info.get("latest_version"));
 
-        info = ApiUtil.getApiResponse(String.format(repoInfoApi, appVer.getName(), "app_up"));
+        info = ApiUtil.getApiResponseMap(String.format(repoInfoApi, appVer.getName(), "app_up"));
         appVer.setUpstreamVersion(info.get("latest_version"));
 
-        info = ApiUtil.getApiResponse(String.format(repoInfoApi, appVer.getName(), "app_openeuler_ci"));
+        info = ApiUtil.getApiResponseMap(String.format(repoInfoApi, appVer.getName(), "app_openeuler_ci"));
         appVer.setCiVersion(info.get("latest_version"));
 
         if (appVer.getCompatibleVersion() == null) {

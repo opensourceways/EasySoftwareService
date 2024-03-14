@@ -1,4 +1,4 @@
-package com.easysoftware.aop;
+package com.easysoftware.common.aop;
 
 import lombok.Getter;
 import lombok.Setter;
