@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.dto.InputEPKGPackage;
+import com.easysoftware.common.constant.MapConstant;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ApiUtil;
 import com.easysoftware.common.utils.Base64Util;
@@ -34,8 +35,8 @@ public class EPKGPackageServiceImpl implements EPKGPackageService {
     @Value("${api.repoMaintainer}")
     String repoMaintainerApi;
 
-    @Value("${api.repoInfo}")
-    String repoInfoApi;
+    @Value("${api.repoSig}")
+    String repoSigApi;
     
     @Override
     public ResponseEntity<Object> deleteEPKGPkg(List<String> ids) {
@@ -123,18 +124,19 @@ public class EPKGPackageServiceImpl implements EPKGPackageService {
     }
 
     public EPKGPackage addEPKGInfo(EPKGPackage epkgPkg) {
-        Map<String, String> maintainer = ApiUtil.getApiResponse(String.format(repoMaintainerApi, epkgPkg.getName()));
+        Map<String, String> maintainer = ApiUtil.getApiResponseMaintainer(String.format(repoMaintainerApi, epkgPkg.getName()));
         epkgPkg.setMaintainerGiteeId(maintainer.get("gitee_id"));
-        epkgPkg.setMaintainerId(maintainer.get("gitee_id"));
+        epkgPkg.setMaintainerId(maintainer.get("id"));
         epkgPkg.setMaintainerEmail(maintainer.get("email"));
+        return epkgPkg;
+    }
 
-        // Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, epkgPkg.getName(), "rpm_openeuler"));
-        // epkgPkg.setOs(info.get("os"));
-        // epkgPkg.setArch(info.get("arch"));
-        // epkgPkg.setBinDownloadUrl(info.get("binDownloadUrl"));
-        // epkgPkg.setSrcDownloadUrl(info.get("srcDownloadUrl"));
-        // epkgPkg.setSrcRepo(info.get("srcRepo"));
-        // epkgPkg.setEpkgSize(info.get("appSize"));
+    public EPKGPackage addRPMPkgRepoSig(EPKGPackage epkgPkg) {
+        String resp = ApiUtil.getApiResponseData(String.format(repoSigApi, epkgPkg.getName()));
+        if (resp != null && MapConstant.CATEGORY_MAP.containsKey(resp)) {
+            epkgPkg.setEpkgCategory(MapConstant.CATEGORY_MAP.get(resp));
+        }
+        epkgPkg.setEpkgCategory(MapConstant.CATEGORY_MAP.get("Other"));
         return epkgPkg;
     }
 }

@@ -16,6 +16,7 @@ import com.easysoftware.application.rpmpackage.dto.InputRPMPackage;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
+import com.easysoftware.common.constant.MapConstant;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ApiUtil;
 import com.easysoftware.common.utils.Base64Util;
@@ -34,8 +35,8 @@ public class RPMPackageServiceImpl implements RPMPackageService {
     @Value("${api.repoMaintainer}")
     String repoMaintainerApi;
 
-    @Value("${api.repoInfo}")
-    String repoInfoApi;
+    @Value("${api.repoSig}")
+    String repoSigApi;
 
     @Override
     public Map<String, Object> queryAllRPMPkgMenu(RPMPackageSearchCondition condition) {
@@ -82,7 +83,8 @@ public class RPMPackageServiceImpl implements RPMPackageService {
         }
         RPMPackage rPMPkg = new RPMPackage();
         BeanUtils.copyProperties(inputrPMPackage, rPMPkg);
-        rPMPkg = addRPMPkgInfo(rPMPkg);
+        rPMPkg = addRPMPkgMaintainerInfo(rPMPkg);
+        rPMPkg = addRPMPkgRepoSig(rPMPkg);
 
         boolean succeed = rPMPkgGateway.save(rPMPkg);
         if (!succeed) {
@@ -111,7 +113,8 @@ public class RPMPackageServiceImpl implements RPMPackageService {
         }
         RPMPackage rPMPkg = new RPMPackage();
         BeanUtils.copyProperties(inputrPMPackage, rPMPkg);
-        rPMPkg = addRPMPkgInfo(rPMPkg);
+        rPMPkg = addRPMPkgMaintainerInfo(rPMPkg);
+        rPMPkg = addRPMPkgRepoSig(rPMPkg);
 
         boolean succeed = rPMPkgGateway.update(rPMPkg);
         if (!succeed) {
@@ -120,19 +123,20 @@ public class RPMPackageServiceImpl implements RPMPackageService {
         return ResultUtil.success(HttpStatus.OK);
     }
 
-    public RPMPackage addRPMPkgInfo(RPMPackage rPMPkg) {
-        Map<String, String> maintainer = ApiUtil.getApiResponse(String.format(repoMaintainerApi, rPMPkg.getName()));
+    public RPMPackage addRPMPkgMaintainerInfo(RPMPackage rPMPkg) {
+        Map<String, String> maintainer = ApiUtil.getApiResponseMaintainer(String.format(repoMaintainerApi, rPMPkg.getName()));
         rPMPkg.setMaintainerGiteeId(maintainer.get("gitee_id"));
-        rPMPkg.setMaintainerId(maintainer.get("gitee_id"));
+        rPMPkg.setMaintainerId(maintainer.get("id"));
         rPMPkg.setMaintainerEmail(maintainer.get("email"));
+        return rPMPkg;
+    }
 
-        // Map<String, String> info = ApiUtil.getApiResponse(String.format(repoInfoApi, rPMPkg.getName(), "rpm_openeuler"));
-        // rPMPkg.setOs(info.get("os"));
-        // rPMPkg.setArch(info.get("arch"));
-        // rPMPkg.setBinDownloadUrl(info.get("binDownloadUrl"));
-        // rPMPkg.setSrcDownloadUrl(info.get("srcDownloadUrl"));
-        // rPMPkg.setSrcRepo(info.get("srcRepo"));
-        // rPMPkg.setRpmSize(info.get("appSize"));
+    public RPMPackage addRPMPkgRepoSig(RPMPackage rPMPkg) {
+        String resp = ApiUtil.getApiResponseData(String.format(repoSigApi, rPMPkg.getName()));
+        if (resp != null && MapConstant.CATEGORY_MAP.containsKey(resp)) {
+            rPMPkg.setRpmCategory(MapConstant.CATEGORY_MAP.get(resp));
+        }
+        rPMPkg.setRpmCategory(MapConstant.CATEGORY_MAP.get("Other"));
         return rPMPkg;
     }
 }
