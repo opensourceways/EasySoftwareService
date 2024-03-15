@@ -35,6 +35,7 @@ public class KafkaConsumerConfig {
         props.put("group.id", groupId);
         props.put("enable.auto.commit", enableAutoCommit);
         props.put("auto.commit.interval.ms", autoCommitIntervalMs);
+        props.put("request.timeout.ms", "300000");
         props.put("key.deserializer", StringDeserializer.class.getName());
         props.put("value.deserializer", StringDeserializer.class.getName());
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);

@@ -163,7 +163,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         Collection<RPMPackageDO> ObjList = new ArrayList<>();
         for (String obj : dataObject) {
             RPMPackage rpmPackage = ObjectMapperUtil.jsonToObject(obj, RPMPackage.class);
-            RPMPackageDO rpmDO = RPMPackageConverter.toDataObjectForUpdate(rpmPackage);
+            RPMPackageDO rpmDO = RPMPackageConverter.toDataObjectForCreate(rpmPackage);
             ObjList.add(rpmDO);
         }
         return ObjList;
