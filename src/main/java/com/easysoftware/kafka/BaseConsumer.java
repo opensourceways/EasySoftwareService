@@ -27,7 +27,7 @@ public class BaseConsumer {
     private static final Logger logger = LoggerFactory.getLogger(BaseConsumer.class);
     protected ArrayList<KafkaConsumer<String, String>> KafkaConsumerList = new ArrayList<>();
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 30000)
     public void tasks() {
         KafkaToMysql();
     }
@@ -54,7 +54,6 @@ public class BaseConsumer {
     public void dealData(ConsumerRecords<String, String> records) {
         for (ConsumerRecord<String, String> record : records) {
             String value = record.value();
-            logger.info(value);
             try {
                 Map<String, Object> dtoMap = ObjectMapperUtil.toMap(value);
                 String table = dtoMap.get("table").toString();
@@ -84,12 +83,12 @@ public class BaseConsumer {
             try {
                 Map<String, Object> dtoMap = ObjectMapperUtil.toMap(value);
                 String table = dtoMap.get("table").toString();
-                String name = dtoMap.get("name").toString();
+                // String unique = dtoMap.get("unique").toString();
                 baseIService = serviceMap.getIService(table + "Service");
-                if (baseIService.existApp(name)) {
-                    logger.info(String.format("The software %s is existed", name));
-                    continue;
-                }
+                // if (baseIService.existApp(unique)) {
+                //     logger.info(String.format("The software %s is existed", unique));
+                //     continue;
+                // }
                 appList.add(value);
                 partition = record.partition();
                 offset = record.offset();

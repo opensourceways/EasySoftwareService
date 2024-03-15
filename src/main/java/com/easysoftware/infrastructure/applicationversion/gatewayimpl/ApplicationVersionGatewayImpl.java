@@ -87,7 +87,7 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
         Collection<ApplicationVersionDO> ObjList = new ArrayList<>();
         for (String obj : dataObject) {
             ApplicationVersion appVer = ObjectMapperUtil.jsonToObject(obj, ApplicationVersion.class);
-            ApplicationVersionDO appVersionDO = ApplicationVersionConvertor.toDataObjectForUpdate(appVer);
+            ApplicationVersionDO appVersionDO = ApplicationVersionConvertor.toDataObjectForCreate(appVer);
             ObjList.add(appVersionDO);
         }
         return ObjList;
