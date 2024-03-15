@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
 
-@Service
+// @Service
 public class VersionConsumer extends BaseConsumer {
     @Value("${consumer.topic.name}")
     String topicName;
