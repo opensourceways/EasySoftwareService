@@ -100,6 +100,6 @@ public class InputRPMPackage {
     @Size(max = 1000, message = "the length of similarPkgs can not exceed 1000")
     private String similarPkgs;
 
-    @Size(max = 255, message = "the length of security can not exceed 255")
+     @Size(max = 100, message = "the length of downloadCount can not exceed 100")
     private String downloadCount;
 }
