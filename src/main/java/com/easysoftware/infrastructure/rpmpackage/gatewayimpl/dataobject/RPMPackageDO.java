@@ -80,4 +80,6 @@ public class RPMPackageDO {
     private String security;
 
     private String similarPkgs;
+
+    private String downloadCount;
 }
