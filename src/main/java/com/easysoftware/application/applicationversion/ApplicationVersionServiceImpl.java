@@ -57,6 +57,7 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
 
         Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(AppVersion);
         kafkaMsg.put("table", "ApplicationVersion");
+        kafkaMsg.put("unique", inputAppVersion.getName());
         kafkaProducer.sendMess(topicAppVersion + "_version", UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(kafkaMsg));
 
         return ResultUtil.success(HttpStatus.OK);
