@@ -69,4 +69,6 @@ public class EPKGPackage {
     private String similarPkgs;
 
     private String files;
+
+    private String downloadCount;
 }
