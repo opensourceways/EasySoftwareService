@@ -2,6 +2,8 @@ package com.easysoftware.infrastructure.rpmpackage.gatewayimpl;
 
 import java.sql.SQLException;
 import java.sql.SQLSyntaxErrorException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +22,7 @@ import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
@@ -153,5 +156,16 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     @Override
     public long queryTableLength() {
         return rPMPkgMapper.selectCount(null);
+    }
+
+    @Override
+    public Collection<RPMPackageDO> convertBatch(Collection<String> dataObject){
+        Collection<RPMPackageDO> ObjList = new ArrayList<>();
+        for (String obj : dataObject) {
+            RPMPackage rpmPackage = ObjectMapperUtil.jsonToObject(obj, RPMPackage.class);
+            RPMPackageDO rpmDO = RPMPackageConverter.toDataObjectForUpdate(rpmPackage);
+            ObjList.add(rpmDO);
+        }
+        return ObjList;
     }
 }

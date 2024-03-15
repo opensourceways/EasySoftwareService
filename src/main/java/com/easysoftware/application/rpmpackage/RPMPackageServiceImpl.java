@@ -6,11 +6,14 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.application.rpmpackage.dto.InputRPMPackage;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
@@ -20,15 +23,24 @@ import com.easysoftware.common.constant.MapConstant;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ApiUtil;
 import com.easysoftware.common.utils.Base64Util;
+import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
+import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
 import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
+import com.easysoftware.infrastructure.mapper.RPMPackageDOMapper;
+import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
+import com.easysoftware.kafka.Producer;
 
 import jakarta.annotation.Resource;
 
-@Service
-public class RPMPackageServiceImpl implements RPMPackageService {
+@Primary
+@Service("RPMPackageService")
+public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPackageDO> implements RPMPackageService {
+    @Autowired
+    Producer kafkaProducer;
+
     @Resource
     RPMPackageGateway rPMPkgGateway;
 
@@ -37,6 +49,12 @@ public class RPMPackageServiceImpl implements RPMPackageService {
 
     @Value("${api.repoSig}")
     String repoSigApi;
+
+    @Value("${api.repoDownload}")
+    String repoDownloadApi;
+
+    @Value("${producer.topic}")
+    String topicAppVersion;
 
     @Override
     public Map<String, Object> queryAllRPMPkgMenu(RPMPackageSearchCondition condition) {
@@ -85,11 +103,17 @@ public class RPMPackageServiceImpl implements RPMPackageService {
         BeanUtils.copyProperties(inputrPMPackage, rPMPkg);
         rPMPkg = addRPMPkgMaintainerInfo(rPMPkg);
         rPMPkg = addRPMPkgRepoSig(rPMPkg);
+        rPMPkg = addRPMPkgRepoDownload(rPMPkg);
 
-        boolean succeed = rPMPkgGateway.save(rPMPkg);
-        if (!succeed) {
-            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0006);
-        }
+        Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(inputrPMPackage);
+        kafkaMsg.put("table", "RPMPackage");
+        kafkaMsg.put("unique", ObjectMapperUtil.writeValueAsString(unique));
+        kafkaProducer.sendMess(topicAppVersion + "_rpm", UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(kafkaMsg));
+
+        // boolean succeed = rPMPkgGateway.save(rPMPkg);
+        // if (!succeed) {
+        //     return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0006);
+        // }
         return ResultUtil.success(HttpStatus.OK);
     }
 
@@ -115,12 +139,30 @@ public class RPMPackageServiceImpl implements RPMPackageService {
         BeanUtils.copyProperties(inputrPMPackage, rPMPkg);
         rPMPkg = addRPMPkgMaintainerInfo(rPMPkg);
         rPMPkg = addRPMPkgRepoSig(rPMPkg);
+        rPMPkg = addRPMPkgRepoDownload(rPMPkg);
 
         boolean succeed = rPMPkgGateway.update(rPMPkg);
         if (!succeed) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0004);
         }
         return ResultUtil.success(HttpStatus.OK);
+    }
+
+    @Override
+    public boolean existApp(String unique){
+        RPMPackageUnique uniquePkg = ObjectMapperUtil.jsonToObject(unique, RPMPackageUnique.class);
+        return rPMPkgGateway.existRPM(uniquePkg);
+    }
+
+    @Override
+    public void saveDataObject(String dataObject) {
+        RPMPackage appVer = ObjectMapperUtil.jsonToObject(dataObject, RPMPackage.class);
+        rPMPkgGateway.save(appVer);
+    }
+
+    @Override
+    public void saveDataObjectBatch(ArrayList<String> dataObject) {
+        saveBatch(rPMPkgGateway.convertBatch(dataObject));
     }
 
     public RPMPackage addRPMPkgMaintainerInfo(RPMPackage rPMPkg) {
@@ -137,6 +179,12 @@ public class RPMPackageServiceImpl implements RPMPackageService {
             rPMPkg.setRpmCategory(MapConstant.CATEGORY_MAP.get(resp));
         }
         rPMPkg.setRpmCategory(MapConstant.CATEGORY_MAP.get("Other"));
+        return rPMPkg;
+    }
+
+    public RPMPackage addRPMPkgRepoDownload(RPMPackage rPMPkg) {
+        String resp = ApiUtil.getApiResponseData(String.format(repoDownloadApi, rPMPkg.getName()));
+        rPMPkg.setDownloadCount(resp);
         return rPMPkg;
     }
 }
