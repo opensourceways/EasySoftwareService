@@ -80,4 +80,6 @@ public class EPKGPackageDO {
     private String similarPkgs;
 
     private String files;
+
+    private String downloadCount;
 }

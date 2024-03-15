@@ -65,4 +65,6 @@ public class RPMPackageDetailVo {
     private String security;
 
     private String similarPkgs;
+
+    private String downloadCount;
 }

@@ -67,4 +67,6 @@ public class RPMPackage {
     private String security;
 
     private String similarPkgs;
+
+    private String downloadCount;
 }
