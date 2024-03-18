@@ -20,4 +20,5 @@ public interface RPMPackageService extends BaseIService<RPMPackageDO> {
     boolean existApp(String name);
     void saveDataObject(String dataObject);
     void saveDataObjectBatch(ArrayList<String> dataObject);
+	Map<String, Object> queryPartAppPkgMenu(RPMPackageSearchCondition condition);
 }
