@@ -1,6 +1,7 @@
-package com.easysoftware.application.domainpackage.vo;
+package com.easysoftware.application.rpmpackage.vo;
 
-import java.util.Set;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,10 +9,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DomainPackageMenuVo {
+public class RPMPackageDomainVo {
     private String category;
-    private String name;
     private String description;
     private String iconUrl;
-    private Set<String> tags;
+    private String name;
+    private List<String> tags;
 }
