@@ -36,7 +36,7 @@ public class RPMPackageSearchCondition {
     private String arch;
 
     @Size(max = 50)
-    private String rpmCategory;
+    private String category;
 
     @Size(max = 50)
     private String rpmUpdateAt;

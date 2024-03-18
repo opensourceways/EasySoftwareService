@@ -12,7 +12,7 @@ public class RPMPackageMenuVo {
     private String version;
     private String os;
     private String arch;
-    private String rpmCategory;
+    private String category;
     private String rpmUpdateAt;
     private String srcRepo;
     private String rpmSize;

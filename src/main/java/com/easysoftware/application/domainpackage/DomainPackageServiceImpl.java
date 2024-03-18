@@ -119,7 +119,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
             RPMPackageSearchCondition rPMCon = new RPMPackageSearchCondition();
             BeanUtils.copyProperties(condition, rPMCon);
             rPMCon.setName("");
-            rPMCon.setRpmCategory(condition.getCategory());
+            rPMCon.setCategory(condition.getCategory());
             Map<String, Object> rpmMenuList = rPMPkgService.queryAllRPMPkgMenu(rPMCon);
             return ResultUtil.success(HttpStatus.OK, rpmMenuList);
         } else if ("epkgpkg".equals(condition.getName())) {
