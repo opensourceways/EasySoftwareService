@@ -14,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.exception.enumvalid.TimeOrderEnum;
@@ -84,6 +85,20 @@ public class RPMPackageConverter {
             res.add(menu);
         }
 
+        return res;
+    }
+
+    public static List<RPMPackageDomainVo> toDomain(List<RPMPackageDO> rpmPkgDOs) {
+        List<RPMPackageDomainVo> res = new ArrayList<>();
+        for (RPMPackageDO rpm: rpmPkgDOs) {
+            RPMPackageDomainVo domain = new RPMPackageDomainVo();
+            BeanUtils.copyProperties(rpm, domain);
+            domain.setTags(List.of("RPM"));
+            domain.setCategory(rpm.getRpmCategory());
+            domain.setIconUrl("");
+            
+            res.add(domain);
+        }
         return res;
     }
 

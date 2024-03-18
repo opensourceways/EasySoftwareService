@@ -21,4 +21,5 @@ public interface RPMPackageGateway {
     List<String> queryColumn(String column);
     long queryTableLength();
     Collection<RPMPackageDO> convertBatch(Collection<String> dataObject);
+    Map<String, Object> queryPartRPMPkgMenu(RPMPackageSearchCondition condition);
 }

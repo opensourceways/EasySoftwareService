@@ -20,6 +20,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ObjectMapperUtil;
@@ -167,5 +168,18 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
             ObjList.add(rpmDO);
         }
         return ObjList;
+    }
+
+    @Override
+    public Map<String, Object> queryPartRPMPkgMenu(RPMPackageSearchCondition condition) {
+        QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
+        wrapper.in("rpm_category", List.of("AI", "大数据", "分布式存储", "数据库", "云服务", "HPC"));
+        List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
+        List<RPMPackageDomainVo> menus = RPMPackageConverter.toDomain(rpmList);
+        Map<String, Object> res = Map.ofEntries(
+            Map.entry("total", menus.size()),
+            Map.entry("list", menus)
+        );
+        return res;
     }
 }
