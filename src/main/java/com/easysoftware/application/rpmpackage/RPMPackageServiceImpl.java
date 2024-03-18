@@ -93,12 +93,12 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
         }
         // 数据库中是否已存在该包
-        RPMPackageUnique unique = new RPMPackageUnique();
-        BeanUtils.copyProperties(inputrPMPackage, unique);
-        boolean found = rPMPkgGateway.existRPM(unique);
-        if (found) {
-            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0008);
-        }
+        // RPMPackageUnique unique = new RPMPackageUnique();
+        // BeanUtils.copyProperties(inputrPMPackage, unique);
+        // boolean found = rPMPkgGateway.existRPM(unique);
+        // if (found) {
+        //     return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0008);
+        // }
         RPMPackage rPMPkg = new RPMPackage();
         BeanUtils.copyProperties(inputrPMPackage, rPMPkg);
         // rPMPkg = addRPMPkgMaintainerInfo(rPMPkg);
@@ -107,7 +107,7 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
 
         Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(inputrPMPackage);
         kafkaMsg.put("table", "RPMPackage");
-        kafkaMsg.put("unique", ObjectMapperUtil.writeValueAsString(unique));
+        // kafkaMsg.put("unique", ObjectMapperUtil.writeValueAsString(unique));
         kafkaProducer.sendMess(topicAppVersion + "_rpm", UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(kafkaMsg));
 
         // boolean succeed = rPMPkgGateway.save(rPMPkg);
