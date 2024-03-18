@@ -103,4 +103,7 @@ public class InputEPKGPackage {
 
     @Size(max = 255, message = "the length of downloadCount can not exceed 255")
     private String downloadCount;
+
+    @Size(max = 255, message = "the length of pkgId can not exceed 255")
+    private String pkgId;
 }

@@ -69,4 +69,6 @@ public class EPKGPackageDetailVo {
     private String similarPkgs;
 
     private String downloadCount;
+
+    private String pkgId;
 }

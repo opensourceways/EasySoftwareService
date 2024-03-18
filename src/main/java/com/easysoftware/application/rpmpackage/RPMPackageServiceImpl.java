@@ -187,4 +187,10 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
         rPMPkg.setDownloadCount(resp);
         return rPMPkg;
     }
+	
+	@Override
+    public Map<String, Object> queryPartAppPkgMenu(RPMPackageSearchCondition condition) {
+        Map<String, Object> rPMMenu = rPMPkgGateway.queryPartRPMPkgMenu(condition);
+        return rPMMenu;
+	}
 }

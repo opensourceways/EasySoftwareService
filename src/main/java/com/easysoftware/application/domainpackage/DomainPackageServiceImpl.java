@@ -3,6 +3,7 @@ package com.easysoftware.application.domainpackage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,8 @@ import com.easysoftware.application.epkgpackage.EPKGPackageService;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.RPMPackageService;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
@@ -71,7 +74,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     private ResponseEntity<Object> searchDomainEntity(DomainSearchCondition conditon) {
         String entity = conditon.getEntity();
         DomainPackageMenuVo domain = new DomainPackageMenuVo();
-        domain.setTags(new ArrayList<String>());
+        domain.setTags(new HashSet<String>());
 
         boolean appExisted = applicationPackageGateway.existApp(entity);
         if (appExisted) {
@@ -134,59 +137,83 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         }
     }
 
+
     private ResponseEntity<Object> searchAllEntity(DomainSearchCondition condition) {
         ApplicationPackageSearchCondition appCon = new ApplicationPackageSearchCondition();
         BeanUtils.copyProperties(condition, appCon);
         Map<String, Object> map = appPkgService.queryAllAppPkgMenu(appCon);
         List<ApplicationPackageMenuVo> appMenus = (List<ApplicationPackageMenuVo>) map.get("list");
 
-        List<DomainPackageMenuVo> domainMenus = new ArrayList<>();
+        RPMPackageSearchCondition rpmCon = new RPMPackageSearchCondition();
+        BeanUtils.copyProperties(condition, rpmCon);
+        Map<String, Object> rpmMap = rPMPkgService.queryPartAppPkgMenu(rpmCon);
+        List<RPMPackageDomainVo> rpmMenus = (List<RPMPackageDomainVo>) rpmMap.get("list");
+
+        Map<String, DomainPackageMenuVo> menuMap = mergeMenuVOs(appMenus, rpmMenus);
+        List<Map<String, Object>> appCate = groupDomainByCategory(menuMap);
+        Map res = Map.ofEntries(
+            Map.entry("total", appMenus.size() + rpmMenus.size()),
+            Map.entry("list", appCate)
+        );
+        return ResultUtil.success(HttpStatus.OK, res);
+    }
+
+    private Map<String, DomainPackageMenuVo> mergeMenuVOs(List<ApplicationPackageMenuVo> appMenus,
+            List<RPMPackageDomainVo> rpmMenus) {
+        
+        Map<String, DomainPackageMenuVo> domainMap = new HashMap<>();
         for (ApplicationPackageMenuVo app: appMenus) {
             DomainPackageMenuVo domain = new DomainPackageMenuVo();
             BeanUtils.copyProperties(app, domain);
-            domain.setTags(new ArrayList<String>());
+            domain.setTags(new HashSet<String>());
             domain.getTags().add("IMAGE");
-
-            String name = domain.getName();
 
             // search RPM
             RPMPackageUnique unique = new RPMPackageUnique();
-            unique.setName(name);
+            unique.setName(app.getName());
             boolean rpmExisted = rpmPackageGateway.existRPM(unique);
             if (rpmExisted) {
                 domain.getTags().add("RPM");
             }
 
-            // search RPM
+            // search EPKG
             EPKGPackageUnique epkg = new EPKGPackageUnique();
-            epkg.setName(name);
+            epkg.setName(app.getName());
             boolean epkgExisted = epkgPackageGateway.existEPKG(epkg);
             if (epkgExisted) {
                 domain.getTags().add("EPKG");
             }
-
-            domainMenus.add(domain);
-
+            
+            domainMap.put(app.getName(), domain);
         }
-       
-        List<Map<String, Object>> appCate = groupDomainByCategory(domainMenus);
-        Map res = Map.ofEntries(
-            Map.entry("total", map.get("total")),
-            Map.entry("list", appCate)
-        );
-        return ResultUtil.success(HttpStatus.OK, res);
 
+        for (RPMPackageDomainVo rpm: rpmMenus) {
+            String name = rpm.getName();
+            if (domainMap.containsKey(name)) {
+                domainMap.get(name).getTags().add("RPM");
+                continue;
+            }
+
+            DomainPackageMenuVo domain = new DomainPackageMenuVo();
+            BeanUtils.copyProperties(rpm, domain);
+            domain.setTags(new HashSet<String>());
+            domain.getTags().add("RPM");
+            domainMap.put(rpm.getName(), domain);
+        }
+
+        return domainMap;
     }
 
 
-    private List<Map<String, Object>> groupDomainByCategory(List<DomainPackageMenuVo> menuList) {
+    private List<Map<String, Object>> groupDomainByCategory(Map<String, DomainPackageMenuVo> domainMap) {
         Map<String, List<DomainPackageMenuVo>> map = new HashMap<>();
         for (AppCategoryEnum categoryEnum : AppCategoryEnum.values()) {
             String category = categoryEnum.getAlias();
             map.put(category, new ArrayList<>());
         }
-    
-        for (DomainPackageMenuVo menu: menuList) {
+
+        for (Map.Entry<String, DomainPackageMenuVo> domain : domainMap.entrySet()) {
+            DomainPackageMenuVo menu = domain.getValue();
             String cate = StringUtils.trimToEmpty(menu.getCategory());
             map.get(cate).add(menu);
         }
