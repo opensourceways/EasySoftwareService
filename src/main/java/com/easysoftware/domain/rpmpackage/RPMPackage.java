@@ -20,7 +20,7 @@ public class RPMPackage {
 
     private String arch;
 
-    private String rpmCategory;
+    private String category;
 
     private String rpmUpdateAt;
 

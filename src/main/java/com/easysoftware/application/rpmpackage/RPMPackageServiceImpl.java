@@ -101,9 +101,9 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
         }
         RPMPackage rPMPkg = new RPMPackage();
         BeanUtils.copyProperties(inputrPMPackage, rPMPkg);
-        rPMPkg = addRPMPkgMaintainerInfo(rPMPkg);
-        rPMPkg = addRPMPkgRepoSig(rPMPkg);
-        rPMPkg = addRPMPkgRepoDownload(rPMPkg);
+        // rPMPkg = addRPMPkgMaintainerInfo(rPMPkg);
+        // rPMPkg = addRPMPkgRepoSig(rPMPkg);
+        // rPMPkg = addRPMPkgRepoDownload(rPMPkg);
 
         Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(inputrPMPackage);
         kafkaMsg.put("table", "RPMPackage");
@@ -176,9 +176,9 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
     public RPMPackage addRPMPkgRepoSig(RPMPackage rPMPkg) {
         String resp = ApiUtil.getApiResponseData(String.format(repoSigApi, rPMPkg.getName()));
         if (resp != null && MapConstant.CATEGORY_MAP.containsKey(resp)) {
-            rPMPkg.setRpmCategory(MapConstant.CATEGORY_MAP.get(resp));
+            rPMPkg.setCategory(MapConstant.CATEGORY_MAP.get(resp));
         }
-        rPMPkg.setRpmCategory(MapConstant.CATEGORY_MAP.get("Other"));
+        rPMPkg.setCategory(MapConstant.CATEGORY_MAP.get("Other"));
         return rPMPkg;
     }
 
