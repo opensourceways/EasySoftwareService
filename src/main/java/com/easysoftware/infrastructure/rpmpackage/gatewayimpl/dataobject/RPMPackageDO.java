@@ -82,4 +82,6 @@ public class RPMPackageDO {
     private String similarPkgs;
 
     private String downloadCount;
+
+    private String pkgId;
 }

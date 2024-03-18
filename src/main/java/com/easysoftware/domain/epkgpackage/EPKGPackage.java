@@ -71,4 +71,6 @@ public class EPKGPackage {
     private String files;
 
     private String downloadCount;
+
+    private String pkgId;
 }

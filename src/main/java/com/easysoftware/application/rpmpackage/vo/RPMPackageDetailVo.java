@@ -67,4 +67,6 @@ public class RPMPackageDetailVo {
     private String similarPkgs;
 
     private String downloadCount;
+
+    private String pkgId;
 }
