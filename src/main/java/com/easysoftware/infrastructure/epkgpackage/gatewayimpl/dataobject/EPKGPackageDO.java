@@ -82,4 +82,6 @@ public class EPKGPackageDO {
     private String files;
 
     private String downloadCount;
+
+    private String pkgId;
 }
