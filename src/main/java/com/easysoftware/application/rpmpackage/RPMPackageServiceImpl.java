@@ -177,8 +177,9 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
         String resp = ApiUtil.getApiResponseData(String.format(repoSigApi, rPMPkg.getName()));
         if (resp != null && MapConstant.CATEGORY_MAP.containsKey(resp)) {
             rPMPkg.setCategory(MapConstant.CATEGORY_MAP.get(resp));
+        } else {
+            rPMPkg.setCategory(MapConstant.CATEGORY_MAP.get("Other"));
         }
-        rPMPkg.setCategory(MapConstant.CATEGORY_MAP.get("Other"));
         return rPMPkg;
     }
 

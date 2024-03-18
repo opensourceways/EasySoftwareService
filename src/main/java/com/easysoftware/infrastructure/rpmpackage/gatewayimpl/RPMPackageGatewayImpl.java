@@ -143,7 +143,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
 
     @Override
     public List<String> queryColumn(String column) {
-        column = "category".equals(column) ? "rpm_category" : column;
+        column = "category".equals(column) ? "category" : column;
         QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
         wrapper.select("distinct " + column);
         List<RPMPackageDO> rpmColumn = rPMPkgMapper.selectList(wrapper);
@@ -173,7 +173,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     @Override
     public Map<String, Object> queryPartRPMPkgMenu(RPMPackageSearchCondition condition) {
         QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
-        wrapper.in("rpm_category", List.of("AI", "大数据", "分布式存储", "数据库", "云服务", "HPC"));
+        wrapper.in("category", List.of("AI", "大数据", "分布式存储", "数据库", "云服务", "HPC"));
         List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
         List<RPMPackageDomainVo> menus = RPMPackageConverter.toDomain(rpmList);
         Map<String, Object> res = Map.ofEntries(

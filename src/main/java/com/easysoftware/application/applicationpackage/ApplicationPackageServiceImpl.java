@@ -148,8 +148,9 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
         String resp = ApiUtil.getApiResponseData(String.format(repoSigApi, appPkg.getName()));
         if (resp != null && MapConstant.CATEGORY_MAP.containsKey(resp)) {
             appPkg.setAppCategory(MapConstant.CATEGORY_MAP.get(resp));
+        } else {
+            appPkg.setAppCategory(MapConstant.CATEGORY_MAP.get("Other"));
         }
-        appPkg.setAppCategory(MapConstant.CATEGORY_MAP.get("Other"));
         return appPkg;
     }
 }

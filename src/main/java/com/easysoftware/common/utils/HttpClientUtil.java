@@ -20,7 +20,7 @@ import com.easysoftware.common.entity.MessageCode;
 
 public class HttpClientUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(LogUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 
     public static String getRequest(String urlStr) {
         try {
