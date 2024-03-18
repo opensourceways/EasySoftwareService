@@ -29,7 +29,7 @@ public class InputRPMPackage {
     private String arch;
 
     @Size(max = 255, message = "the length of rpmCategory can not exceed 255")
-    private String rpmCategory;
+    private String category;
 
     @Size(max = 255, message = "the length of rpmUpdateAt can not exceed 255")
     private String rpmUpdateAt;
