@@ -17,4 +17,5 @@ public class EPKGPackageMenuVo {
     private String srcRepo;
     private String epkgSize;
     private String binDownloadUrl;
+    private String pkgId;
 }

@@ -102,4 +102,7 @@ public class InputRPMPackage {
 
     @Size(max = 100, message = "the length of downloadCount can not exceed 100")
     private String downloadCount;
+
+    @Size(max = 255, message = "the length of pkgId can not exceed 255")
+    private String pkgId;
 }

@@ -69,4 +69,6 @@ public class RPMPackage {
     private String similarPkgs;
 
     private String downloadCount;
+
+    private String pkgId;
 }
