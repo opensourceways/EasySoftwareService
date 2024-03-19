@@ -1,5 +1,6 @@
 package com.easysoftware.kafka;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,15 +12,18 @@ import org.apache.kafka.common.TopicPartition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 import com.easysoftware.application.BaseIService;
 import com.easysoftware.application.ServiceMap;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 
+// @Service
 public class BaseConsumer {
-    @Autowired
-    KafkaConsumer<String, String> consumer;
+    // @Autowired
+    // KafkaConsumer<String, String> consumer;
 
     @Autowired
     ServiceMap serviceMap;
@@ -27,27 +31,28 @@ public class BaseConsumer {
     private static final Logger logger = LoggerFactory.getLogger(BaseConsumer.class);
     protected ArrayList<KafkaConsumer<String, String>> KafkaConsumerList = new ArrayList<>();
 
-    @Scheduled(fixedRate = 30000)
+    // @Scheduled(fixedRate = 5000)
     public void tasks() {
         KafkaToMysql();
     }
 
-    protected void initConsumer(String topicName, String topicOffset) {
-        String[] topciOffsets = topicOffset.split(",");
-        for (String topciOffset : topciOffsets) {
-            String[] tf = topciOffset.split(":");
-            TopicPartition topicPartition = new TopicPartition(topicName, Integer.parseInt(tf[0]));
-            consumer.assign(Arrays.asList(topicPartition));
-            consumer.seek(topicPartition, Integer.parseInt(tf[1]));
-            KafkaConsumerList.add(consumer);
-        }
-    }
+
+    // protected void initConsumer(String topicName, String topicOffset) {
+    //     String[] topciOffsets = topicOffset.split(",");
+    //     for (String topciOffset : topciOffsets) {
+    //         String[] tf = topciOffset.split(":");
+    //         TopicPartition topicPartition = new TopicPartition(topicName, Integer.parseInt(tf[0]));
+    //         consumer.assign(Arrays.asList(topicPartition));
+    //         consumer.seek(topicPartition, Integer.parseInt(tf[1]));
+    //         KafkaConsumerList.add(consumer);
+    //     }
+    // }
 
     public void KafkaToMysql() {
         for (KafkaConsumer<String, String> customer : KafkaConsumerList) {
-            ConsumerRecords<String, String> poll = customer.poll(2);
+            ConsumerRecords<String, String> poll = customer.poll(Duration.ofSeconds(5));
             dealDataToTableByBatch(poll);
-            customer.commitSync();
+            customer.commitAsync();
         }
     }
 
@@ -78,6 +83,7 @@ public class BaseConsumer {
         BaseIService baseIService = null;
         int partition = 0;
         long offset = 0;
+        long startTime = System.nanoTime();
         for (ConsumerRecord<String, String> record : records) {
             String value = record.value();
             try {
@@ -96,10 +102,16 @@ public class BaseConsumer {
                 logger.error(e.getMessage() + ":" + value, e);
             }
         }
+        long endTime1 = System.nanoTime();
+        long duration = (endTime1 - startTime) / 1000000;
+        logger.info("处理records用时： " + duration + " 毫秒，" + "数据量：" + appList.size());
         if (!appList.isEmpty()) {
             logger.info("partation: " + partition + ", offset: " + offset);
             baseIService.saveDataObjectBatch(appList);
         }
+        long endTime2 = System.nanoTime();
+        duration = (endTime2 - endTime1) / 1000000;
+        logger.info("写入数据库用时： " + duration + " 毫秒，" + "数据量：" + appList.size());
     }
 
     // The data of a topic may be written to multiple tables
