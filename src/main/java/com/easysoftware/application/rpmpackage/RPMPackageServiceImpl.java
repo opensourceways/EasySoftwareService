@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
@@ -161,6 +162,7 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
     }
 
     @Override
+    @Transactional
     public void saveDataObjectBatch(ArrayList<String> dataObject) {
         saveBatch(rPMPkgGateway.convertBatch(dataObject));
     }
