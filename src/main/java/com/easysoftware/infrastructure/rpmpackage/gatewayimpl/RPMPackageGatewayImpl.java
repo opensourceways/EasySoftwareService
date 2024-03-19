@@ -10,6 +10,8 @@ import java.util.Map;
 
 import javax.management.Query;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -49,6 +51,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private static final Logger logger = LoggerFactory.getLogger(RPMPackageGatewayImpl.class);
 
     @Override
     public boolean delete(String id) {
@@ -161,12 +164,16 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
 
     @Override
     public Collection<RPMPackageDO> convertBatch(Collection<String> dataObject){
+        long startTime = System.nanoTime();
         Collection<RPMPackageDO> ObjList = new ArrayList<>();
         for (String obj : dataObject) {
             RPMPackage rpmPackage = ObjectMapperUtil.jsonToObject(obj, RPMPackage.class);
             RPMPackageDO rpmDO = RPMPackageConverter.toDataObjectForCreate(rpmPackage);
             ObjList.add(rpmDO);
         }
+        long endTime1 = System.nanoTime();
+        long duration = (endTime1 - startTime) / 1000000;
+        logger.info("转换时间： " + duration + " 毫秒，" + "数据量：" + dataObject.size());
         return ObjList;
     }
 

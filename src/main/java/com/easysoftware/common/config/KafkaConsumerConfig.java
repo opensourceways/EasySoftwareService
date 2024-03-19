@@ -1,45 +1,44 @@
 package com.easysoftware.common.config;
 
-import java.util.Properties;
-
-import org.apache.kafka.clients.consumer.KafkaConsumer;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+import org.springframework.kafka.core.ConsumerFactory;
+import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
 @Configuration
+@EnableKafka
 public class KafkaConsumerConfig {
-    @Value("${consumer.topic.name}")
-    String topicNames;
-
-    @Value("${consumer.topic.offset}")
-    String topicOffset;
 
     @Value("${bootstrap.servers}")
-    String bootstrapServers;
+    private String bootstrapServers;
 
     @Value("${consumer.groupId}")
-    String groupId;
-
-    @Value("${consumer.autoCommitIntervalMs}")
-    String autoCommitIntervalMs;
-
-    @Value("${consumer.enableAutoCommit}")
-    String enableAutoCommit;
+    private String groupId;
 
     @Bean
-    public KafkaConsumer<String, String> kafkaConsumer() {
-        Properties props = new Properties();
-        props.put("bootstrap.servers", bootstrapServers);
-        props.put("group.id", groupId);
-        props.put("enable.auto.commit", enableAutoCommit);
-        props.put("auto.commit.interval.ms", autoCommitIntervalMs);
-        props.put("request.timeout.ms", "300000");
-        props.put("key.deserializer", StringDeserializer.class.getName());
-        props.put("value.deserializer", StringDeserializer.class.getName());
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
+    public ConsumerFactory<String, String> consumerFactory() {
+        Map<String, Object> configProps = new HashMap<>();
+        configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+        configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 
-        return consumer;
+        return new DefaultKafkaConsumerFactory<>(configProps);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactory());
+        
+        factory.setBatchListener(true);
+        return factory;
     }
 }

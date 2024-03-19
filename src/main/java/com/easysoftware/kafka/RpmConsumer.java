@@ -1,9 +1,9 @@
 package com.easysoftware.kafka;
 
+import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-
-import jakarta.annotation.PostConstruct;
 
 @Service
 public class RpmConsumer extends BaseConsumer {
@@ -13,8 +13,8 @@ public class RpmConsumer extends BaseConsumer {
     @Value("${consumer.topic.offset}")
     String topicOffset;
 
-    @PostConstruct
-    private void init() {
-        initConsumer(topicName + "_rpm", topicOffset);
+    @KafkaListener(topics = "software_test_rpm", concurrency = "3")
+    public void listen(ConsumerRecords<String, String> records) {
+        dealDataToTableByBatch(records);
     }
 }

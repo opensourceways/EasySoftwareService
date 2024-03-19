@@ -1,20 +1,14 @@
 package com.easysoftware.kafka;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.PostConstruct;
-
-// @Service
+@Service
 public class VersionConsumer extends BaseConsumer {
-    @Value("${consumer.topic.name}")
-    String topicName;
 
-    @Value("${consumer.topic.offset}")
-    String topicOffset;
-
-    @PostConstruct
-    private void init() {
-        initConsumer(topicName + "_version", topicOffset);
+    @KafkaListener(topics = "software_test_version")
+    public void listen(ConsumerRecords<String, String> records) {
+        dealDataToTableByBatch(records);
     }
 }
