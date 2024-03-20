@@ -95,7 +95,6 @@ public class RPMPackageConverter {
             BeanUtils.copyProperties(rpm, domain);
             domain.setTags(List.of("RPM"));
             domain.setCategory(rpm.getCategory());
-            domain.setIconUrl("");
             
             res.add(domain);
         }
