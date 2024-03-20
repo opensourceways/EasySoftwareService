@@ -25,6 +25,7 @@ import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
@@ -125,6 +126,9 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         Page<RPMPackageDO> page = createPage(condition);
         QueryWrapper<RPMPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new RPMPackageDO(), 
                 condition, "rpm_update_at");
+        RPMPackageMenuVo pkgVo = new RPMPackageMenuVo();
+        List<String> columns = ClassField.getFieldNames(pkgVo);
+        wrapper.select(columns);
         IPage<RPMPackageDO> resPage = rPMPkgMapper.selectPage(page, wrapper);
         List<RPMPackageDO> rpmDOs = resPage.getRecords();
         List<RPMPackageMenuVo> rPMMenus = RPMPackageConverter.toMenu(rpmDOs);
@@ -180,6 +184,9 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     @Override
     public Map<String, Object> queryPartRPMPkgMenu(RPMPackageSearchCondition condition) {
         QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
+        RPMPackageDomainVo pkgVo = new RPMPackageDomainVo();
+        List<String> columns = ClassField.getFieldNames(pkgVo);
+        wrapper.select(columns);
         wrapper.in("category", List.of("AI", "大数据", "分布式存储", "数据库", "云服务", "HPC"));
         List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
         List<RPMPackageDomainVo> menus = RPMPackageConverter.toDomain(rpmList);

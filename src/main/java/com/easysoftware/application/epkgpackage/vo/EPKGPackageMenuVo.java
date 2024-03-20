@@ -13,7 +13,7 @@ public class EPKGPackageMenuVo {
     private String version;
     private String os;
     private String arch;
-    private String epkgCategory;
+    private String category;
     private String epkgUpdateAt;
     private String srcRepo;
     private String epkgSize;
