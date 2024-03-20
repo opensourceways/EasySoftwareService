@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EPKGPackageMenuVo {
     private String name;
+    private String id;
     private String version;
     private String os;
     private String arch;
