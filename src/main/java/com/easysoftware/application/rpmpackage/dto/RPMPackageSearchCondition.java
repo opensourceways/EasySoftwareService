@@ -17,8 +17,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RPMPackageSearchCondition {
     @Size(max = 50)
-    @NotBlank
     private String name;
+
+    @Size(max = 50)
+    private String id;
 
     @Range(min = PackageConstant.MIN_PAGE_NUM, max = PackageConstant.MAX_PAGE_NUM)
     private Integer pageNum = 1;
