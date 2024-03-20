@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class RPMPackageDomainVo {
     private String category;
     private String description;
-    private String iconUrl;
     private String name;
     private List<String> tags;
 }
