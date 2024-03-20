@@ -134,9 +134,9 @@ public class EPKGPackageServiceImpl implements EPKGPackageService {
     public EPKGPackage addRPMPkgRepoSig(EPKGPackage epkgPkg) {
         String resp = ApiUtil.getApiResponseData(String.format(repoSigApi, epkgPkg.getName()));
         if (resp != null && MapConstant.CATEGORY_MAP.containsKey(resp)) {
-            epkgPkg.setEpkgCategory(MapConstant.CATEGORY_MAP.get(resp));
+            epkgPkg.setCategory(MapConstant.CATEGORY_MAP.get(resp));
         } else {
-            epkgPkg.setEpkgCategory(MapConstant.CATEGORY_MAP.get("Other"));
+            epkgPkg.setCategory(MapConstant.CATEGORY_MAP.get("Other"));
         }
         return epkgPkg;
     }

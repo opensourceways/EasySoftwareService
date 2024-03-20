@@ -19,6 +19,7 @@ import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
+import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.domain.epkgpackage.EPKGPackage;
 import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
@@ -94,6 +95,9 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
         Page<EPKGPackageDO> page = createPage(condition);
         QueryWrapper<EPKGPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new EPKGPackageDO(), 
                 condition, "epkg_update_at");
+        EPKGPackageMenuVo pkgVo = new EPKGPackageMenuVo();
+        List<String> columns = ClassField.getFieldNames(pkgVo);
+        wrapper.select(columns);
         IPage<EPKGPackageDO> resPage = ePKGPkgMapper.selectPage(page, wrapper);
         List<EPKGPackageDO> rpmDOs = resPage.getRecords();
         List<EPKGPackageMenuVo> rPMMenus = EPKGPackageConverter.toMenu(rpmDOs);
@@ -133,7 +137,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
 
     @Override
     public List<String> queryColumn(String column) {
-        column = "category".equals(column) ? "epkg_category" : column;
+        column = "category".equals(column) ? "category" : column;
         QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
         wrapper.select("distinct " + column);
         List<EPKGPackageDO> rpmColumn = ePKGPkgMapper.selectList(wrapper);

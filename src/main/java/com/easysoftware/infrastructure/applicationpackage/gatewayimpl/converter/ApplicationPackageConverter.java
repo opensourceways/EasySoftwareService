@@ -35,8 +35,10 @@ public class ApplicationPackageConverter {
         for (ApplicationPackageDO app: appPkgDOs) {
             ApplicationPackageMenuVo menu = new ApplicationPackageMenuVo();
             BeanUtils.copyProperties(app, menu);
-            menu.setTags(List.of(app.getType()));
-            menu.setCategory(app.getAppCategory());
+            if (app.getType() != null) {
+                menu.setTags(List.of(app.getType()));
+            }
+            menu.setCategory(app.getCategory());
             res.add(menu);
         }
         return res;

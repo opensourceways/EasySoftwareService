@@ -126,7 +126,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
             EPKGPackageSearchCondition eCon = new EPKGPackageSearchCondition();
             BeanUtils.copyProperties(condition, eCon);
             eCon.setName("");
-            eCon.setEpkgCategory(condition.getCategory());
+            eCon.setCategory(condition.getCategory());
             Map<String, Object> epkgMenu = epkgPackageService.queryAllEPKGPkgMenu(eCon);
             return ResultUtil.success(HttpStatus.OK, epkgMenu);
         } else if ("all".equals(condition.getName())) {

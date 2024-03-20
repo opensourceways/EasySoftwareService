@@ -38,7 +38,7 @@ public class EPKGPackageSearchCondition {
     private String arch;
 
     @Size(max = 50)
-    private String epkgCategory;
+    private String category;
 
     @Size(max = 50)
     private String epkgUpdateAt;

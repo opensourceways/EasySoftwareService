@@ -11,7 +11,7 @@ public class EPKGPackageUnique {
     private String version;
     private String os;
     private String arch;
-    private String epkgCategory;
+    private String category;
     private String epkgUpdateAt;
     
 }
