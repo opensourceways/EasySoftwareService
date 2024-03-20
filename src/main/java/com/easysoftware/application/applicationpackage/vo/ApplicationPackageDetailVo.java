@@ -23,7 +23,7 @@ public class ApplicationPackageDetailVo {
 
     private String similarPkgs;
 
-    private String appCategory;
+    private String category;
 
     private String dependencyPkgs;
 

@@ -15,6 +15,7 @@ import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSea
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
+import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter.ApplicationPackageConverter;
@@ -73,6 +74,9 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         Page<ApplicationPackageDO> page = new Page<>(pageNum, pageSize);
 
         QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
+        ApplicationPackageMenuVo pkgVo = new ApplicationPackageMenuVo();
+        List<String> columns = ClassField.getFieldNames(pkgVo);
+        wrapper.select(columns);
 
         IPage<ApplicationPackageDO> resPage = appPkgMapper.selectPage(page, wrapper);
         List<ApplicationPackageDO> appDOs = resPage.getRecords();

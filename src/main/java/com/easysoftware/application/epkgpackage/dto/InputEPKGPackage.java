@@ -26,8 +26,8 @@ public class InputEPKGPackage {
     @Size(max = 255, message = "the length of arch can not exceed 255")
     private String arch;
 
-    @Size(max = 255, message = "the length of epkgCategory can not exceed 255")
-    private String epkgCategory;
+    @Size(max = 255, message = "the length of category can not exceed 255")
+    private String category;
 
     @Size(max = 255, message = "the length of epkgUpdateAt can not exceed 255")
     private String epkgUpdateAt;

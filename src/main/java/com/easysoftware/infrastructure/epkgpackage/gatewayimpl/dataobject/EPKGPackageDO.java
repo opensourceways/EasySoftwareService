@@ -31,7 +31,7 @@ public class EPKGPackageDO {
 
     private String arch;
 
-    private String epkgCategory;
+    private String category;
 
     private String epkgUpdateAt;
 

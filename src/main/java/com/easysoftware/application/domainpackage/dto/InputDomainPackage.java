@@ -39,7 +39,7 @@ public class InputDomainPackage {
     private String dependencyPkgs;
 
     @EnumValue(enumClass = AppCategoryEnum.class, enumMethod = "isValidCategory")
-    private String appCategory;
+    private String category;
 
     @Size(max = 100, message = "the length of type can not exceed 100")
     private String type;
