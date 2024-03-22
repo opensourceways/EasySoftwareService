@@ -18,4 +18,5 @@ public class RPMPackageMenuVo {
     private String srcRepo;
     private String rpmSize;
     private String binDownloadUrl;
+    private String pkgId;
 }

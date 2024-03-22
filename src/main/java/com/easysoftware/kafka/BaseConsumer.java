@@ -2,29 +2,20 @@ package com.easysoftware.kafka;
 
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.common.TopicPartition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-
 import com.easysoftware.application.BaseIService;
 import com.easysoftware.application.ServiceMap;
+import com.easysoftware.common.constant.PackageConstant;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 
-// @Service
 public class BaseConsumer {
-    // @Autowired
-    // KafkaConsumer<String, String> consumer;
-
     @Autowired
     ServiceMap serviceMap;
 
@@ -35,18 +26,6 @@ public class BaseConsumer {
     public void tasks() {
         KafkaToMysql();
     }
-
-
-    // protected void initConsumer(String topicName, String topicOffset) {
-    //     String[] topciOffsets = topicOffset.split(",");
-    //     for (String topciOffset : topciOffsets) {
-    //         String[] tf = topciOffset.split(":");
-    //         TopicPartition topicPartition = new TopicPartition(topicName, Integer.parseInt(tf[0]));
-    //         consumer.assign(Arrays.asList(topicPartition));
-    //         consumer.seek(topicPartition, Integer.parseInt(tf[1]));
-    //         KafkaConsumerList.add(consumer);
-    //     }
-    // }
 
     public void KafkaToMysql() {
         for (KafkaConsumer<String, String> customer : KafkaConsumerList) {
@@ -89,12 +68,7 @@ public class BaseConsumer {
             try {
                 Map<String, Object> dtoMap = ObjectMapperUtil.toMap(value);
                 String table = dtoMap.get("table").toString();
-                // String unique = dtoMap.get("unique").toString();
                 baseIService = serviceMap.getIService(table + "Service");
-                // if (baseIService.existApp(unique)) {
-                //     logger.info(String.format("The software %s is existed", unique));
-                //     continue;
-                // }
                 appList.add(value);
                 partition = record.partition();
                 offset = record.offset();
