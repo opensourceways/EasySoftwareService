@@ -53,7 +53,7 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
         ApplicationPackage appPkg = new ApplicationPackage();
         BeanUtils.copyProperties(inputAppPkg, appPkg);
         appPkg = addAppPkgInfo(appPkg);
-        appPkg = addAppkgRepoSig(appPkg);
+        // appPkg = addAppkgRepoSig(appPkg);
         appPkg = addAppkgRepoDownload(appPkg);
 
         boolean succeed = appPkgGateway.save(appPkg);
@@ -74,7 +74,7 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
         BeanUtils.copyProperties(inputAppPkg, appPkg);
 
         appPkg = addAppPkgInfo(appPkg);
-        appPkg = addAppkgRepoSig(appPkg);
+        // appPkg = addAppkgRepoSig(appPkg);
         appPkg = addAppkgRepoDownload(appPkg);
 
         boolean succeed = appPkgGateway.update(appPkg);
