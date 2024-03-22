@@ -19,8 +19,8 @@ public class RPMPackageSearchCondition {
     @Size(max = 50)
     private String name;
 
-    @Size(max = 50)
-    private String id;
+    @Size(max = 255)
+    private String pkgId;
 
     @Range(min = PackageConstant.MIN_PAGE_NUM, max = PackageConstant.MAX_PAGE_NUM)
     private Integer pageNum = 1;
