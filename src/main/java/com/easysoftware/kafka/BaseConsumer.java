@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.easysoftware.application.BaseIService;
 import com.easysoftware.application.ServiceMap;
-import com.easysoftware.common.constant.PackageConstant;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 
 public class BaseConsumer {
