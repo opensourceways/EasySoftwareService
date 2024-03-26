@@ -117,45 +117,6 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
-    @Override
-    public Map<String, Object> queryAllAppPkgMenu(ApplicationPackageSearchCondition condition) {
-        Map<String, Object> map = appPkgGateway.queryMenuByName(condition);
-        List<ApplicationPackageMenuVo> appMenus = (List<ApplicationPackageMenuVo>) map.get("list");
-            
-        Map<String, List<ApplicationPackageMenuVo>> appCate = groupByCategory(appMenus);
-        List<Map<String, Object>> mapList = assembleApp(appCate);
-
-        Map res = Map.ofEntries(
-                Map.entry("total", map.get("total")),
-                Map.entry("list", mapList)
-            );
-        return res;
-    }
-
-    private Map<String, List<ApplicationPackageMenuVo>> groupByCategory(List<ApplicationPackageMenuVo> appMenus) {
-        Map<String, List<ApplicationPackageMenuVo>> map = new HashMap<>();
-        for (AppCategoryEnum categoryEnum : AppCategoryEnum.values()) {
-            String category = categoryEnum.getAlias();
-            map.put(category, new ArrayList<>());
-        }
-
-        for (ApplicationPackageMenuVo menu: appMenus) {
-            map.get(menu.getCategory()).add(menu);
-        }
-        return map;
-    }
-
-    private List<Map<String, Object>> assembleApp(Map<String, List<ApplicationPackageMenuVo>> appCate) {
-        List<Map<String, Object>> res = new ArrayList<>();
-        for (Map.Entry<String, List<ApplicationPackageMenuVo>> entry : appCate.entrySet()) {
-            Map<String, Object> cMap = new HashMap<>();
-            cMap.put("name", entry.getKey());
-            cMap.put("children", entry.getValue());
-            res.add(cMap);
-        }
-        return res;
-    }
-
     public ApplicationPackage addAppPkgInfo(ApplicationPackage appPkg) {
         Map<String, String> maintainer = ApiUtil.getApiResponseMaintainer(String.format(repoMaintainerApi, appPkg.getName()));
         appPkg.setMaintainerGiteeId(maintainer.get("gitee_id"));

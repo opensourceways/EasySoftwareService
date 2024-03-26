@@ -9,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
+import com.easysoftware.application.domainpackage.vo.DomainPackageMenuVo;
 import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
@@ -84,6 +85,23 @@ public class ApplicationPackageConverter {
         appPkgDO.setUpdateAt(currentTime);
        
         return appPkgDO;
+    }
+
+    public static List<DomainPackageMenuVo> toDomainPackageMenuVo(List<ApplicationPackageMenuVo> appList) {
+        List<DomainPackageMenuVo> menuList = new ArrayList<>();
+        for (ApplicationPackageMenuVo app : appList) {
+            DomainPackageMenuVo menu = toDomainPackageMenuVo(app);
+            menuList.add(menu);
+        }
+        return menuList;
+    }
+
+    public static DomainPackageMenuVo toDomainPackageMenuVo(ApplicationPackageMenuVo app) {
+        DomainPackageMenuVo menu = new DomainPackageMenuVo();
+        BeanUtils.copyProperties(app, menu);
+        menu.getPkgIds().put("IMAGE", app.getPkgId());
+        menu.getTags().add("IMAGE");
+        return menu;
     }
 }
 
