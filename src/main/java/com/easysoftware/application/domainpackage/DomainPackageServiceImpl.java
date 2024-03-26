@@ -95,7 +95,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     private ResponseEntity<Object> searchDomainPage(DomainSearchCondition condition) {
         // 展示精品应用
         if ("apppkg".equals(condition.getName())) {
-            List<Map<String, Object>> res = searchAppPkgPage(condition);
+            Map<String, Object> res = searchAppPkgPage(condition);
             return ResultUtil.success(HttpStatus.OK, res);
         // 展示rpm软件包
         } else if ("rpmpkg".equals(condition.getName())) {
@@ -116,11 +116,16 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         }
     }
 
-    private List<Map<String, Object>> searchAppPkgPage(DomainSearchCondition condition) {
+    private Map<String, Object> searchAppPkgPage(DomainSearchCondition condition) {
         ApplicationPackageSearchCondition appCon = DomainPackageConverter.toApp(condition);
-        List<ApplicationPackageMenuVo> appList = appPkgService.queryPkgMenuList(appCon);
+        Map<String, Object> map = applicationPackageGateway.queryMenuByName(appCon);
+        List<ApplicationPackageMenuVo> appList = (List<ApplicationPackageMenuVo>) map.get("list");
         List<DomainPackageMenuVo> menuList = ApplicationPackageConverter.toDomainPackageMenuVo(appList);
-        List<Map<String, Object>> res = groupByCategory(menuList);
+        List<Map<String, Object>> cateList = groupByCategory(menuList);
+        Map<String, Object> res = Map.ofEntries(
+            Map.entry("total", map.get("total")),
+            Map.entry("list", cateList)
+        );
         return res;
     }
 
