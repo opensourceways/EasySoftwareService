@@ -28,12 +28,16 @@ public class EPKGPackageConverter {
     public static List<EPKGPackageMenuVo> toMenu(List<EPKGPackageDO> rPMPkgDOs) {
         List<EPKGPackageMenuVo> res = new ArrayList<>();
         for (EPKGPackageDO rpm: rPMPkgDOs) {
-            EPKGPackageMenuVo menu = new EPKGPackageMenuVo();
-            BeanUtils.copyProperties(rpm, menu);
+            EPKGPackageMenuVo menu = toMenu(rpm);
             res.add(menu);
         }
-
         return res;
+    }
+
+    public static EPKGPackageMenuVo toMenu(EPKGPackageDO epkg) {
+        EPKGPackageMenuVo menu = new EPKGPackageMenuVo();
+        BeanUtils.copyProperties(epkg, menu);
+        return menu;
     }
 
     public static List<String> toColumn(List<EPKGPackageDO> epkgDOs, String column) {

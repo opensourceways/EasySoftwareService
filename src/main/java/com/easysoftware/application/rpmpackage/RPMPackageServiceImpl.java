@@ -19,6 +19,7 @@ import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenu
 import com.easysoftware.application.rpmpackage.dto.InputRPMPackage;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.constant.MapConstant;
 import com.easysoftware.common.entity.MessageCode;
@@ -192,8 +193,11 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
     }
 	
 	@Override
-    public Map<String, Object> queryPartAppPkgMenu(RPMPackageSearchCondition condition) {
+    public List<RPMPackageDomainVo> queryPartAppPkgMenu(RPMPackageSearchCondition condition) {
         Map<String, Object> rPMMenu = rPMPkgGateway.queryPartRPMPkgMenu(condition);
-        return rPMMenu;
+        List<RPMPackageDomainVo> menus = (List<RPMPackageDomainVo>) rPMMenu.get("list");
+        return menus;
 	}
+
+    
 }

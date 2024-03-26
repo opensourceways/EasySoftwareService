@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
+import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.domain.epkgpackage.EPKGPackage;
 import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
@@ -20,4 +21,5 @@ public interface EPKGPackageGateway {
     Map<String, Object> queryMenuByName(EPKGPackageSearchCondition condition);
     List<String> queryColumn(String column);
     long queryTableLength();
+    EPKGPackageMenuVo selectOne(String name);
 }

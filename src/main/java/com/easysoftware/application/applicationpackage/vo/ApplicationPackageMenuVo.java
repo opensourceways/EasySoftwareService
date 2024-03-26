@@ -14,4 +14,6 @@ public class ApplicationPackageMenuVo {
     private String description;
     private String iconUrl;
     private List<String> tags;
+    private String id;
+    private String pkgId;
 }

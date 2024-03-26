@@ -14,4 +14,6 @@ public class RPMPackageDomainVo {
     private String description;
     private String name;
     private List<String> tags;
+    private String id;
+    private String pkgId;
 }
