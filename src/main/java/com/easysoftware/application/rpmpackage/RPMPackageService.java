@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import com.easysoftware.application.BaseIService;
 import com.easysoftware.application.rpmpackage.dto.InputRPMPackage;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
 
 public interface RPMPackageService extends BaseIService<RPMPackageDO> {
@@ -20,5 +21,6 @@ public interface RPMPackageService extends BaseIService<RPMPackageDO> {
     boolean existApp(String name);
     void saveDataObject(String dataObject);
     void saveDataObjectBatch(ArrayList<String> dataObject);
-	Map<String, Object> queryPartAppPkgMenu(RPMPackageSearchCondition condition);
+	List<RPMPackageDomainVo> queryPartAppPkgMenu(RPMPackageSearchCondition condition);
+    
 }

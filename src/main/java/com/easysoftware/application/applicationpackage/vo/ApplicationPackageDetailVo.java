@@ -60,4 +60,6 @@ public class ApplicationPackageDetailVo {
     private String type;
 
     private String iconUrl;
+
+    private String pkgId;
 }

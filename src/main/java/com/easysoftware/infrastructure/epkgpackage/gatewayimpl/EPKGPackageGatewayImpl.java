@@ -152,4 +152,18 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
     public long queryTableLength() {
         return ePKGPkgMapper.selectCount(null);
     }
+
+    @Override
+    public EPKGPackageMenuVo selectOne(String name) {
+        QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
+        wrapper.select("pkg_id");
+        wrapper.eq("name", name);
+        wrapper.last("limit 1");
+        List<EPKGPackageDO> epkgList = ePKGPkgMapper.selectList(wrapper);
+        if (epkgList.size() == 0) {
+            return new EPKGPackageMenuVo();
+        }
+        EPKGPackageMenuVo res = EPKGPackageConverter.toMenu(epkgList.get(0));
+        return res;
+    }
 }

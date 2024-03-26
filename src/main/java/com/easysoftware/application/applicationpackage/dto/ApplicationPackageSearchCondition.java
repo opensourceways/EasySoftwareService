@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ApplicationPackageSearchCondition {
     @Size(max = 50)
-    @NotBlank
     private String name;
 
     @Range(min = PackageConstant.MIN_PAGE_NUM, max = PackageConstant.MAX_PAGE_NUM)
@@ -23,5 +22,8 @@ public class ApplicationPackageSearchCondition {
 
     @Range(min = PackageConstant.MIN_PAGE_SIZE, max = PackageConstant.MAX_PAGE_SIZE)
     private Integer pageSize = 10;
+
+    @Size(max = 200)
+    private String pkgId;
 }
 

@@ -44,6 +44,12 @@ public class ApplicationPackageConverter {
         return res;
     }
 
+    public static ApplicationPackageMenuVo toMenu(ApplicationPackageDO appPkgDO) {
+        ApplicationPackageMenuVo menu = new ApplicationPackageMenuVo();
+        BeanUtils.copyProperties(appPkgDO, menu);
+        return menu;
+    }
+
     public static List<ApplicationPackage> toEntity(List<ApplicationPackageDO> appDOs) {
         List<ApplicationPackage> res = new ArrayList<>();
         for (ApplicationPackageDO appDO : appDOs) {
