@@ -37,6 +37,7 @@ import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
 import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
 import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
+import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter.ApplicationPackageConverter;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
 
 import jakarta.annotation.Resource;
@@ -94,8 +95,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     private ResponseEntity<Object> searchDomainPage(DomainSearchCondition condition) {
         // 展示精品应用
         if ("apppkg".equals(condition.getName())) {
-            ApplicationPackageSearchCondition appCon = DomainPackageConverter.toApp(condition);
-            Map<String, Object> res = appPkgService.queryAllAppPkgMenu(appCon);
+            List<Map<String, Object>> res = searchAppPkgPage(condition);
             return ResultUtil.success(HttpStatus.OK, res);
         // 展示rpm软件包
         } else if ("rpmpkg".equals(condition.getName())) {
@@ -116,6 +116,15 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         }
     }
 
+    private List<Map<String, Object>> searchAppPkgPage(DomainSearchCondition condition) {
+        ApplicationPackageSearchCondition appCon = DomainPackageConverter.toApp(condition);
+        List<ApplicationPackageMenuVo> appList = appPkgService.queryPkgMenuList(appCon);
+        List<DomainPackageMenuVo> menuList = ApplicationPackageConverter.toDomainPackageMenuVo(appList);
+        List<Map<String, Object>> res = groupByCategory(menuList);
+        return res;
+    }
+
+
 
     private ResponseEntity<Object> searchAllEntity(DomainSearchCondition condition) {
         ApplicationPackageSearchCondition appCon = DomainPackageConverter.toApp(condition);
@@ -132,7 +141,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
             menu = extendIds(menu);
         }
 
-        List<Map<String, Object>> appCate = groupDomainByCategory(domainMenus);
+        List<Map<String, Object>> appCate = groupByCategory(domainMenus);
         Map res = Map.ofEntries(
             Map.entry("total", domainMenus.size()),
             Map.entry("list", appCate)
@@ -196,38 +205,16 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     }
 
 
-    private List<Map<String, Object>> groupDomainByCategory(Collection<DomainPackageMenuVo> domainCollection) {
+    private List<Map<String, Object>> groupByCategory(Collection<DomainPackageMenuVo> menuList) {
         Map<String, List<DomainPackageMenuVo>> map = new HashMap<>();
         for (AppCategoryEnum categoryEnum : AppCategoryEnum.values()) {
             String category = categoryEnum.getAlias();
             map.put(category, new ArrayList<>());
         }
 
-        for (DomainPackageMenuVo domain : domainCollection) {
-            String cate = StringUtils.trimToEmpty(domain.getCategory());
-            map.get(cate).add(domain);
-        }
-    
-        List<Map<String, Object>> res = new ArrayList<>();
-        for (String category: map.keySet()) {
-            Map<String, Object> cMap = new HashMap<>();
-            cMap.put("name", category);
-            cMap.put("children", map.get(category));
-            res.add(cMap);
-        }
-    
-        return res;
-    }
-
-    private List<Map<String, Object>> groupByCategory(List<ApplicationPackageMenuVo> menuList) {
-        Map<String, List<ApplicationPackageMenuVo>> map = new HashMap<>();
-        for (AppCategoryEnum categoryEnum : AppCategoryEnum.values()) {
-            String category = categoryEnum.getAlias();
-            map.put(category, new ArrayList<>());
-        }
-    
-        for (ApplicationPackageMenuVo menu: menuList) {
-            map.get(menu.getCategory()).add(menu);
+        for (DomainPackageMenuVo menu: menuList) {
+            String cate = StringUtils.trimToEmpty(menu.getCategory());
+            map.get(cate).add(menu);
         }
     
         List<Map<String, Object>> res = new ArrayList<>();
