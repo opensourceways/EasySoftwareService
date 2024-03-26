@@ -6,6 +6,8 @@ import java.util.Map;
 
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
 import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
@@ -22,4 +24,5 @@ public interface RPMPackageGateway {
     long queryTableLength();
     Collection<RPMPackageDO> convertBatch(Collection<String> dataObject);
     Map<String, Object> queryPartRPMPkgMenu(RPMPackageSearchCondition condition);
+    RPMPackageMenuVo selectOne(String name);
 }

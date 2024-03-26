@@ -64,4 +64,6 @@ public class ApplicationPackage {
     private String binDownloadUrl;
 
     private String type;
+
+    private String pkgId;
 }

@@ -16,4 +16,5 @@ public interface ApplicationPackageGateway {
     Map<String, Object> queryMenuByName(ApplicationPackageSearchCondition condition);
     Map<String, Object> queryDetailByName(ApplicationPackageSearchCondition condition);
     long queryTableLength();
+    ApplicationPackageMenuVo selectOne(String name);
 }

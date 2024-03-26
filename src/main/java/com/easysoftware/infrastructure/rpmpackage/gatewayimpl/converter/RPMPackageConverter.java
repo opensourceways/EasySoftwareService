@@ -80,12 +80,17 @@ public class RPMPackageConverter {
     public static List<RPMPackageMenuVo> toMenu(List<RPMPackageDO> rPMPkgDOs) {
         List<RPMPackageMenuVo> res = new ArrayList<>();
         for (RPMPackageDO rpm: rPMPkgDOs) {
-            RPMPackageMenuVo menu = new RPMPackageMenuVo();
-            BeanUtils.copyProperties(rpm, menu);
+            RPMPackageMenuVo menu = toMenu(rpm);
             res.add(menu);
         }
 
         return res;
+    }
+
+    public static RPMPackageMenuVo toMenu(RPMPackageDO rpm) {
+        RPMPackageMenuVo menu = new RPMPackageMenuVo();
+        BeanUtils.copyProperties(rpm, menu);
+        return menu;
     }
 
     public static List<RPMPackageDomainVo> toDomain(List<RPMPackageDO> rpmPkgDOs) {

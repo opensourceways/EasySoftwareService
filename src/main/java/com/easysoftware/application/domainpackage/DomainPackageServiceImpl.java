@@ -2,10 +2,13 @@ package com.easysoftware.application.domainpackage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -16,11 +19,13 @@ import org.springframework.stereotype.Service;
 import com.easysoftware.application.applicationpackage.ApplicationPackageService;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
+import com.easysoftware.application.domainpackage.converter.DomainPackageConverter;
 import com.easysoftware.application.domainpackage.dto.DomainColumnCondition;
 import com.easysoftware.application.domainpackage.dto.DomainSearchCondition;
 import com.easysoftware.application.domainpackage.vo.DomainPackageMenuVo;
 import com.easysoftware.application.epkgpackage.EPKGPackageService;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
+import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
 import com.easysoftware.application.rpmpackage.RPMPackageService;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
@@ -32,6 +37,7 @@ import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
 import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
 import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
+import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
 
 import jakarta.annotation.Resource;
 
@@ -60,10 +66,10 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         String name = condition.getName();
         String entity = condition.getEntity();
 
-        // 搜索domain页面 
+        // 搜索domain页面多个软件包
         if (StringUtils.isBlank(entity) && StringUtils.isNotBlank(name)) {
             return searchDomainPage(condition);
-        // 搜索单个domain包
+        // 搜索domain页面单个软件包
         } else if (StringUtils.isBlank(name) && StringUtils.isNotBlank(entity)) {
             return searchDomainEntity(condition);
         } else {
@@ -74,27 +80,10 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     private ResponseEntity<Object> searchDomainEntity(DomainSearchCondition conditon) {
         String entity = conditon.getEntity();
         DomainPackageMenuVo domain = new DomainPackageMenuVo();
-        domain.setTags(new HashSet<String>());
+        domain.setName(entity);
 
-        boolean appExisted = applicationPackageGateway.existApp(entity);
-        if (appExisted) {
-            domain.getTags().add("IMAGE");
-        }
-
-        RPMPackageUnique unique = new RPMPackageUnique();
-        unique.setName(entity);
-        boolean rpmExisted = rpmPackageGateway.existRPM(unique);
-        if (rpmExisted) {
-            domain.getTags().add("RPM");
-        }
-
-        EPKGPackageUnique epkg = new EPKGPackageUnique();
-        epkg.setName(entity);
-        boolean epkgExisted = epkgPackageGateway.existEPKG(epkg);
-        if (epkgExisted) {
-            domain.getTags().add("EPKG");
-        }
-
+        domain = extendIds(domain);
+        
         Map res = Map.ofEntries(
             Map.entry("total", "-1"),
             Map.entry("list", domain)
@@ -103,32 +92,22 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     }
 
     private ResponseEntity<Object> searchDomainPage(DomainSearchCondition condition) {
+        // 展示精品应用
         if ("apppkg".equals(condition.getName())) {
-            ApplicationPackageSearchCondition appCon = new ApplicationPackageSearchCondition();
-            BeanUtils.copyProperties(condition, appCon);
-            Map<String, Object> map = appPkgService.queryAllAppPkgMenu(appCon);
-            List<ApplicationPackageMenuVo> appMenus = (List<ApplicationPackageMenuVo>) map.get("list");
-            
-            List<Map<String, Object>> appCate = groupByCategory(appMenus);
-            Map res = Map.ofEntries(
-                Map.entry("total", map.get("total")),
-                Map.entry("list", appCate)
-            );
+            ApplicationPackageSearchCondition appCon = DomainPackageConverter.toApp(condition);
+            Map<String, Object> res = appPkgService.queryAllAppPkgMenu(appCon);
             return ResultUtil.success(HttpStatus.OK, res);
+        // 展示rpm软件包
         } else if ("rpmpkg".equals(condition.getName())) {
-            RPMPackageSearchCondition rPMCon = new RPMPackageSearchCondition();
-            BeanUtils.copyProperties(condition, rPMCon);
-            rPMCon.setName("");
-            rPMCon.setCategory(condition.getCategory());
-            Map<String, Object> rpmMenuList = rPMPkgService.queryAllRPMPkgMenu(rPMCon);
+            RPMPackageSearchCondition rpmCon = DomainPackageConverter.toRpm(condition);
+            Map<String, Object> rpmMenuList = rPMPkgService.queryAllRPMPkgMenu(rpmCon);
             return ResultUtil.success(HttpStatus.OK, rpmMenuList);
+        // 展示epkg软件包
         } else if ("epkgpkg".equals(condition.getName())) {
-            EPKGPackageSearchCondition eCon = new EPKGPackageSearchCondition();
-            BeanUtils.copyProperties(condition, eCon);
-            eCon.setName("");
-            eCon.setCategory(condition.getCategory());
-            Map<String, Object> epkgMenu = epkgPackageService.queryAllEPKGPkgMenu(eCon);
+            EPKGPackageSearchCondition epkgCon = DomainPackageConverter.toEpkg(condition);
+            Map<String, Object> epkgMenu = epkgPackageService.queryAllEPKGPkgMenu(epkgCon);
             return ResultUtil.success(HttpStatus.OK, epkgMenu);
+        // 展示领域应用
         } else if ("all".equals(condition.getName())) {
             ResponseEntity<Object> res = searchAllEntity(condition);
             return res;
@@ -139,51 +118,63 @@ public class DomainPackageServiceImpl implements DomainPackageService {
 
 
     private ResponseEntity<Object> searchAllEntity(DomainSearchCondition condition) {
-        ApplicationPackageSearchCondition appCon = new ApplicationPackageSearchCondition();
-        BeanUtils.copyProperties(condition, appCon);
-        Map<String, Object> map = appPkgService.queryAllAppPkgMenu(appCon);
-        List<ApplicationPackageMenuVo> appMenus = (List<ApplicationPackageMenuVo>) map.get("list");
+        ApplicationPackageSearchCondition appCon = DomainPackageConverter.toApp(condition);
+        appCon.setPageSize(Integer.MAX_VALUE);
+        List<ApplicationPackageMenuVo> appMenus = appPkgService.queryPkgMenuList(appCon);
 
-        RPMPackageSearchCondition rpmCon = new RPMPackageSearchCondition();
-        BeanUtils.copyProperties(condition, rpmCon);
-        Map<String, Object> rpmMap = rPMPkgService.queryPartAppPkgMenu(rpmCon);
-        List<RPMPackageDomainVo> rpmMenus = (List<RPMPackageDomainVo>) rpmMap.get("list");
+        RPMPackageSearchCondition rpmCon = DomainPackageConverter.toRpm(condition);
+        rpmCon.setPageSize(Integer.MAX_VALUE);
+        rpmCon.setTimeOrder("");
+        List<RPMPackageDomainVo> rpmMenus = rPMPkgService.queryPartAppPkgMenu(rpmCon);
 
-        Map<String, DomainPackageMenuVo> menuMap = mergeMenuVOs(appMenus, rpmMenus);
-        List<Map<String, Object>> appCate = groupDomainByCategory(menuMap);
+        List<DomainPackageMenuVo> domainMenus = mergeMenuVOs(appMenus, rpmMenus);
+        for (DomainPackageMenuVo menu : domainMenus) {
+            menu = extendIds(menu);
+        }
+
+        List<Map<String, Object>> appCate = groupDomainByCategory(domainMenus);
         Map res = Map.ofEntries(
-            Map.entry("total", appMenus.size() + rpmMenus.size()),
+            Map.entry("total", domainMenus.size()),
             Map.entry("list", appCate)
         );
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
-    private Map<String, DomainPackageMenuVo> mergeMenuVOs(List<ApplicationPackageMenuVo> appMenus,
+    private DomainPackageMenuVo extendIds(DomainPackageMenuVo domain) {
+        String name = domain.getName();
+        Set<String> tags = domain.getTags();
+        if (!tags.contains("IMAGE")) {
+            ApplicationPackageMenuVo app = applicationPackageGateway.selectOne(name);
+            if (StringUtils.isNotBlank(app.getPkgId())) {
+                tags.add("IMAGE");
+                domain.getPkgIds().put("IMAGE", app.getPkgId());
+            }
+        }
+        if (!tags.contains("RPM")) {
+            RPMPackageMenuVo rpm = rpmPackageGateway.selectOne(name);
+            if (StringUtils.isNotBlank(rpm.getPkgId())) {
+                tags.add("RPM");
+                domain.getPkgIds().put("RPM", rpm.getPkgId());
+            }
+        }
+        if (!tags.contains("EPKG")) {
+            EPKGPackageMenuVo epkg = epkgPackageGateway.selectOne(name);
+            if (StringUtils.isNotBlank(epkg.getPkgId())) {
+                tags.add("EPKG");
+                domain.getPkgIds().put("EPKG", epkg.getPkgId());
+            }
+        }
+        return domain;
+    }
+
+    private List<DomainPackageMenuVo> mergeMenuVOs(List<ApplicationPackageMenuVo> appMenus,
             List<RPMPackageDomainVo> rpmMenus) {
-        
         Map<String, DomainPackageMenuVo> domainMap = new HashMap<>();
         for (ApplicationPackageMenuVo app: appMenus) {
             DomainPackageMenuVo domain = new DomainPackageMenuVo();
             BeanUtils.copyProperties(app, domain);
-            domain.setTags(new HashSet<String>());
             domain.getTags().add("IMAGE");
-
-            // search RPM
-            RPMPackageUnique unique = new RPMPackageUnique();
-            unique.setName(app.getName());
-            boolean rpmExisted = rpmPackageGateway.existRPM(unique);
-            if (rpmExisted) {
-                domain.getTags().add("RPM");
-            }
-
-            // search EPKG
-            EPKGPackageUnique epkg = new EPKGPackageUnique();
-            epkg.setName(app.getName());
-            boolean epkgExisted = epkgPackageGateway.existEPKG(epkg);
-            if (epkgExisted) {
-                domain.getTags().add("EPKG");
-            }
-            
+            domain.getPkgIds().put("IMAGE", app.getPkgId());
             domainMap.put(app.getName(), domain);
         }
 
@@ -196,26 +187,25 @@ public class DomainPackageServiceImpl implements DomainPackageService {
 
             DomainPackageMenuVo domain = new DomainPackageMenuVo();
             BeanUtils.copyProperties(rpm, domain);
-            domain.setTags(new HashSet<String>());
             domain.getTags().add("RPM");
+            domain.getPkgIds().put("RPM", rpm.getPkgId());
             domainMap.put(rpm.getName(), domain);
         }
 
-        return domainMap;
+        return new ArrayList<DomainPackageMenuVo>(domainMap.values());
     }
 
 
-    private List<Map<String, Object>> groupDomainByCategory(Map<String, DomainPackageMenuVo> domainMap) {
+    private List<Map<String, Object>> groupDomainByCategory(Collection<DomainPackageMenuVo> domainCollection) {
         Map<String, List<DomainPackageMenuVo>> map = new HashMap<>();
         for (AppCategoryEnum categoryEnum : AppCategoryEnum.values()) {
             String category = categoryEnum.getAlias();
             map.put(category, new ArrayList<>());
         }
 
-        for (Map.Entry<String, DomainPackageMenuVo> domain : domainMap.entrySet()) {
-            DomainPackageMenuVo menu = domain.getValue();
-            String cate = StringUtils.trimToEmpty(menu.getCategory());
-            map.get(cate).add(menu);
+        for (DomainPackageMenuVo domain : domainCollection) {
+            String cate = StringUtils.trimToEmpty(domain.getCategory());
+            map.get(cate).add(domain);
         }
     
         List<Map<String, Object>> res = new ArrayList<>();

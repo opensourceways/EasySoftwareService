@@ -94,4 +94,7 @@ public class InputApplicationPackage {
     @URL
     @Size(max = 200,  message = "the length of binDownloadUrl can not exceed 200")
     private String binDownloadUrl;
+
+    @Size(max = 100,  message = "the length of pkgId can not exceed 100")
+    private String pkgId;
 }

@@ -16,6 +16,7 @@ import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDeta
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.common.utils.ClassField;
+import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter.ApplicationPackageConverter;
@@ -92,9 +93,8 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
     @Override
     public Map<String, Object> queryDetailByName(ApplicationPackageSearchCondition condition) {
         Page<ApplicationPackageDO> page = createPage(condition);
-        QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
-        String name = condition.getName();
-        wrapper.eq("name", condition.getName());
+        QueryWrapper<ApplicationPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new ApplicationPackageDO()
+                , condition, "");
 
         IPage<ApplicationPackageDO> resPage = appPkgMapper.selectPage(page, wrapper);
         List<ApplicationPackageDO> appDOs = resPage.getRecords();
@@ -118,5 +118,20 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
     @Override
     public long queryTableLength() {
         return appPkgMapper.selectCount(null);
+    }
+
+
+    @Override
+    public ApplicationPackageMenuVo selectOne(String name) {
+        QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
+        wrapper.select("pkg_id");
+        wrapper.eq("name", name);
+        wrapper.last("limit 1");
+        List<ApplicationPackageDO> appList = appPkgMapper.selectList(wrapper);
+        if (appList.size() == 0) {
+            return new ApplicationPackageMenuVo();
+        }
+        ApplicationPackageMenuVo res =ApplicationPackageConverter.toMenu(appList.get(0));
+        return res;
     }
 }

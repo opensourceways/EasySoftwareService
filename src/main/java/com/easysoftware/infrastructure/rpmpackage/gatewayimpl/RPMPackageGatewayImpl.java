@@ -184,7 +184,8 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
 
     @Override
     public Map<String, Object> queryPartRPMPkgMenu(RPMPackageSearchCondition condition) {
-        QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
+        QueryWrapper<RPMPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new RPMPackageDO()
+                , condition, "");
         RPMPackageDomainVo pkgVo = new RPMPackageDomainVo();
         List<String> columns = ClassField.getFieldNames(pkgVo);
         wrapper.select(columns);
@@ -195,6 +196,20 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
             Map.entry("total", menus.size()),
             Map.entry("list", menus)
         );
+        return res;
+    }
+
+    @Override
+    public RPMPackageMenuVo selectOne(String name) {
+        QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
+        wrapper.eq("name", name);
+        wrapper.select("pkg_id");
+        wrapper.last("limit 1");
+        List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
+        if (rpmList.size() == 0) {
+            return new RPMPackageMenuVo();
+        }
+        RPMPackageMenuVo res = RPMPackageConverter.toMenu(rpmList.get(0));
         return res;
     }
 }

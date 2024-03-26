@@ -74,4 +74,6 @@ public class ApplicationPackageDO {
     private String srcDownloadUrl;
 
     private String binDownloadUrl;
+
+    private String pkgId;
 }
