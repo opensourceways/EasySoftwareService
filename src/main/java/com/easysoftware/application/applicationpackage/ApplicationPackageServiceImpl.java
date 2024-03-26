@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -163,7 +164,11 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
 
         Map<String, String> info = ApiUtil.getApiResponseMap(String.format(repoInfoApi, appPkg.getName(), "app_openeuler"));
         appPkg.setOs(info.get("os"));
-        appPkg.setAppVer(info.get("latest_version") + "-" + info.get("os_version"));
+        if (StringUtils.isBlank(info.get("latest_version")) && StringUtils.isBlank(info.get("os_version"))) {
+            appPkg.setAppVer("");
+        } else {
+            appPkg.setAppVer(info.get("latest_version") + "-" + info.get("os_version"));
+        }
         appPkg.setArch(info.get("arch"));
         appPkg.setAppSize(info.get("appSize"));
         appPkg.setBinDownloadUrl(info.get("binDownloadUrl"));
