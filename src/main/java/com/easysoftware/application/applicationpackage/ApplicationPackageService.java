@@ -13,6 +13,5 @@ public interface ApplicationPackageService {
     ResponseEntity<Object> updateAppPkg(InputApplicationPackage inputAppPackage);
     ResponseEntity<Object> deleteAppPkg(List<String> names);
     ResponseEntity<Object> searchAppPkg(ApplicationPackageSearchCondition condition);
-    Map<String, Object> queryAllAppPkgMenu(ApplicationPackageSearchCondition condition);
     List<ApplicationPackageMenuVo> queryPkgMenuList(ApplicationPackageSearchCondition condition);
 }
