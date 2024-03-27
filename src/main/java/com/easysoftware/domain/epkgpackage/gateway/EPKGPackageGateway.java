@@ -1,5 +1,6 @@
 package com.easysoftware.domain.epkgpackage.gateway;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import com.easysoftware.domain.epkgpackage.EPKGPackage;
 import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
 import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
+import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.dataobject.EPKGPackageDO;
 
 public interface EPKGPackageGateway {
     boolean existEPKG(EPKGPackageUnique unique);
@@ -22,4 +24,5 @@ public interface EPKGPackageGateway {
     List<String> queryColumn(String column);
     long queryTableLength();
     EPKGPackageMenuVo selectOne(String name);
+    Collection<EPKGPackageDO> convertBatch(Collection<String> dataObject);
 }

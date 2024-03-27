@@ -1,12 +1,15 @@
 package com.easysoftware.infrastructure.epkgpackage.gatewayimpl;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -16,10 +19,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
-import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
-import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
-import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.utils.ClassField;
+import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.domain.epkgpackage.EPKGPackage;
 import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
@@ -27,14 +28,12 @@ import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
 import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.converter.EPKGPackageConverter;
 import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.dataobject.EPKGPackageDO;
 import com.easysoftware.infrastructure.mapper.EPKGPackageDOMapper;
-import com.easysoftware.infrastructure.mapper.RPMPackageDOMapper;
-import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.converter.RPMPackageConverter;
-import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power.common.util.StringUtil;
 
 @Component
 public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
+    private static final Logger logger = LoggerFactory.getLogger(EPKGPackageGatewayImpl.class);
     @Autowired
     private EPKGPackageDOMapper ePKGPkgMapper;
 
@@ -165,5 +164,17 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
         }
         EPKGPackageMenuVo res = EPKGPackageConverter.toMenu(epkgList.get(0));
         return res;
+    }
+
+    @Override
+    public Collection<EPKGPackageDO> convertBatch(Collection<String> dataObject) {
+        Collection<EPKGPackageDO> objList = new ArrayList<>();
+        for (String obj : dataObject) {
+            EPKGPackage epkg = ObjectMapperUtil.jsonToObject(obj, EPKGPackage.class);
+            EPKGPackageDO epkgDO = EPKGPackageConverter.toDataObjectForCreate(epkg);
+            logger.info("convert pkgId: {}", epkgDO.getPkgId());
+            objList.add(epkgDO);
+        }
+        return objList;
     }
 }
