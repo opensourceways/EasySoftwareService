@@ -173,7 +173,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         for (String obj : dataObject) {
             RPMPackage rpmPackage = ObjectMapperUtil.jsonToObject(obj, RPMPackage.class);
             RPMPackageDO rpmDO = RPMPackageConverter.toDataObjectForCreate(rpmPackage);
-            log.info("pkgId: {}", rpmDO.getPkgId());
+            log.info("convert pkgId: {}", rpmDO.getPkgId());
             ObjList.add(rpmDO);
         }
         long endTime1 = System.nanoTime();

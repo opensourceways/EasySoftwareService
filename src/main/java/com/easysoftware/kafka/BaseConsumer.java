@@ -65,6 +65,7 @@ public class BaseConsumer {
         for (ConsumerRecord<String, String> record : records) {
             String value = record.value();
             try {
+                logger.info("kafka record: {}", value);
                 Map<String, Object> dtoMap = ObjectMapperUtil.toMap(value);
                 String table = dtoMap.get("table").toString();
                 baseIService = serviceMap.getIService(table + "Service");
