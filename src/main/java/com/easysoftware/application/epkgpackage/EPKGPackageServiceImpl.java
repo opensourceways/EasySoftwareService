@@ -6,37 +6,53 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.dto.InputEPKGPackage;
 import com.easysoftware.common.constant.MapConstant;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ApiUtil;
 import com.easysoftware.common.utils.Base64Util;
+import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
+import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.epkgpackage.EPKGPackage;
 import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
 import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
 import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
+import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.dataobject.EPKGPackageDO;
+import com.easysoftware.infrastructure.mapper.EPKGPackageDOMapper;
+import com.easysoftware.infrastructure.mapper.RPMPackageDOMapper;
+import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
+import com.easysoftware.kafka.Producer;
+import com.power.common.util.ObjectUtil;
 
 import jakarta.annotation.Resource;
 
-@Service
-public class EPKGPackageServiceImpl implements EPKGPackageService {
+@Service("EPKGPackageService")
+public class EPKGPackageServiceImpl extends ServiceImpl<EPKGPackageDOMapper, EPKGPackageDO> implements EPKGPackageService {
     @Resource
     EPKGPackageGateway ePKGPackageGateway;
+
+    @Autowired
+    Producer kafkaProducer;
 
     @Value("${api.repoMaintainer}")
     String repoMaintainerApi;
 
     @Value("${api.repoSig}")
     String repoSigApi;
+
+    @Value("${producer.topic}")
+    String topicAppVersion;
     
     @Override
     public ResponseEntity<Object> deleteEPKGPkg(List<String> ids) {
@@ -69,22 +85,26 @@ public class EPKGPackageServiceImpl implements EPKGPackageService {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
         }
         // 数据库中是否已存在该包
-        EPKGPackageUnique unique = new EPKGPackageUnique();
-        BeanUtils.copyProperties(inputEPKGPackage, unique);
-        boolean found = ePKGPackageGateway.existEPKG(unique);
-        if (found) {
-            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0008);
-        }
+        // EPKGPackageUnique unique = new EPKGPackageUnique();
+        // BeanUtils.copyProperties(inputEPKGPackage, unique);
+        // boolean found = ePKGPackageGateway.existEPKG(unique);
+        // if (found) {
+        //     return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0008);
+        // }
         
 
         EPKGPackage epkgPkg = new EPKGPackage();
         BeanUtils.copyProperties(inputEPKGPackage, epkgPkg);
-        epkgPkg = addEPKGInfo(epkgPkg);
+        // epkgPkg = addEPKGInfo(epkgPkg);
 
-        boolean succeed = ePKGPackageGateway.save(epkgPkg);
-        if (!succeed) {
-            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0006);
-        }
+        Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(inputEPKGPackage);
+        kafkaMsg.put("table", "EPKGPackage");
+        kafkaProducer.sendMess(topicAppVersion + "_epkg", UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(kafkaMsg));
+
+        // boolean succeed = ePKGPackageGateway.save(epkgPkg);
+        // if (!succeed) {
+        //     return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0006);
+        // }
         return ResultUtil.success(HttpStatus.OK);
     }
 
@@ -139,5 +159,30 @@ public class EPKGPackageServiceImpl implements EPKGPackageService {
             epkgPkg.setCategory(MapConstant.CATEGORY_MAP.get("Other"));
         }
         return epkgPkg;
+    }
+
+    @Override
+    public void saveDataObject(String dataObject) {
+        EPKGPackage pkg = ObjectMapperUtil.jsonToObject(dataObject, EPKGPackage.class);
+        ePKGPackageGateway.save(pkg);
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void saveDataObjectBatch(ArrayList<String> dataObject) {
+        saveBatch(ePKGPackageGateway.convertBatch(dataObject));
+    }
+
+    @Override
+    public boolean existApp(String unique) {
+        EPKGPackageUnique uniquePkg = ObjectMapperUtil.jsonToObject(unique, EPKGPackageUnique.class);
+        return ePKGPackageGateway.existEPKG(uniquePkg);
+    }
+
+    @Override
+    public List<EPKGPackageDO> queryPartAppPkgMenu(EPKGPackageSearchCondition condition) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
