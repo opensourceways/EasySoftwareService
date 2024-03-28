@@ -42,7 +42,7 @@ import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter.
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
 import com.easysoftware.redis.RedisService;
 import com.easysoftware.redis.RedisUtil;
-
+import org.springframework.beans.factory.annotation.Value;
 import jakarta.annotation.Resource;
 
 @Service
@@ -67,6 +67,9 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     
     @Autowired  
     private RedisService redisService;  
+
+    @Value("${redis-global.expiration}") 
+    int timeOut;
 
     @Override
     public ResponseEntity<Object> searchDomain(DomainSearchCondition condition) {
@@ -171,8 +174,8 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         
         // 结果转json
         String resJson = RedisUtil.convertToJson(res);
-       // 设置超时时间 12小时超时
-        redisService.setWithExpire(redisKey, resJson, 12, TimeUnit.HOURS);
+       // 设置超时时间 
+        redisService.setWithExpire(redisKey, resJson, timeOut, TimeUnit.HOURS);
        
         return ResultUtil.success(HttpStatus.OK, res);
     }

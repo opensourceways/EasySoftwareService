@@ -112,33 +112,6 @@ public class RedisUtil {
         } catch (NoSuchAlgorithmException e) {  
             throw new RuntimeException(e);   
         }  
-    } 
-
-    public static void main(String[] args) {  
-        class TestObject {  
-            private String name;  
-            private int age;  
-  
-            public TestObject(String name, int age) {  
-                this.name = name;  
-                this.age = age;  
-            }  
-  
-            // 省略getter和setter方法...  
-        }  
-  
-        TestObject testObj = new TestObject("John Doe", 30);  
-        String result = objectToString(testObj);  
-        String test1 = getSHA256(result);
-        String test2 = getSHA256(result);
-        System.out.println(test1);
-        System.out.println(test2);
-        //sha256 验证
-        if(test1.equals(test2)) {
-            System.out.println("same");
-        }else{
-            System.out.println("not same");
-        }
     }  
 }
 
