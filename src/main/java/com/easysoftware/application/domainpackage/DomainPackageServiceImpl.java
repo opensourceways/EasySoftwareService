@@ -18,18 +18,24 @@ import org.springframework.stereotype.Service;
 
 import com.easysoftware.application.applicationpackage.ApplicationPackageService;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
+import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.application.domainpackage.converter.DomainPackageConverter;
 import com.easysoftware.application.domainpackage.dto.DomainColumnCondition;
+import com.easysoftware.application.domainpackage.dto.DomainDetailSearchCondition;
 import com.easysoftware.application.domainpackage.dto.DomainSearchCondition;
 import com.easysoftware.application.domainpackage.vo.DomainPackageMenuVo;
 import com.easysoftware.application.epkgpackage.EPKGPackageService;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
+import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
 import com.easysoftware.application.rpmpackage.RPMPackageService;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
+import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
@@ -120,11 +126,17 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         ApplicationPackageSearchCondition appCon = DomainPackageConverter.toApp(condition);
         Map<String, Object> map = applicationPackageGateway.queryMenuByName(appCon);
         List<ApplicationPackageMenuVo> appList = (List<ApplicationPackageMenuVo>) map.get("list");
-        List<DomainPackageMenuVo> menuList = ApplicationPackageConverter.toDomainPackageMenuVo(appList);
-        List<Map<String, Object>> cateList = groupByCategory(menuList);
+
+        Map<String, List<Object>> cateMap = getCategorys();
+        for (ApplicationPackageMenuVo app : appList) {
+            String cate = StringUtils.trimToEmpty(app.getCategory());
+            cateMap.get(cate).add(app);
+        }
+        List<Map<String, Object>> mapList = assembleMap(cateMap);
+
         Map<String, Object> res = Map.ofEntries(
             Map.entry("total", map.get("total")),
-            Map.entry("list", cateList)
+            Map.entry("list", mapList)
         );
         return res;
     }
@@ -146,10 +158,16 @@ public class DomainPackageServiceImpl implements DomainPackageService {
             menu = extendIds(menu);
         }
 
-        List<Map<String, Object>> appCate = groupByCategory(domainMenus);
+        Map<String, List<Object>> cateMap = getCategorys();
+        for (DomainPackageMenuVo menu : domainMenus) {
+            String cate = menu.getCategory();
+            cateMap.get(cate).add(menu);
+        }
+        List<Map<String, Object>> mapList = assembleMap(cateMap);
+
         Map res = Map.ofEntries(
             Map.entry("total", domainMenus.size()),
-            Map.entry("list", appCate)
+            Map.entry("list", mapList)
         );
         return ResultUtil.success(HttpStatus.OK, res);
     }
@@ -209,27 +227,25 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         return new ArrayList<DomainPackageMenuVo>(domainMap.values());
     }
 
-
-    private List<Map<String, Object>> groupByCategory(Collection<DomainPackageMenuVo> menuList) {
-        Map<String, List<DomainPackageMenuVo>> map = new HashMap<>();
+    private Map<String, List<Object>> getCategorys() {
+        Map<String, List<Object>> map = new HashMap<>();
         for (AppCategoryEnum categoryEnum : AppCategoryEnum.values()) {
             String category = categoryEnum.getAlias();
             map.put(category, new ArrayList<>());
         }
+        return map;
+    }
 
-        for (DomainPackageMenuVo menu: menuList) {
-            String cate = StringUtils.trimToEmpty(menu.getCategory());
-            map.get(cate).add(menu);
-        }
-    
+    private List<Map<String, Object>> assembleMap(Map<String, List<Object>> mapObj) {
         List<Map<String, Object>> res = new ArrayList<>();
-        for (String category: map.keySet()) {
-            Map<String, Object> cMap = new HashMap<>();
-            cMap.put("name", category);
-            cMap.put("children", map.get(category));
-            res.add(cMap);
+        for (Map.Entry<String, List<Object>> entry : mapObj.entrySet()) {
+            String category = entry.getKey();
+            List<Object> list = entry.getValue();
+            res.add(Map.ofEntries(
+                Map.entry("name", category),
+                Map.entry("children", list)
+            ));
         }
-    
         return res;
     }
 
@@ -257,5 +273,60 @@ public class DomainPackageServiceImpl implements DomainPackageService {
             Map.entry("total", rpmNum + epkgNum)
         );
         return ResultUtil.success(HttpStatus.OK, res);
+    }
+
+    @Override
+    public ResponseEntity<Object> searchDomainDetail(DomainDetailSearchCondition condition) {
+        Map<String, Object> res = new HashMap<>();
+        Set<String> tags = new HashSet<>();
+
+        String appPkgId = condition.getAppPkgId();
+        if (StringUtils.isNotBlank(appPkgId)) {
+            ApplicationPackageDetailVo app = searchAppDetail(appPkgId);
+            res.put("IMAGE", app);
+            tags.add("IMAGE");
+        }
+
+        String rpmPkgId = condition.getRpmPkgId();
+        if (StringUtils.isNotBlank(rpmPkgId)) {
+            RPMPackageDetailVo rpm = searchRpmDetail(rpmPkgId);
+            res.put("RPM", rpm);
+            tags.add("RPM");
+        }
+
+        String epkgPkgId = condition.getEpkgPkgId();
+        if (StringUtils.isNotBlank(epkgPkgId)) {
+            EPKGPackageDetailVo epkg = searchEpkgDetail(epkgPkgId);
+            res.put("EPKG", epkg);
+            tags.add("EPKG");
+        }
+
+        res.put("tags", tags);
+        return ResultUtil.success(HttpStatus.OK, res);
+        
+    }
+
+    private EPKGPackageDetailVo searchEpkgDetail(String epkgPkgId) {
+        List<EPKGPackageDetailVo> epkgList = epkgPackageGateway.queryDetailByPkgId(epkgPkgId);
+        if (epkgList.size() != 1) {
+            throw new ParamErrorException(String.format(MessageCode.EC00014.getMsgEn(), "epkgPkgId"));
+        }
+        return epkgList.get(0);
+    }
+
+    private ApplicationPackageDetailVo searchAppDetail(String appPkgId) {
+        List<ApplicationPackageDetailVo> appList = applicationPackageGateway.queryDetailByPkgId(appPkgId);
+        if (appList.size() != 1) {
+            throw new ParamErrorException(String.format(MessageCode.EC00014.getMsgEn(), "appPkgId"));
+        }
+        return appList.get(0);
+    }
+
+    private RPMPackageDetailVo searchRpmDetail(String rpmPkgId) {
+        List<RPMPackageDetailVo> rpmList = rpmPackageGateway.queryDetailByPkgId(rpmPkgId);
+        if (rpmList.size() != 1) {
+            throw new ParamErrorException(String.format(MessageCode.EC00014.getMsgEn(), "rpmPkgId"));
+        }
+        return rpmList.get(0);
     }
 }

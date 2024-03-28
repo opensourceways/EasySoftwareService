@@ -212,4 +212,13 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         RPMPackageMenuVo res = RPMPackageConverter.toMenu(rpmList.get(0));
         return res;
     }
+
+    @Override
+    public List<RPMPackageDetailVo> queryDetailByPkgId(String pkgId) {
+        QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
+        wrapper.eq("pkg_id", pkgId);
+        List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
+        List<RPMPackageDetailVo> res = RPMPackageConverter.toDetail(rpmList);
+        return res;
+    }
 }
