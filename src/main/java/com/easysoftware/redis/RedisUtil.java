@@ -9,6 +9,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.bouncycastle.jcajce.provider.asymmetric.ec.SignatureSpi.ecCVCDSA;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.converter.EPKGPackageConverter;
 import com.fasterxml.jackson.databind.ObjectMapper; 
 import java.nio.charset.StandardCharsets;  
 import java.security.MessageDigest;  
@@ -16,6 +21,7 @@ import java.security.NoSuchAlgorithmException;
 import java.math.BigInteger;  
 
 public class RedisUtil {
+    private static final Logger logger = LoggerFactory.getLogger(RedisUtil.class);
      public static String objectToString(Object obj) {  
         if (obj == null) {  
             return "null";  
@@ -33,7 +39,7 @@ public class RedisUtil {
                 String fieldValue = String.valueOf(value);  
                 sb.append(fieldName).append(":").append(fieldValue).append("_");  
             } catch (IllegalAccessException e) {  
-                e.printStackTrace();  
+                logger.error(MessageCode.EC0001.getMsgEn(), e);
             }  
         }  
   
@@ -71,7 +77,7 @@ public class RedisUtil {
               
             return jsonResponse;  
         } catch (IOException e) {  
-            e.printStackTrace();  
+            logger.error(MessageCode.EC0001.getMsgEn(), e);
             return null; 
         }  
     }
@@ -85,7 +91,7 @@ public class RedisUtil {
               
             return json;  
         } catch (IOException e) {  
-            e.printStackTrace();  
+            logger.error(MessageCode.EC0001.getMsgEn(), e); 
             return null; 
         }  
     }
