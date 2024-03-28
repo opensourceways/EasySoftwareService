@@ -12,10 +12,11 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import java.util.concurrent.TimeUnit;
 import com.easysoftware.application.applicationpackage.ApplicationPackageService;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
@@ -45,7 +46,9 @@ import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter.ApplicationPackageConverter;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
-
+import com.easysoftware.redis.RedisService;
+import com.easysoftware.redis.RedisUtil;
+import org.springframework.beans.factory.annotation.Value;
 import jakarta.annotation.Resource;
 
 @Service
@@ -67,6 +70,12 @@ public class DomainPackageServiceImpl implements DomainPackageService {
 
     @Resource
     ApplicationPackageGateway applicationPackageGateway;
+    
+    @Autowired  
+    private RedisService redisService;  
+
+    @Value("${redis-global.expiration}") 
+    int timeOut;
 
     @Override
     public ResponseEntity<Object> searchDomain(DomainSearchCondition condition) {
@@ -141,9 +150,18 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         return res;
     }
 
-
-
     private ResponseEntity<Object> searchAllEntity(DomainSearchCondition condition) {
+        // 根据请求参数生成唯一redis key
+        String redisKeyStr = RedisUtil.objectToString(condition);
+        String redisKey = RedisUtil.getSHA256(redisKeyStr);
+        
+        // 结果未过期，直接返回
+        if(redisService.hasKey(redisKey) == true){
+            String resJson = redisService.get(redisKey);
+            Object res = RedisUtil.convertToObject(resJson);
+            return ResultUtil.success(HttpStatus.OK, res);
+        }
+
         ApplicationPackageSearchCondition appCon = DomainPackageConverter.toApp(condition);
         appCon.setPageSize(Integer.MAX_VALUE);
         List<ApplicationPackageMenuVo> appMenus = appPkgService.queryPkgMenuList(appCon);
@@ -154,6 +172,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         List<RPMPackageDomainVo> rpmMenus = rPMPkgService.queryPartAppPkgMenu(rpmCon);
 
         List<DomainPackageMenuVo> domainMenus = mergeMenuVOs(appMenus, rpmMenus);
+       
         for (DomainPackageMenuVo menu : domainMenus) {
             menu = extendIds(menu);
         }
@@ -169,6 +188,12 @@ public class DomainPackageServiceImpl implements DomainPackageService {
             Map.entry("total", domainMenus.size()),
             Map.entry("list", mapList)
         );
+        
+        // 结果转json
+        String resJson = RedisUtil.convertToJson(res);
+       // 设置超时时间 配置默认超时时间
+        redisService.setWithExpire(redisKey, resJson, timeOut, TimeUnit.HOURS);
+       
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
