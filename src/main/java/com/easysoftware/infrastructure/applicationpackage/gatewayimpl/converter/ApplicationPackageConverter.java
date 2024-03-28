@@ -24,11 +24,15 @@ public class ApplicationPackageConverter {
     public static List<ApplicationPackageDetailVo> toDetail(List<ApplicationPackageDO> appPkgDOs) {
         List<ApplicationPackageDetailVo> res = new ArrayList<>();
         for (ApplicationPackageDO app: appPkgDOs) {
-            ApplicationPackageDetailVo menu = new ApplicationPackageDetailVo();
-            BeanUtils.copyProperties(app, menu);
-            res.add(menu);
+            res.add(toDetail(app));
         }
         return res;
+    }
+
+    public static ApplicationPackageDetailVo toDetail(ApplicationPackageDO app) {
+        ApplicationPackageDetailVo detail = new ApplicationPackageDetailVo();
+        BeanUtils.copyProperties(app, detail);
+        return detail;
     }
 
     public static List<ApplicationPackageMenuVo> toMenu(List<ApplicationPackageDO> appPkgDOs) {
@@ -36,10 +40,7 @@ public class ApplicationPackageConverter {
         for (ApplicationPackageDO app: appPkgDOs) {
             ApplicationPackageMenuVo menu = new ApplicationPackageMenuVo();
             BeanUtils.copyProperties(app, menu);
-            if (app.getType() != null) {
-                menu.setTags(List.of(app.getType()));
-            }
-            menu.setCategory(app.getCategory());
+            menu.setTags(List.of("IMAGE"));
             res.add(menu);
         }
         return res;
