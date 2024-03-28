@@ -177,4 +177,13 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
         }
         return objList;
     }
+
+    @Override
+    public List<EPKGPackageDetailVo> queryDetailByPkgId(String pkgId) {
+        QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
+        wrapper.eq("pkg_id", pkgId);
+        List<EPKGPackageDO> epkgList = ePKGPkgMapper.selectList(wrapper);
+        List<EPKGPackageDetailVo> res = EPKGPackageConverter.toDetail(epkgList);
+        return res;
+    }
 }

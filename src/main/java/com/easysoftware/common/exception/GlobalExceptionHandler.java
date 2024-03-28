@@ -25,6 +25,13 @@ public class GlobalExceptionHandler {
         return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
     }
 
+    @ExceptionHandler(ParamErrorException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> exception(ParamErrorException e) {
+        logger.error(e.getMessage());
+        return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002, e.getMessage());
+    }
+
     @ExceptionHandler(EnumValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Object> exception(EnumValidException e) {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.easysoftware.application.domainpackage.DomainPackageService;
 import com.easysoftware.application.domainpackage.dto.DomainColumnCondition;
+import com.easysoftware.application.domainpackage.dto.DomainDetailSearchCondition;
 import com.easysoftware.application.domainpackage.dto.DomainSearchCondition;
 
 import jakarta.validation.Valid;
@@ -27,6 +28,12 @@ public class DomainPackageQueryAdapter {
     @GetMapping()
     public ResponseEntity<Object> queryByName(@Valid DomainSearchCondition condition) {
         ResponseEntity<Object> res = domainService.searchDomain(condition);
+        return res;
+    }
+
+    @GetMapping("/detail")
+    public ResponseEntity<Object> queryDomainDetail(@Valid DomainDetailSearchCondition condition) {
+        ResponseEntity<Object> res = domainService.searchDomainDetail(condition);
         return res;
     }
 

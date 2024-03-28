@@ -7,6 +7,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -15,6 +17,8 @@ import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSea
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
+import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
@@ -23,6 +27,8 @@ import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter.
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
 import com.easysoftware.infrastructure.mapper.ApplicationPackageDOMapper;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
+
+import okhttp3.internal.ws.RealWebSocket.Message;
 
 @Component
 public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway {
@@ -132,6 +138,16 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
             return new ApplicationPackageMenuVo();
         }
         ApplicationPackageMenuVo res =ApplicationPackageConverter.toMenu(appList.get(0));
+        return res;
+    }
+
+
+    @Override
+    public List<ApplicationPackageDetailVo> queryDetailByPkgId(String pkgId) {
+        QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
+        wrapper.eq("pkg_id", pkgId);
+        List<ApplicationPackageDO> appList = appPkgMapper.selectList(wrapper);
+        List<ApplicationPackageDetailVo> res =  ApplicationPackageConverter.toDetail(appList);
         return res;
     }
 }
