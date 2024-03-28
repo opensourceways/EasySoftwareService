@@ -191,7 +191,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         
         // 结果转json
         String resJson = RedisUtil.convertToJson(res);
-       // 设置超时时间 
+       // 设置超时时间 配置默认超时时间
         redisService.setWithExpire(redisKey, resJson, timeOut, TimeUnit.HOURS);
        
         return ResultUtil.success(HttpStatus.OK, res);
