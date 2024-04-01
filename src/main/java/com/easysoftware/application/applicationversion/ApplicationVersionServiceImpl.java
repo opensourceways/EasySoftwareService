@@ -53,7 +53,6 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
         }
         ApplicationVersion AppVersion = new ApplicationVersion();
         BeanUtils.copyProperties(inputAppVersion, AppVersion);
-        AppVersion = addAppPkgInfo(AppVersion);
 
         Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(AppVersion);
         kafkaMsg.put("table", "ApplicationVersion");
@@ -78,7 +77,6 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
         }
         ApplicationVersion AppVersion = new ApplicationVersion();
         BeanUtils.copyProperties(inputAppVersion, AppVersion);
-        AppVersion = addAppPkgInfo(AppVersion);
 
         boolean succeed = AppVersionGateway.update(AppVersion);
         if (!succeed) {
@@ -110,25 +108,6 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
         return ResultUtil.success(HttpStatus.OK, msg);
     }
     
-    public ApplicationVersion addAppPkgInfo(ApplicationVersion appVer) {
-        Map<String, String> info = ApiUtil.getApiResponseMap(String.format(repoInfoApi, appVer.getName(), "app_openeuler"));
-        appVer.setCompatibleVersion(info.get("latest_version"));
-
-        info = ApiUtil.getApiResponseMap(String.format(repoInfoApi, appVer.getName(), "app_up"));
-        appVer.setUpstreamVersion(info.get("latest_version"));
-
-        info = ApiUtil.getApiResponseMap(String.format(repoInfoApi, appVer.getName(), "app_openeuler_ci"));
-        appVer.setCiVersion(info.get("latest_version"));
-
-        if (appVer.getCompatibleVersion() == null) {
-            appVer.setStatus("MISSING");
-        } else if (appVer.getUpstreamVersion().equals(appVer.getCompatibleVersion())) {
-            appVer.setStatus("OK");
-        } else {
-            appVer.setStatus("OUTDATED");
-        }
-        return appVer;
-    }
 
     @Override
     public boolean existApp(String name){

@@ -6,7 +6,6 @@ import com.easysoftware.common.constant.PackageConstant;
 import com.easysoftware.common.exception.enumvalid.EnumValue;
 import com.easysoftware.common.exception.enumvalid.TimeOrderEnum;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;

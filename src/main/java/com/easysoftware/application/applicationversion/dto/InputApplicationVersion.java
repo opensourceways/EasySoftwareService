@@ -17,7 +17,11 @@ public class InputApplicationVersion {
 
     @Size(max = 255, message = "the length of homepage can not exceed 255")
     @Pattern(regexp = "^[A-Za-z0-9.()\\-_:/ ]+$", message = "Include only letters, digits, and special characters(_-()$.)")
-    public String homepage;
+    public String eulerHomepage;
+
+    @Size(max = 255, message = "the length of homepage can not exceed 255")
+    @Pattern(regexp = "^[A-Za-z0-9.()\\-_:/ ]+$", message = "Include only letters, digits, and special characters(_-()$.)")
+    public String upHomepage;
 
     @Size(max = 45, message = "the length of backend can not exceed 45")
     @Pattern(regexp = "^[\\u4E00-\\u9FA5A-Za-z0-9.()$\\-_:/ ]+$", message = "Include only letters, digits, and special characters(_-()$.)")
@@ -30,7 +34,7 @@ public class InputApplicationVersion {
     public String upstreamVersion;
 
     @Size(max = 45, message = "the length of compatibleVersion can not exceed 45")
-    public String compatibleVersion;
+    public String openeulerVersion;
 
     @Size(max = 45, message = "the length of compatibleVersion can not exceed 45")
     public String ciVersion;
