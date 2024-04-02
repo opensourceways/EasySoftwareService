@@ -71,4 +71,6 @@ public class RPMPackage {
     private String downloadCount;
 
     private String pkgId;
+
+    private String subPath;
 }

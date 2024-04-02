@@ -71,4 +71,6 @@ public class EPKGPackageDetailVo {
     private String downloadCount;
 
     private String pkgId;
+
+    private String subPath;
 }
