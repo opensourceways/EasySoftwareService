@@ -37,6 +37,9 @@ public class EPKGPackageSearchCondition {
     @Size(max = 50)
     private String os;
 
+    @Size(max = 255)
+    private String subPath;
+
     @Size(max = 50)
     private String arch;
 

@@ -69,4 +69,6 @@ public class RPMPackageDetailVo {
     private String downloadCount;
 
     private String pkgId;
+
+    private String subPath;
 }

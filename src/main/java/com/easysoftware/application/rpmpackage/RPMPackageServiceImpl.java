@@ -121,8 +121,36 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
 
     @Override
     public ResponseEntity<Object> searchRPMPkg(RPMPackageSearchCondition condition) {
+        String pkgId = assemblePkgId(condition);
+
+        List<RPMPackageDetailVo> rpmList = rPMPkgGateway.queryDetailByPkgId(pkgId);
+        if (rpmList.size() != 0) {
+            Map<String, Object> res = Map.ofEntries(
+                Map.entry("total", rpmList.size()),
+                Map.entry("list", rpmList)
+            );
+            return ResultUtil.success(HttpStatus.OK, res);
+        }
+
         Map<String, Object> res = rPMPkgGateway.queryDetailByName(condition);
         return ResultUtil.success(HttpStatus.OK, res);
+    }
+
+    private String assemblePkgId(RPMPackageSearchCondition condition) {
+        String os = StringUtils.trimToEmpty(condition.getOs());
+        String subPath = StringUtils.trimToEmpty(condition.getSubPath());
+        String name = StringUtils.trimToEmpty(condition.getName());
+        String version = StringUtils.trimToEmpty(condition.getVersion());
+        String arch = StringUtils.trimToEmpty(condition.getArch());
+
+        StringBuilder cSb = new StringBuilder();
+        cSb.append(os);
+        cSb.append(subPath);
+        cSb.append(name);
+        cSb.append(version);
+        cSb.append(arch);
+        String pkgId = cSb.toString();
+        return pkgId;
     }
 
     @Override

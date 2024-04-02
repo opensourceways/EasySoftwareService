@@ -19,4 +19,5 @@ public class EPKGPackageMenuVo {
     private String epkgSize;
     private String binDownloadUrl;
     private String pkgId;
+    private String subPath;
 }

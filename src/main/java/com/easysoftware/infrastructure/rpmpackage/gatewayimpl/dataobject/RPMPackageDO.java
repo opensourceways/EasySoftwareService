@@ -84,4 +84,6 @@ public class RPMPackageDO {
     private String downloadCount;
 
     private String pkgId;
+
+    private String subPath;
 }
