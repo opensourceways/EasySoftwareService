@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.dto.InputEPKGPackage;
+import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
 import com.easysoftware.common.constant.MapConstant;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ApiUtil;
@@ -116,6 +117,30 @@ public class EPKGPackageServiceImpl extends ServiceImpl<EPKGPackageDOMapper, EPK
 
     @Override
     public ResponseEntity<Object> searchEPKGPkg(EPKGPackageSearchCondition condition) {
+        String os = StringUtils.trimToEmpty(condition.getOs());
+        String subPath = StringUtils.trimToEmpty(condition.getSubPath());
+        String name = StringUtils.trimToEmpty(condition.getName());
+        String version = StringUtils.trimToEmpty(condition.getVersion());
+        String arch = StringUtils.trimToEmpty(condition.getArch());
+
+        StringBuilder cSb = new StringBuilder();
+        cSb.append(os);
+        cSb.append(subPath);
+        cSb.append(name);
+        cSb.append(version);
+        cSb.append(arch);
+        String pkgId = cSb.toString();
+
+        List<EPKGPackageDetailVo> epkgList = ePKGPackageGateway.queryDetailByPkgId(pkgId);
+
+        if (epkgList.size() != 0) {
+            Map<String, Object> res = Map.ofEntries(
+                Map.entry("total", epkgList.size()),
+                Map.entry("list", epkgList)
+            );
+            return ResultUtil.success(HttpStatus.OK, res);
+        }
+
         Map<String, Object> res = ePKGPackageGateway.queryDetailByName(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }

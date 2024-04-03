@@ -105,4 +105,7 @@ public class InputRPMPackage {
 
     @Size(max = 255, message = "the length of pkgId can not exceed 255")
     private String pkgId;
+
+    @Size(max = 255, message = "the length of subPath can not exceed 255")
+    private String subPath;
 }

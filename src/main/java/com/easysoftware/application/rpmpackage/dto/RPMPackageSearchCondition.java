@@ -21,6 +21,9 @@ public class RPMPackageSearchCondition {
     @Size(max = 255)
     private String pkgId;
 
+    @Size(max = 255)
+    private String subPath;
+
     @Range(min = PackageConstant.MIN_PAGE_NUM, max = PackageConstant.MAX_PAGE_NUM)
     private Integer pageNum = 1;
 
