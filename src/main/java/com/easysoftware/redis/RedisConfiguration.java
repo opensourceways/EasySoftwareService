@@ -41,7 +41,7 @@ public class RedisConfiguration  {
     @Value("${spring.data.redis.timeout:2000}")
     private Integer redisReadTimeout = 2000;
 
-    @Value("${redis-global.caPtah}")
+    @Value("${redis-global.caPath}")
     private String caPath;
 
 
