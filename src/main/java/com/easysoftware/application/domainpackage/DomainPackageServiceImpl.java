@@ -295,7 +295,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
 
         Map<String, Long> res = Map.ofEntries(
             Map.entry("apppkg", appNum),
-            Map.entry("total", rpmNum + epkgNum)
+            Map.entry("total", Math.addExact(rpmNum, epkgNum))
         );
         return ResultUtil.success(HttpStatus.OK, res);
     }
