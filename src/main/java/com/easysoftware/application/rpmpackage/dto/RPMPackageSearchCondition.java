@@ -15,13 +15,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RPMPackageSearchCondition {
-    @Size(max = 50)
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String name;
 
-    @Size(max = 255)
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String pkgId;
 
-    @Size(max = 255)
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String subPath;
 
     @Range(min = PackageConstant.MIN_PAGE_NUM, max = PackageConstant.MAX_PAGE_NUM)
@@ -30,19 +30,19 @@ public class RPMPackageSearchCondition {
     @Range(min = PackageConstant.MIN_PAGE_SIZE, max = PackageConstant.MAX_PAGE_SIZE)
     private Integer pageSize = 10;
 
-    @Size(max = 50)
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String version;
 
-    @Size(max = 50)
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String os;
 
-    @Size(max = 50)
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String arch;
 
-    @Size(max = 50)
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String category;
 
-    @Size(max = 50)
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String rpmUpdateAt;
 
     @EnumValue(enumClass = TimeOrderEnum.class, enumMethod = "isValidCategory")
