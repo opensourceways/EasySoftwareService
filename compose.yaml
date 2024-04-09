@@ -1,0 +1,70 @@
+services:
+  zookeeper:
+    networks:
+      network:
+        ipv4_address: 10.5.0.2
+    image: bitnami/zookeeper:latest
+    ports:
+      - "2181:2181"
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: yes
+  kafka:
+    image: 'bitnami/kafka:2.7.0-debian-10-r124'
+    ports:
+      - '9092:9092'
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics.sh --list --bootstrap-server 127.0.0.1:9092"]
+      interval: 5s
+      timeout: 30s
+      retries: 10
+    environment:
+       - KAFKA_CFG_BROKER_ID=1
+       - KAFKA_CFG_BROKER_RACK=zone1
+       - KAFKA_ZOOKEEPER_CONNECT=10.5.0.2:2181
+       - ALLOW_PLAINTEXT_LISTENER=yes
+       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://10.5.0.3:9092
+    networks:
+      network:
+        ipv4_address: 10.5.0.3
+    depends_on:
+      - zookeeper
+  redis:
+    image: redis
+    entrypoint:
+      - "/usr/local/bin/redis-server"
+      - --requirepass ${REDIS_PASS:-redis_password}
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a redis_password ping"]
+      interval: 5s
+      timeout: 30s
+      retries: 10
+    ports:
+      - "6379:6379"
+    networks:
+      network:
+        ipv4_address: 10.5.0.4
+  mysql:
+    image: mysql:8.1.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-mysql_root_password}
+      MYSQL_USER: ${MYSQL_USER:-test}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-mysql_password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-easysoftware_test}
+    healthcheck:
+      test: [ "CMD-SHELL", "mysqladmin ping -P 3306 -proot | grep 'mysqld is alive' || exit 1" ]
+      interval: 10s
+      timeout: 30s
+      retries: 10
+    ports:
+      - "3306:3306"
+    networks:
+      network:
+        ipv4_address: 10.5.0.5
+networks:
+  network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+          gateway: 10.5.0.1

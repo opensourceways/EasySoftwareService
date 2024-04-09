@@ -1,0 +1,80 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/easysoftware_test?characterEncoding=utf8&useSSL=false&autoReconnect=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USER:test}
+    password: ${MYSQL_PASSWORD:mysql_password}
+  flyway:
+    locations: [ "classpath:db/migration" ]
+    baseline-on-migrate: true
+    table: flyway_history
+  jackson:
+    data0format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  data:
+    redis:  
+      host: 127.0.0.1
+      port: 6379  
+      password: ${REDIS_PASS:redis_password}
+redis-global:
+  expiration: 12
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+server:
+  error:
+    path: /error
+    whitelabel:
+      enabled: false
+  port: 8080
+bootstrap:
+  servers: 127.0.0.1:9092
+producer: 
+  acks: 1
+  retries: 3
+  retryBackoffMs: 1000
+  batchSize: 16384
+  lingerMs: 0
+  topic: software_test
+
+consumer:
+  groupId: software_test
+  enableAutoCommit: false
+  autoCommitIntervalMs: 1000
+  sessionTimeoutMs: 30000
+  topic:
+    name: software_test
+    offset: 0:0
+apppkg:
+  icon:
+    path: aa
+api:
+  repoMaintainer: test
+  repoInfo: test
+  repoDownload: test
+  repoSig: test
+obs:
+  endpoint: test
+  bucket: test
+  ak: test
+  sk: test
+
+logging:
+  file:
+    path: /var/log/easysoftware
+  level:
+    com:
+      easysoftware:
+        adapter:
+          query: debug
+cookie:
+  token:
+    name: test
+oneid:
+  permissionApi: test
+  manage:
+    apiBody: test
+    tokenApi: test
+
+
