@@ -117,7 +117,7 @@ public class ObjectMapperUtil {
         T obj = null;
 
         try {
-            if (json != null) {
+            if (json == null) {
                 return null;
             } else {
                 obj = objectMapper.readValue(json, clazz);

@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,6 +55,8 @@ import jakarta.annotation.Resource;
 
 @Service
 public class DomainPackageServiceImpl implements DomainPackageService {
+    private static final Logger logger = LoggerFactory.getLogger(DomainPackageServiceImpl.class);
+
     @Resource
     ApplicationPackageService appPkgService;
 
@@ -155,12 +159,18 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         String redisKeyStr = RedisUtil.objectToString(condition);
         String redisKey = RedisUtil.getSHA256(redisKeyStr);
         
-        // 结果未过期，直接返回
-        if(redisService.hasKey(redisKey) == true){
-            String resJson = redisService.get(redisKey);
-            Object res = RedisUtil.convertToObject(resJson);
-            return ResultUtil.success(HttpStatus.OK, res);
+        
+        try {
+            // 结果未过期，直接返回
+            if(redisService.hasKey(redisKey) == true){
+                String resJson = redisService.get(redisKey);
+                Object res = RedisUtil.convertToObject(resJson);
+                return ResultUtil.success(HttpStatus.OK, res);
+            }
+        } catch (Exception e) {
+            logger.info(MessageCode.EC00015.getMsgEn());
         }
+        
 
         ApplicationPackageSearchCondition appCon = DomainPackageConverter.toApp(condition);
         appCon.setPageSize(Integer.MAX_VALUE);
@@ -189,10 +199,15 @@ public class DomainPackageServiceImpl implements DomainPackageService {
             Map.entry("list", mapList)
         );
         
-        // 结果转json
-        String resJson = RedisUtil.convertToJson(res);
-       // 设置超时时间 配置默认超时时间
-        redisService.setWithExpire(redisKey, resJson, timeOut, TimeUnit.HOURS);
+        try {
+            // 结果转json
+            String resJson = RedisUtil.convertToJson(res);
+            // 设置超时时间 配置默认超时时间
+            redisService.setWithExpire(redisKey, resJson, timeOut, TimeUnit.HOURS);
+        } catch (Exception e) {
+            logger.info(MessageCode.EC00015.getMsgEn());
+        }
+        
        
         return ResultUtil.success(HttpStatus.OK, res);
     }

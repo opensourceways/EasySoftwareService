@@ -31,6 +31,7 @@ public enum MessageCode {
     EC00012("EC00012", "Unauthorized", "身份认证失败"),
     EC00013("EC00013", "Unable to connect to database", "无法连接数据库"),
     EC00014("EC00014", "Param error, detailed:%s", "参数错误, 详细信息:%s"),
+    EC00015("EC00015", "Connect to Redis failed", "无法连接redis"),
 
     // self service exception
     ES0001("ES0001", "Internal Server Error", "服务异常");
