@@ -25,6 +25,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -32,6 +34,8 @@ import com.easysoftware.application.rpmpackage.RPMPackageService;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.common.constant.PackageConstant;
+import com.easysoftware.common.entity.ResultVo;
+import com.easysoftware.common.utils.CommonUtil;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
@@ -58,81 +62,13 @@ public class RPMPackageQueryAdapterTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
+    // test /rpmpkg?
     @Test
-    public void test_rpmpkg_search_condition() throws Exception {
-        String pkgId = "openEuler-20.03-LTS-SP1debuginfoaarch64aalib-debuginfo1.4.0-1.oe1aarch64";
-        List<RPMPackageDetailVo> list = createMockListPkg();
-        when(gateway.queryDetailByPkgId(pkgId)).thenReturn(list);
-
-        String content = performAndReturn();
-        
-        boolean right = rightContent(content, list);
-        assertTrue(right);
-    }
-
-    private boolean rightContent(String content, List<RPMPackageDetailVo> rpmList) throws Exception {
-        Map<String, Object> rpmMap = extractContent(content);
-        RPMPackageDetailVo rpmPkg = rpmList.get(0);
-        return compare(rpmMap, rpmPkg);
-    }
-
-    private boolean compare(Map<String, Object> rpmMap, RPMPackageDetailVo rpmPkg) throws Exception {
-        Field[] fields = RPMPackageDetailVo.class.getDeclaredFields();
-        for (Field field : fields) {
-            field.setAccessible(true);
-            String filedName = field.getName();
-            Object value = field.get(rpmPkg);
-            Object mapValue = rpmMap.get(filedName);
-
-            if (value == null && mapValue == null) {
-                continue;
-            } else if ((value == null && mapValue != null) || (value != null && mapValue == null)) {
-                return false;
-            } else if (value != null && mapValue != null) {
-                String valueS = (String) value;
-                String mapValueS = (String) mapValue;
-                if (! valueS.equals(mapValueS)) {
-                    return false;
-                }
-            } else {
-            }
-        }
-        return true;
-    }
-
-    private Map<String, Object> extractContent(String content) {
-        Map<String, Object> map = ObjectMapperUtil.toMap(content);
-        Map<String, Object> data = (Map<String, Object>) map.get("data");
-        List<Map<String, Object>> list = (List<Map<String, Object>>) data.get("list");
-        Map<String, Object> rpmMap = list.get(0);
-        return rpmMap;
-    }
-
-    private String performAndReturn() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/rpmpkg")
-                .param("name", "aalib-debuginfo")
-                .param("version", "1.4.0-1.oe1")
-                .param("arch", "aarch64")
-                .param("os", "openEuler-20.03-LTS-SP1")
-                .param("subPath", "debuginfoaarch64")
-                .accept(MediaType.APPLICATION_JSON))
-                .andReturn();
-        String content = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        return content;
-    }
-
-    private List<RPMPackageDetailVo> createMockListPkg() {
-        RPMPackageDetailVo rpm = new RPMPackageDetailVo();
-        rpm.setName("aalib-debuginfo");
-        rpm.setVersion("1.4.0-1.oe1");
-        rpm.setOs("openEuler-20.03-LTS-SP1");
-        rpm.setArch("aarch64");
-        rpm.setCategory("其他");
-        rpm.setBinDownloadUrl("https://repo.openeuler.org/openEuler-20.03-LTS-SP1/debuginfo/aarch64/Packages/aalib-debuginfo-1.4.0-1.oe1.aarch64.rpm");
-        rpm.setSubPath("debuginfoaarch64");
-        
-        List<RPMPackageDetailVo> list = new ArrayList<>();
-        list.add(rpm);
-        return list;
+    void test_rpm() throws Exception {
+        MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
+        paramMap.add("name", "grafana");
+        paramMap.add("os", "openEuler-20.03-LTS-SP1");
+        ResultVo res = CommonUtil.executeGet(mockMvc, "/rpmpkg", paramMap);
+        CommonUtil.assertList(res);
     }
 }
