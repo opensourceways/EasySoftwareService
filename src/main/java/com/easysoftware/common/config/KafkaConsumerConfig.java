@@ -2,7 +2,12 @@ package com.easysoftware.common.config;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.common.config.SaslConfigs;
+import org.apache.kafka.common.config.SslConfigs;
+import org.apache.kafka.common.security.auth.SecurityProtocol;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +27,12 @@ public class KafkaConsumerConfig {
     @Value("${consumer.groupId}")
     private String groupId;
 
+    @Value("${spring.kafka.properties.sasl.jaas.config}")
+    private String authConfig;
+
+    @Value("${spring.kafka.properties.ssl.truststore.location}")
+    private String trustStoreLocation;
+
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
         Map<String, Object> configProps = new HashMap<>();
@@ -29,6 +40,13 @@ public class KafkaConsumerConfig {
         configProps.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+
+        // add SASL_SSL config
+        configProps.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, SecurityProtocol.SASL_SSL.name);
+        configProps.put(SaslConfigs.SASL_MECHANISM, "SCRAM-SHA-512");
+        configProps.put(SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG, "");
+        configProps.put(SaslConfigs.SASL_JAAS_CONFIG, authConfig);
+        configProps.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, trustStoreLocation);
 
         return new DefaultKafkaConsumerFactory<>(configProps);
     }
