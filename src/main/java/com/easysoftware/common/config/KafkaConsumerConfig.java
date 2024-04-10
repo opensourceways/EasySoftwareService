@@ -30,6 +30,9 @@ public class KafkaConsumerConfig {
     @Value("${spring.kafka.properties.sasl.jaas.config}")
     private String authConfig;
 
+    @Value("${spring.kafka.properties.sasl.mechanism}")
+    private String mechanism;
+
     @Value("${spring.kafka.properties.ssl.truststore.location}")
     private String trustStoreLocation;
 
@@ -43,7 +46,7 @@ public class KafkaConsumerConfig {
 
         // add SASL_SSL config
         configProps.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, SecurityProtocol.SASL_SSL.name);
-        configProps.put(SaslConfigs.SASL_MECHANISM, "SCRAM-SHA-512");
+        configProps.put(SaslConfigs.SASL_MECHANISM, mechanism);
         configProps.put(SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG, "");
         configProps.put(SaslConfigs.SASL_JAAS_CONFIG, authConfig);
         configProps.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, trustStoreLocation);
