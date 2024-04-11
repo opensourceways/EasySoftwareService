@@ -66,7 +66,6 @@ public class RankerImpl implements Ranker{
             domainPage.add(0,rankingList.get(i));
         }
 
-
         return domainPage;
     }
 
@@ -81,7 +80,6 @@ public class RankerImpl implements Ranker{
         String[] recommendNames = recommendOrder.replace(" ", "").split(",");
         List<Object> rankingList = new ArrayList<>();
 
-        System.out.println("start ranking");
         for(String name : recommendNames){
             Iterator<Object> iterator = menuVoList.iterator();
             while (iterator.hasNext()) {  
@@ -95,16 +93,10 @@ public class RankerImpl implements Ranker{
             }
         }
 
-
         for(int i = rankingList.size() - 1 ; i >= 0; i --){
             menuVoList.add(0,rankingList.get(i));
         }
 
-        for(Object obj : menuVoList){
-            DomainPackageMenuVo menuVo = (DomainPackageMenuVo )obj;
-            System.out.println(menuVo.getName());
-        }
-        
         // 避免设置空value
         if(menuVoList != null) {
             item.put("children", menuVoList);
