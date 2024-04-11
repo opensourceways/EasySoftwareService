@@ -48,6 +48,7 @@ import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter.ApplicationPackageConverter;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
+import com.easysoftware.ranking.Ranker;
 import com.easysoftware.redis.RedisGateway;
 import com.easysoftware.redis.RedisServiceImpl;
 import com.easysoftware.redis.RedisUtil;
@@ -78,6 +79,9 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     
     @Resource  
     private RedisGateway redisGateway;  
+
+    @Resource  
+    private Ranker ranker;
 
     @Value("${redis-global.expiration}") 
     int timeOut;
@@ -171,7 +175,6 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         } catch (Exception e) {
             logger.info(MessageCode.EC00015.getMsgEn());
         }
-        
 
         ApplicationPackageSearchCondition appCon = DomainPackageConverter.toApp(condition);
         appCon.setPageSize(Integer.MAX_VALUE);
@@ -195,9 +198,11 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         }
         List<Map<String, Object>> mapList = assembleMap(cateMap);
 
+        List<Map<String, Object>> rankedMapList = ranker.rankingDomainPageByOperationConfig(mapList);
+
         Map res = Map.ofEntries(
             Map.entry("total", domainMenus.size()),
-            Map.entry("list", mapList)
+            Map.entry("list", rankedMapList)
         );
         
         try {
@@ -282,10 +287,12 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         for (Map.Entry<String, List<Object>> entry : mapObj.entrySet()) {
             String category = entry.getKey();
             List<Object> list = entry.getValue();
-            res.add(Map.ofEntries(
-                Map.entry("name", category),
-                Map.entry("children", list)
-            ));
+
+            // 为支持排序需求，修改为可变map
+            Map<String, Object> map = new HashMap<>();
+            map.put("name", category);
+            map.put("children", list);
+            res.add(map);
         }
         return res;
     }
