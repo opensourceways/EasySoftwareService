@@ -24,7 +24,6 @@ import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.constant.MapConstant;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ApiUtil;
-import com.easysoftware.common.utils.Base64Util;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.common.utils.UuidUtil;
@@ -89,7 +88,6 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
 
     @Override
     public ResponseEntity<Object> insertRPMPkg(InputRPMPackage inputrPMPackage) {
-        // inputrPMPackage = Base64Util.decode(inputrPMPackage);
 
         if (StringUtils.isNotBlank(inputrPMPackage.getId())) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
@@ -155,8 +153,6 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
 
     @Override
     public ResponseEntity<Object> updateRPMPkg(InputRPMPackage inputrPMPackage) {
-        // inputrPMPackage = Base64Util.decode(inputrPMPackage);
-
         if (StringUtils.isBlank(inputrPMPackage.getId())) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
         }
