@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.easysoftware.application.externalos.dto.ExternalOsSearchCondiiton;
 import com.easysoftware.application.externalos.dto.InputExternalOs;
 import com.easysoftware.common.entity.MessageCode;
-import com.easysoftware.common.utils.Base64Util;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.externalos.ExternalOs;
 import com.easysoftware.domain.externalos.ExternalOsUnique;
@@ -57,8 +56,6 @@ public class ExternalOsServiceImpl implements ExternalOsService {
 
     @Override
     public ResponseEntity<Object> insertPkgMap(InputExternalOs input) {
-        // input = Base64Util.decode(input);
-
         // 若数据库中已经存在该数据，则请求失败
         if (StringUtils.isNotBlank(input.getId())) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
@@ -76,8 +73,6 @@ public class ExternalOsServiceImpl implements ExternalOsService {
 
     @Override
     public ResponseEntity<Object> updatePkgMap(InputExternalOs input) {
-        // input = Base64Util.decode(input);
-
         if (StringUtils.isBlank(input.getId())) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
         }

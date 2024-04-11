@@ -19,7 +19,6 @@ import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
 import com.easysoftware.common.constant.MapConstant;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ApiUtil;
-import com.easysoftware.common.utils.Base64Util;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.common.utils.UuidUtil;
@@ -80,7 +79,6 @@ public class EPKGPackageServiceImpl extends ServiceImpl<EPKGPackageDOMapper, EPK
 
     @Override
     public ResponseEntity<Object> insertEPKGPkg(InputEPKGPackage inputEPKGPackage) {
-        // inputEPKGPackage = Base64Util.decode(inputEPKGPackage);
 
         if (StringUtils.isNotBlank(inputEPKGPackage.getId())) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
@@ -147,7 +145,6 @@ public class EPKGPackageServiceImpl extends ServiceImpl<EPKGPackageDOMapper, EPK
 
     @Override
     public ResponseEntity<Object> updateEPKGPkg(InputEPKGPackage inputEPKGPackage) {
-        // inputEPKGPackage = Base64Util.decode(inputEPKGPackage);
         
         if (StringUtils.isBlank(inputEPKGPackage.getId())) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
