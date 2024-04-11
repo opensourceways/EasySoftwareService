@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;  
 
 public class JasonResponse {
-        private int total;  
+    private int total;  
     private List<Category> list;  
   
     // Getter and setter methods  
