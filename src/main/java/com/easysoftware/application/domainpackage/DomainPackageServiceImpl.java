@@ -48,7 +48,8 @@ import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter.ApplicationPackageConverter;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
-import com.easysoftware.redis.RedisService;
+import com.easysoftware.redis.RedisGateway;
+import com.easysoftware.redis.RedisServiceImpl;
 import com.easysoftware.redis.RedisUtil;
 import org.springframework.beans.factory.annotation.Value;
 import jakarta.annotation.Resource;
@@ -75,8 +76,8 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     @Resource
     ApplicationPackageGateway applicationPackageGateway;
     
-    @Autowired  
-    private RedisService redisService;  
+    @Resource  
+    private RedisGateway redisGateway;  
 
     @Value("${redis-global.expiration}") 
     int timeOut;
@@ -157,13 +158,13 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     private ResponseEntity<Object> searchAllEntity(DomainSearchCondition condition) {
         // 根据请求参数生成唯一redis key
         String redisKeyStr = RedisUtil.objectToString(condition);
-        String redisKey = RedisUtil.getSHA256(redisKeyStr);
+        String redisKey = String.format("domainPage_%s",RedisUtil.getSHA256(redisKeyStr));
         
         
         try {
             // 结果未过期，直接返回
-            if(redisService.hasKey(redisKey) == true){
-                String resJson = redisService.get(redisKey);
+            if(redisGateway.hasKey(redisKey) == true){
+                String resJson = redisGateway.get(redisKey);
                 Object res = RedisUtil.convertToObject(resJson);
                 return ResultUtil.success(HttpStatus.OK, res);
             }
@@ -203,7 +204,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
             // 结果转json
             String resJson = RedisUtil.convertToJson(res);
             // 设置超时时间 配置默认超时时间
-            redisService.setWithExpire(redisKey, resJson, timeOut, TimeUnit.HOURS);
+            redisGateway.setWithExpire(redisKey, resJson, timeOut, TimeUnit.HOURS);
         } catch (Exception e) {
             logger.info(MessageCode.EC00015.getMsgEn());
         }
