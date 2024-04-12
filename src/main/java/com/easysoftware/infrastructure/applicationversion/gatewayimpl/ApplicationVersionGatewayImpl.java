@@ -24,9 +24,9 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
     private ApplicationVersionDOMapper appVersionMapper;
 
     @Override
-    public boolean delete(List<String> names) {
+    public boolean delete(String name) {
         QueryWrapper<ApplicationVersionDO> wrapper = new QueryWrapper<>();
-        wrapper.in("name", names);
+        wrapper.in("name", name);
         int mark = appVersionMapper.delete(wrapper);
         return mark == 1;
     }

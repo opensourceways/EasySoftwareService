@@ -3,19 +3,20 @@ package com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobjec
 import java.io.Serial;
 import java.sql.Timestamp;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 @TableName("application_version")
 public class ApplicationVersionDO {
     @Serial
     private static final long serialVersionUID = 1L;
+    
+    @TableId(value = "name")
     public String name;
     public String upHomepage;
     public String eulerHomepage;
