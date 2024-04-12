@@ -40,7 +40,7 @@ public class EPKGPackageQueryAdapterTest {
         MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
         paramMap.add("name", "grafana");
         paramMap.add("os", "openEuler-20.03-LTS-SP1");
-        ResultVo res = CommonUtil.executeGet(mockMvc, "/rpmpkg", paramMap);
+        ResultVo res = CommonUtil.executeGet(mockMvc, "/epkgpkg", paramMap);
         CommonUtil.assertList(res);
     }
 }

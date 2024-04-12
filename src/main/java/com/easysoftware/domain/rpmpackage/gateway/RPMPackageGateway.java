@@ -16,8 +16,8 @@ public interface RPMPackageGateway {
     boolean existRPM(RPMPackageUnique unique);
     boolean existRPM(String id);
     boolean save(RPMPackage appPkg);
-    boolean update(RPMPackage appPkg);
-    boolean delete(String id);
+    int update(RPMPackage appPkg);
+    int delete(List<String> id);
     Map<String, Object> queryDetailByName(RPMPackageSearchCondition condition);
     List<RPMPackageDetailVo> queryDetailByPkgId(String pkgId);
     Map<String, Object> queryMenuByName(RPMPackageSearchCondition condition);

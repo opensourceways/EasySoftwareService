@@ -97,4 +97,10 @@ public class InputApplicationPackage {
 
     @Size(max = 100,  message = "the length of pkgId can not exceed 100")
     private String pkgId;
+
+    @Size(max = 10000, message = "the length of tags can not exceed 10000")
+    private String imageTags;
+
+    @Size(max = 10000, message = "the length of usage can not exceed 10000")
+    private String imageUsage;
 }

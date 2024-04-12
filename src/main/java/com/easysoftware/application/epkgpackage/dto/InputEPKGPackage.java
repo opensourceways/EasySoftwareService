@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class InputEPKGPackage {
     @Size(max = 255, message = "the length of name can not exceed 255")
-    @NotBlank
     private String name;
 
     @Size(max = 255, message = "the length of id can not exceed 255")

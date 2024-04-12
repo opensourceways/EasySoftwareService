@@ -41,11 +41,11 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
     private ObjectMapper objectMapper;
 
     @Override
-    public boolean delete(String id) {
+    public int delete(List<String> ids) {
         QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
-        wrapper.eq("id", id);
+        wrapper.in("pkg_id", ids);
         int mark = ePKGPkgMapper.delete(wrapper);
-        return mark == 1;
+        return mark;
     }
 
     @Override
@@ -117,14 +117,14 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
     }
 
     @Override
-    public boolean update(EPKGPackage epkg) {
+    public int update(EPKGPackage epkg) {
         EPKGPackageDO epkgPackageDO = EPKGPackageConverter.toDataObjectForUpdate(epkg);
 
         UpdateWrapper<EPKGPackageDO> wrapper = new UpdateWrapper<>();
-        wrapper.eq("name", epkg.getName());
+        wrapper.eq("pkg_id", epkg.getPkgId());
 
         int mark = ePKGPkgMapper.update(epkgPackageDO, wrapper);
-        return mark == 1;
+        return mark;
     }
     
     private Page<EPKGPackageDO> createPage(EPKGPackageSearchCondition condition) {

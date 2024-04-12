@@ -62,4 +62,8 @@ public class ApplicationPackageDetailVo {
     private String iconUrl;
 
     private String pkgId;
+
+    private String imageTags;
+
+    private String imageUsage;
 }
