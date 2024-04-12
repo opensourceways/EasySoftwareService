@@ -14,7 +14,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
 import com.easysoftware.application.applicationversion.dto.InputApplicationVersion;
 import com.easysoftware.common.entity.MessageCode;
-import com.easysoftware.common.utils.ApiUtil;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.common.utils.UuidUtil;
@@ -40,9 +39,6 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
     @Resource
     ApplicationVersionGateway AppVersionGateway;
 
-    public String getCompatible(String name) {
-        return null;
-    }
 
     @Override
     public ResponseEntity<Object> insertAppVersion(InputApplicationVersion inputAppVersion) {
@@ -97,7 +93,7 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
 
         List<String> deletedNames = new ArrayList<>(); 
         for (String name : existedNames) {
-            boolean deleted = AppVersionGateway.delete(names);
+            boolean deleted = AppVersionGateway.delete(name);
             if (deleted) {
                 deletedNames.add(name);
             }
@@ -107,21 +103,9 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
                 , names.toString(), existedNames.toString(), deletedNames.toString());
         return ResultUtil.success(HttpStatus.OK, msg);
     }
-    
-
-    @Override
-    public boolean existApp(String name){
-        return AppVersionGateway.existApp(name);
-    }
-
-    @Override
-    public void saveDataObject(String dataObject) {
-        ApplicationVersion appVer = ObjectMapperUtil.jsonToObject(dataObject, ApplicationVersion.class);
-        AppVersionGateway.save(appVer);
-    }
 
     @Override
     public void saveDataObjectBatch(ArrayList<String> dataObject) {
-        saveBatch(AppVersionGateway.convertBatch(dataObject));
+        saveOrUpdateBatch(AppVersionGateway.convertBatch(dataObject));
     }
 }

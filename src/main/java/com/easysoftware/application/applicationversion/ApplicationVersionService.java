@@ -15,7 +15,4 @@ public interface ApplicationVersionService extends BaseIService<ApplicationVersi
     ResponseEntity<Object> updateAppVersion(InputApplicationVersion inputAppVersion);
     ResponseEntity<Object> deleteAppVersion(List<String> names);
     ResponseEntity<Object> searchAppVersion(ApplicationVersionSearchCondition condition);
-    boolean existApp(String name);
-    void saveDataObject(String dataObject);
-    void saveDataObjectBatch(ArrayList<String> dataObject);
 }

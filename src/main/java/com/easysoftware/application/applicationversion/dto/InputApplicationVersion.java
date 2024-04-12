@@ -2,13 +2,11 @@ package com.easysoftware.application.applicationversion.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 public class InputApplicationVersion {
     @NotBlank(message = "name can not be null")
     @Pattern(regexp = "^[\\u4E00-\\u9FA5A-Za-z0-9.()$\\-_:/ ]+$", message = "Include only letters, digits, and special characters(_-()$.)")
