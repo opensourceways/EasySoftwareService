@@ -2,13 +2,11 @@ package com.easysoftware.domain.applicationversion;
 
 import java.io.Serial;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class ApplicationVersion {
     @Serial
     private static final long serialVersionUID = 1L;

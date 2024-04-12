@@ -14,6 +14,8 @@ import com.easysoftware.application.BaseIService;
 import com.easysoftware.application.ServiceMap;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 
+import lombok.Generated;
+
 public class BaseConsumer {
     @Autowired
     ServiceMap serviceMap;
@@ -22,35 +24,18 @@ public class BaseConsumer {
     protected ArrayList<KafkaConsumer<String, String>> KafkaConsumerList = new ArrayList<>();
 
     // @Scheduled(fixedRate = 5000)
+    @Generated
     public void tasks() {
         KafkaToMysql();
     }
 
+    @Generated
     public void KafkaToMysql() {
-        for (KafkaConsumer<String, String> customer : KafkaConsumerList) {
-            ConsumerRecords<String, String> poll = customer.poll(Duration.ofSeconds(5));
-            dealDataToTableByBatch(poll);
-            customer.commitAsync();
-        }
-    }
-
-    public void dealData(ConsumerRecords<String, String> records) {
-        for (ConsumerRecord<String, String> record : records) {
-            String value = record.value();
-            try {
-                Map<String, Object> dtoMap = ObjectMapperUtil.toMap(value);
-                String table = dtoMap.get("table").toString();
-                String name = dtoMap.get("name").toString();
-                BaseIService baseIService = serviceMap.getIService(table + "Service");
-                if (baseIService.existApp(name)) {
-                    logger.info(String.format("The software %s is existed", name));
-                    continue;
-                }
-                baseIService.saveDataObject(value);
-                logger.info("partation: " + record.partition() + ", offset: " + record.offset());
-
-            } catch (Exception e) {
-                logger.error(e.getMessage() + ":" + value, e);
+        while (true) {
+            for (KafkaConsumer<String, String> customer : KafkaConsumerList) {
+                ConsumerRecords<String, String> poll = customer.poll(Duration.ofSeconds(5));
+                dealDataToTableByBatch(poll);
+                customer.commitAsync();
             }
         }
     }
@@ -65,7 +50,6 @@ public class BaseConsumer {
         for (ConsumerRecord<String, String> record : records) {
             String value = record.value();
             try {
-                logger.info("kafka record: {}", value);
                 Map<String, Object> dtoMap = ObjectMapperUtil.toMap(value);
                 String table = dtoMap.get("table").toString();
                 baseIService = serviceMap.getIService(table + "Service");
@@ -89,6 +73,7 @@ public class BaseConsumer {
     }
 
     // The data of a topic may be written to multiple tables
+    @Generated
     public void dealDataToMultipleTables(ConsumerRecords<String, String> records) {
         Map<String, ArrayList<String>> resMap = new HashMap<>();
         int partition = 0;
@@ -99,13 +84,6 @@ public class BaseConsumer {
             try {
                 Map<String, Object> dtoMap = ObjectMapperUtil.toMap(value);
                 String table = dtoMap.get("table").toString();
-                String name = dtoMap.get("name").toString();
-
-                BaseIService baseIService = serviceMap.getIService(table + "Service");
-                if (baseIService.existApp(name)) {
-                    logger.info(String.format("The software %s is already existed", name));
-                    continue;
-                }
 
                 if (!resMap.containsKey(table)) {
                     resMap.put(table, new ArrayList<>());

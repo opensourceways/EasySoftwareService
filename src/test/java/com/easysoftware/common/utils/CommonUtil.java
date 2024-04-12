@@ -4,7 +4,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -14,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.MultiValueMap;
 
-import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
+import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.entity.ResultVo;
 
 public class CommonUtil {
@@ -34,6 +33,38 @@ public class CommonUtil {
         return res;
     }
 
+    public static ResultVo executePost(MockMvc mockMvc, String url, String jsonRequest) throws Exception {
+        String content = mockMvc.perform(MockMvcRequestBuilders.post(url)
+            .content(jsonRequest)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andReturn().getResponse()
+            .getContentAsString(StandardCharsets.UTF_8);
+
+        ResultVo res = ObjectMapperUtil.toObject(ResultVo.class, content);
+        return res;
+    }
+
+    public static ResultVo executePut(MockMvc mockMvc, String url, String jsonRequest) throws Exception {
+        String content = mockMvc.perform(MockMvcRequestBuilders.put(url)
+            .content(jsonRequest)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andReturn().getResponse()
+            .getContentAsString(StandardCharsets.UTF_8);
+
+        ResultVo res = ObjectMapperUtil.toObject(ResultVo.class, content);
+        return res;
+    }
+
+    public static ResultVo executeDelete(MockMvc mockMvc, String url) throws Exception {
+        String content = mockMvc.perform(MockMvcRequestBuilders.delete(url)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andReturn().getResponse()
+            .getContentAsString(StandardCharsets.UTF_8);
+
+        ResultVo res = ObjectMapperUtil.toObject(ResultVo.class, content);
+        return res;
+    }
+
     public static void assertOk(ResultVo res) {
         assertEquals(res.getCode(), HttpStatus.OK.value());
         assertEquals(res.getMsg(), HttpStatus.OK.getReasonPhrase());
@@ -48,6 +79,15 @@ public class CommonUtil {
                 assertTrue(data.keySet().stream().allMatch(key -> key instanceof String));
                 assertTrue(data.containsKey("total"));
                 assertTrue(data.containsKey("list"));
+            }
+        }
+    }
+
+    public static void assertMsg(ResultVo res, MessageCode msg) {
+        if (res.getMsg() instanceof Map) {
+            Map<?, ?> msgVo = (Map<?, ?>) res.getMsg();
+            if (msgVo.size()> 0) {
+                assertEquals(msgVo.get("code"), msg.getCode());
             }
         }
     }
