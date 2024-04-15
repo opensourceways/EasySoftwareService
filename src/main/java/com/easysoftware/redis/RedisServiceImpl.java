@@ -1,6 +1,7 @@
 
 package com.easysoftware.redis;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -110,4 +111,29 @@ public class RedisServiceImpl implements RedisService{
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
+
+    @Override
+    public ResponseEntity<Object> updateRedisByNameSapce(String namespace) {  
+        List<String> resKeys = redisGateway.scanKey(namespace);
+
+        Map<String,String> resMap = new HashMap<>();
+        
+        for(String key : resKeys){
+            // key 检查 key不存在直接返回
+            boolean keyExsit = redisGateway.hasKey(key);
+            if(!keyExsit){
+                resMap.put(key, "key does't exsit");
+                continue;
+            }
+
+            boolean isSuccess = redisGateway.delteKey(key);
+            if(isSuccess == false){
+                resMap.put(key, "key delete failed");
+            }else{
+                resMap.put(key, "key delete success");
+            }
+        }
+
+        return ResultUtil.success(HttpStatus.OK, resMap);
+    }
 }

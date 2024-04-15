@@ -13,4 +13,5 @@ public interface RedisService {
     ResponseEntity<Object> hasKey(String key);
     ResponseEntity<Object> deleteKey(String key);
     ResponseEntity<Object> scanKeyByNameSpace(String namespace);
+    ResponseEntity<Object> updateRedisByNameSapce(String namespace);
 }
