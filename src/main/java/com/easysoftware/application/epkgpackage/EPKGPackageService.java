@@ -23,5 +23,4 @@ public interface EPKGPackageService extends BaseIService<EPKGPackageDO> {
     boolean existApp(String name);
     void saveDataObject(String dataObject);
     void saveDataObjectBatch(ArrayList<String> dataObject);
-    List<EPKGPackageDO> queryPartAppPkgMenu(EPKGPackageSearchCondition condition);
 }

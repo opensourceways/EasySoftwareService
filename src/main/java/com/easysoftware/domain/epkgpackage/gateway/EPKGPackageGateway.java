@@ -18,8 +18,8 @@ public interface EPKGPackageGateway {
     boolean existEPKG(EPKGPackageUnique unique);
     boolean existEPKG(String id);
     boolean save(EPKGPackage appPkg);
-    boolean update(EPKGPackage appPkg);
-    boolean delete(String id);
+    int update(EPKGPackage appPkg);
+    int delete(List<String> id);
     Map<String, Object> queryDetailByName(EPKGPackageSearchCondition condition);
     List<EPKGPackageDetailVo> queryDetailByPkgId(String pkgId);
     Map<String, Object> queryMenuByName(EPKGPackageSearchCondition condition);

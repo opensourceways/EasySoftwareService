@@ -66,4 +66,8 @@ public class ApplicationPackage {
     private String type;
 
     private String pkgId;
+
+    private String imageTags;
+
+    private String imageUsage;
 }

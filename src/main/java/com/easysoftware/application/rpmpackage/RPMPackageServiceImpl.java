@@ -65,55 +65,19 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
 
     @Override
     public ResponseEntity<Object> deleteRPMPkg(List<String> ids) {
-        List<String> existedNames = new ArrayList<>();
-        for (String id : ids) {
-            boolean found = rPMPkgGateway.existRPM(id);
-            if (found) {
-                existedNames.add(id);
-            }
-        }
-
-        List<String> deletedNames = new ArrayList<>();
-        for (String id : existedNames) {
-            boolean deleted = rPMPkgGateway.delete(id);
-            if (deleted) {
-                deletedNames.add(id);
-            }
-        }
-
-        String msg = String.format("请求删除的数据: %s, 在数据库中的数据: %s, 成功删除的数据: %s"
-                , ids.toString(), existedNames.toString(), deletedNames.toString());
-        return ResultUtil.success(HttpStatus.OK);
+        int mark = rPMPkgGateway.delete(ids);
+        String msg = String.format("the number of deleted : %d", mark);
+        return ResultUtil.success(HttpStatus.OK, msg);
     }
 
     @Override
     public ResponseEntity<Object> insertRPMPkg(InputRPMPackage inputrPMPackage) {
 
-        if (StringUtils.isNotBlank(inputrPMPackage.getId())) {
-            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
-        }
-        // 数据库中是否已存在该包
-        // RPMPackageUnique unique = new RPMPackageUnique();
-        // BeanUtils.copyProperties(inputrPMPackage, unique);
-        // boolean found = rPMPkgGateway.existRPM(unique);
-        // if (found) {
-        //     return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0008);
-        // }
         RPMPackage rPMPkg = new RPMPackage();
         BeanUtils.copyProperties(inputrPMPackage, rPMPkg);
-        // rPMPkg = addRPMPkgMaintainerInfo(rPMPkg);
-        // rPMPkg = addRPMPkgRepoSig(rPMPkg);
-        // rPMPkg = addRPMPkgRepoDownload(rPMPkg);
-
         Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(inputrPMPackage);
         kafkaMsg.put("table", "RPMPackage");
-        // kafkaMsg.put("unique", ObjectMapperUtil.writeValueAsString(unique));
         kafkaProducer.sendMess(topicAppVersion + "_rpm", UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(kafkaMsg));
-
-        // boolean succeed = rPMPkgGateway.save(rPMPkg);
-        // if (!succeed) {
-        //     return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0006);
-        // }
         return ResultUtil.success(HttpStatus.OK);
     }
 
@@ -153,25 +117,11 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
 
     @Override
     public ResponseEntity<Object> updateRPMPkg(InputRPMPackage inputrPMPackage) {
-        if (StringUtils.isBlank(inputrPMPackage.getId())) {
-            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
-        }
-        // 数据库中是否已存在该包
-        boolean found = rPMPkgGateway.existRPM(inputrPMPackage.getId());
-        if (!found) {
-            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0009);
-        }
         RPMPackage rPMPkg = new RPMPackage();
         BeanUtils.copyProperties(inputrPMPackage, rPMPkg);
-        rPMPkg = addRPMPkgMaintainerInfo(rPMPkg);
-        rPMPkg = addRPMPkgRepoSig(rPMPkg);
-        rPMPkg = addRPMPkgRepoDownload(rPMPkg);
-
-        boolean succeed = rPMPkgGateway.update(rPMPkg);
-        if (!succeed) {
-            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0004);
-        }
-        return ResultUtil.success(HttpStatus.OK);
+        int mark = rPMPkgGateway.update(rPMPkg);
+        String msg = String.format("the number of updated : %d", mark);
+        return ResultUtil.success(HttpStatus.OK, msg);
     }
 
     @Override

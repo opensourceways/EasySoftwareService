@@ -76,4 +76,8 @@ public class ApplicationPackageDO {
     private String binDownloadUrl;
 
     private String pkgId;
+
+    private String imageTags;
+
+    private String imageUsage;
 }
