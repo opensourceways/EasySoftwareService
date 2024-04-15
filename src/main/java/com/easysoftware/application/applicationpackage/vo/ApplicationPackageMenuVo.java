@@ -17,4 +17,6 @@ public class ApplicationPackageMenuVo {
     private List<String> tags;
     private String id;
     private String pkgId;
+    private String imageTags;
+    private String imageUsage;
 }

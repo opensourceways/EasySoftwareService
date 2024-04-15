@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -65,6 +66,23 @@ public class CommonUtil {
         return res;
     }
 
+    public static ResultVo executeDelete(MockMvc mockMvc, String url, MultiValueMap<String, String> paramMap) 
+            throws Exception {
+        String content = "";
+        if (null == paramMap) {
+            content = mockMvc.perform(MockMvcRequestBuilders.delete(url)
+                    .accept(MediaType.APPLICATION_JSON))
+                    .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+        } else {
+            content = mockMvc.perform(MockMvcRequestBuilders.delete(url)
+                    .params(paramMap)
+                    .accept(MediaType.APPLICATION_JSON))
+                    .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+        }
+        ResultVo res = ObjectMapperUtil.toObject(ResultVo.class, content);
+        return res;
+    }
+
     public static void assertOk(ResultVo res) {
         assertEquals(res.getCode(), HttpStatus.OK.value());
         assertEquals(res.getMsg(), HttpStatus.OK.getReasonPhrase());
@@ -90,5 +108,18 @@ public class CommonUtil {
                 assertEquals(msgVo.get("code"), msg.getCode());
             }
         }
+    }
+
+	public static void assertNone(ResultVo res) {
+        assertList(res);
+        Map<String, Object> data = (Map<String, Object>) res.getData();
+        Integer total = (Integer) data.get("total");
+        assertEquals(total, 0);
+    }
+
+    public static List<Map<String, String>> getList(ResultVo res) throws Exception {
+        Map<String, Object> data = (Map<String, Object>) res.getData();
+        List<Map<String, String>> list = (List<Map<String, String>>) data.get("list");
+        return list;
     }
 }
