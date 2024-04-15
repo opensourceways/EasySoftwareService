@@ -1,5 +1,6 @@
 package com.easysoftware.common.utils;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -115,6 +116,18 @@ public class CommonUtil {
         Map<String, Object> data = (Map<String, Object>) res.getData();
         Integer total = (Integer) data.get("total");
         assertEquals(total, 0);
+    }
+
+    public static void assert400(ResultVo res) {
+        assertEquals(res.getCode(), HttpStatus.BAD_REQUEST.value());
+        assertNull(res.getData());
+        assertNotNull(res.getMsg());
+    }
+
+    public static void assert500(ResultVo res) {
+        assertEquals(res.getCode(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+        assertNull(res.getData());
+        assertNotNull(res.getError());
     }
 
     public static List<Map<String, String>> getList(ResultVo res) throws Exception {

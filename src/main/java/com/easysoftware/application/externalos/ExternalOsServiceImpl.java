@@ -33,25 +33,9 @@ public class ExternalOsServiceImpl implements ExternalOsService {
 
     @Override
     public ResponseEntity<Object> deletePkgMap(List<String> ids) {
-        List<String> existedNames = new ArrayList<>();
-        for (String id : ids) {
-            boolean found = externalOsGateway.existExternalOs(id);
-            if (found) {
-                existedNames.add(id);
-            }
-        }
-
-        List<String> deletedNames = new ArrayList<>();
-        for (String id : existedNames) {
-            boolean deleted = externalOsGateway.delete(id);
-            if (deleted) {
-                deletedNames.add(id);
-            }
-        }
-
-        String msg = String.format("请求删除的数据: %s, 在数据库中的数据: %s, 成功删除的数据: %s"
-                , ids.toString(), existedNames.toString(), deletedNames.toString());
-        return ResultUtil.success(HttpStatus.OK);
+        int mark = externalOsGateway.delete(ids);
+        String msg = String.format("the number of deleted : %d", mark);
+        return ResultUtil.success(HttpStatus.OK, msg);
     }
 
     @Override
@@ -73,23 +57,12 @@ public class ExternalOsServiceImpl implements ExternalOsService {
 
     @Override
     public ResponseEntity<Object> updatePkgMap(InputExternalOs input) {
-        if (StringUtils.isBlank(input.getId())) {
-            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
-        }
-        // 若数据库中不存在，则请求失败
-        boolean found = externalOsGateway.existExternalOs(input.getId());
-        if (!found) {
-            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0009);
-        }
-
         ExternalOs ex = new ExternalOs();
         BeanUtils.copyProperties(input, ex);
 
-        boolean succeed = externalOsGateway.update(ex);
-        if (!succeed) {
-            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0004);
-        }
-        return ResultUtil.success(HttpStatus.OK);
+        int mark = externalOsGateway.update(ex);
+        String msg = String.format("the number of updated : %d", mark);
+        return ResultUtil.success(HttpStatus.OK, msg);
     }
     
 }

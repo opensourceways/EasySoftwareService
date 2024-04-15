@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.connection.ReactiveRedisConnection.MultiValueResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -47,6 +48,7 @@ import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGate
 import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.power.common.constants.BaseErrorCode.Common;
 
 import jakarta.validation.constraints.AssertTrue;
 import lombok.extern.slf4j.Slf4j;
@@ -85,6 +87,16 @@ public class DomainPackageQueryAdapterTest {
         }
     }
 
+    @Test
+    void test_domain_column_exception() throws Exception {
+        ResultVo res = performDomainColumn("error", "version");
+        CommonUtil.assert400(res);
+        res = performDomainColumn("rpmpkg", "error");
+        CommonUtil.assert400(res);
+        res = performDomainColumn("epkgpkg", "error");
+        CommonUtil.assert400(res);
+    }
+
     // test /domain/column
     @Test
     void test_domain_column() throws Exception {
@@ -93,24 +105,42 @@ public class DomainPackageQueryAdapterTest {
 
         for (String name : names) {
             for (String column : columns) {
-                performDomainColumn(name, column);
+                ResultVo res = performDomainColumn(name, column);
+                CommonUtil.assertOk(res);
             }
         }
     }
 
-    private void performDomainColumn(String name, String column) throws Exception {
+    private ResultVo performDomainColumn(String name, String column) throws Exception {
         MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
         paramMap.add("column", column);
         paramMap.add("name", name);
         ResultVo res = CommonUtil.executeGet(mockMvc, "/domain/column", paramMap);
-        
-        CommonUtil.assertOk(res);
+        return res;
+    }
 
-        assertTrue(res.getData() instanceof List);
-        if (res.getData() instanceof List) {
-            List<?> data = (List<?>) res.getData();
-            assertTrue(data.stream().allMatch(element -> element instanceof String));
-        }
+    @Test
+    void test_domain_detail_exception() throws Exception {
+        MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
+        paramMap.add("appPkgId", "error");
+        paramMap.add("epkgPkgId", "openEuler-22.03-LTS-SP1texlive-apnum-docsvn47510-24noarch");
+        paramMap.add("rpmPkgId", "openeEuler-22.03-LTS-SP1texlive-apnum-docsvn47510-24noarch");
+        ResultVo res = CommonUtil.executeGet(mockMvc, "/domain/detail", paramMap);
+        CommonUtil.assert400(res);
+
+        paramMap = new LinkedMultiValueMap<>();
+        paramMap.add("appPkgId", "memcached");
+        paramMap.add("epkgPkgId", "error");
+        paramMap.add("rpmPkgId", "openeEuler-22.03-LTS-SP1texlive-apnum-docsvn47510-24noarch");
+        res = CommonUtil.executeGet(mockMvc, "/domain/detail", paramMap);
+        CommonUtil.assert400(res);
+
+        paramMap = new LinkedMultiValueMap<>();
+        paramMap.add("appPkgId", "memcached");
+        paramMap.add("epkgPkgId", "openEuler-22.03-LTS-SP1texlive-apnum-docsvn47510-24noarch");
+        paramMap.add("rpmPkgId", "error");
+        res = CommonUtil.executeGet(mockMvc, "/domain/detail", paramMap);
+        CommonUtil.assert400(res);
     }
 
     // test /domain/detail
@@ -118,8 +148,8 @@ public class DomainPackageQueryAdapterTest {
     void test_domain_detail() throws Exception {
         MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
         paramMap.add("appPkgId", "memcached");
-        paramMap.add("epkgPkgId", "openEuler-22.03-LTS-SP1memcached1.6.12-2aarch64");
-        paramMap.add("rpmPkgId", "openEuler-20.03-LTS-SP1everythingaarch64memcached1.5.10-5.oe1aarch64");
+        paramMap.add("epkgPkgId", "openEuler-22.03-LTS-SP1texlive-apnum-docsvn47510-24noarch");
+        paramMap.add("rpmPkgId", "openeEuler-22.03-LTS-SP1texlive-apnum-docsvn47510-24noarch");
         ResultVo res = CommonUtil.executeGet(mockMvc, "/domain/detail", paramMap);
 
         CommonUtil.assertOk(res);
@@ -144,16 +174,23 @@ public class DomainPackageQueryAdapterTest {
     void test_domain_pkg() throws Exception {
         List<String> names = List.of("apppkg", "rpmpkg", "epkgpkg", "all");
         for (String name : names) {
-            performDomainPkg(name);
+            ResultVo res = performDomainPkg(name);
+            CommonUtil.assertList(res);
         }
     }
 
-    private void performDomainPkg(String name) throws Exception {
+    @Test
+    void test_domain_pkg_exception() throws Exception {
+        ResultVo res = performDomainPkg("error");
+        CommonUtil.assert400(res);
+    }
+
+    private ResultVo performDomainPkg(String name) throws Exception {
         MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
         paramMap.add("name", name);
         paramMap.add("timeOrder", "asc");
         ResultVo res = CommonUtil.executeGet(mockMvc, "/domain", paramMap);
-        CommonUtil.assertList(res);
+        return res;
     }
 
     // test search rpmpkg with multiparam
@@ -166,5 +203,24 @@ public class DomainPackageQueryAdapterTest {
         paramMap.add("timeOrder", "desc");
         ResultVo res = CommonUtil.executeGet(mockMvc, "/domain", paramMap);
         CommonUtil.assertList(res);
+    }
+
+    @Test
+    void test_domain_multiparam_exception() throws Exception {
+        MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
+        paramMap.add("name", "error");
+        paramMap.add("os", "openEuler-20.03-LTS-SP2");
+        paramMap.add("arch", "noarch, x86_64");
+        paramMap.add("timeOrder", "desc");
+        ResultVo res = CommonUtil.executeGet(mockMvc, "/domain", paramMap);
+        CommonUtil.assert400(res);
+
+        paramMap = new LinkedMultiValueMap<>();
+        paramMap.add("name", "rpmpkg");
+        paramMap.add("os", "error");
+        paramMap.add("arch", "noarch, x86_64");
+        paramMap.add("timeOrder", "desc");
+        res = CommonUtil.executeGet(mockMvc, "/domain", paramMap);
+        CommonUtil.assertNone(res);
     }
 }

@@ -51,13 +51,12 @@ public class ExternalOsGatewayImpl implements ExternalOsGateway {
         return page;
     }
 
-
     @Override
-    public boolean delete(String id) {
+    public int delete(List<String> ids) {
         QueryWrapper<ExternalOsDO> wrapper = new QueryWrapper<>();
-        wrapper.eq("id", id);
+        wrapper.in("id", ids);
         int mark = externalOsDOMapper.delete(wrapper);
-        return mark == 1;
+        return mark;
     }
 
 
@@ -85,12 +84,12 @@ public class ExternalOsGatewayImpl implements ExternalOsGateway {
 
 
     @Override
-    public boolean update(ExternalOs ex) {
+    public int update(ExternalOs ex) {
         ExternalOsDO exDO = ExternalOsConverter.toDataObjectForUpdate(ex);
         UpdateWrapper<ExternalOsDO> wrapper = new UpdateWrapper<>();
         wrapper.eq("id", ex.getId());
         
         int mark = externalOsDOMapper.update(exDO, wrapper);
-        return mark == 1;
+        return mark;
     }
 }
