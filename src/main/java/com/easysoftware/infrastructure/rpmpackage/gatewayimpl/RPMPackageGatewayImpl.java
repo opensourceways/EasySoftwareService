@@ -13,6 +13,7 @@ import javax.management.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Component;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -25,6 +26,7 @@ import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.QueryWrapperUtil;
@@ -153,7 +155,12 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         column = "category".equals(column) ? "category" : column;
         QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
         wrapper.select("distinct " + column);
-        List<RPMPackageDO> rpmColumn = rPMPkgMapper.selectList(wrapper);
+        List<RPMPackageDO> rpmColumn = new ArrayList<>();
+        try {
+            rpmColumn = rPMPkgMapper.selectList(wrapper);
+        } catch (BadSqlGrammarException e) {
+            throw new ParamErrorException("unsupported param: " + column);
+        }
 
         column = StringUtil.underlineToCamel(column);
         List<String> res = RPMPackageConverter.toColumn(rpmColumn, column);

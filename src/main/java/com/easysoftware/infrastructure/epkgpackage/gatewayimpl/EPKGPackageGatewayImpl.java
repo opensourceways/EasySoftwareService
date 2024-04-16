@@ -9,6 +9,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Component;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -19,6 +20,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
+import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.QueryWrapperUtil;
@@ -139,8 +141,12 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
         column = "category".equals(column) ? "category" : column;
         QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
         wrapper.select("distinct " + column);
-        List<EPKGPackageDO> rpmColumn = ePKGPkgMapper.selectList(wrapper);
-
+        List<EPKGPackageDO> rpmColumn = new ArrayList<>();
+        try {
+            rpmColumn = ePKGPkgMapper.selectList(wrapper);
+        } catch (BadSqlGrammarException e) {
+            throw new ParamErrorException("unsupported param: " + column);
+        }
         column = StringUtil.underlineToCamel(column);
         List<String> res = EPKGPackageConverter.toColumn(rpmColumn, column);
         
