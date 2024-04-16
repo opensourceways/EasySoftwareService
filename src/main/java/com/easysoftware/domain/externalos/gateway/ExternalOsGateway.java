@@ -10,8 +10,8 @@ import com.easysoftware.domain.externalos.ExternalOsUnique;
 public interface ExternalOsGateway {
     Map<String, Object> queryPkgMap(ExternalOsSearchCondiiton condition);
     boolean existExternalOs(String id);
-    boolean delete(String id);
+    int delete(List<String> ids);
     boolean existExternalOs(ExternalOsUnique uni);
     boolean save(ExternalOs ex);
-    boolean update(ExternalOs ex);
+    int update(ExternalOs ex);
 }

@@ -98,7 +98,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         } else if (StringUtils.isBlank(name) && StringUtils.isNotBlank(entity)) {
             return searchDomainEntity(condition);
         } else {
-            return null;
+            throw new ParamErrorException("unspecified param: name, entity");
         }
     }
 
@@ -136,7 +136,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
             ResponseEntity<Object> res = searchAllEntity(condition);
             return res;
         } else {
-            return null;
+            throw new ParamErrorException("unsupported param: " + condition.getName());
         }
     }
 
@@ -306,7 +306,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
             List<String> res = epkgPackageGateway.queryColumn(condition.getColumn());
             return ResultUtil.success(HttpStatus.OK, res);
         } else {
-            return null;
+            throw new ParamErrorException("unsupported param: " + condition.getName());
         }
     }
 
