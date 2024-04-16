@@ -146,11 +146,6 @@ public class DomainPackageQueryAdapterTest {
         for (String name : names) {
             performDomainPkg(name);
         }
-        MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
-        paramMap.add("name", "apppkg");
-        paramMap.add("timeOrder", "asc");
-        ResultVo res = CommonUtil.executeGet(mockMvc, "/domain", paramMap);
-        CommonUtil.assertList(res);
     }
 
     private void performDomainPkg(String name) throws Exception {

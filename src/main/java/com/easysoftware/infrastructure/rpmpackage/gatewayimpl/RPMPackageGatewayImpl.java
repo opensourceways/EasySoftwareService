@@ -55,11 +55,11 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     private static final Logger logger = LoggerFactory.getLogger(RPMPackageGatewayImpl.class);
 
     @Override
-    public boolean delete(String id) {
+    public int delete(List<String> id) {
         QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
-        wrapper.eq("id", id);
+        wrapper.in("pkg_id", id);
         int mark = rPMPkgMapper.delete(wrapper);
-        return mark == 1;
+        return mark;
     }
 
     @Override
@@ -104,14 +104,14 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     }
 
     @Override
-    public boolean update(RPMPackage rPMPkg) {
+    public int update(RPMPackage rPMPkg) {
         RPMPackageDO rPMPkgDO = RPMPackageConverter.toDataObjectForUpdate(rPMPkg);
 
         UpdateWrapper<RPMPackageDO> wrapper = new UpdateWrapper<>();
-        wrapper.eq("name", rPMPkg.getName());
+        wrapper.eq("pkg_id", rPMPkg.getPkgId());
 
         int mark = rPMPkgMapper.update(rPMPkgDO, wrapper);
-        return mark == 1;
+        return mark;
     }
 
     @Override
