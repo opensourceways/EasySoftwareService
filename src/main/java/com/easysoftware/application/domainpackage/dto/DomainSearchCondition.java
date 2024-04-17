@@ -21,20 +21,20 @@ public class DomainSearchCondition {
     @EnumValue(enumClass = DomainNameEnum.class, enumMethod = "isValidCategory")
     private String name;
 
-    @Size(max = 50)
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     // 软件包名称
     private String entity;
 
-    @Size(max = 50)
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String os;
 
-    @Size(max = 50)
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String arch;
 
-    @Size(max = 50)
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String category;
 
-    @Size(max = 50)
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String version;
 
     @EnumValue(enumClass = TimeOrderEnum.class, enumMethod = "isValidCategory")

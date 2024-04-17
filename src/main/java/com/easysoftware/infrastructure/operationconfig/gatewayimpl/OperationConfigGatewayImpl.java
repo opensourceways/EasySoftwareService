@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.easysoftware.application.operationconfig.dto.InputOperationConfig;
 import com.easysoftware.application.operationconfig.vo.OperationConfigVo;
 import com.easysoftware.common.entity.MessageCode;
@@ -32,15 +33,11 @@ public class OperationConfigGatewayImpl implements OperationConfigGateway {
     }
 
     @Override
-    public boolean truncateTable() {
-        try {
-            mapper.myDelete();
-            return true;
-        } catch (Exception e) {
-            logger.info(MessageCode.EC0005.getMsgEn());
-            return false;
-        }
-       
+    public boolean deleteByType(String type) {
+        QueryWrapper<OperationConfigDO> wrapper = new QueryWrapper<>();
+        wrapper.eq("type", type);
+        mapper.delete(wrapper);
+        return true;
     }
 
     @Override

@@ -71,4 +71,13 @@ public class RPMPackageQueryAdapterTest {
         ResultVo res = CommonUtil.executeGet(mockMvc, "/rpmpkg", paramMap);
         CommonUtil.assertList(res);
     }
+
+    @Test
+    void test_rpm_exception() throws Exception {
+        MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
+        paramMap.add("name", "error");
+        paramMap.add("os", "openEuler-20.03-LTS-SP1");
+        ResultVo res = CommonUtil.executeGet(mockMvc, "/rpmpkg", paramMap);
+        CommonUtil.assertList(res);
+    }
 }

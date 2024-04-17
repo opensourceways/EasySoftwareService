@@ -1,5 +1,6 @@
 package com.easysoftware.adapter.execute;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.easysoftware.application.applicationpackage.dto.InputApplicationPackage;
+import com.easysoftware.common.constant.PackageConstant;
 import com.easysoftware.common.entity.ResultVo;
 import com.easysoftware.common.utils.CommonUtil;
 import com.easysoftware.common.utils.ObjectMapperUtil;
@@ -42,7 +44,6 @@ public class ApplicationPackageExecuteAdatperTest {
         input.setPkgId("testfortest");
         input.setName("testfortest");
         ResultVo res = CommonUtil.executePost(mockMvc, REQUEST_MAPPING, ObjectMapperUtil.writeValueAsString(input));
-        log.info("in: {}", ObjectMapperUtil.writeValueAsString(input));
         CommonUtil.assertOk(res);
         
         // test update
@@ -56,5 +57,21 @@ public class ApplicationPackageExecuteAdatperTest {
         CommonUtil.assertOk(res);
     }
 
+    @Test
+    public void test_insert_exception() throws Exception {
+        CommonUtil.executeDelete(mockMvc, REQUEST_MAPPING + "/testfortest", null);
+        InputApplicationPackage input = new InputApplicationPackage();
+        input.setPkgId("testfortest");
+        input.setName("testfortest");
+        ResultVo res = CommonUtil.executePost(mockMvc, REQUEST_MAPPING, ObjectMapperUtil.writeValueAsString(input));
 
+        // 重复写入
+        input = new InputApplicationPackage();
+        input.setPkgId("testfortest");
+        input.setName("testfortest");
+        res = CommonUtil.executePost(mockMvc, REQUEST_MAPPING, ObjectMapperUtil.writeValueAsString(input));
+        CommonUtil.assert400(res);
+
+        CommonUtil.executeDelete(mockMvc, REQUEST_MAPPING + "/testfortest", null);
+    }
 }
