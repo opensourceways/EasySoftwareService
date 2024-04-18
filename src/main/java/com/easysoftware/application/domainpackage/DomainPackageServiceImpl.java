@@ -221,27 +221,25 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     private DomainPackageMenuVo extendIds(DomainPackageMenuVo domain) {
         String name = domain.getName();
         Set<String> tags = domain.getTags();
-        if (!tags.contains("IMAGE")) {
-            ApplicationPackageMenuVo app = applicationPackageGateway.selectOne(name);
-            if (StringUtils.isNotBlank(app.getPkgId())) {
-                tags.add("IMAGE");
-                domain.getPkgIds().put("IMAGE", app.getPkgId());
-            }
+
+        ApplicationPackageMenuVo app = applicationPackageGateway.selectOne(name);
+        if (StringUtils.isNotBlank(app.getPkgId())) {
+            tags.add("IMAGE");
+            domain.getPkgIds().put("IMAGE", app.getPkgId());
         }
-        if (!tags.contains("RPM")) {
-            RPMPackageMenuVo rpm = rpmPackageGateway.selectOne(name);
-            if (StringUtils.isNotBlank(rpm.getPkgId())) {
-                tags.add("RPM");
-                domain.getPkgIds().put("RPM", rpm.getPkgId());
-            }
+
+        RPMPackageMenuVo rpm = rpmPackageGateway.selectOne(name);
+        if (StringUtils.isNotBlank(rpm.getPkgId())) {
+            tags.add("RPM");
+            domain.getPkgIds().put("RPM", rpm.getPkgId());
         }
-        if (!tags.contains("EPKG")) {
-            EPKGPackageMenuVo epkg = epkgPackageGateway.selectOne(name);
-            if (StringUtils.isNotBlank(epkg.getPkgId())) {
-                tags.add("EPKG");
-                domain.getPkgIds().put("EPKG", epkg.getPkgId());
-            }
+
+        EPKGPackageMenuVo epkg = epkgPackageGateway.selectOne(name);
+        if (StringUtils.isNotBlank(epkg.getPkgId())) {
+            tags.add("EPKG");
+            domain.getPkgIds().put("EPKG", epkg.getPkgId());
         }
+
         return domain;
     }
 

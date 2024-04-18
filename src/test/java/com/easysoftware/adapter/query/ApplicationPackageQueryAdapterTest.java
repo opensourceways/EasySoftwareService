@@ -35,8 +35,16 @@ public class ApplicationPackageQueryAdapterTest {
     void test_query() throws Exception {
         MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
         paramMap.add("pkgId", "cassandra");
-        ResultVo res = CommonUtil.executeGet(mockMvc, REQUEST_MAPPING, null);
-        CommonUtil.assertOk(res);
+        ResultVo res = CommonUtil.executeGet(mockMvc, REQUEST_MAPPING, paramMap);
+        CommonUtil.assertList(res);
+    }
+
+    @Test
+    void test_query_exception() throws Exception {
+        MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
+        paramMap.add("pkgId", "error");
+        ResultVo res = CommonUtil.executeGet(mockMvc, REQUEST_MAPPING, paramMap);
+        CommonUtil.assertNone(res);
     }
 
 

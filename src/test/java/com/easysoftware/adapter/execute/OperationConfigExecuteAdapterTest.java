@@ -37,15 +37,16 @@ public class OperationConfigExecuteAdapterTest {
 
     @Test
     void test_insert() throws Exception {
-        CommonUtil.executeGet(mockMvc, REQUEST_MAPPING + "/truncate", null);
+        CommonUtil.executeDelete(mockMvc, REQUEST_MAPPING + "/domainPage", null);
         InputOperationConfig input = new InputOperationConfig();
         input.setCategorys("大数据");
         input.setOrderIndex("1");
         input.setRecommend("kafka, redis");
-        input.setType("0");
+        input.setType("domainPage");
         ResultVo res = CommonUtil.executePost(mockMvc, REQUEST_MAPPING, ObjectMapperUtil.writeValueAsString(input));
         CommonUtil.assertOk(res);
-        res = CommonUtil.executeGet(mockMvc, REQUEST_MAPPING + "/truncate", null);
+
+        res = CommonUtil.executeDelete(mockMvc, REQUEST_MAPPING + "/domainPage", null);
         CommonUtil.assertOk(res);
     }
 }

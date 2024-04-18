@@ -211,7 +211,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
         wrapper.eq("name", name);
         wrapper.select("pkg_id");
-        wrapper.last("limit 1");
+        wrapper.last("order by rpm_update_at desc limit 1");
         List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
         if (rpmList.size() == 0) {
             return new RPMPackageMenuVo();

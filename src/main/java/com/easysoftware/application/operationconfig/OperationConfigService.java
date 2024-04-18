@@ -7,5 +7,5 @@ import com.easysoftware.application.operationconfig.dto.InputOperationConfig;
 
 public interface OperationConfigService {
     boolean insertOperationConfig(InputOperationConfig input);
-    boolean truncateTable();
+    boolean deleteByType(String type);
 }

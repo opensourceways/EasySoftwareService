@@ -19,8 +19,8 @@ public class OperationConfigServiceImpl implements OperationConfigService {
     }
 
     @Override
-    public boolean truncateTable() {
-        return gateway.truncateTable();
+    public boolean deleteByType(String type) {
+        return gateway.deleteByType(type);
     }
 
     

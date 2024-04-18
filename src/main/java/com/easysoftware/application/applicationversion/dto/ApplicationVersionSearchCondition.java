@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ApplicationVersionSearchCondition {
-    @Size(max = 50)
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     @Pattern(regexp = "^[\\u4E00-\\u9FA5A-Za-z0-9.()$\\-_ ]+$", message = "Include only letters, digits, and special characters(_-()$.)")
     private String name;
 

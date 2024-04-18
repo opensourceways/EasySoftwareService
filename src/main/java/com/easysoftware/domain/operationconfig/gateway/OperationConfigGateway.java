@@ -7,6 +7,6 @@ import com.easysoftware.application.operationconfig.vo.OperationConfigVo;
 
 public interface OperationConfigGateway {
     boolean insertOperationConfig(InputOperationConfig input);
-    boolean truncateTable();
+    boolean deleteByType(String type);
     List<OperationConfigVo> selectAll();
 }
