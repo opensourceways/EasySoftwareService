@@ -14,6 +14,7 @@ import com.easysoftware.application.domainpackage.DomainPackageService;
 import com.easysoftware.application.domainpackage.dto.DomainColumnCondition;
 import com.easysoftware.application.domainpackage.dto.DomainDetailSearchCondition;
 import com.easysoftware.application.domainpackage.dto.DomainSearchCondition;
+import com.easysoftware.common.aop.RequestLimitRedis;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
@@ -26,24 +27,28 @@ public class DomainPackageQueryAdapter {
     private DomainPackageService domainService;
 
     @GetMapping()
+    @RequestLimitRedis(period = 10, count = 5) // 10s内同一ip连续访问5次，拒绝访问
     public ResponseEntity<Object> queryByName(@Valid DomainSearchCondition condition) {
         ResponseEntity<Object> res = domainService.searchDomain(condition);
         return res;
     }
 
     @GetMapping("/detail")
+    @RequestLimitRedis(period = 10, count = 5)
     public ResponseEntity<Object> queryDomainDetail(@Valid DomainDetailSearchCondition condition) {
         ResponseEntity<Object> res = domainService.searchDomainDetail(condition);
         return res;
     }
 
     @GetMapping("/column")
+    @RequestLimitRedis(period = 10, count = 5)
     public ResponseEntity<Object> queryColumn(@Valid DomainColumnCondition condition) {
         ResponseEntity<Object> res = domainService.searchColumn(condition);
         return res;
     }
 
     @GetMapping("/stat")
+    @RequestLimitRedis(period = 10, count = 5)
     public ResponseEntity<Object> queryStat() {
         ResponseEntity<Object> res = domainService.queryStat();
         return res;
