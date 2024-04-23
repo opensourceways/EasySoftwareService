@@ -21,7 +21,7 @@ public class ExternalOsQueryAdapter {
     private ExternalOsService externalOsService;
 
     @GetMapping()
-    @RequestLimitRedis(period = 10, count = 5) // 10s内同一ip连续访问5次，拒绝访问
+    @RequestLimitRedis() 
     public ResponseEntity<Object> searchPkgMap(@Valid ExternalOsSearchCondiiton condition) {
         ResponseEntity<Object> res = externalOsService.searchPkgMap(condition);
         return res;
