@@ -67,7 +67,7 @@ public class QueryWrapperUtil {
         return wrapper;
     }
 
-    private static List<String> splitStr(String vStr) {
+    public static List<String> splitStr(String vStr) {
         List<String> res = new ArrayList<>();
 
         String[] sps = StringUtils.split(vStr, ",");
