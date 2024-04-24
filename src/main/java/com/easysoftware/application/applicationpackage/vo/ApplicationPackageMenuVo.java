@@ -10,13 +10,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApplicationPackageMenuVo {
-    private String category;
     private String name;
-    private String description;
-    private String iconUrl;
-    private List<String> tags;
+    private String osSupport;
+    private String os;
+    private String appVer;
     private String id;
+    private String category;
+    private String arch;
+    private String type;
     private String pkgId;
     private String imageTags;
-    private String imageUsage;
+    private String download;
 }

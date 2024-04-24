@@ -143,21 +143,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
 
     private Map<String, Object> searchAppPkgPage(DomainSearchCondition condition) {
         ApplicationPackageSearchCondition appCon = DomainPackageConverter.toApp(condition);
-        Map<String, Object> map = applicationPackageGateway.queryMenuByName(appCon);
-        List<ApplicationPackageMenuVo> appList = (List<ApplicationPackageMenuVo>) map.get("list");
-
-        Map<String, List<Object>> cateMap = getCategorys();
-        for (ApplicationPackageMenuVo app : appList) {
-            String cate = StringUtils.trimToEmpty(app.getCategory());
-            cateMap.get(cate).add(app);
-        }
-        List<Map<String, Object>> mapList = assembleMap(cateMap);
-
-        Map<String, Object> res = Map.ofEntries(
-            Map.entry("total", map.get("total")),
-            Map.entry("list", mapList)
-        );
-        return res;
+        return applicationPackageGateway.queryMenuByName(appCon);
     }
 
     private ResponseEntity<Object> searchAllEntity(DomainSearchCondition condition) {
