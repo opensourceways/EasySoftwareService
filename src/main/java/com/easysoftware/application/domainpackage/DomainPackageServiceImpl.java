@@ -291,7 +291,10 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         } else if ("epkgpkg".equals(condition.getName())) {
             Map<String, List<String>> res = epkgPackageGateway.queryColumn(columns);
             return ResultUtil.success(HttpStatus.OK, res);
-        } else {
+        } else if ("apppkg".equals(condition.getName())) {
+            Map<String, List<String>> res = applicationPackageGateway.queryColumn(columns);
+            return ResultUtil.success(HttpStatus.OK, res);
+        }else {
             throw new ParamErrorException("unsupported param: " + condition.getName());
         }
     }

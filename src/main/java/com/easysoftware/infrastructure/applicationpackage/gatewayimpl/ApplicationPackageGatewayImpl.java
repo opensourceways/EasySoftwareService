@@ -1,11 +1,13 @@
 package com.easysoftware.infrastructure.applicationpackage.gatewayimpl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
@@ -27,6 +29,7 @@ import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter.
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
 import com.easysoftware.infrastructure.mapper.ApplicationPackageDOMapper;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
+import com.power.common.util.StringUtil;
 
 import okhttp3.internal.ws.RealWebSocket.Message;
 
@@ -148,6 +151,33 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         wrapper.eq("pkg_id", pkgId);
         List<ApplicationPackageDO> appList = appPkgMapper.selectList(wrapper);
         List<ApplicationPackageDetailVo> res =  ApplicationPackageConverter.toDetail(appList);
+        return res;
+    }
+
+    @Override
+    public Map<String, List<String>> queryColumn(List<String> columns) {
+        Map<String, List<String>> res = new HashMap<>();
+        for (String column : columns) {
+            List<String> colList = queryColumn(column);
+            res.put(column, colList);
+        }
+        return res;
+    }
+
+    public List<String> queryColumn(String column) {
+        column = "category".equals(column) ? "category" : column;
+        QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
+        wrapper.select("distinct " + column);
+        List<ApplicationPackageDO> rpmColumn = new ArrayList<>();
+        try {
+            rpmColumn = appPkgMapper.selectList(wrapper);
+        } catch (BadSqlGrammarException e) {
+            throw new ParamErrorException("unsupported param: " + column);
+        }
+    
+        column = StringUtil.underlineToCamel(column);
+        List<String> res = ApplicationPackageConverter.toColumn(rpmColumn, column);
+    
         return res;
     }
 }
