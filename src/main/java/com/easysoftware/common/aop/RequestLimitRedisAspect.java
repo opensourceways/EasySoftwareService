@@ -4,6 +4,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,12 @@ public class RequestLimitRedisAspect {
     @Autowired
     RedisTemplate  redisTemplate;
 
+    @Value("${dos-global.rejectPeriod}") 
+    long rejectPeriod;
+
+    @Value("${dos-global.rejectCount}") 
+    long rejectCount;
+
     // 切点
     @Pointcut("@annotation(requestLimit)")
     public void controllerAspect(RequestLimitRedis requestLimit) {}
@@ -39,8 +46,8 @@ public class RequestLimitRedisAspect {
     @Around("controllerAspect(requestLimit)")
     public Object before(ProceedingJoinPoint joinPoint, RequestLimitRedis requestLimit) throws Throwable {
         
-        long period = requestLimit.period();
-        long limitCount = requestLimit.count();
+        long period = rejectPeriod;
+        long limitCount = rejectCount;
         
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 

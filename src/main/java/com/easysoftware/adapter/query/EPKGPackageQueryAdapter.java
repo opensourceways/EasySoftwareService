@@ -19,7 +19,7 @@ public class EPKGPackageQueryAdapter {
     private EPKGPackageService ePKGPackageService;
 
     @GetMapping()
-    @RequestLimitRedis(period = 10, count = 5) // 10s内同一ip连续访问5次，拒绝访问
+    @RequestLimitRedis() 
     public ResponseEntity<Object> searchEPKGPkg(@Valid EPKGPackageSearchCondition condition) {
         ResponseEntity<Object> res = ePKGPackageService.searchEPKGPkg(condition);
         return res;
