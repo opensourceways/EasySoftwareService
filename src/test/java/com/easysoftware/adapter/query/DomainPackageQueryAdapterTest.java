@@ -101,7 +101,7 @@ public class DomainPackageQueryAdapterTest {
     @Test
     void test_domain_column() throws Exception {
         List<String> names = List.of("rpmpkg", "epkgpkg");
-        List<String> columns = List.of("arch", "version", "os", "category");
+        List<String> columns = List.of("arch", "version", "os", "category", "category, os, arch");
 
         for (String name : names) {
             for (String column : columns) {

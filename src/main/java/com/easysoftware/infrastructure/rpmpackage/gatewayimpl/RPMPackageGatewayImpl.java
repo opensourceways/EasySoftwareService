@@ -151,6 +151,15 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     }
 
     @Override
+    public Map<String, List<String>> queryColumn(List<String> columns) {
+        Map<String, List<String>> res = new HashMap<>();
+        for (String column : columns) {
+            List<String> colList = queryColumn(column);
+            res.put(column, colList);
+        }
+        return res;
+    }
+
     public List<String> queryColumn(String column) {
         column = "category".equals(column) ? "category" : column;
         QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();

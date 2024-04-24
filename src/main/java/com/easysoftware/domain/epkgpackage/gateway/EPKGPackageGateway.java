@@ -23,7 +23,7 @@ public interface EPKGPackageGateway {
     Map<String, Object> queryDetailByName(EPKGPackageSearchCondition condition);
     List<EPKGPackageDetailVo> queryDetailByPkgId(String pkgId);
     Map<String, Object> queryMenuByName(EPKGPackageSearchCondition condition);
-    List<String> queryColumn(String column);
+    Map<String, List<String>> queryColumn(List<String> columns);
     long queryTableLength();
     EPKGPackageMenuVo selectOne(String name);
     Collection<EPKGPackageDO> convertBatch(Collection<String> dataObject);
