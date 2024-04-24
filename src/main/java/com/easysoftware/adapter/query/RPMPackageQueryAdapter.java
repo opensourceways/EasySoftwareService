@@ -18,7 +18,7 @@ public class RPMPackageQueryAdapter {
     private RPMPackageService rPMPkgService;
 
     @GetMapping()
-    @RequestLimitRedis(period = 10, count = 5) // 10s内同一ip连续访问5次，拒绝访问
+    @RequestLimitRedis() //dos-global设置 2s内 单一ip调用超5次触发
     public ResponseEntity<Object> searchRPMPkg(@Valid RPMPackageSearchCondition condition) {
         ResponseEntity<Object> res = rPMPkgService.searchRPMPkg(condition);
         return res;

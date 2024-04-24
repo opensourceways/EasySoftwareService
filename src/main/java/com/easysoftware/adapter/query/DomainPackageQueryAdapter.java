@@ -25,30 +25,30 @@ import okhttp3.Response;
 public class DomainPackageQueryAdapter {
     @Autowired
     private DomainPackageService domainService;
-
+    
     @GetMapping()
-    @RequestLimitRedis(period = 10, count = 5) // 10s内同一ip连续访问5次，拒绝访问
+    @RequestLimitRedis() 
     public ResponseEntity<Object> queryByName(@Valid DomainSearchCondition condition) {
         ResponseEntity<Object> res = domainService.searchDomain(condition);
         return res;
     }
 
     @GetMapping("/detail")
-    @RequestLimitRedis(period = 10, count = 5)
+    @RequestLimitRedis()
     public ResponseEntity<Object> queryDomainDetail(@Valid DomainDetailSearchCondition condition) {
         ResponseEntity<Object> res = domainService.searchDomainDetail(condition);
         return res;
     }
 
     @GetMapping("/column")
-    @RequestLimitRedis(period = 10, count = 5)
+    @RequestLimitRedis()
     public ResponseEntity<Object> queryColumn(@Valid DomainColumnCondition condition) {
         ResponseEntity<Object> res = domainService.searchColumn(condition);
         return res;
     }
 
     @GetMapping("/stat")
-    @RequestLimitRedis(period = 10, count = 5)
+    @RequestLimitRedis()
     public ResponseEntity<Object> queryStat() {
         ResponseEntity<Object> res = domainService.queryStat();
         return res;
