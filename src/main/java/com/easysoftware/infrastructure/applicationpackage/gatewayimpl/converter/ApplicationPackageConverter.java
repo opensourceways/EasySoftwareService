@@ -115,7 +115,7 @@ public class ApplicationPackageConverter {
     public static List<String> toColumn(List<ApplicationPackageDO> appDOs, String column) {
         List<String> res = new ArrayList<>();
         try {
-            Field field = EPKGPackageDO.class.getDeclaredField(column);
+            Field field = ApplicationPackageDO.class.getDeclaredField(column);
             field.setAccessible(true);
             for (ApplicationPackageDO appDo : appDOs) {
                 if (appDo == null) {
