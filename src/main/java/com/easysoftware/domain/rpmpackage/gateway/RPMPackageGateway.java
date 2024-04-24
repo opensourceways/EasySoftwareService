@@ -21,7 +21,7 @@ public interface RPMPackageGateway {
     Map<String, Object> queryDetailByName(RPMPackageSearchCondition condition);
     List<RPMPackageDetailVo> queryDetailByPkgId(String pkgId);
     Map<String, Object> queryMenuByName(RPMPackageSearchCondition condition);
-    List<String> queryColumn(String column);
+    Map<String, List<String>> queryColumn(List<String> columns);
     long queryTableLength();
     Collection<RPMPackageDO> convertBatch(Collection<String> dataObject);
     Map<String, Object> queryPartRPMPkgMenu(RPMPackageSearchCondition condition);

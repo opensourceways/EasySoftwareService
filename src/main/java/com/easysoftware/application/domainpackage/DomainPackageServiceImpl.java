@@ -40,6 +40,7 @@ import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
+import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
 import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
@@ -297,11 +298,12 @@ public class DomainPackageServiceImpl implements DomainPackageService {
 
     @Override
     public ResponseEntity<Object> searchColumn(DomainColumnCondition condition) {
+        List<String> columns = QueryWrapperUtil.splitStr(condition.getColumn());
         if ("rpmpkg".equals(condition.getName())) {
-            List<String> res = rpmPackageGateway.queryColumn(condition.getColumn());
+            Map<String, List<String>> res = rpmPackageGateway.queryColumn(columns);
             return ResultUtil.success(HttpStatus.OK, res);
         } else if ("epkgpkg".equals(condition.getName())) {
-            List<String> res = epkgPackageGateway.queryColumn(condition.getColumn());
+            Map<String, List<String>> res = epkgPackageGateway.queryColumn(columns);
             return ResultUtil.success(HttpStatus.OK, res);
         } else {
             throw new ParamErrorException("unsupported param: " + condition.getName());
