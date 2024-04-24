@@ -44,6 +44,16 @@ public class RedisConfiguration  {
     @Value("${redis-global.caPath}")
     private String caPath;
 
+    @Value("${spring.data.redis.poolmin-idel}")
+    private Integer minIdel;
+
+    @Value("${spring.data.redis.poolmax-idel}")
+    private Integer maxIdel;
+    
+    @Value("${spring.data.redis.poolmax}")
+    private Integer maxPool;
+    
+
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory(JedisClientConfiguration clientConfiguration) {
@@ -65,6 +75,9 @@ public class RedisConfiguration  {
     
        
         configurationBuilder.useSsl().sslSocketFactory(getTrustStoreSslSocketFactory());
+        
+        configurationBuilder.usePooling().poolConfig(redisPoolConfig());
+
         return configurationBuilder.build();
     }
 
@@ -97,11 +110,11 @@ public class RedisConfiguration  {
     private JedisPoolConfig redisPoolConfig() {
         JedisPoolConfig poolConfig = new JedisPoolConfig();
         //连接池的最小连接数
-        poolConfig.setMinIdle(50);
+        poolConfig.setMinIdle(minIdel);
         //连接池的最大空闲连接数
-        poolConfig.setMaxIdle(200);
+        poolConfig.setMaxIdle(maxIdel);
         //连接池的最大连接数
-        poolConfig.setMaxTotal(200);
+        poolConfig.setMaxTotal(maxPool);
 
         return poolConfig;
     }
