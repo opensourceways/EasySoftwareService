@@ -40,7 +40,7 @@ public class ApplicationPackageConverter {
         for (ApplicationPackageDO app: appPkgDOs) {
             ApplicationPackageMenuVo menu = new ApplicationPackageMenuVo();
             BeanUtils.copyProperties(app, menu);
-            menu.setTags(List.of("IMAGE"));
+            
             res.add(menu);
         }
         return res;
