@@ -104,7 +104,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
     public Map<String, Object> queryDetailByName(ApplicationPackageSearchCondition condition) {
         Page<ApplicationPackageDO> page = createPage(condition);
         QueryWrapper<ApplicationPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new ApplicationPackageDO()
-                , condition, "");
+                , condition, null);
 
         IPage<ApplicationPackageDO> resPage = appPkgMapper.selectPage(page, wrapper);
         List<ApplicationPackageDO> appDOs = resPage.getRecords();
