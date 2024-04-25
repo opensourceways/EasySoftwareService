@@ -44,12 +44,6 @@ public class ObsService {
         obsClient.putObject(request);
     }
 
-    public InputStream getData(String ObjectKey) {
-        ObsObject object = obsClient.getObject(obsBucketName, ObjectKey);
-        InputStream res = object.getObjectContent();
-        return res;
-    }
-
     public String generateUrl(String name) {
         String objectKey = name + ".png";
         if(!obsClient.doesObjectExist(obsBucketName, objectKey)) {

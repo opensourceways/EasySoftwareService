@@ -113,6 +113,7 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
 
     @Override
     public ResponseEntity<Object> searchAppPkg(ApplicationPackageSearchCondition condition) {
+        condition.setTimeOrder("");
         Map<String, Object> res = appPkgGateway.queryDetailByName(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }
