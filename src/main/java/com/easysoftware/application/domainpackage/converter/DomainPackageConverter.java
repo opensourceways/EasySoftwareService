@@ -11,6 +11,8 @@ public class DomainPackageConverter {
     public static ApplicationPackageSearchCondition toApp(DomainSearchCondition con) {
         ApplicationPackageSearchCondition appCon = new ApplicationPackageSearchCondition();
         BeanUtils.copyProperties(con, appCon);
+        appCon.setName("");
+        appCon.setAppUpdateAt("");
         return appCon;
     }
 
