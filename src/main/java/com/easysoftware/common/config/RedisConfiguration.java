@@ -9,6 +9,8 @@ import java.time.Duration;
 
 import javax.net.ssl.TrustManagerFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,8 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+
+
 import javax.net.ssl.SSLSocketFactory;
 import java.security.cert.CertificateFactory;
 import java.security.cert.Certificate;
@@ -25,7 +29,7 @@ import redis.clients.jedis.JedisPoolConfig;
 
 @Configuration
 public class RedisConfiguration  {
-
+    private static final Logger logger = LoggerFactory.getLogger(RedisConfiguration.class);
     @Value("${spring.data.redis.host}")
     private String redisHost;
 
@@ -87,7 +91,12 @@ public class RedisConfiguration  {
         Certificate ca;
         try (InputStream is = new FileInputStream(caPath)) {
             ca = cf.generateCertificate(is);
+        }catch (Exception e) {
+            logger.error("redis ca load error");
+            throw e;
         }
+
+    
 
         //创建keystore
         String keyStoreType = KeyStore.getDefaultType();
