@@ -1,6 +1,7 @@
 package com.easysoftware.common.utils;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -27,14 +28,22 @@ public class HttpClientUtil {
             URL url = new URL(urlStr);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-            String line;
-            StringBuilder response = new StringBuilder();
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
-            }
-            reader.close();
-            return response.toString();
+            connection.setConnectTimeout(5000); // 设置连接超时，单位毫秒  
+            connection.setReadTimeout(5000); // 设置读取超时，单位毫秒  
+            int responseCode = connection.getResponseCode();  
+
+            if (responseCode != HttpURLConnection.HTTP_OK) {  
+                throw new IOException("HTTP error code: " + responseCode);  
+            } 
+            
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"))) {  
+                String line;  
+                StringBuilder response = new StringBuilder();  
+                while ((line = reader.readLine()) != null) {  
+                    response.append(line);  
+                }  
+                return response.toString();  
+            }  
         } catch (Exception e) {
             logger.error(MessageCode.EC0001.getMsgEn(), e);
         }
