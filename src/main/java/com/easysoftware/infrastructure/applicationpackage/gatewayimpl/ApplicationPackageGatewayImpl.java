@@ -83,7 +83,8 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         int pageSize = condition.getPageSize();
         Page<ApplicationPackageDO> page = new Page<>(pageNum, pageSize);
 
-        QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
+        QueryWrapper<ApplicationPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new ApplicationPackageDO(), 
+                condition, null);
         ApplicationPackageMenuVo pkgVo = new ApplicationPackageMenuVo();
         List<String> columns = ClassField.getFieldNames(pkgVo);
         wrapper.select(columns);
