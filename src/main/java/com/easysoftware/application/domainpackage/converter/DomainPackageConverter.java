@@ -12,7 +12,7 @@ public class DomainPackageConverter {
         ApplicationPackageSearchCondition appCon = new ApplicationPackageSearchCondition();
         BeanUtils.copyProperties(con, appCon);
         appCon.setName("");
-        appCon.setAppUpdateAt("");
+        appCon.setTimeOrder("");
         return appCon;
     }
 
