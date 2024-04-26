@@ -2,10 +2,12 @@ package com.easysoftware.common.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -26,23 +28,23 @@ public class HttpClientUtil {
     private static final Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 
     private static final RequestConfig requestConfig = RequestConfig.custom()
-            .setConnectTimeout(HttpConstant.timeOut)
-            .setSocketTimeout(HttpConstant.timeOut).build();
+            .setConnectTimeout(HttpConstant.TIME_OUT)
+            .setSocketTimeout(HttpConstant.TIME_OUT).build();
 
     public static String getRequest(String urlStr) {
         try {
             URL url = new URL(urlStr);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setConnectTimeout(5000); // 设置连接超时，单位毫秒  
-            connection.setReadTimeout(5000); // 设置读取超时，单位毫秒  
+            connection.setRequestMethod(HttpConstant.GET);
+            connection.setConnectTimeout(HttpConstant.TIME_OUT); // 设置连接超时，单位毫秒
+            connection.setReadTimeout(HttpConstant.TIME_OUT); // 设置读取超时，单位毫秒
             int responseCode = connection.getResponseCode();  
 
             if (responseCode != HttpURLConnection.HTTP_OK) {  
                 throw new IOException("HTTP error code: " + responseCode);  
-            } 
-            
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"))) {  
+            }
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(),
+                    StandardCharsets.UTF_8))) {
                 String line;  
                 StringBuilder response = new StringBuilder();  
                 while ((line = reader.readLine()) != null) {  
@@ -61,9 +63,9 @@ public class HttpClientUtil {
             URL url = new URL(urlStr);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             
-            connection.setRequestMethod("POST");
-            connection.setConnectTimeout(HttpConstant.timeOut);
-            connection.setReadTimeout(HttpConstant.timeOut);
+            connection.setRequestMethod(HttpConstant.POST);
+            connection.setConnectTimeout(HttpConstant.TIME_OUT);
+            connection.setReadTimeout(HttpConstant.TIME_OUT);
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setDoOutput(true);
 
@@ -75,8 +77,9 @@ public class HttpClientUtil {
             try (OutputStream outputStream = connection.getOutputStream()) {
                 outputStream.write(body.getBytes());
             }
-
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"))) {
+            try (InputStream inputStream = connection.getInputStream();
+                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+                 BufferedReader reader = new BufferedReader(inputStreamReader)) {
                 String line;
                 StringBuilder response = new StringBuilder();
                 while ((line = reader.readLine()) != null) {

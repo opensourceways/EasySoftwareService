@@ -110,8 +110,8 @@ public class RedisConfiguration  {
         trustManagerFactory.init(keyStore);
 
         //创建SSLContext
-        SSLContext context = SSLContext.getInstance("TLS");
-        context.init(null, trustManagerFactory.getTrustManagers(), new SecureRandom());
+        SSLContext context = SSLContext.getInstance("TLSv1.2");
+        context.init(null, trustManagerFactory.getTrustManagers(), SecureRandom.getInstanceStrong());
         return context.getSocketFactory();
     }
 
