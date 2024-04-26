@@ -18,7 +18,6 @@ import com.easysoftware.common.aop.RequestLimitRedis;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
-import okhttp3.Response;
 
 @RestController
 @RequestMapping("/domain")

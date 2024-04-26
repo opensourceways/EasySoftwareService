@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 // TODO 修改表名
-@TableName("rpm_pkg_base")
+@TableName("domain_package")
 public class FieldApplicationDO {
     @Serial
     private String os;
