@@ -56,9 +56,6 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
         }
         ApplicationPackage appPkg = new ApplicationPackage();
         BeanUtils.copyProperties(inputAppPkg, appPkg);
-        appPkg = addAppPkgInfo(appPkg);
-        // appPkg = addAppkgRepoSig(appPkg);
-        appPkg = addAppkgRepoDownload(appPkg);
 
         boolean succeed = appPkgGateway.save(appPkg);
         if (!succeed) {
@@ -76,10 +73,6 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
         }
         ApplicationPackage appPkg = new ApplicationPackage();
         BeanUtils.copyProperties(inputAppPkg, appPkg);
-
-        appPkg = addAppPkgInfo(appPkg);
-        // appPkg = addAppkgRepoSig(appPkg);
-        appPkg = addAppkgRepoDownload(appPkg);
 
         boolean succeed = appPkgGateway.update(appPkg);
         if (!succeed) {
@@ -118,50 +111,10 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
-    public ApplicationPackage addAppPkgInfo(ApplicationPackage appPkg) {
-        Map<String, String> maintainer = ApiUtil.getApiResponseMaintainer(String.format(repoMaintainerApi, appPkg.getName()));
-        appPkg.setMaintainerGiteeId(maintainer.get(MapConstant.MAINTAINER_GITEE_ID));
-        appPkg.setMaintainerId(maintainer.get(MapConstant.MAINTAINER_ID));
-        appPkg.setMaintainerEmail(maintainer.get(MapConstant.MAINTAINER_EMAIL));
-
-        Map<String, String> info = ApiUtil.getApiResponseMap(String.format(repoInfoApi, appPkg.getName(), "app_openeuler"));
-        appPkg.setOs(info.get("os"));
-        // if (StringUtils.isBlank(info.get("latest_version")) && StringUtils.isBlank(info.get("os_version"))) {
-        //     appPkg.setAppVer("");
-        // } else {
-        //     appPkg.setAppVer(info.get("latest_version") + "-" + info.get("os_version"));
-        // }
-        appPkg.setArch(info.get("arch"));
-        appPkg.setAppSize(info.get("appSize"));
-        appPkg.setBinDownloadUrl(info.get("binDownloadUrl"));
-        appPkg.setSrcDownloadUrl(info.get("srcDownloadUrl"));
-        appPkg.setSrcRepo(info.get("srcRepo"));
-        appPkg.setIconUrl(obsService.generateUrl(appPkg.getName()));
-        return appPkg;
-    }
-
-    public ApplicationPackage addAppkgRepoDownload(ApplicationPackage appPkg) {
-        String resp = ApiUtil.getApiResponseData(String.format(repoDownloadApi, appPkg.getName()));
-        appPkg.setDownloadCount(resp);
-        return appPkg;
-    }
-
-    public ApplicationPackage addAppkgRepoSig(ApplicationPackage appPkg) {
-        String resp = ApiUtil.getApiResponseData(String.format(repoSigApi, appPkg.getName()));
-        if (resp != null && MapConstant.CATEGORY_MAP.containsKey(resp)) {
-            appPkg.setCategory(MapConstant.CATEGORY_MAP.get(resp));
-        } else {
-            appPkg.setCategory(MapConstant.CATEGORY_MAP.get(MapConstant.CATEGORY_OTHER));
-        }
-        return appPkg;
-    }
-
     @Override
     public List<ApplicationPackageMenuVo> queryPkgMenuList(ApplicationPackageSearchCondition condition) {
         Map<String, Object> map = appPkgGateway.queryMenuByName(condition);
         List<ApplicationPackageMenuVo> appMenus = (List<ApplicationPackageMenuVo>) map.get("list");
         return appMenus;
     }
-
-    
 }
