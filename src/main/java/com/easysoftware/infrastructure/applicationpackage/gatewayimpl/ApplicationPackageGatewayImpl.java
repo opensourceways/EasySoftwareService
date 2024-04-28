@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -18,8 +17,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
-import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
-import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
@@ -28,10 +25,8 @@ import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGate
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter.ApplicationPackageConverter;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
 import com.easysoftware.infrastructure.mapper.ApplicationPackageDOMapper;
-import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
 import com.power.common.util.StringUtil;
 
-import okhttp3.internal.ws.RealWebSocket.Message;
 
 @Component
 public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway {
@@ -111,18 +106,16 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         List<ApplicationPackageDetailVo> appDetails = ApplicationPackageConverter.toDetail(appDOs);
         long total = resPage.getTotal();
 
-        Map<String, Object> res = Map.ofEntries(
+        return Map.ofEntries(
             Map.entry("total", total),
             Map.entry("list", appDetails)
         );
-        return res;
     }
 
     private Page<ApplicationPackageDO> createPage(ApplicationPackageSearchCondition condition) {
         int pageNum = condition.getPageNum();
         int pageSize = condition.getPageSize();
-        Page<ApplicationPackageDO> page = new Page<>(pageNum, pageSize);
-        return page;
+        return new Page<>(pageNum, pageSize);
     }
 
     @Override
@@ -141,8 +134,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         if (appList.size() == 0) {
             return new ApplicationPackageMenuVo();
         }
-        ApplicationPackageMenuVo res =ApplicationPackageConverter.toMenu(appList.get(0));
-        return res;
+        return ApplicationPackageConverter.toMenu(appList.get(0));
     }
 
 
@@ -151,8 +143,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
         wrapper.eq("pkg_id", pkgId);
         List<ApplicationPackageDO> appList = appPkgMapper.selectList(wrapper);
-        List<ApplicationPackageDetailVo> res =  ApplicationPackageConverter.toDetail(appList);
-        return res;
+        return ApplicationPackageConverter.toDetail(appList);
     }
 
     @Override
@@ -177,8 +168,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         }
     
         column = StringUtil.underlineToCamel(column);
-        List<String> res = ApplicationPackageConverter.toColumn(rpmColumn, column);
-    
-        return res;
+
+        return ApplicationPackageConverter.toColumn(rpmColumn, column);
     }
 }

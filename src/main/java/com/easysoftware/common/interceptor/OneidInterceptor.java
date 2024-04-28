@@ -3,6 +3,7 @@ package com.easysoftware.common.interceptor;
 import java.lang.reflect.Method;
 import java.util.*;
 
+import com.easysoftware.common.constant.HttpConstant;
 import com.easysoftware.common.exception.AuthException;
 import com.easysoftware.common.utils.HttpClientUtil;
 import com.easysoftware.common.utils.ObjectMapperUtil;
@@ -61,7 +62,7 @@ public class OneidInterceptor implements HandlerInterceptor {
             throw new AuthException("unauthorized, missing cookie");
         }
 
-        String userToken = httpServletRequest.getHeader("token");
+        String userToken = httpServletRequest.getHeader(HttpConstant.TOKEN);
         if (userToken == null) {
             throw new AuthException("unauthorized, missing token");
         }

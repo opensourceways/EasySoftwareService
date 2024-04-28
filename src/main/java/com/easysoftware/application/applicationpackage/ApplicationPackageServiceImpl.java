@@ -120,9 +120,9 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
 
     public ApplicationPackage addAppPkgInfo(ApplicationPackage appPkg) {
         Map<String, String> maintainer = ApiUtil.getApiResponseMaintainer(String.format(repoMaintainerApi, appPkg.getName()));
-        appPkg.setMaintainerGiteeId(maintainer.get("gitee_id"));
-        appPkg.setMaintainerId(maintainer.get("id"));
-        appPkg.setMaintainerEmail(maintainer.get("email"));
+        appPkg.setMaintainerGiteeId(maintainer.get(MapConstant.MAINTAINER_GITEE_ID));
+        appPkg.setMaintainerId(maintainer.get(MapConstant.MAINTAINER_ID));
+        appPkg.setMaintainerEmail(maintainer.get(MapConstant.MAINTAINER_EMAIL));
 
         Map<String, String> info = ApiUtil.getApiResponseMap(String.format(repoInfoApi, appPkg.getName(), "app_openeuler"));
         appPkg.setOs(info.get("os"));
@@ -151,7 +151,7 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
         if (resp != null && MapConstant.CATEGORY_MAP.containsKey(resp)) {
             appPkg.setCategory(MapConstant.CATEGORY_MAP.get(resp));
         } else {
-            appPkg.setCategory(MapConstant.CATEGORY_MAP.get("Other"));
+            appPkg.setCategory(MapConstant.CATEGORY_MAP.get(MapConstant.CATEGORY_OTHER));
         }
         return appPkg;
     }

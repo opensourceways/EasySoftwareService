@@ -149,12 +149,13 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     private ResponseEntity<Object> searchAllEntity(DomainSearchCondition condition) {
         // 根据请求参数生成唯一redis key
         String redisKeyStr = RedisUtil.objectToString(condition);
-        String redisKey = String.format("domainPage_%s",RedisUtil.getSHA256(redisKeyStr));
+        String redisKeyFormat = "domainPage_%s";
+        String redisKey = String.format(redisKeyFormat,RedisUtil.getSHA256(redisKeyStr));
         
         
         try {
             // 结果未过期，直接返回
-            if(redisGateway.hasKey(redisKey) == true){
+            if(redisGateway.hasKey(redisKey)){
                 String resJson = redisGateway.get(redisKey);
                 Object res = RedisUtil.convertToObject(resJson);
                 return ResultUtil.success(HttpStatus.OK, res);

@@ -66,7 +66,7 @@ public class HttpClientUtil {
             connection.setRequestMethod(HttpConstant.POST);
             connection.setConnectTimeout(HttpConstant.TIME_OUT);
             connection.setReadTimeout(HttpConstant.TIME_OUT);
-            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty(HttpConstant.CONTENT_TYPE, "application/json");
             connection.setDoOutput(true);
 
             int responseCode = connection.getResponseCode();
@@ -98,9 +98,9 @@ public class HttpClientUtil {
         HttpGet httpGet = new HttpGet(uri);
         httpGet.setConfig(requestConfig);
 
-        if (token != null) httpGet.addHeader("token", token);
-        if (userToken != null) httpGet.addHeader("user-token", userToken);
-        if (cookie != null) httpGet.addHeader("Cookie", "_Y_G_=" + cookie);
+        if (token != null) httpGet.addHeader(HttpConstant.TOKEN, token);
+        if (userToken != null) httpGet.addHeader(HttpConstant.USER_TOKEN, userToken);
+        if (cookie != null) httpGet.addHeader(HttpConstant.COOKIE, "_Y_G_=" + cookie);
 
         try {
             HttpResponse response = httpClient.execute(httpGet);
@@ -116,7 +116,7 @@ public class HttpClientUtil {
         HttpPost httpPost = new HttpPost(uri);
         httpPost.setConfig(requestConfig);
         try {
-            httpPost.setHeader("Content-Type", "application/json");
+            httpPost.setHeader(HttpConstant.CONTENT_TYPE, "application/json");
             StringEntity stringEntity = new StringEntity(requestBody);
             httpPost.setEntity(stringEntity);
             HttpResponse response = httpClient.execute(httpPost);
