@@ -32,10 +32,15 @@ public class HttpClientUtil {
     public static String getRequest(String urlStr) {
         try {
             URL url = new URL(urlStr);
+
+            if(!sercuritySSRFUrlCheck(url)){
+                throw new IllegalArgumentException("URL is vulnerable to SSRF attacks");  
+            }
+
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setConnectTimeout(5000); // 设置连接超时，单位毫秒  
-            connection.setReadTimeout(5000); // 设置读取超时，单位毫秒  
+            connection.setConnectTimeout(HttpConstant.timeOut);  
+            connection.setReadTimeout(HttpConstant.timeOut); 
             int responseCode = connection.getResponseCode();  
 
             if (responseCode != HttpURLConnection.HTTP_OK) {  
@@ -59,6 +64,11 @@ public class HttpClientUtil {
     public static String postRequest(String urlStr, String body) {
         try {
             URL url = new URL(urlStr);
+
+            if(!sercuritySSRFUrlCheck(url)){
+                throw new IllegalArgumentException("URL is vulnerable to SSRF attacks");  
+            }
+
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             
             connection.setRequestMethod("POST");
@@ -122,5 +132,14 @@ public class HttpClientUtil {
         } catch (Exception e) {
             throw new RuntimeException(MessageCode.EC0001.getMsgEn());
         }
+    }
+    // ssrf检查，whitelist todo
+    private static Boolean sercuritySSRFUrlCheck(URL url){
+    
+        if(!url.getProtocol().startsWith("http") && !url.getProtocol().startsWith("https")){
+                return false;
+        }
+
+        return true;
     }
 }
