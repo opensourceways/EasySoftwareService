@@ -86,7 +86,7 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
         String pkgId = assemblePkgId(condition);
 
         List<RPMPackageDetailVo> rpmList = rPMPkgGateway.queryDetailByPkgId(pkgId);
-        if (rpmList.size() != 0) {
+        if (!rpmList.isEmpty()) {
             Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", rpmList.size()),
                 Map.entry("list", rpmList)
@@ -144,19 +144,17 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
 
     public RPMPackage addRPMPkgMaintainerInfo(RPMPackage rPMPkg) {
         Map<String, String> maintainer = ApiUtil.getApiResponseMaintainer(String.format(repoMaintainerApi, rPMPkg.getName()));
-        rPMPkg.setMaintainerGiteeId(maintainer.get("gitee_id"));
-        rPMPkg.setMaintainerId(maintainer.get("id"));
-        rPMPkg.setMaintainerEmail(maintainer.get("email"));
+        rPMPkg.setMaintainerGiteeId(maintainer.get(MapConstant.MAINTAINER_GITEE_ID));
+        rPMPkg.setMaintainerId(maintainer.get(MapConstant.MAINTAINER_ID));
+        rPMPkg.setMaintainerEmail(maintainer.get(MapConstant.MAINTAINER_EMAIL));
         return rPMPkg;
     }
 
     public RPMPackage addRPMPkgRepoSig(RPMPackage rPMPkg) {
         String resp = ApiUtil.getApiResponseData(String.format(repoSigApi, rPMPkg.getName()));
-        if (resp != null && MapConstant.CATEGORY_MAP.containsKey(resp)) {
-            rPMPkg.setCategory(MapConstant.CATEGORY_MAP.get(resp));
-        } else {
-            rPMPkg.setCategory(MapConstant.CATEGORY_MAP.get("Other"));
-        }
+        String category = (resp != null && MapConstant.CATEGORY_MAP.containsKey(resp)) ?
+                MapConstant.CATEGORY_MAP.get(resp) : MapConstant.CATEGORY_MAP.get(MapConstant.CATEGORY_OTHER);
+        rPMPkg.setCategory(category);
         return rPMPkg;
     }
 
