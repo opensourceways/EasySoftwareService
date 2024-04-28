@@ -3,6 +3,7 @@ package com.easysoftware.infrastructure.fieldapplication.gatewayimpl;
 import java.sql.SQLException;
 import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -73,7 +74,15 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
     }
 
     public List<String> queryColumn(String column) {
+        // 白名单列
+        List<String> allowedColumns = Arrays.asList("category", "os", "arch"); 
+
+        if (!allowedColumns.contains(column)) {  
+            throw new ParamErrorException("Unsupported column: " + column);  
+        }
+
         QueryWrapper<FieldApplicationDO> wrapper = new QueryWrapper<>();
+        // 安全地选择列，列名已经通过白名单验证
         wrapper.select("distinct " + column);
         List<FieldApplicationDO> columnList = new ArrayList<>();
         try {

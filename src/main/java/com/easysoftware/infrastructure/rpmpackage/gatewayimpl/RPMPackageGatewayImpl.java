@@ -3,6 +3,7 @@ package com.easysoftware.infrastructure.rpmpackage.gatewayimpl;
 import java.sql.SQLException;
 import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -161,8 +162,15 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     }
 
     public List<String> queryColumn(String column) {
-        column = "category".equals(column) ? "category" : column;
+        // 白名单列
+        List<String> allowedColumns = Arrays.asList("category", "os", "arch"); 
+
+        if (!allowedColumns.contains(column)) {  
+            throw new ParamErrorException("Unsupported column: " + column);  
+        }
+
         QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
+        // 安全地选择列，列名已经通过白名单验证
         wrapper.select("distinct " + column);
         List<RPMPackageDO> rpmColumn = new ArrayList<>();
         try {
