@@ -3,9 +3,11 @@ package com.easysoftware.infrastructure.fieldapplication.gatewayimpl.converter;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import com.easysoftware.application.filedapplication.dto.InputFiledApplication;
 import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
 import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.infrastructure.fieldapplication.gatewayimpl.dataobject.FieldApplicationDO;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
 
@@ -40,6 +43,21 @@ public class FieldApplicationConverter {
     public static FiledApplicationVo toVo(FieldApplicationDO opDo) {
         FiledApplicationVo opVo = new FiledApplicationVo();
         BeanUtils.copyProperties(opDo, opVo);
+        opDo.getTags();
+        List<String> tags = ObjectMapperUtil.toObjectList(String.class, opDo.getTags());
+        Map<String, Object> pkgIds = ObjectMapperUtil.toMap(opDo.getPkgIds());
+        
+        Set<String> tagsSet = new HashSet<>();
+        tagsSet.addAll(tags);
+        opVo.setTags(tagsSet);
+
+        Map<String, String> pkgIdsMap = new HashMap<>();
+        for (Map.Entry<String, Object> pkgId : pkgIds.entrySet()) {
+            String key = pkgId.getKey();
+            String value = (String) pkgId.getValue();
+            pkgIdsMap.put(key, value);
+        }
+        opVo.setPkgIds(pkgIdsMap);
         return opVo;
     }
 
