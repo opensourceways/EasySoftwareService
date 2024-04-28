@@ -9,6 +9,7 @@ import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
 
 
 public interface FieldapplicationGateway {
-    List<FiledApplicationVo> queryAll(FiledApplicationSerachCondition condition);
+    Map<String, Object> queryAll(FiledApplicationSerachCondition condition);
+    Map<String, List<String>> queryColumn(List<String> columns);
 
 }

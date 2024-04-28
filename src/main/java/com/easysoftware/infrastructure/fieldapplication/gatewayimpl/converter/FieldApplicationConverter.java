@@ -1,6 +1,7 @@
 package com.easysoftware.infrastructure.fieldapplication.gatewayimpl.converter;
 
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -13,7 +14,9 @@ import org.springframework.beans.BeanUtils;
 
 import com.easysoftware.application.filedapplication.dto.InputFiledApplication;
 import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
+import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.infrastructure.fieldapplication.gatewayimpl.dataobject.FieldApplicationDO;
+import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
 
 
 public class FieldApplicationConverter {
@@ -38,5 +41,27 @@ public class FieldApplicationConverter {
         FiledApplicationVo opVo = new FiledApplicationVo();
         BeanUtils.copyProperties(opDo, opVo);
         return opVo;
+    }
+
+    public static List<String> toColumn(List<FieldApplicationDO> columnList, String column) {
+        List<String> res = new ArrayList<>();
+        try {
+            Field field = FieldApplicationDO.class.getDeclaredField(column);
+            field.setAccessible(true);
+            for (FieldApplicationDO pkg : columnList) {
+                if (pkg == null) {
+                    continue;
+                }
+                Object obj = field.get(pkg);
+                if (! (obj instanceof String)) {
+                    continue;
+                }
+                String value = (String) field.get(pkg);
+                res.add(value);
+            }
+        } catch (Exception e) {
+            logger.error(MessageCode.EC00011.getMsgEn(), e);
+        }
+        return res;
     }
 }

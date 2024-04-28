@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.easysoftware.application.filedapplication.FieldApplicationService;
+import com.easysoftware.application.filedapplication.dto.FieldColumnSearchCondition;
 import com.easysoftware.application.filedapplication.dto.FiledApplicationSerachCondition;
 import com.easysoftware.common.aop.RequestLimitRedis;
 
@@ -22,5 +23,11 @@ public class FieldApplicationQueryAdapter {
     @RequestLimitRedis()
     public ResponseEntity<Object> searchField(@Valid FiledApplicationSerachCondition condition) {
         return service.queryAll(condition);
+    }
+
+    @GetMapping("/column")
+    @RequestLimitRedis()
+    public ResponseEntity<Object> searchColumn(@Valid FieldColumnSearchCondition condition) {
+        return service.searchColumn(condition);
     }
 }
