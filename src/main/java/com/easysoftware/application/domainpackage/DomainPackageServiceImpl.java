@@ -286,14 +286,27 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     public ResponseEntity<Object> searchColumn(DomainColumnCondition condition) {
         List<String> columns = QueryWrapperUtil.splitStr(condition.getColumn());
         if ("rpmpkg".equals(condition.getName())) {
-            Map<String, List<String>> res = rpmPackageGateway.queryColumn(columns);
-            return ResultUtil.success(HttpStatus.OK, res);
+            try{
+                Map<String, List<String>> res = rpmPackageGateway.queryColumn(columns);
+                return ResultUtil.success(HttpStatus.OK, res);
+            } catch(ParamErrorException e){
+                return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
+            }
         } else if ("epkgpkg".equals(condition.getName())) {
-            Map<String, List<String>> res = epkgPackageGateway.queryColumn(columns);
-            return ResultUtil.success(HttpStatus.OK, res);
+            try{
+                Map<String, List<String>> res = epkgPackageGateway.queryColumn(columns);
+                return ResultUtil.success(HttpStatus.OK, res);
+            } catch(ParamErrorException e){
+                return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
+            }
         } else if ("apppkg".equals(condition.getName())) {
-            Map<String, List<String>> res = applicationPackageGateway.queryColumn(columns);
-            return ResultUtil.success(HttpStatus.OK, res);
+            try{
+                Map<String, List<String>> res = applicationPackageGateway.queryColumn(columns);
+                return ResultUtil.success(HttpStatus.OK, res);
+            } catch(ParamErrorException e){
+                return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
+            }
+
         }else {
             throw new ParamErrorException("unsupported param: " + condition.getName());
         }

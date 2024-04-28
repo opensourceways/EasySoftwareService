@@ -30,7 +30,7 @@ import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject
 import com.easysoftware.infrastructure.mapper.ApplicationPackageDOMapper;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
 import com.power.common.util.StringUtil;
-
+import java.util.Arrays;
 import okhttp3.internal.ws.RealWebSocket.Message;
 
 @Component
@@ -166,8 +166,15 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
     }
 
     public List<String> queryColumn(String column) {
-        column = "category".equals(column) ? "category" : column;
+        // 白名单列
+        List<String> allowedColumns = Arrays.asList("category", "os", "arch"); 
+
+        if (!allowedColumns.contains(column)) {  
+            throw new ParamErrorException("Unsupported column: " + column);  
+        }
+
         QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
+        // 安全地选择列，列名已经通过白名单验证
         wrapper.select("distinct " + column);
         List<ApplicationPackageDO> rpmColumn = new ArrayList<>();
         try {
