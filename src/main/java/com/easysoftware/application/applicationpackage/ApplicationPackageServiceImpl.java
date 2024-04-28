@@ -49,11 +49,7 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
 
     @Override
     public ResponseEntity<Object> insertAppPkg(InputApplicationPackage inputAppPkg) {
-        // 数据库中是否已存在该包
-        boolean found = appPkgGateway.existApp(inputAppPkg.getName());
-        if (found) {
-            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0008);
-        }
+
         ApplicationPackage appPkg = new ApplicationPackage();
         BeanUtils.copyProperties(inputAppPkg, appPkg);
 
@@ -67,10 +63,7 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
     @Override
     public ResponseEntity<Object> updateAppPkg(InputApplicationPackage inputAppPkg) {
         // 数据库中是否已存在该包
-        boolean found = appPkgGateway.existApp(inputAppPkg.getName());
-        if (!found) {
-            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0009);
-        }
+
         ApplicationPackage appPkg = new ApplicationPackage();
         BeanUtils.copyProperties(inputAppPkg, appPkg);
 
