@@ -3,6 +3,7 @@ package com.easysoftware.common.interceptor;
 import java.lang.reflect.Method;
 import java.util.*;
 
+import com.easysoftware.common.constant.HttpConstant;
 import com.easysoftware.common.exception.AuthException;
 import com.easysoftware.common.utils.HttpClientUtil;
 import com.easysoftware.common.utils.ObjectMapperUtil;
@@ -37,7 +38,7 @@ public class OneidInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-            Object object) throws Exception {
+                             Object object) throws Exception {
         if (!(object instanceof HandlerMethod)) {
             return true;
         }
@@ -61,7 +62,7 @@ public class OneidInterceptor implements HandlerInterceptor {
             throw new AuthException("unauthorized, missing cookie");
         }
 
-        String userToken = httpServletRequest.getHeader("token");
+        String userToken = httpServletRequest.getHeader(HttpConstant.TOKEN);
         if (userToken == null) {
             throw new AuthException("unauthorized, missing token");
         }
@@ -86,15 +87,15 @@ public class OneidInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse,
-            Object o, Exception e) throws Exception {
+                                HttpServletResponse httpServletResponse,
+                                Object o, Exception e) throws Exception {
     }
 
     /**
      * 校验用户操作权限
      */
     private String verifyUser(CompatibleToken compatibleToken, HttpServletRequest httpServletRequest,
-            Cookie tokenCookie, String userToken) {
+                              Cookie tokenCookie, String userToken) {
         if (compatibleToken != null && compatibleToken.required()) {
             List<String> pers = getUserPermission(httpServletRequest, tokenCookie, userToken);
             for (String per : pers) {
