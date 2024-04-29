@@ -2,10 +2,12 @@ package com.easysoftware.common.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -26,35 +28,35 @@ public class HttpClientUtil {
     private static final Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 
     private static final RequestConfig requestConfig = RequestConfig.custom()
-            .setConnectTimeout(HttpConstant.timeOut)
-            .setSocketTimeout(HttpConstant.timeOut).build();
+            .setConnectTimeout(HttpConstant.TIME_OUT)
+            .setSocketTimeout(HttpConstant.TIME_OUT).build();
 
     public static String getRequest(String urlStr) {
         try {
             URL url = new URL(urlStr);
 
             if(!sercuritySSRFUrlCheck(url)){
-                throw new IllegalArgumentException("URL is vulnerable to SSRF attacks");  
+                throw new IllegalArgumentException("URL is vulnerable to SSRF attacks");
             }
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setConnectTimeout(HttpConstant.timeOut);  
-            connection.setReadTimeout(HttpConstant.timeOut); 
-            int responseCode = connection.getResponseCode();  
+            connection.setRequestMethod(HttpConstant.GET);
+            connection.setConnectTimeout(HttpConstant.TIME_OUT); // 设置连接超时，单位毫秒
+            connection.setReadTimeout(HttpConstant.TIME_OUT); // 设置读取超时，单位毫秒
+            int responseCode = connection.getResponseCode();
 
-            if (responseCode != HttpURLConnection.HTTP_OK) {  
-                throw new IOException("HTTP error code: " + responseCode);  
-            } 
-            
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"))) {  
-                String line;  
-                StringBuilder response = new StringBuilder();  
-                while ((line = reader.readLine()) != null) {  
-                    response.append(line);  
-                }  
-                return response.toString();  
-            }  
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                throw new IOException("HTTP error code: " + responseCode);
+            }
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(),
+                    StandardCharsets.UTF_8))) {
+                String line;
+                StringBuilder response = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                return response.toString();
+            }
         } catch (Exception e) {
             logger.error(MessageCode.EC0001.getMsgEn(), e);
         }
@@ -66,15 +68,15 @@ public class HttpClientUtil {
             URL url = new URL(urlStr);
 
             if(!sercuritySSRFUrlCheck(url)){
-                throw new IllegalArgumentException("URL is vulnerable to SSRF attacks");  
+                throw new IllegalArgumentException("URL is vulnerable to SSRF attacks");
             }
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            
-            connection.setRequestMethod("POST");
-            connection.setConnectTimeout(HttpConstant.timeOut);
-            connection.setReadTimeout(HttpConstant.timeOut);
-            connection.setRequestProperty("Content-Type", "application/json");
+
+            connection.setRequestMethod(HttpConstant.POST);
+            connection.setConnectTimeout(HttpConstant.TIME_OUT);
+            connection.setReadTimeout(HttpConstant.TIME_OUT);
+            connection.setRequestProperty(HttpConstant.CONTENT_TYPE, "application/json");
             connection.setDoOutput(true);
 
             int responseCode = connection.getResponseCode();
@@ -85,8 +87,9 @@ public class HttpClientUtil {
             try (OutputStream outputStream = connection.getOutputStream()) {
                 outputStream.write(body.getBytes());
             }
-
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"))) {
+            try (InputStream inputStream = connection.getInputStream();
+                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+                 BufferedReader reader = new BufferedReader(inputStreamReader)) {
                 String line;
                 StringBuilder response = new StringBuilder();
                 while ((line = reader.readLine()) != null) {
@@ -105,9 +108,9 @@ public class HttpClientUtil {
         HttpGet httpGet = new HttpGet(uri);
         httpGet.setConfig(requestConfig);
 
-        if (token != null) httpGet.addHeader("token", token);
-        if (userToken != null) httpGet.addHeader("user-token", userToken);
-        if (cookie != null) httpGet.addHeader("Cookie", "_Y_G_=" + cookie);
+        if (token != null) httpGet.addHeader(HttpConstant.TOKEN, token);
+        if (userToken != null) httpGet.addHeader(HttpConstant.USER_TOKEN, userToken);
+        if (cookie != null) httpGet.addHeader(HttpConstant.COOKIE, "_Y_G_=" + cookie);
 
         try {
             HttpResponse response = httpClient.execute(httpGet);
@@ -123,7 +126,7 @@ public class HttpClientUtil {
         HttpPost httpPost = new HttpPost(uri);
         httpPost.setConfig(requestConfig);
         try {
-            httpPost.setHeader("Content-Type", "application/json");
+            httpPost.setHeader(HttpConstant.CONTENT_TYPE, "application/json");
             StringEntity stringEntity = new StringEntity(requestBody);
             httpPost.setEntity(stringEntity);
             HttpResponse response = httpClient.execute(httpPost);
@@ -135,9 +138,9 @@ public class HttpClientUtil {
     }
     // ssrf检查，whitelist todo
     private static Boolean sercuritySSRFUrlCheck(URL url){
-    
+
         if(!url.getProtocol().startsWith("http") && !url.getProtocol().startsWith("https")){
-                return false;
+            return false;
         }
 
         return true;

@@ -77,14 +77,14 @@ public class DomainPackageServiceImpl implements DomainPackageService {
 
     @Resource
     ApplicationPackageGateway applicationPackageGateway;
-    
-    @Resource  
-    private RedisGateway redisGateway;  
 
-    @Resource  
+    @Resource
+    private RedisGateway redisGateway;
+
+    @Resource
     private Ranker ranker;
 
-    @Value("${redis-global.expiration}") 
+    @Value("${redis-global.expiration}")
     int timeOut;
 
     @Override
@@ -95,7 +95,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         // 搜索domain页面多个软件包
         if (StringUtils.isBlank(entity) && StringUtils.isNotBlank(name)) {
             return searchDomainPage(condition);
-        // 搜索domain页面单个软件包
+            // 搜索domain页面单个软件包
         } else if (StringUtils.isBlank(name) && StringUtils.isNotBlank(entity)) {
             return searchDomainEntity(condition);
         } else {
@@ -109,10 +109,10 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         domain.setName(entity);
 
         domain = extendIds(domain);
-        
+
         Map res = Map.ofEntries(
-            Map.entry("total", "-1"),
-            Map.entry("list", domain)
+                Map.entry("total", "-1"),
+                Map.entry("list", domain)
         );
         return ResultUtil.success(HttpStatus.OK, res);
     }
@@ -149,12 +149,13 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     private ResponseEntity<Object> searchAllEntity(DomainSearchCondition condition) {
         // 根据请求参数生成唯一redis key
         String redisKeyStr = RedisUtil.objectToString(condition);
-        String redisKey = String.format("domainPage_%s",RedisUtil.getSHA256(redisKeyStr));
-        
-        
+        String redisKeyFormat = "domainPage_%s";
+        String redisKey = String.format(redisKeyFormat,RedisUtil.getSHA256(redisKeyStr));
+
+
         try {
             // 结果未过期，直接返回
-            if(redisGateway.hasKey(redisKey) == true){
+            if(redisGateway.hasKey(redisKey)){
                 String resJson = redisGateway.get(redisKey);
                 Object res = RedisUtil.convertToObject(resJson);
                 return ResultUtil.success(HttpStatus.OK, res);
@@ -173,7 +174,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         List<RPMPackageDomainVo> rpmMenus = rPMPkgService.queryPartAppPkgMenu(rpmCon);
 
         List<DomainPackageMenuVo> domainMenus = mergeMenuVOs(appMenus, rpmMenus);
-       
+
         for (DomainPackageMenuVo menu : domainMenus) {
             menu = extendIds(menu);
         }
@@ -188,10 +189,10 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         List<Map<String, Object>> rankedMapList = ranker.rankingDomainPageByOperationConfig(mapList);
 
         Map res = Map.ofEntries(
-            Map.entry("total", domainMenus.size()),
-            Map.entry("list", rankedMapList)
+                Map.entry("total", domainMenus.size()),
+                Map.entry("list", rankedMapList)
         );
-        
+
         try {
             // 结果转json
             String resJson = RedisUtil.convertToJson(res);
@@ -200,8 +201,8 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         } catch (Exception e) {
             logger.info(MessageCode.EC00015.getMsgEn());
         }
-        
-       
+
+
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
@@ -231,7 +232,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     }
 
     private List<DomainPackageMenuVo> mergeMenuVOs(List<ApplicationPackageMenuVo> appMenus,
-            List<RPMPackageDomainVo> rpmMenus) {
+                                                   List<RPMPackageDomainVo> rpmMenus) {
         Map<String, DomainPackageMenuVo> domainMap = new HashMap<>();
         for (ApplicationPackageMenuVo app: appMenus) {
             DomainPackageMenuVo domain = new DomainPackageMenuVo();
@@ -319,8 +320,8 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         Long epkgNum = epkgPackageGateway.queryTableLength();
 
         Map<String, Long> res = Map.ofEntries(
-            Map.entry("apppkg", appNum),
-            Map.entry("total", Math.addExact(rpmNum, epkgNum))
+                Map.entry("apppkg", appNum),
+                Map.entry("total", Math.addExact(rpmNum, epkgNum))
         );
         return ResultUtil.success(HttpStatus.OK, res);
     }
@@ -353,7 +354,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
 
         res.put("tags", tags);
         return ResultUtil.success(HttpStatus.OK, res);
-        
+
     }
 
     private EPKGPackageDetailVo searchEpkgDetail(String epkgPkgId) {
