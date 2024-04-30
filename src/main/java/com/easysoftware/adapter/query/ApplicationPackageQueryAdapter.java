@@ -23,4 +23,11 @@ public class ApplicationPackageQueryAdapter {
         ResponseEntity<Object> res = appPkgService.searchAppPkg(condition);
         return res;
     }
+
+    @GetMapping("/tags")
+    @RequestLimitRedis() 
+    public ResponseEntity<Object> queryByTags(@Valid ApplicationPackageSearchCondition condition) {
+        ResponseEntity<Object> res = appPkgService.queryPkgByTags(condition);
+        return res;
+    }
 }

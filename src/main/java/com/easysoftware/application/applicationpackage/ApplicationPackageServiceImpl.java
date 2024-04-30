@@ -48,6 +48,12 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
     String repoSigApi;
 
     @Override
+    public ResponseEntity<Object> queryPkgByTags(ApplicationPackageSearchCondition condition){
+        Map<String, Object> res = appPkgGateway.queryTagsByName(condition);
+        
+        return ResultUtil.success(HttpStatus.OK, res);
+    }
+    @Override
     public ResponseEntity<Object> insertAppPkg(InputApplicationPackage inputAppPkg) {
 
         ApplicationPackage appPkg = new ApplicationPackage();

@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
+import com.easysoftware.application.applicationpackage.vo.ApplicationPackageTagsVo;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
@@ -96,6 +97,23 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         return res;
     }
 
+    @Override
+    public Map<String, Object> queryTagsByName(ApplicationPackageSearchCondition condition){
+        Page<ApplicationPackageDO> page = createPage(condition);
+        QueryWrapper<ApplicationPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new ApplicationPackageDO()
+                , condition, null);
+        IPage<ApplicationPackageDO> resPage = appPkgMapper.selectPage(page, wrapper);
+        List<ApplicationPackageDO> appDOs = resPage.getRecords();
+        List<ApplicationPackageTagsVo> aggregatePkgs = ApplicationPackageConverter.aggregateByTags(appDOs);
+        long total = aggregatePkgs.size();
+
+        Map<String, Object> res = Map.ofEntries(
+            Map.entry("total", total),
+            Map.entry("list", aggregatePkgs)
+        );
+        return res;
+    }
+    
     @Override
     public Map<String, Object> queryDetailByName(ApplicationPackageSearchCondition condition) {
         Page<ApplicationPackageDO> page = createPage(condition);
