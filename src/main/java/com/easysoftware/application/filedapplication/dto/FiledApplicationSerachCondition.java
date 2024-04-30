@@ -27,4 +27,9 @@ public class FiledApplicationSerachCondition {
 
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String category;
+
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    private String name;
+
+    private String timeOrder;
 }
