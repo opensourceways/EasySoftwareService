@@ -4,7 +4,9 @@ import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
+import com.easysoftware.application.applicationpackage.vo.ApplicationPackageTagsVo;
 import com.easysoftware.application.domainpackage.vo.DomainPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.UuidUtil;
@@ -35,6 +38,42 @@ public class ApplicationPackageConverter {
         }
         return res;
     }
+
+    public static List<ApplicationPackageTagsVo> aggregateByTags(List<ApplicationPackageDO> appPkgDOs) {
+        
+        List<ApplicationPackageTagsVo> appTags = new ArrayList<>();
+
+        for(ApplicationPackageDO app : appPkgDOs){
+            ApplicationPackageTagsVo tag = new ApplicationPackageTagsVo();
+            tag.setAppVer(app.getAppVer());
+            tag.setArch(app.getArch());
+            tag.setDockerStr("docker pull openeuler/".concat(app.getName()).concat(":").concat(app.getAppVer()));
+            appTags.add(tag);
+        }
+
+        Map<String, ApplicationPackageTagsVo> agrMap = new HashMap<>();
+        for (ApplicationPackageTagsVo tag : appTags){
+            if(agrMap.containsKey(tag.getAppVer())){
+                // 该tag下已经存在，开始合并
+                ApplicationPackageTagsVo mergeTag = agrMap.get(tag.getAppVer());
+                String mergedArch = mergeTag.getArch().concat(",").concat(tag.getArch());
+                mergeTag.setArch(mergedArch);
+            }else{
+                agrMap.put(tag.getAppVer(), tag);
+            }   
+        }
+
+        List<ApplicationPackageTagsVo> resTags = new ArrayList<>();
+
+        for (Map.Entry<String, ApplicationPackageTagsVo> entry : agrMap.entrySet()) {  
+            
+            ApplicationPackageTagsVo agrTag = entry.getValue();  
+            resTags.add(agrTag);
+        }
+
+        return resTags;
+    }
+    
 
     public static ApplicationPackageDetailVo toDetail(ApplicationPackageDO app) {
         ApplicationPackageDetailVo detail = new ApplicationPackageDetailVo();
