@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.dto.InputApplicationPackage;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
+import com.easysoftware.application.applicationpackage.vo.ApplicationPackageTagsVo;
 import com.easysoftware.common.constant.MapConstant;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
@@ -46,6 +47,13 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
 
     @Value("${api.repoSig}")
     String repoSigApi;
+
+    @Override
+    public ResponseEntity<Object> queryPkgByTags(ApplicationPackageSearchCondition condition){
+        Map<String, Object> res = appPkgGateway.queryTagsByName(condition);
+        
+        return ResultUtil.success(HttpStatus.OK, res);
+    }
 
     @Override
     public ResponseEntity<Object> insertAppPkg(InputApplicationPackage inputAppPkg) {

@@ -18,9 +18,16 @@ public class ApplicationPackageQueryAdapter {
     private ApplicationPackageService appPkgService;
 
     @GetMapping("")
-    @RequestLimitRedis(period = 10, count = 5) // 10s内同一ip连续访问5次，拒绝访问
+    @RequestLimitRedis() 
     public ResponseEntity<Object> queryByName(@Valid ApplicationPackageSearchCondition condition) {
         ResponseEntity<Object> res = appPkgService.searchAppPkg(condition);
+        return res;
+    }
+    
+    @GetMapping("/tags")
+    @RequestLimitRedis() 
+    public ResponseEntity<Object> queryByTags(@Valid ApplicationPackageSearchCondition condition) {
+        ResponseEntity<Object> res = appPkgService.queryPkgByTags(condition);
         return res;
     }
 }
