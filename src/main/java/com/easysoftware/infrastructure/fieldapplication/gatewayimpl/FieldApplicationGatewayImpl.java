@@ -1,14 +1,10 @@
 package com.easysoftware.infrastructure.fieldapplication.gatewayimpl;
 
-import java.sql.SQLException;
-import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 
 import org.slf4j.Logger;
@@ -41,9 +37,9 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
     private static final Logger logger = LoggerFactory.getLogger(FieldApplicationGatewayImpl.class);
 
     @Override
-    public Map<String, Object> queryAll(FiledApplicationSerachCondition condition){
+    public Map<String, Object> queryAll(FiledApplicationSerachCondition condition) {
         Page<FieldApplicationDO> page = createPage(condition);
-        QueryWrapper<FieldApplicationDO> wrapper = QueryWrapperUtil.createQueryWrapper(new FieldApplicationDO(), 
+        QueryWrapper<FieldApplicationDO> wrapper = QueryWrapperUtil.createQueryWrapper(new FieldApplicationDO(),
                 condition, null);
         IPage<FieldApplicationDO> resPage = fieldAppMapper.selectPage(page, wrapper);
         List<FieldApplicationDO> list = resPage.getRecords();
@@ -51,8 +47,8 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
         long total = resPage.getTotal();
 
         return Map.ofEntries(
-            Map.entry("total", total),
-            Map.entry("list", voList)
+                Map.entry("total", total),
+                Map.entry("list", voList)
         );
     }
 

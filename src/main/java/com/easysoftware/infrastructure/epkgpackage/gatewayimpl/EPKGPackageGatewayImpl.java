@@ -35,7 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power.common.util.StringUtil;
 
 @Component
-public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
+public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
     private static final Logger logger = LoggerFactory.getLogger(EPKGPackageGatewayImpl.class);
     @Autowired
     private EPKGPackageDOMapper ePKGPkgMapper;
@@ -60,7 +60,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
             String underlineKey = StringUtil.camelToUnderline(key);
             underlineMap.put(underlineKey, map.get(key));
         }
-        
+
         QueryWrapper<EPKGPackageDO> wrapper = Wrappers.query();
         wrapper.setEntityClass(EPKGPackageDO.class);
         wrapper.allEq(underlineMap, false);
@@ -77,7 +77,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
     @Override
     public Map<String, Object> queryDetailByName(EPKGPackageSearchCondition condition) {
         Page<EPKGPackageDO> page = createPage(condition);
-        QueryWrapper<EPKGPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new EPKGPackageDO(), 
+        QueryWrapper<EPKGPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new EPKGPackageDO(),
                 condition, "epkg_update_at");
         IPage<EPKGPackageDO> resPage = ePKGPkgMapper.selectPage(page, wrapper);
         List<EPKGPackageDO> rPMDOs = resPage.getRecords();
@@ -85,17 +85,17 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
         long total = resPage.getTotal();
 
         Map<String, Object> res = Map.ofEntries(
-            Map.entry("total", total),
-            Map.entry("list", rPMDetails)
+                Map.entry("total", total),
+                Map.entry("list", rPMDetails)
         );
-        
+
         return res;
     }
 
     @Override
     public Map<String, Object> queryMenuByName(EPKGPackageSearchCondition condition) {
         Page<EPKGPackageDO> page = createPage(condition);
-        QueryWrapper<EPKGPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new EPKGPackageDO(), 
+        QueryWrapper<EPKGPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new EPKGPackageDO(),
                 condition, "epkg_update_at");
         EPKGPackageMenuVo pkgVo = new EPKGPackageMenuVo();
         List<String> columns = ClassField.getFieldNames(pkgVo);
@@ -106,8 +106,8 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
         long total = resPage.getTotal();
 
         Map<String, Object> res = Map.ofEntries(
-            Map.entry("total", total),
-            Map.entry("list", rPMMenus)
+                Map.entry("total", total),
+                Map.entry("list", rPMMenus)
         );
         return res;
     }
@@ -129,7 +129,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
         int mark = ePKGPkgMapper.update(epkgPackageDO, wrapper);
         return mark;
     }
-    
+
     private Page<EPKGPackageDO> createPage(EPKGPackageSearchCondition condition) {
         int pageNum = condition.getPageNum();
         int pageSize = condition.getPageSize();
@@ -149,10 +149,10 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
 
     public List<String> queryColumn(String column) {
         // 白名单列
-        List<String> allowedColumns = Arrays.asList("category", "os", "arch"); 
+        List<String> allowedColumns = Arrays.asList("category", "os", "arch");
 
-        if (!allowedColumns.contains(column)) {  
-            throw new ParamErrorException("Unsupported column: " + column);  
+        if (!allowedColumns.contains(column)) {
+            throw new ParamErrorException("Unsupported column: " + column);
         }
 
         QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
@@ -166,7 +166,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway{
         }
         column = StringUtil.underlineToCamel(column);
         List<String> res = EPKGPackageConverter.toColumn(rpmColumn, column);
-        
+
         return res;
     }
 
