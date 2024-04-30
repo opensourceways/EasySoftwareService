@@ -13,9 +13,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
-
+import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
+import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
+import com.easysoftware.application.filedapplication.dto.FiledApplicationSerachCondition;
 import com.easysoftware.application.filedapplication.dto.InputFiledApplication;
 import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
+import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.infrastructure.fieldapplication.gatewayimpl.dataobject.FieldApplicationDO;
@@ -81,5 +84,27 @@ public class FieldApplicationConverter {
             logger.error(MessageCode.EC00011.getMsgEn(), e);
         }
         return res;
+    }
+
+    public static ApplicationPackageSearchCondition toApp(FiledApplicationSerachCondition con) {
+        ApplicationPackageSearchCondition appCon = new ApplicationPackageSearchCondition();
+        BeanUtils.copyProperties(con, appCon);
+        appCon.setName("");
+        appCon.setTimeOrder("");
+        return appCon;
+    }
+
+    public static RPMPackageSearchCondition toRpm(FiledApplicationSerachCondition con) {
+        RPMPackageSearchCondition rPMCon = new RPMPackageSearchCondition();
+        BeanUtils.copyProperties(con, rPMCon);
+        rPMCon.setName("");
+        return rPMCon;
+    }
+
+    public static EPKGPackageSearchCondition toEpkg(FiledApplicationSerachCondition con) {
+        EPKGPackageSearchCondition eCon = new EPKGPackageSearchCondition();
+        BeanUtils.copyProperties(con, eCon);
+        eCon.setName("");
+        return eCon;
     }
 }
