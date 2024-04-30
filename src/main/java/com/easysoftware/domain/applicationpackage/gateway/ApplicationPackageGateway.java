@@ -19,4 +19,5 @@ public interface ApplicationPackageGateway {
     long queryTableLength();
     ApplicationPackageMenuVo selectOne(String name);
     Map<String, List<String>> queryColumn(List<String> columns);
+    public Map<String, Object> queryTagsByName(ApplicationPackageSearchCondition condition);
 }
