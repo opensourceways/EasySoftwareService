@@ -139,7 +139,9 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
 
     @Override
     public long queryTableLength() {
-        return appPkgMapper.selectCount(null);
+        QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
+        wrapper.select("distinct name");
+        return appPkgMapper.selectCount(wrapper);
     }
 
 
