@@ -1,6 +1,5 @@
 package com.easysoftware.application.epkgpackage.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,102 +9,202 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InputEPKGPackage {
-    @Size(max = 255, message = "the length of name can not exceed 255")
+    /**
+     * Name of the package.
+     */
+    @Size(max = 255, message = "the length of name cannot exceed 255")
     private String name;
 
-    @Size(max = 255, message = "the length of id can not exceed 255")
+    /**
+     * Unique identifier for the package.
+     */
+    @Size(max = 255, message = "the length of id cannot exceed 255")
     private String id;
 
-    @Size(max = 255, message = "the length of version can not exceed 255")
+    /**
+     * Version of the package.
+     */
+    @Size(max = 255, message = "the length of version cannot exceed 255")
     private String version;
 
-    @Size(max = 255, message = "the length of os can not exceed 255")
+    /**
+     * Operating system compatibility.
+     */
+    @Size(max = 255, message = "the length of os cannot exceed 255")
     private String os;
 
-    @Size(max = 255, message = "the length of arch can not exceed 255")
+    /**
+     * Architecture type required by the package.
+     */
+    @Size(max = 255, message = "the length of arch cannot exceed 255")
     private String arch;
 
-    @Size(max = 255, message = "the length of category can not exceed 255")
+    /**
+     * Category of the package.
+     */
+    @Size(max = 255, message = "the length of category cannot exceed 255")
     private String category;
 
-    @Size(max = 255, message = "the length of epkgUpdateAt can not exceed 255")
+    /**
+     * Update timestamp for the package.
+     */
+    @Size(max = 255, message = "the length of epkgUpdateAt cannot exceed 255")
     private String epkgUpdateAt;
 
-    @Size(max = 255, message = "the length of srcRepo can not exceed 255")
+    /**
+     * Source repository URL.
+     */
+    @Size(max = 255, message = "the length of srcRepo cannot exceed 255")
     private String srcRepo;
 
-    @Size(max = 255, message = "the length of epkgSize can not exceed 255")
+    /**
+     * Size of the package.
+     */
+    @Size(max = 255, message = "the length of epkgSize cannot exceed 255")
     private String epkgSize;
 
-    @Size(max = 255, message = "the length of binDownloadUrl can not exceed 255")
+    /**
+     * Binary download URL.
+     */
+    @Size(max = 255, message = "the length of binDownloadUrl cannot exceed 255")
     private String binDownloadUrl;
 
-    @Size(max = 255, message = "the length of srcDownloadUrl can not exceed 255")
+    /**
+     * Source code download URL.
+     */
+    @Size(max = 255, message = "the length of srcDownloadUrl cannot exceed 255")
     private String srcDownloadUrl;
 
-    @Size(max = 255, message = "the length of summary can not exceed 255")
+    /**
+     * Brief summary of the package.
+     */
+    @Size(max = 255, message = "the length of summary cannot exceed 255")
     private String summary;
 
-    @Size(max = 255, message = "the length of osSupport can not exceed 255")
+    /**
+     * Supported operating systems.
+     */
+    @Size(max = 255, message = "the length of osSupport cannot exceed 255")
     private String osSupport;
 
-    @Size(max = 255, message = "the length of repo can not exceed 255")
+    /**
+     * Repository URL.
+     */
+    @Size(max = 255, message = "the length of repo cannot exceed 255")
     private String repo;
 
-    @Size(max = 255, message = "the length of repoType can not exceed 255")
+    /**
+     * Type of repository.
+     */
+    @Size(max = 255, message = "the length of repoType cannot exceed 255")
     private String repoType;
 
-    @Size(max = 10000, message = "the length of installation can not exceed 10000")
+    /**
+     * Installation instructions.
+     */
+    @Size(max = 10000, message = "the length of installation cannot exceed 10000")
     private String installation;
 
-    @Size(max = 10000, message = "the length of description can not exceed 10000")
+    /**
+     * Detailed description of the package.
+     */
+    @Size(max = 10000, message = "the length of description cannot exceed 10000")
     private String description;
 
+    /**
+     * Dependencies required by the package.
+     */
     @Size(max = 100_0000, message = "the length of requires can not exceed 100_0000")
     private String requires;
-    
+
+    /**
+     * Features provided by the package.
+     */
     @Size(max = 100_0000, message = "the length of provides can not exceed 100_0000")
     private String provides;
 
+    /**
+     * Conflicting packages.
+     */
     @Size(max = 100_0000, message = "the length of conflicts can not exceed 100_0000")
     private String conflicts;
 
+    /**
+     * Changelog for the package.
+     */
     @Size(max = 100_0000, message = "the length of changeLog can not exceed 100_0000")
     private String changeLog;
 
+    /**
+     * Path to package files.
+     */
     @Size(max = 100_0000, message = "the length of path can not exceed 100_0000")
     private String files;
 
-    @Size(max = 255, message = "the length of maintainerId can not exceed 255")
+    /**
+     * Maintainer's unique identifier.
+     */
+    @Size(max = 255, message = "the length of maintainerId cannot exceed 255")
     private String maintainerId;
 
-    @Size(max = 255, message = "the length of maintainerEmail can not exceed 255")
+    /**
+     * Maintainer's email address.
+     */
+    @Size(max = 255, message = "the length of maintainerEmail cannot exceed 255")
     private String maintainerEmail;
 
-    @Size(max = 255, message = "the length of maintainerGiteeId can not exceed 255")
+    /**
+     * Maintainer's Gitee ID.
+     */
+    @Size(max = 255, message = "the length of maintainerGiteeId cannot exceed 255")
     private String maintainerGiteeId;
 
-    @Size(max = 255, message = "the length of maintainerUpdateAt can not exceed 255")
+    /**
+     * Update timestamp for the maintainer.
+     */
+    @Size(max = 255, message = "the length of maintainerUpdateAt cannot exceed 255")
     private String maintainerUpdateAt;
 
-    @Size(max = 255, message = "the length of maintainerStatus can not exceed 255")
+    /**
+     * Status of the maintainer.
+     */
+    @Size(max = 255, message = "the length of maintainerStatus cannot exceed 255")
     private String maintainerStatus;
 
-    @Size(max = 255, message = "the length of upStream can not exceed 255")
+    /**
+     * Upstream source information.
+     */
+    @Size(max = 255, message = "the length of upStream cannot exceed 255")
     private String upStream;
 
-    @Size(max = 255, message = "the length of security can not exceed 255")
+    /**
+     * Security-related information.
+     */
+    @Size(max = 255, message = "the length of security cannot exceed 255")
     private String security;
 
-    @Size(max = 1000, message = "the length of similarPkgs can not exceed 1000")
+    /**
+     * List of similar packages.
+     */
+    @Size(max = 1000, message = "the length of similarPkgs cannot exceed 1000")
     private String similarPkgs;
 
-    @Size(max = 255, message = "the length of downloadCount can not exceed 255")
+    /**
+     * Download count for the package.
+     */
+    @Size(max = 255, message = "the length of downloadCount cannot exceed 255")
     private String downloadCount;
 
-    @Size(max = 255, message = "the length of pkgId can not exceed 255")
+    /**
+     * Unique identifier for the package.
+     */
+    @Size(max = 255, message = "the length of pkgId cannot exceed 255")
     private String pkgId;
 
-    @Size(max = 255, message = "the length of subPath can not exceed 255")
+    /**
+     * Subpath information.
+     */
+    @Size(max = 255, message = "the length of subPath cannot exceed 255")
     private String subPath;
+
 }

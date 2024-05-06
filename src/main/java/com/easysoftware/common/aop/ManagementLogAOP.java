@@ -16,19 +16,33 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class ManagementLogAOP {
 
+    /**
+     * Autowired HttpServletRequest for handling HTTP request information.
+     */
     @Autowired
     private HttpServletRequest request;
 
+    /**
+     * Autowired HttpServletResponse for handling HTTP response information.
+     */
     @Autowired
     private HttpServletResponse response;
 
-    //定义切点
+    /**
+     * Defines the pointcut for methods in specific packages.
+     */
     @Pointcut("execution(* com.easysoftware.adapter.query.*.*(..)) || execution(* com.easysoftware.adapter.execute.*.*(..))")
     public void pointcut() {
     }
 
+    /**
+     * Advice method called after a method in the specified packages successfully returns.
+     *
+     * @param joinPoint    The JoinPoint representing the intercepted method.
+     * @param returnObject The object returned by the intercepted method.
+     */
     @AfterReturning(pointcut = "pointcut()", returning = "returnObject")
-    public void afterReturning(JoinPoint joinPoint, Object returnObject) {
+    public void afterReturning(final JoinPoint joinPoint, final Object returnObject) {
         LogUtil.managementOperate(joinPoint, request, response, returnObject);
     }
 

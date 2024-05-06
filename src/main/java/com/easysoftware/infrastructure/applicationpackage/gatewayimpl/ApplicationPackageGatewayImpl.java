@@ -1,15 +1,5 @@
 package com.easysoftware.infrastructure.applicationpackage.gatewayimpl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jdbc.BadSqlGrammarException;
-import org.springframework.stereotype.Component;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -27,19 +17,40 @@ import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter.
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
 import com.easysoftware.infrastructure.mapper.ApplicationPackageDOMapper;
 import com.power.common.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.BadSqlGrammarException;
+import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway {
+    /**
+     * Autowired ApplicationPackageDOMapper bean.
+     */
     @Autowired
     private ApplicationPackageDOMapper appPkgMapper;
 
+    /**
+     * Value for the application package icon path.
+     */
     @Value("${apppkg.icon.path}")
     private String apppkgIconPath;
 
+
+    /**
+     * Delete an application by name.
+     *
+     * @param name The name of the application to delete
+     * @return true if the delete operation was successful, false otherwise
+     */
     @Override
-    public boolean delete(String name) {
+    public boolean delete(final String name) {
         QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
         wrapper.eq("name", name);
         int mark = appPkgMapper.delete(wrapper);
@@ -47,24 +58,42 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
     }
 
 
+    /**
+     * Check if an application exists based on its name.
+     *
+     * @param name The name of the application
+     * @return true if the application exists, false otherwise
+     */
     @Override
-    public boolean existApp(String name) {
+    public boolean existApp(final String name) {
         QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
         wrapper.eq("name", name);
         return appPkgMapper.exists(wrapper);
     }
 
 
+    /**
+     * Save an ApplicationPackage object.
+     *
+     * @param appPkg The ApplicationPackage object to save
+     * @return true if the save operation was successful, false otherwise
+     */
     @Override
-    public boolean save(ApplicationPackage appPkg) {
+    public boolean save(final ApplicationPackage appPkg) {
         ApplicationPackageDO appPkgDO = ApplicationPackageConverter.toDataObjectForCreate(appPkg);
         int mark = appPkgMapper.insert(appPkgDO);
         return mark == 1;
     }
 
 
+    /**
+     * Update an existing ApplicationPackage object.
+     *
+     * @param appPkg The ApplicationPackage object to update
+     * @return true if the update operation was successful, false otherwise
+     */
     @Override
-    public boolean update(ApplicationPackage appPkg) {
+    public boolean update(final ApplicationPackage appPkg) {
         ApplicationPackageDO appPkgDO = ApplicationPackageConverter.toDataObjectForUpdate(appPkg);
 
         UpdateWrapper<ApplicationPackageDO> wrapper = new UpdateWrapper<>();
@@ -74,8 +103,14 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         return mark == 1;
     }
 
+    /**
+     * Query menu items based on the provided search condition.
+     *
+     * @param condition The search condition for querying menu items
+     * @return A map containing menu items
+     */
     @Override
-    public Map<String, Object> queryMenuByName(ApplicationPackageSearchCondition condition) {
+    public Map<String, Object> queryMenuByName(final ApplicationPackageSearchCondition condition) {
         int pageNum = condition.getPageNum();
         int pageSize = condition.getPageSize();
         Page<ApplicationPackageDO> page = new Page<>(pageNum, pageSize);
@@ -97,28 +132,40 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         return res;
     }
 
+    /**
+     * Query tags based on the provided search condition.
+     *
+     * @param condition The search condition for querying tags
+     * @return A map containing tags information
+     */
     @Override
-    public Map<String, Object> queryTagsByName(ApplicationPackageSearchCondition condition){
+    public Map<String, Object> queryTagsByName(final ApplicationPackageSearchCondition condition) {
         Page<ApplicationPackageDO> page = createPage(condition);
-        QueryWrapper<ApplicationPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new ApplicationPackageDO()
-                , condition, null);
+        QueryWrapper<ApplicationPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new ApplicationPackageDO(),
+                condition, null);
         IPage<ApplicationPackageDO> resPage = appPkgMapper.selectPage(page, wrapper);
         List<ApplicationPackageDO> appDOs = resPage.getRecords();
         List<ApplicationPackageTagsVo> aggregatePkgs = ApplicationPackageConverter.aggregateByTags(appDOs);
         long total = aggregatePkgs.size();
 
         Map<String, Object> res = Map.ofEntries(
-            Map.entry("total", total),
-            Map.entry("list", aggregatePkgs)
+                Map.entry("total", total),
+                Map.entry("list", aggregatePkgs)
         );
         return res;
     }
-    
+
+    /**
+     * Query detailed information based on the provided search condition.
+     *
+     * @param condition The search condition for querying detailed information
+     * @return A map containing detailed information
+     */
     @Override
-    public Map<String, Object> queryDetailByName(ApplicationPackageSearchCondition condition) {
+    public Map<String, Object> queryDetailByName(final ApplicationPackageSearchCondition condition) {
         Page<ApplicationPackageDO> page = createPage(condition);
-        QueryWrapper<ApplicationPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new ApplicationPackageDO()
-                , condition, null);
+        QueryWrapper<ApplicationPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new ApplicationPackageDO(),
+                condition, null);
 
         IPage<ApplicationPackageDO> resPage = appPkgMapper.selectPage(page, wrapper);
         List<ApplicationPackageDO> appDOs = resPage.getRecords();
@@ -131,20 +178,37 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         );
     }
 
-    private Page<ApplicationPackageDO> createPage(ApplicationPackageSearchCondition condition) {
+    /**
+     * Create a page of ApplicationPackageDO objects based on the provided search condition.
+     *
+     * @param condition The search condition for creating the page
+     * @return A page of ApplicationPackageDO objects
+     */
+    private Page<ApplicationPackageDO> createPage(final ApplicationPackageSearchCondition condition) {
         int pageNum = condition.getPageNum();
         int pageSize = condition.getPageSize();
         return new Page<>(pageNum, pageSize);
     }
 
+    /**
+     * Get the total number of records in the table.
+     *
+     * @return The total number of records in the table
+     */
     @Override
     public long queryTableLength() {
         return appPkgMapper.selectCount(null);
     }
 
 
+    /**
+     * Select a single ApplicationPackageMenuVo object by name.
+     *
+     * @param name The name used to select the object
+     * @return The selected ApplicationPackageMenuVo object
+     */
     @Override
-    public ApplicationPackageMenuVo selectOne(String name) {
+    public ApplicationPackageMenuVo selectOne(final String name) {
         QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
         wrapper.select("pkg_id");
         wrapper.eq("name", name);
@@ -157,16 +221,28 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
     }
 
 
+    /**
+     * Query detailed information by package ID.
+     *
+     * @param pkgId The package ID to query detailed information
+     * @return A list of ApplicationPackageDetailVo objects
+     */
     @Override
-    public List<ApplicationPackageDetailVo> queryDetailByPkgId(String pkgId) {
+    public List<ApplicationPackageDetailVo> queryDetailByPkgId(final String pkgId) {
         QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
         wrapper.eq("pkg_id", pkgId);
         List<ApplicationPackageDO> appList = appPkgMapper.selectList(wrapper);
         return ApplicationPackageConverter.toDetail(appList);
     }
 
+    /**
+     * Query columns based on the provided list of columns.
+     *
+     * @param columns The list of columns to query
+     * @return A map containing column data
+     */
     @Override
-    public Map<String, List<String>> queryColumn(List<String> columns) {
+    public Map<String, List<String>> queryColumn(final List<String> columns) {
         Map<String, List<String>> res = new HashMap<>();
         for (String column : columns) {
             List<String> colList = queryColumn(column);
@@ -175,7 +251,13 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         return res;
     }
 
-    public List<String> queryColumn(String column) {
+    /**
+     * Query a specific column in the database and return the results as a list of strings.
+     *
+     * @param column The column to query
+     * @return A list of strings containing the query results
+     */
+    public List<String> queryColumn(final String column) {
         // 白名单列
         List<String> allowedColumns = Arrays.asList("category", "os", "arch");
 
@@ -193,8 +275,8 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
             throw new ParamErrorException("unsupported param: " + column);
         }
 
-        column = StringUtil.underlineToCamel(column);
+        String underlineToCamelColumn = StringUtil.underlineToCamel(column);
 
-        return ApplicationPackageConverter.toColumn(rpmColumn, column);
+        return ApplicationPackageConverter.toColumn(rpmColumn, underlineToCamelColumn);
     }
 }

@@ -11,16 +11,29 @@
 
 package com.easysoftware.common.utils;
 
-import java.util.HashMap;
+import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.entity.ResultMsgVo;
+import com.easysoftware.common.entity.ResultVo;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.easysoftware.common.entity.MessageCode;
-import com.easysoftware.common.entity.ResultMsgVo;
-import com.easysoftware.common.entity.ResultVo;
+import java.util.HashMap;
 
 public class ResultUtil {
+
+    // Private constructor to prevent instantiation of the utility class
+    private ResultUtil() {
+        // private constructor to hide the implicit public one
+        throw new AssertionError("ResultUtil class cannot be instantiated.");
+    }
+
+    /**
+     * Create a ResponseEntity representing a successful response with the specified HTTP status.
+     *
+     * @param status The HTTP status for the response
+     * @return A ResponseEntity object representing success
+     */
     public static ResponseEntity<Object> success(HttpStatus status) {
         ResultVo res = new ResultVo()
                 .setCode(status.value())
@@ -28,6 +41,13 @@ public class ResultUtil {
         return new ResponseEntity<>(res, status);
     }
 
+    /**
+     * Create a ResponseEntity representing a successful response with the specified HTTP status and message code.
+     *
+     * @param status  The HTTP status for the response
+     * @param msgCode The message code associated with the success response
+     * @return A ResponseEntity object representing success
+     */
     public static ResponseEntity<Object> success(HttpStatus status, MessageCode msgCode) {
         ResultVo res = new ResultVo()
                 .setCode(status.value())
@@ -38,10 +58,25 @@ public class ResultUtil {
         return new ResponseEntity<>(res, status);
     }
 
+    /**
+     * Create a ResponseEntity representing a successful response with the specified HTTP status, headers, and data.
+     *
+     * @param status  The HTTP status for the response
+     * @param headers HttpHeaders to include in the response
+     * @param data    The data to include in the response
+     * @return A ResponseEntity object representing success
+     */
     public static ResponseEntity<Object> success(HttpStatus status, HttpHeaders headers, Object data) {
         return new ResponseEntity<>(data, headers, status);
     }
 
+    /**
+     * Create a ResponseEntity representing a successful response with the specified HTTP status and data.
+     *
+     * @param status The HTTP status for the response
+     * @param data   The data to include in the response
+     * @return A ResponseEntity object representing success
+     */
     public static ResponseEntity<Object> success(HttpStatus status, Object data) {
         ResultVo res = new ResultVo()
                 .setCode(status.value())
@@ -50,6 +85,13 @@ public class ResultUtil {
         return new ResponseEntity<>(res, status);
     }
 
+    /**
+     * Create a ResponseEntity representing a failure response with the specified HTTP status and message code.
+     *
+     * @param status  The HTTP status for the response
+     * @param msgCode The message code associated with the failure response
+     * @return A ResponseEntity object representing failure
+     */
     public static ResponseEntity<Object> fail(HttpStatus status, MessageCode msgCode) {
         ResultVo res = new ResultVo()
                 .setCode(status.value())
@@ -60,6 +102,14 @@ public class ResultUtil {
         return new ResponseEntity<>(res, status);
     }
 
+    /**
+     * Create a ResponseEntity representing a failure response with the specified HTTP status, message code, and error message.
+     *
+     * @param status  The HTTP status for the response
+     * @param msgCode The message code associated with the failure response
+     * @param error   The error message
+     * @return A ResponseEntity object representing failure
+     */
     public static ResponseEntity<Object> fail(HttpStatus status, MessageCode msgCode, String error) {
         ResultVo res = new ResultVo()
                 .setCode(status.value())
@@ -71,6 +121,13 @@ public class ResultUtil {
         return new ResponseEntity<>(res, status);
     }
 
+    /**
+     * Create a ResponseEntity with the specified HTTP status and message code.
+     *
+     * @param status  The HTTP status for the response
+     * @param msgCode The message code associated with the response
+     * @return A ResponseEntity object
+     */
     public static ResponseEntity<Object> setResult(HttpStatus status, MessageCode msgCode) {
         HashMap<String, Object> res = new HashMap<>();
         if (status.value() == 200) {
@@ -89,6 +146,14 @@ public class ResultUtil {
         return new ResponseEntity<>(res, status);
     }
 
+    /**
+     * Create a ResponseEntity with the specified HTTP status, message code, and error message.
+     *
+     * @param status  The HTTP status for the response
+     * @param msgCode The message code associated with the response
+     * @param error   The error message
+     * @return A ResponseEntity object
+     */
     public static ResponseEntity<Object> setResult(HttpStatus status, MessageCode msgCode, String error) {
         HashMap<String, Object> res = new HashMap<>();
         if (status.value() == 200) {

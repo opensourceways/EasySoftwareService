@@ -9,14 +9,25 @@ import com.easysoftware.common.interceptor.OneidInterceptor;
 
 @Configuration
 public class OneidInterceptorConfig implements WebMvcConfigurer {
+
+    /**
+     * Add interceptors to the InterceptorRegistry.
+     *
+     * @param registry The InterceptorRegistry used to register interceptors.
+     */
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(OneidInterceptor())
+    public void addInterceptors(final InterceptorRegistry registry) {
+        registry.addInterceptor(oneidInterceptor())
                 .addPathPatterns("/appVersion/**");
     }
 
+    /**
+     * Configures a OneidInterceptor bean.
+     *
+     * @return The configured OneidInterceptor bean.
+     */
     @Bean
-    public OneidInterceptor OneidInterceptor() {
+    public OneidInterceptor oneidInterceptor() {
         return new OneidInterceptor();
     }
 }

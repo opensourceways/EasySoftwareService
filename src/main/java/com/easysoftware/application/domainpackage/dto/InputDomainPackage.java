@@ -1,4 +1,5 @@
 package com.easysoftware.application.domainpackage.dto;
+
 import org.hibernate.validator.constraints.URL;
 
 import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
@@ -15,83 +16,165 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InputDomainPackage {
+    /**
+     * Description with a maximum length of 10000 characters.
+     */
     @Size(max = 10000, message = "the length of description can not exceed 10000")
-    public String description;
+    private String description;
 
+    /**
+     * Name that cannot be null and has a maximum length of 255 characters.
+     */
     @NotBlank(message = "name can not be null")
     @Size(max = 255, message = "the length of name can not exceed 255")
-    public String name;
+    private String name;
 
-    @Size(max = 1000, message = "the length of arch can not exceed 5000")
+    /**
+     * Description with a license length of 10000 characters.
+     */
+    @Size(max = 1000, message = "the length of arch can not exceed 1000")
     public String license;
 
+    /**
+     * Download information with a maximum length of 10000 characters.
+     */
     @Size(max = 10000, message = "the length of download can not exceed 10000")
     private String download;
+
+    /**
+     * Environment details with a maximum length of 10000 characters.
+     */
     @Size(max = 10000, message = "the length of environment can not exceed 10000")
     private String environment;
+
+    /**
+     * Installation instructions with a maximum length of 10000 characters.
+     */
     @Size(max = 10000, message = "the length of installation can not exceed 10000")
     private String installation;
 
+    /**
+     * Similar packages information with a maximum length of 10000 characters.
+     */
     @Size(max = 10000, message = "the length of similarPkgs can not exceed 10000")
     private String similarPkgs;
 
+    /**
+     * Dependency packages information with a maximum length of 10000 characters.
+     */
     @Size(max = 10000, message = "the length of dependencyPkgs can not exceed 10000")
     private String dependencyPkgs;
 
+    /**
+     * Category with validation against AppCategoryEnum's valid categories.
+     */
     @EnumValue(enumClass = AppCategoryEnum.class, enumMethod = "isValidCategory")
     private String category;
 
+    /**
+     * Type with a maximum length of 100 characters.
+     */
     @Size(max = 100, message = "the length of type can not exceed 100")
     private String type;
 
-    @Size(max = 100,  message = "the length of iconUrl can not exceed 100")
+
+    /**
+     * URL to the icon of maximum length 100 characters.
+     */
+    @Size(max = 100, message = "the length of iconUrl can not exceed 100")
     private String iconUrl;
 
-    @Size(max = 100,  message = "the length of appVer can not exceed 100")
+    /**
+     * Application version with a maximum length of 100 characters.
+     */
+    @Size(max = 100, message = "the length of appVer can not exceed 100")
     private String appVer;
 
-    @Size(max = 100,  message = "the length of osSupport can not exceed 100")
+    /**
+     * Operating system support information with a maximum length of 100 characters.
+     */
+    @Size(max = 100, message = "the length of osSupport can not exceed 100")
     private String osSupport;
 
-    @Size(max = 100,  message = "the length of os can not exceed 100")
+    /**
+     * Operating system details with a maximum length of 100 characters.
+     */
+    @Size(max = 100, message = "the length of os can not exceed 100")
     private String os;
 
-    @Size(max = 100,  message = "the length of arch can not exceed 100")
+    /**
+     * Architecture details with a maximum length of 100 characters.
+     */
+    @Size(max = 100, message = "the length of arch can not exceed 100")
     private String arch;
 
-    @Size(max = 100,  message = "the length of maintainerId can not exceed 100")
+    /**
+     * Maintainer ID with a maximum length of 100 characters.
+     */
+    @Size(max = 100, message = "the length of maintainerId can not exceed 100")
     private String maintainerId;
 
+    /**
+     * Email address of the maintainer with a maximum length of 100 characters.
+     */
     @Email
-    @Size(max = 100,  message = "the length of maintainerEmail can not exceed 100")
+    @Size(max = 100, message = "the length of maintainerEmail can not exceed 100")
     private String maintainerEmail;
 
-    @Size(max = 100,  message = "the length of maintainerGiteeId can not exceed 100")
+    /**
+     * Gitee ID of the maintainer with a maximum length of 100 characters.
+     */
+    @Size(max = 100, message = "the length of maintainerGiteeId can not exceed 100")
     private String maintainerGiteeId;
 
-    @Size(max = 100,  message = "the length of maintainerUpdateAt can not exceed 100")
+    /**
+     * Last update timestamp for the maintainer with a maximum length of 100 characters.
+     */
+    @Size(max = 100, message = "the length of maintainerUpdateAt can not exceed 100")
     private String maintainerUpdateAt;
 
-    @Size(max = 100,  message = "the length of securityLevel can not exceed 100")
+    /**
+     * Security level information with a maximum length of 100 characters.
+     */
+    @Size(max = 100, message = "the length of securityLevel can not exceed 100")
     private String securityLevel;
 
-    @Size(max = 100,  message = "the length of safeLabel can not exceed 100")
+    /**
+     * Safe label information with a maximum length of 100 characters.
+     */
+    @Size(max = 100, message = "the length of safeLabel can not exceed 100")
     private String safeLabel;
 
-    @Size(max = 100,  message = "the length of downloadCount can not exceed 100")
+    /**
+     * Download count information with a maximum length of 100 characters.
+     */
+    @Size(max = 100, message = "the length of downloadCount can not exceed 100")
     private String downloadCount;
 
-    @Size(max = 100,  message = "the length of appSize can not exceed 100")
+    /**
+     * Application size information with a maximum length of 100 characters.
+     */
+    @Size(max = 100, message = "the length of appSize can not exceed 100")
     private String appSize;
 
-    @Size(max = 100,  message = "the length of srcRepo can not exceed 100")
+    /**
+     * Source repository URL with a maximum length of 100 characters.
+     */
+    @Size(max = 100, message = "the length of srcRepo can not exceed 100")
     private String srcRepo;
 
+    /**
+     * URL for downloading the source code with a maximum length of 200 characters.
+     */
     @URL
-    @Size(max = 200,  message = "the length of srcDownloadUrl can not exceed 200")
+    @Size(max = 200, message = "the length of srcDownloadUrl can not exceed 200")
     private String srcDownloadUrl;
 
+    /**
+     * URL for downloading the binary with a maximum length of 200 characters.
+     */
     @URL
-    @Size(max = 200,  message = "the length of binDownloadUrl can not exceed 200")
+    @Size(max = 200, message = "the length of binDownloadUrl can not exceed 200")
     private String binDownloadUrl;
+
 }

@@ -10,12 +10,22 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ResultMsgVo  implements Serializable {
+public class ResultMsgVo implements Serializable {
+    /**
+     * Error code.
+     */
     private String code;
 
+    /**
+     * Error message in English.
+     */
     @JsonProperty("message_en")
     private String msgEn;
 
+    /**
+     * Error message in Chinese.
+     */
     @JsonProperty("message_zh")
     private String msgZh;
+
 }

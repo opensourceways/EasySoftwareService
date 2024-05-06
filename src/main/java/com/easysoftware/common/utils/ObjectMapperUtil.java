@@ -5,7 +5,14 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.*;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
@@ -18,17 +25,29 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Jackson工具类
+ * Jackson工具类.
  */
-public class ObjectMapperUtil {
+public final class ObjectMapperUtil {
 
+    /**
+     * ObjectMapper instance for JSON serialization and deserialization.
+     */
     private static ObjectMapper objectMapper = null;
 
+    // Private constructor to prevent instantiation of the utility class
     private ObjectMapperUtil() {
+        // private constructor to hide the implicit public one
+        throw new AssertionError("ObjectMapperUtil class cannot be instantiated.");
     }
 
     static {
@@ -52,7 +71,13 @@ public class ObjectMapperUtil {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    public static String writeValueAsString(Object obj) {
+    /**
+     * Convert an object to its JSON representation as a string.
+     *
+     * @param obj The object to convert
+     * @return The JSON representation of the object as a string
+     */
+    public static String writeValueAsString(final Object obj) {
         try {
             return objectMapper.writeValueAsString(obj);
         } catch (JsonProcessingException var2) {
@@ -60,7 +85,15 @@ public class ObjectMapperUtil {
         }
     }
 
-    public static <T> T jsonToObject(String json, Class<T> valueType) {
+    /**
+     * Convert a JSON string to an object of the specified type.
+     *
+     * @param <T>       Type parameter for the method.
+     * @param json      The JSON string to convert
+     * @param valueType The class of the object to convert to
+     * @return An object of the specified type
+     */
+    public static <T> T jsonToObject(final String json, final Class<T> valueType) {
         try {
             return objectMapper.readValue(json, valueType);
         } catch (Exception e) {
@@ -68,7 +101,13 @@ public class ObjectMapperUtil {
         }
     }
 
-    public static String writeValueAsStringForNull(Object obj) {
+    /**
+     * Convert an object to its JSON representation as a string, handling null values.
+     *
+     * @param obj The object to convert
+     * @return The JSON representation of the object as a string, including null values
+     */
+    public static String writeValueAsStringForNull(final Object obj) {
         objectMapper
                 .getSerializerProvider()
                 .setNullValueSerializer(
@@ -87,7 +126,13 @@ public class ObjectMapperUtil {
         }
     }
 
-    public static byte[] toJsonByte(Object obj) {
+    /**
+     * Convert an object to its JSON representation as a byte array.
+     *
+     * @param obj The object to convert
+     * @return The JSON representation of the object as a byte array
+     */
+    public static byte[] toJsonByte(final Object obj) {
         try {
             return objectMapper.writeValueAsBytes(obj);
         } catch (Exception var2) {
@@ -95,7 +140,13 @@ public class ObjectMapperUtil {
         }
     }
 
-    public static Map<String, Object> toMap(String json) {
+    /**
+     * Convert a JSON string to a Map&lt;String, Object&gt;.
+     *
+     * @param json The JSON string to convert
+     * @return A map representing the JSON data
+     */
+    public static Map<String, Object> toMap(final String json) {
         try {
             return (Map) objectMapper.readValue(json, Map.class);
         } catch (Exception var2) {
@@ -103,7 +154,13 @@ public class ObjectMapperUtil {
         }
     }
 
-    public static OutputStream toJsonOutStream(Object obj) {
+    /**
+     * Convert an object to its JSON representation as an OutputStream.
+     *
+     * @param obj The object to convert
+     * @return The JSON representation of the object as an OutputStream
+     */
+    public static OutputStream toJsonOutStream(final Object obj) {
         try {
             OutputStream os = new ByteArrayOutputStream();
             objectMapper.writeValue(os, obj);
@@ -113,7 +170,15 @@ public class ObjectMapperUtil {
         }
     }
 
-    public static <T> T toObject(Class<T> clazz, String json) {
+    /**
+     * Convert a JSON string to an object of the specified class.
+     *
+     * @param <T> Type parameter for the method.
+     * @param clazz The class of the object to convert to
+     * @param json  The JSON string to convert
+     * @return An object of the specified class
+     */
+    public static <T> T toObject(final Class<T> clazz, final String json) {
         T obj = null;
 
         try {
@@ -128,7 +193,15 @@ public class ObjectMapperUtil {
         }
     }
 
-    public static <T> T toObject(Class<T> clazz, byte[] bytes) {
+    /**
+     * Convert a byte array representing JSON to an object of the specified class.
+     *
+     * @param <T> Type parameter for the method.
+     * @param clazz The class of the object to convert to
+     * @param bytes The byte array representing JSON data
+     * @return An object of the specified class
+     */
+    public static <T> T toObject(final Class<T> clazz, final byte[] bytes) {
         T obj = null;
 
         try {
@@ -143,7 +216,15 @@ public class ObjectMapperUtil {
         }
     }
 
-    public static <T> List<T> toObjectList(Class<T> clazz, String json) {
+    /**
+     * Convert a JSON string to a list of objects of the specified class.
+     *
+     * @param <T> Type parameter for the method.
+     * @param clazz The class of the objects in the list
+     * @param json  The JSON string to convert
+     * @return A list of objects of the specified class
+     */
+    public static <T> List<T> toObjectList(final Class<T> clazz, final String json) {
         try {
             JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, clazz);
             return objectMapper.readValue(json, javaType);
@@ -152,7 +233,15 @@ public class ObjectMapperUtil {
         }
     }
 
-    public static String toJsonTree(List<ConcurrentHashMap<String, Object>> pageMap, Object... count) {
+    /**
+     * Convert a list of ConcurrentHashMap containing String keys and Object values to a JSON tree,
+     * optionally appending additional objects as count.
+     *
+     * @param pageMap The list of ConcurrentHashMap to convert
+     * @param count   Additional objects to append
+     * @return The JSON representation of the data
+     */
+    public static String toJsonTree(final List<ConcurrentHashMap<String, Object>> pageMap, final Object... count) {
         List<ConcurrentHashMap<String, Object>> myMap = new ArrayList<>();
         for (ConcurrentHashMap<String, Object> map : pageMap) {
             ConcurrentHashMap<String, Object> tempMap = new ConcurrentHashMap<>();
@@ -179,7 +268,7 @@ public class ObjectMapperUtil {
         }
     }
 
-    public static JsonNode toJsonNode(String content) {
+    public static JsonNode toJsonNode(final String content) {
         try {
             return objectMapper.readTree(content);
         } catch (JsonProcessingException var2) {
@@ -187,8 +276,15 @@ public class ObjectMapperUtil {
         }
     }
 
-    public static <T> Map<String, T> jsonToMap(Object obj) {
-        Map<String, T> res = objectMapper.convertValue(obj, new TypeReference<Map<String, T>>() {});
-        return res;
+    /**
+     * Convert a JSON string to a JsonNode object.
+     *
+     * @param <T> Type parameter for the method.
+     * @param obj The JSON string to convert
+     * @return The JsonNode representation of the JSON data
+     */
+    public static <T> Map<String, T> jsonToMap(final Object obj) {
+        return objectMapper.convertValue(obj, new TypeReference<Map<String, T>>() {
+        });
     }
 }

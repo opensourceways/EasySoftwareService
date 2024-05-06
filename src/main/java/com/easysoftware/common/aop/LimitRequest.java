@@ -10,6 +10,18 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LimitRequest {
+    /**
+     * Specifies the default call time, set to 1.
+     *
+     * @return The default call time value.
+     */
     int callTime() default 1;
+
+    /**
+     * Specifies the default call count, set to 10.
+     *
+     * @return The default call count value.
+     */
     int callCount() default 10;
+
 }

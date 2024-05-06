@@ -1,46 +1,69 @@
 package com.easysoftware.infrastructure.epkgpackage.gatewayimpl.converter;
 
+import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
+import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
+import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.utils.UuidUtil;
+import com.easysoftware.domain.epkgpackage.EPKGPackage;
+import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.dataobject.EPKGPackageDO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
+public final class EPKGPackageConverter {
 
-import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
-import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
-import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
-import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
-import com.easysoftware.common.entity.MessageCode;
-import com.easysoftware.common.utils.QueryWrapperUtil;
-import com.easysoftware.common.utils.UuidUtil;
-import com.easysoftware.domain.epkgpackage.EPKGPackage;
-import com.easysoftware.domain.rpmpackage.RPMPackage;
-import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.dataobject.EPKGPackageDO;
-import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
 
-public class EPKGPackageConverter {
+    // Private constructor to prevent instantiation of the utility class
+    private EPKGPackageConverter() {
+        // private constructor to hide the implicit public one
+        throw new AssertionError("Cannot instantiate EPKGPackageConverter class");
+    }
 
-    private static final Logger logger = LoggerFactory.getLogger(EPKGPackageConverter.class);
+    /**
+     * Logger instance for EPKGPackageConverter.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(EPKGPackageConverter.class);
 
-    public static List<EPKGPackageMenuVo> toMenu(List<EPKGPackageDO> rPMPkgDOs) {
+    /**
+     * Convert a list of EPKGPackageDO objects to a list of EPKGPackageMenuVo objects.
+     *
+     * @param rPMPkgDOs The list of EPKGPackageDO objects to convert
+     * @return A list of EPKGPackageMenuVo objects
+     */
+    public static List<EPKGPackageMenuVo> toMenu(final List<EPKGPackageDO> rPMPkgDOs) {
         List<EPKGPackageMenuVo> res = new ArrayList<>();
-        for (EPKGPackageDO rpm: rPMPkgDOs) {
+        for (EPKGPackageDO rpm : rPMPkgDOs) {
             EPKGPackageMenuVo menu = toMenu(rpm);
             res.add(menu);
         }
         return res;
     }
 
-    public static EPKGPackageMenuVo toMenu(EPKGPackageDO epkg) {
+    /**
+     * Convert an EPKGPackageDO object to an EPKGPackageMenuVo object.
+     *
+     * @param epkg The EPKGPackageDO object to convert
+     * @return An EPKGPackageMenuVo object
+     */
+    public static EPKGPackageMenuVo toMenu(final EPKGPackageDO epkg) {
         EPKGPackageMenuVo menu = new EPKGPackageMenuVo();
         BeanUtils.copyProperties(epkg, menu);
         return menu;
     }
 
-    public static List<String> toColumn(List<EPKGPackageDO> epkgDOs, String column) {
+    /**
+     * Extract a specific column values from a list of EPKGPackageDO objects.
+     *
+     * @param epkgDOs The list of EPKGPackageDO objects
+     * @param column  The column to extract values from
+     * @return A list of values for the specified column
+     */
+    public static List<String> toColumn(final List<EPKGPackageDO> epkgDOs, final String column) {
         List<String> res = new ArrayList<>();
         try {
             Field field = EPKGPackageDO.class.getDeclaredField(column);
@@ -50,21 +73,27 @@ public class EPKGPackageConverter {
                     continue;
                 }
                 Object obj = field.get(epkgDO);
-                if (! (obj instanceof String)) {
+                if (!(obj instanceof String)) {
                     continue;
                 }
                 String value = (String) field.get(epkgDO);
                 res.add(value);
             }
         } catch (Exception e) {
-            logger.error(MessageCode.EC00011.getMsgEn(), e);
+            LOGGER.error(MessageCode.EC00011.getMsgEn(), e);
         }
         return res;
     }
 
-    public static List<EPKGPackageDetailVo> toDetail(List<EPKGPackageDO> rPMPkgDOs) {
+    /**
+     * Convert a list of EPKGPackageDO objects to a list of EPKGPackageDetailVo objects.
+     *
+     * @param rPMPkgDOs The list of EPKGPackageDO objects to convert
+     * @return A list of EPKGPackageDetailVo objects
+     */
+    public static List<EPKGPackageDetailVo> toDetail(final List<EPKGPackageDO> rPMPkgDOs) {
         List<EPKGPackageDetailVo> res = new ArrayList<>();
-        for (EPKGPackageDO rpm: rPMPkgDOs) {
+        for (EPKGPackageDO rpm : rPMPkgDOs) {
             EPKGPackageDetailVo detail = new EPKGPackageDetailVo();
             BeanUtils.copyProperties(rpm, detail);
             res.add(detail);
@@ -72,13 +101,25 @@ public class EPKGPackageConverter {
         return res;
     }
 
-    public static EPKGPackageDO toDataObject(EPKGPackage epkg) {
+    /**
+     * Convert an EPKGPackage entity to an EPKGPackageDO data object.
+     *
+     * @param epkg The EPKGPackage entity to convert
+     * @return An EPKGPackageDO data object
+     */
+    public static EPKGPackageDO toDataObject(final EPKGPackage epkg) {
         EPKGPackageDO epkgPackageDO = new EPKGPackageDO();
         BeanUtils.copyProperties(epkg, epkgPackageDO);
         return epkgPackageDO;
     }
 
-    public static EPKGPackageDO toDataObjectForCreate(EPKGPackage epkg) {
+    /**
+     * Convert an EPKGPackage entity to an EPKGPackageDO data object for creation.
+     *
+     * @param epkg The EPKGPackage entity to convert
+     * @return An EPKGPackageDO data object for creation
+     */
+    public static EPKGPackageDO toDataObjectForCreate(final EPKGPackage epkg) {
         EPKGPackageDO epkgPackageDO = toDataObject(epkg);
 
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
@@ -89,8 +130,14 @@ public class EPKGPackageConverter {
 
         return epkgPackageDO;
     }
-    
-    public static EPKGPackageDO toDataObjectForUpdate(EPKGPackage rPMPkg) {
+
+    /**
+     * Convert an EPKGPackage entity to an EPKGPackageDO data object for update.
+     *
+     * @param rPMPkg The EPKGPackage entity to convert
+     * @return An EPKGPackageDO data object for update
+     */
+    public static EPKGPackageDO toDataObjectForUpdate(final EPKGPackage rPMPkg) {
         EPKGPackageDO rPMPkgDO = toDataObject(rPMPkg);
 
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());

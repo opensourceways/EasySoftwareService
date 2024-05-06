@@ -9,28 +9,53 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InputExternalOs {
-    @Size(max = 255, message = "the length of name can not exceed 255")
+    /**
+     * Name (maximum length: 255 characters).
+     */
+    @Size(max = 255, message = "the length of name cannot exceed 255")
     private String name;
 
-    @Size(max = 255, message = "the length of id can not exceed 255")
+    /**
+     * Identifier (maximum length: 255 characters).
+     */
+    @Size(max = 255, message = "the length of id cannot exceed 255")
     private String id;
 
-    @Size(max = 255, message = "the length of originOsName can not exceed 255")
+    /**
+     * Original operating system name (maximum length: 255 characters).
+     */
+    @Size(max = 255, message = "the length of originOsName cannot exceed 255")
     private String originOsName;
 
-    @Size(max = 255, message = "the length of originOsVer can not exceed 255")
+    /**
+     * Original operating system version (maximum length: 255 characters).
+     */
+    @Size(max = 255, message = "the length of originOsVer cannot exceed 255")
     private String originOsVer;
 
-    @Size(max = 255, message = "the length of originPkg can not exceed 255")
+    /**
+     * Original package name (maximum length: 255 characters).
+     */
+    @Size(max = 255, message = "the length of originPkg cannot exceed 255")
     private String originPkg;
 
-    @Size(max = 255, message = "the length of targetOsName can not exceed 255")
+    /**
+     * Target operating system name (maximum length: 255 characters).
+     */
+    @Size(max = 255, message = "the length of targetOsName cannot exceed 255")
     private String targetOsName;
 
-    @Size(max = 255, message = "the length of targetOsVer can not exceed 255")
+    /**
+     * Target operating system version (maximum length: 255 characters).
+     */
+    @Size(max = 255, message = "the length of targetOsVer cannot exceed 255")
     private String targetOsVer;
 
-    @Size(max = 255, message = "the length of targetPkg can not exceed 255")
+    /**
+     * Target package name (maximum length: 255 characters).
+     */
+    @Size(max = 255, message = "the length of targetPkg cannot exceed 255")
     private String targetPkg;
+
 
 }

@@ -1,14 +1,7 @@
 package com.easysoftware.common.utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-
+import com.easysoftware.common.constant.HttpConstant;
+import com.easysoftware.common.entity.MessageCode;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
@@ -20,22 +13,47 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.easysoftware.common.constant.HttpConstant;
-import com.easysoftware.common.entity.MessageCode;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
-public class HttpClientUtil {
+public final class HttpClientUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 
-    private static final RequestConfig requestConfig = RequestConfig.custom()
+    // Private constructor to prevent instantiation of the utility class
+    private HttpClientUtil() {
+        // private constructor to hide the implicit public one
+        throw new AssertionError("HttpClientUtil class cannot be instantiated.");
+    }
+
+    /**
+     * Logger for HttpClientUtil.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpClientUtil.class);
+
+    /**
+     * Request configuration with timeout settings.
+     */
+    private static final RequestConfig REQUEST_CONFIG = RequestConfig.custom()
             .setConnectTimeout(HttpConstant.TIME_OUT)
             .setSocketTimeout(HttpConstant.TIME_OUT).build();
 
-    public static String getRequest(String urlStr) {
+    /**
+     * Send a GET request to the specified URL and retrieve the response as a string.
+     *
+     * @param urlStr The URL to send the GET request to.
+     * @return The response from the GET request as a string.
+     */
+    public static String getRequest(final String urlStr) {
         try {
             URL url = new URL(urlStr);
 
-            if(!sercuritySSRFUrlCheck(url)){
+            if (!sercuritySSRFUrlCheck(url)) {
                 throw new IllegalArgumentException("URL is vulnerable to SSRF attacks");
             }
 
@@ -58,16 +76,23 @@ public class HttpClientUtil {
                 return response.toString();
             }
         } catch (Exception e) {
-            logger.error(MessageCode.EC0001.getMsgEn(), e);
+            LOGGER.error(MessageCode.EC0001.getMsgEn(), e);
         }
         return null;
     }
 
-    public static String postRequest(String urlStr, String body) {
+    /**
+     * Send a POST request to the specified URL with a given request body and retrieve the response as a string.
+     *
+     * @param urlStr The URL to send the POST request to.
+     * @param body   The request body for the POST request.
+     * @return The response from the POST request as a string.
+     */
+    public static String postRequest(final String urlStr, final String body) {
         try {
             URL url = new URL(urlStr);
 
-            if(!sercuritySSRFUrlCheck(url)){
+            if (!sercuritySSRFUrlCheck(url)) {
                 throw new IllegalArgumentException("URL is vulnerable to SSRF attacks");
             }
 
@@ -98,15 +123,24 @@ public class HttpClientUtil {
                 return response.toString();
             }
         } catch (Exception e) {
-            logger.error(MessageCode.EC0001.getMsgEn(), e);
+            LOGGER.error(MessageCode.EC0001.getMsgEn(), e);
         }
         return null;
     }
 
-    public static String getHttpClient(String uri, String token, String userToken, String cookie) {
+    /**
+     * Get an HTTP client with specified parameters.
+     *
+     * @param uri       The URI for the HTTP client.
+     * @param token     The token to include in the request.
+     * @param userToken The user token to include in the request.
+     * @param cookie    The cookie value to include in the request.
+     * @return The HTTP client as a string.
+     */
+    public static String getHttpClient(final String uri, final String token, final String userToken, final String cookie) {
         HttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(uri);
-        httpGet.setConfig(requestConfig);
+        httpGet.setConfig(REQUEST_CONFIG);
 
         if (token != null) httpGet.addHeader(HttpConstant.TOKEN, token);
         if (userToken != null) httpGet.addHeader(HttpConstant.USER_TOKEN, userToken);
@@ -114,35 +148,42 @@ public class HttpClientUtil {
 
         try {
             HttpResponse response = httpClient.execute(httpGet);
-            String responseBody = EntityUtils.toString(response.getEntity());
-            return responseBody;
+            return EntityUtils.toString(response.getEntity());
         } catch (Exception e) {
             throw new RuntimeException(MessageCode.EC0001.getMsgEn());
         }
     }
 
-    public static String postHttpClient(String uri, String requestBody) {
+    /**
+     * Send a POST request using an HTTP client to the specified URI with the given request body.
+     *
+     * @param uri         The URI for the POST request.
+     * @param requestBody The body of the POST request.
+     * @return The response from the POST request as a string.
+     */
+    public static String postHttpClient(final String uri, final String requestBody) {
         HttpClient httpClient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(uri);
-        httpPost.setConfig(requestConfig);
+        httpPost.setConfig(REQUEST_CONFIG);
         try {
             httpPost.setHeader(HttpConstant.CONTENT_TYPE, "application/json");
             StringEntity stringEntity = new StringEntity(requestBody);
             httpPost.setEntity(stringEntity);
             HttpResponse response = httpClient.execute(httpPost);
-            String responseBody = EntityUtils.toString(response.getEntity());
-            return responseBody;
+            return EntityUtils.toString(response.getEntity());
         } catch (Exception e) {
             throw new RuntimeException(MessageCode.EC0001.getMsgEn());
         }
     }
+
+    /**
+     * Perform a security check for SSRF on the provided URL.
+     *
+     * @param url The URL to check for SSRF.
+     * @return Boolean value indicating the SSRF security check result.
+     */
     // ssrf检查，whitelist todo
-    private static Boolean sercuritySSRFUrlCheck(URL url){
-
-        if(!url.getProtocol().startsWith("http") && !url.getProtocol().startsWith("https")){
-            return false;
-        }
-
-        return true;
+    private static Boolean sercuritySSRFUrlCheck(final URL url) {
+        return url.getProtocol().startsWith("http") || url.getProtocol().startsWith("https");
     }
 }

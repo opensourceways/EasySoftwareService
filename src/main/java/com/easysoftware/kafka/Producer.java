@@ -9,13 +9,27 @@ import org.springframework.stereotype.Component;
 @Component
 public class Producer {
 
+    /**
+     * Autowired KafkaTemplate for producing messages.
+     */
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    public static KafkaProducer<String, String> producer;
+    /**
+     * Static KafkaProducer for handling Kafka operations.
+     */
+    private static KafkaProducer<String, String> producer;
 
-    public void sendMess(String topic, String key, String value) {
+    /**
+     * Sends a message with the specified topic, key, and value.
+     *
+     * @param topic The Kafka topic to send the message to.
+     * @param key The key associated with the message.
+     * @param value The value of the message.
+     */
+    public void sendMess(final String topic, final String key, final String value) {
         ProducerRecord<String, String> mess = new ProducerRecord<String, String>(topic, key, value);
         kafkaTemplate.send(mess);
     }
+
 }
