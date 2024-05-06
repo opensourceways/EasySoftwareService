@@ -1,5 +1,7 @@
 package com.easysoftware.application.filedapplication;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -28,6 +30,7 @@ import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.exception.ParamErrorException;
+import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
 import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
@@ -75,14 +78,48 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         } else if ("domain".equals(name)) {
             Map<String, Object> res = searchDomainMenu(condition);
             return ResultUtil.success(HttpStatus.OK, res);
+        } else if ("mainPage".equals(name)) {
+            List<Map<String, Object>> cateMap = searchMainPage();
+            return ResultUtil.success(HttpStatus.OK, cateMap);
         } else {
             throw new ParamErrorException("unsupported param: " + name);
         }
     }
 
+
+    private List<Map<String, Object>> searchMainPage() {
+        Map<String, List<Object>> cateMap = getCategorys();
+        List<FiledApplicationVo> fList = domainGateway.queryVoList();
+        for (FiledApplicationVo field : fList) {
+            String cate = field.getCategory();
+            cateMap.get(cate).add(field);
+        }
+        return assembleMainPage(cateMap);
+    }
+
+    private List<Map<String, Object>> assembleMainPage(Map<String, List<Object>> cateMap) {
+        List<Map<String, Object>> res = new ArrayList<>();
+        for (Map.Entry<String, List<Object>> cateEntry : cateMap.entrySet()) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("name", cateEntry.getKey());
+            map.put("children", cateEntry.getValue());
+            res.add(map);
+        }
+        return res;
+    }
+
+    private Map<String, List<Object>> getCategorys() {
+        Map<String, List<Object>> map = new HashMap<>();
+        for (AppCategoryEnum categoryEnum : AppCategoryEnum.values()) {
+            String category = categoryEnum.getAlias();
+            map.put(category, new ArrayList<>());
+        }
+        return map;
+    }
+
     private Map<String, Object> searchDomainMenu(FiledApplicationSerachCondition condition) {
         condition.setName("");
-        return domainGateway.queryAll(condition);
+        return domainGateway.queryMenuByPage(condition);
     } 
 
     private Map<String, Object> searchEpkgMenu(FiledApplicationSerachCondition condition) {
