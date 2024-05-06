@@ -8,5 +8,10 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CompatibleToken {
+    /**
+     * Indicates whether the element is required.
+     *
+     * @return True if the element is required, false otherwise
+     */
     boolean required() default true;
 }

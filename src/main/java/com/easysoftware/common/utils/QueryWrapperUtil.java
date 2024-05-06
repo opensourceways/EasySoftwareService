@@ -16,25 +16,52 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.exception.enumvalid.TimeOrderEnum;
 import com.power.common.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class QueryWrapperUtil {
-    private static final Logger logger = LoggerFactory.getLogger(QueryWrapperUtil.class);
+public final class QueryWrapperUtil {
 
-    public static <T, U> QueryWrapper<T> createQueryWrapper(T t, U u, String updateAt) {
+
+    // Private constructor to prevent instantiation of the utility class
+    private QueryWrapperUtil() {
+        // private constructor to hide the implicit public one
+        throw new AssertionError("QueryWrapperUtil class cannot be instantiated.");
+    }
+
+    /**
+     * Logger instance for QueryWrapperUtil.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(QueryWrapperUtil.class);
+
+
+    /**
+     * Create a QueryWrapper for given generic types T and U, with an updateAt parameter.
+     *
+     * @param t        The first generic type T
+     * @param u        The second generic type U
+     * @param updateAt The updateAt parameter
+     * @return A QueryWrapper instance
+     */
+    public static <T, U> QueryWrapper<T> createQueryWrapper(final T t, final U u, final String updateAt) {
         QueryWrapper<T> wrapper = new QueryWrapper<>();
-        
+
         Field[] fields = u.getClass().getDeclaredFields();
-        for (Field field: fields) {
+        for (Field field : fields) {
             field.setAccessible(true);
 
             Object value = null;
             try {
                 value = field.get(u);
             } catch (Exception e) {
-                logger.error(MessageCode.EC00011.getMsgEn(), e);
+                LOGGER.error(MessageCode.EC00011.getMsgEn(), e);
             }
-            if (! (value instanceof String)) {
+            if (!(value instanceof String)) {
                 continue;
             }
 
@@ -54,7 +81,7 @@ public class QueryWrapperUtil {
             }
 
             String undLine = StringUtil.camelToUnderline(field.getName());
-            
+
             //","代表该字段有多个参数
             if (vStr.contains(",")) {
                 List<String> items = splitStr(vStr);
@@ -66,12 +93,18 @@ public class QueryWrapperUtil {
                 vStr = StringUtils.trimToEmpty(vStr);
                 wrapper.eq(undLine, vStr);
             }
-            
+
         }
         return wrapper;
     }
 
-    public static List<String> splitStr(String vStr) {
+    /**
+     * Split a string into a list of substrings.
+     *
+     * @param vStr The string to split
+     * @return A list of substrings
+     */
+    public static List<String> splitStr(final String vStr) {
         List<String> res = new ArrayList<>();
 
         String[] sps = StringUtils.split(vStr, ",");

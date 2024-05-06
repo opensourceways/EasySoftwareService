@@ -1,49 +1,61 @@
 package com.easysoftware.infrastructure.operationconfig.gatewayimpl;
 
-import java.util.List;
-
-import org.apache.logging.log4j.core.util.OptionConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.easysoftware.application.operationconfig.dto.InputOperationConfig;
 import com.easysoftware.application.operationconfig.vo.OperationConfigVo;
-import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.domain.operationconfig.gateway.OperationConfigGateway;
 import com.easysoftware.infrastructure.mapper.OperationConfigDOMapper;
 import com.easysoftware.infrastructure.operationconfig.gatewayimpl.converter.OperationConfigConverter;
 import com.easysoftware.infrastructure.operationconfig.gatewayimpl.dataobject.OperationConfigDO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class OperationConfigGatewayImpl implements OperationConfigGateway {
-    Logger logger = LoggerFactory.getLogger(OperationConfigGatewayImpl.class);
+
+
+    /**
+     * Autowired OperationConfigDOMapper for database operations.
+     */
     @Autowired
     private OperationConfigDOMapper mapper;
 
-    public boolean insertOperationConfig(InputOperationConfig input) {
+    /**
+     * Insert an operation configuration based on the input.
+     *
+     * @param input The input operation configuration to insert
+     * @return true if the insertion was successful, false otherwise
+     */
+    public boolean insertOperationConfig(final InputOperationConfig input) {
         OperationConfigDO operationConfigDO = OperationConfigConverter.toDataObject(input);
         int mark = mapper.insert(operationConfigDO);
-        if (mark == 1) {
-            return true;
-        }
-        return false;
+        return mark == 1;
     }
 
+    /**
+     * Delete operation configurations by type.
+     *
+     * @param type The type of operation configurations to delete
+     * @return true if the deletion was successful, false otherwise
+     */
     @Override
-    public boolean deleteByType(String type) {
+    public boolean deleteByType(final String type) {
         QueryWrapper<OperationConfigDO> wrapper = new QueryWrapper<>();
         wrapper.eq("type", type);
         mapper.delete(wrapper);
         return true;
     }
 
+    /**
+     * Select all operation configurations and return them as a list of OperationConfigVo objects.
+     *
+     * @return A list of OperationConfigVo objects containing all operation configurations
+     */
     @Override
     public List<OperationConfigVo> selectAll() {
         List<OperationConfigDO> doList = mapper.selectList(null);
-        List<OperationConfigVo> res = OperationConfigConverter.toVo(doList);
-        return res;
+        return OperationConfigConverter.toVo(doList);
     }
 }

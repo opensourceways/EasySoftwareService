@@ -16,13 +16,35 @@ import lombok.SneakyThrows;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class LogUtil {
-    private static final Logger logger = LoggerFactory.getLogger(LogUtil.class);
-    private static ObjectMapper objectMapper = new ObjectMapper();
+public final class LogUtil {
 
+
+    // Private constructor to prevent instantiation of the utility class
+    private LogUtil() {
+        // private constructor to hide the implicit public one
+        throw new AssertionError("LogUtil class cannot be instantiated.");
+    }
+
+    /**
+     * Logger instance for LogUtil.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogUtil.class);
+    /**
+     * ObjectMapper instance for JSON serialization and deserialization.
+     */
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    /**
+     * Perform a management operation.
+     *
+     * @param joinPoint    The JoinPoint object
+     * @param request      The HttpServletRequest object
+     * @param response     The HttpServletResponse object
+     * @param returnObject The object returned from the operation
+     */
     @SneakyThrows
-    public static void managementOperate(JoinPoint joinPoint, HttpServletRequest request, HttpServletResponse response,
-            Object returnObject) {
+    public static void managementOperate(final JoinPoint joinPoint, final HttpServletRequest request, final HttpServletResponse response,
+                                         final Object returnObject) {
         ManagementLog log = new ManagementLog();
         log.setType("OmOperate");
 
@@ -49,8 +71,8 @@ public class LogUtil {
         }
         log.setOperator("");
 
-        String jsonLog = objectMapper.writeValueAsString(log);
-        logger.info("operationLog:{}", jsonLog);
+        String jsonLog = OBJECT_MAPPER.writeValueAsString(log);
+        LOGGER.info("operationLog:{}", jsonLog);
     }
 
 }

@@ -15,17 +15,30 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DomainColumnCondition {
+    /**
+     * Page number within the range of PackageConstant.MIN_PAGE_NUM and PackageConstant.MAX_PAGE_NUM.
+     */
     @Range(min = PackageConstant.MIN_PAGE_NUM, max = PackageConstant.MAX_PAGE_NUM)
     private Integer pageNum = 1;
 
+    /**
+     * Page size within the range of PackageConstant.MIN_PAGE_SIZE and PackageConstant.MAX_PAGE_SIZE.
+     */
     @Range(min = PackageConstant.MIN_PAGE_SIZE, max = PackageConstant.MAX_PAGE_SIZE)
     private Integer pageSize = 10;
 
+    /**
+     * Name with a maximum size of 50 characters and must not be blank.
+     */
     @Size(max = 50)
     @NotBlank
     private String name;
 
+    /**
+     * Column with a maximum size of 50 characters and must not be blank.
+     */
     @Size(max = 50)
     @NotBlank
     private String column;
+
 }

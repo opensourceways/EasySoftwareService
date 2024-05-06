@@ -14,13 +14,22 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/rpmpkg")
 public class RPMPackageQueryAdapter {
+
+    /**
+     * Autowired service for handling RPM package-related operations.
+     */
     @Autowired
     private RPMPackageService rPMPkgService;
 
+    /**
+     * Endpoint to search for RPM packages based on the provided search condition.
+     *
+     * @param condition The search condition for querying RPM packages.
+     * @return ResponseEntity<Object>.
+     */
     @GetMapping()
     @RequestLimitRedis() //dos-global设置 2s内 单一ip调用超5次触发
-    public ResponseEntity<Object> searchRPMPkg(@Valid RPMPackageSearchCondition condition) {
-        ResponseEntity<Object> res = rPMPkgService.searchRPMPkg(condition);
-        return res;
+    public ResponseEntity<Object> searchRPMPkg(@Valid final RPMPackageSearchCondition condition) {
+        return rPMPkgService.searchRPMPkg(condition);
     }
 }

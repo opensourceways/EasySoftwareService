@@ -15,13 +15,22 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/epkgpkg")
 public class EPKGPackageQueryAdapter {
+
+    /**
+     * Autowired service for managing EPKGPackage packages.
+     */
     @Autowired
     private EPKGPackageService ePKGPackageService;
 
+    /**
+     * Search for EPKG packages based on the provided search condition.
+     *
+     * @param condition The search condition for querying EPKG packages.
+     * @return ResponseEntity<Object>.
+     */
     @GetMapping()
-    @RequestLimitRedis() 
-    public ResponseEntity<Object> searchEPKGPkg(@Valid EPKGPackageSearchCondition condition) {
-        ResponseEntity<Object> res = ePKGPackageService.searchEPKGPkg(condition);
-        return res;
+    @RequestLimitRedis()
+    public ResponseEntity<Object> searchEPKGPkg(@Valid final EPKGPackageSearchCondition condition) {
+        return ePKGPackageService.searchEPKGPkg(condition);
     }
 }

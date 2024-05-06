@@ -7,8 +7,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class AppPkgConsumer extends BaseConsumer {
 
+    /**
+     * Listens for and processes ConsumerRecords of type <String, String>.
+     *
+     * @param records The ConsumerRecords to process.
+     */
     @KafkaListener(topics = "software_test_app")
-    public void listen(ConsumerRecords<String, String> records) {
+    public void listen(final ConsumerRecords<String, String> records) {
         dealDataToTableByBatch(records);
     }
 }

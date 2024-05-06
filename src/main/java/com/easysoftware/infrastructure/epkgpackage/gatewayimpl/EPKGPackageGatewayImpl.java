@@ -1,18 +1,5 @@
 package com.easysoftware.infrastructure.epkgpackage.gatewayimpl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.BadSqlGrammarException;
-import org.springframework.stereotype.Component;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -33,26 +20,60 @@ import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.dataobject.EPKGPa
 import com.easysoftware.infrastructure.mapper.EPKGPackageDOMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power.common.util.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.BadSqlGrammarException;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
-    private static final Logger logger = LoggerFactory.getLogger(EPKGPackageGatewayImpl.class);
+
+    /**
+     * Logger instance for EPKGPackageGatewayImpl.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(EPKGPackageGatewayImpl.class);
+
+    /**
+     * Autowired EPKGPackageDOMapper for database operations.
+     */
     @Autowired
     private EPKGPackageDOMapper ePKGPkgMapper;
 
+    /**
+     * Autowired ObjectMapper for JSON serialization/deserialization.
+     */
     @Autowired
     private ObjectMapper objectMapper;
 
+    /**
+     * Delete EPKG packages by their IDs.
+     *
+     * @param ids A list of IDs of EPKG packages to delete
+     * @return the number of rows deleted
+     */
     @Override
-    public int delete(List<String> ids) {
+    public int delete(final List<String> ids) {
         QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
         wrapper.in("pkg_id", ids);
-        int mark = ePKGPkgMapper.delete(wrapper);
-        return mark;
+        return ePKGPkgMapper.delete(wrapper);
     }
 
+    /**
+     * Check if an EPKG package exists based on its unique identifier.
+     *
+     * @param unique The unique identifier of the EPKG package
+     * @return true if the EPKG package exists, false otherwise
+     */
     @Override
-    public boolean existEPKG(EPKGPackageUnique unique) {
+    public boolean existEPKG(final EPKGPackageUnique unique) {
         Map<String, Object> map = objectMapper.convertValue(unique, HashMap.class);
 
         Map<String, Object> underlineMap = new HashMap<>();
@@ -67,15 +88,27 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         return ePKGPkgMapper.exists(wrapper);
     }
 
+    /**
+     * Check if an EPKG package exists based on its ID.
+     *
+     * @param id The ID of the EPKG package
+     * @return true if the EPKG package exists, false otherwise
+     */
     @Override
-    public boolean existEPKG(String id) {
+    public boolean existEPKG(final String id) {
         QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
         wrapper.eq("id", id);
         return ePKGPkgMapper.exists(wrapper);
     }
 
+    /**
+     * Query detailed information based on the provided search condition.
+     *
+     * @param condition The search condition for querying EPKG package details
+     * @return A map containing detailed information
+     */
     @Override
-    public Map<String, Object> queryDetailByName(EPKGPackageSearchCondition condition) {
+    public Map<String, Object> queryDetailByName(final EPKGPackageSearchCondition condition) {
         Page<EPKGPackageDO> page = createPage(condition);
         QueryWrapper<EPKGPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new EPKGPackageDO(),
                 condition, "epkg_update_at");
@@ -92,8 +125,14 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         return res;
     }
 
+    /**
+     * Query menu items based on the provided search condition.
+     *
+     * @param condition The search condition for querying menu items
+     * @return A map containing menu items
+     */
     @Override
-    public Map<String, Object> queryMenuByName(EPKGPackageSearchCondition condition) {
+    public Map<String, Object> queryMenuByName(final EPKGPackageSearchCondition condition) {
         Page<EPKGPackageDO> page = createPage(condition);
         QueryWrapper<EPKGPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new EPKGPackageDO(),
                 condition, "epkg_update_at");
@@ -112,33 +151,56 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         return res;
     }
 
+    /**
+     * Save an EPKGPackage object.
+     *
+     * @param epkg The EPKGPackage object to save
+     * @return true if the save operation was successful, false otherwise
+     */
     @Override
-    public boolean save(EPKGPackage epkg) {
+    public boolean save(final EPKGPackage epkg) {
         EPKGPackageDO epkgPackageDO = EPKGPackageConverter.toDataObjectForCreate(epkg);
         int mark = ePKGPkgMapper.insert(epkgPackageDO);
         return mark == 1;
     }
 
+    /**
+     * Update an existing EPKGPackage object.
+     *
+     * @param epkg The EPKGPackage object to update
+     * @return the number of rows affected by the update operation
+     */
     @Override
-    public int update(EPKGPackage epkg) {
+    public int update(final EPKGPackage epkg) {
         EPKGPackageDO epkgPackageDO = EPKGPackageConverter.toDataObjectForUpdate(epkg);
 
         UpdateWrapper<EPKGPackageDO> wrapper = new UpdateWrapper<>();
         wrapper.eq("pkg_id", epkg.getPkgId());
 
-        int mark = ePKGPkgMapper.update(epkgPackageDO, wrapper);
-        return mark;
+        return ePKGPkgMapper.update(epkgPackageDO, wrapper);
     }
 
-    private Page<EPKGPackageDO> createPage(EPKGPackageSearchCondition condition) {
+    /**
+     * Creates a Page of EPKGPackageDO based on the provided search condition.
+     *
+     * @param condition The EPKGPackageSearchCondition object to create the page from.
+     * @return A Page of EPKGPackageDO entities.
+     */
+    private Page<EPKGPackageDO> createPage(final EPKGPackageSearchCondition condition) {
         int pageNum = condition.getPageNum();
         int pageSize = condition.getPageSize();
         Page<EPKGPackageDO> page = new Page<>(pageNum, pageSize);
         return page;
     }
 
+    /**
+     * Query columns based on the provided list of columns.
+     *
+     * @param columns The list of columns to query
+     * @return A map containing column data
+     */
     @Override
-    public Map<String, List<String>> queryColumn(List<String> columns) {
+    public Map<String, List<String>> queryColumn(final List<String> columns) {
         Map<String, List<String>> res = new HashMap<>();
         for (String column : columns) {
             List<String> colList = queryColumn(column);
@@ -150,7 +212,13 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         return res;
     }
 
-    public List<String> queryColumn(String column) {
+    /**
+     * Query a specific column and return the results as a list of strings.
+     *
+     * @param column The name of the column to query.
+     * @return A list of strings representing the queried column.
+     */
+    public List<String> queryColumn(final String column) {
         // 白名单列
         List<String> allowedColumns = Arrays.asList("category", "os", "arch");
 
@@ -167,19 +235,29 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         } catch (BadSqlGrammarException e) {
             throw new ParamErrorException("unsupported param: " + column);
         }
-        column = StringUtil.underlineToCamel(column);
-        List<String> res = EPKGPackageConverter.toColumn(rpmColumn, column);
+        String underlineToCamelColumn = StringUtil.underlineToCamel(column);
 
-        return res;
+        return EPKGPackageConverter.toColumn(rpmColumn, underlineToCamelColumn);
     }
 
+    /**
+     * Get the total number of records in the table.
+     *
+     * @return The total number of records in the table
+     */
     @Override
     public long queryTableLength() {
         return ePKGPkgMapper.selectCount(null);
     }
 
+    /**
+     * Select a single EPKGPackageMenuVo object by name.
+     *
+     * @param name The name used to select the object
+     * @return The selected EPKGPackageMenuVo object
+     */
     @Override
-    public EPKGPackageMenuVo selectOne(String name) {
+    public EPKGPackageMenuVo selectOne(final String name) {
         QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
         wrapper.select("pkg_id");
         wrapper.eq("name", name);
@@ -188,28 +266,38 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         if (epkgList.size() == 0) {
             return new EPKGPackageMenuVo();
         }
-        EPKGPackageMenuVo res = EPKGPackageConverter.toMenu(epkgList.get(0));
-        return res;
+        return EPKGPackageConverter.toMenu(epkgList.get(0));
     }
 
+    /**
+     * Convert a batch of data objects to EPKGPackageDO objects.
+     *
+     * @param dataObject A collection of data objects to convert
+     * @return A collection of EPKGPackageDO objects
+     */
     @Override
-    public Collection<EPKGPackageDO> convertBatch(Collection<String> dataObject) {
+    public Collection<EPKGPackageDO> convertBatch(final Collection<String> dataObject) {
         Collection<EPKGPackageDO> objList = new ArrayList<>();
         for (String obj : dataObject) {
             EPKGPackage epkg = ObjectMapperUtil.jsonToObject(obj, EPKGPackage.class);
             EPKGPackageDO epkgDO = EPKGPackageConverter.toDataObjectForCreate(epkg);
-            logger.info("convert pkgId: {}", epkgDO.getPkgId());
+            LOGGER.info("convert pkgId: {}", epkgDO.getPkgId());
             objList.add(epkgDO);
         }
         return objList;
     }
 
+    /**
+     * Query detailed information by package ID.
+     *
+     * @param pkgId The package ID to query detailed information
+     * @return A list of EPKGPackageDetailVo objects
+     */
     @Override
-    public List<EPKGPackageDetailVo> queryDetailByPkgId(String pkgId) {
+    public List<EPKGPackageDetailVo> queryDetailByPkgId(final String pkgId) {
         QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
         wrapper.eq("pkg_id", pkgId);
         List<EPKGPackageDO> epkgList = ePKGPkgMapper.selectList(wrapper);
-        List<EPKGPackageDetailVo> res = EPKGPackageConverter.toDetail(epkgList);
-        return res;
+        return EPKGPackageConverter.toDetail(epkgList);
     }
 }
