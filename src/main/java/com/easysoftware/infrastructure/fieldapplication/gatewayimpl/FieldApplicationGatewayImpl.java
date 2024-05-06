@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
     private static final Logger logger = LoggerFactory.getLogger(FieldApplicationGatewayImpl.class);
 
     @Override
-    public Map<String, Object> queryAll(FiledApplicationSerachCondition condition) {
+    public Map<String, Object> queryMenuByPage(FiledApplicationSerachCondition condition){
         Page<FieldApplicationDO> page = createPage(condition);
         QueryWrapper<FieldApplicationDO> wrapper = QueryWrapperUtil.createQueryWrapper(new FieldApplicationDO(),
                 condition, null);
@@ -89,5 +88,11 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
 
         column = StringUtil.underlineToCamel(column);
         return FieldApplicationConverter.toColumn(columnList, column);
+    }
+
+    @Override
+    public List<FiledApplicationVo> queryVoList() {
+        List<FieldApplicationDO> doList = fieldAppMapper.selectList(null);
+        return FieldApplicationConverter.toVo(doList);
     }
 }
