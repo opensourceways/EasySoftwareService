@@ -1,17 +1,5 @@
 package com.easysoftware.infrastructure.fieldapplication.gatewayimpl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.BadSqlGrammarException;
-import org.springframework.stereotype.Component;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -46,10 +34,10 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
     private FieldApplicationDOMapper fieldAppMapper;
 
     /**
-     * Query all based on the provided search condition for filed applications.
+     * Query menu items by page based on the specified search condition.
      *
-     * @param condition The search condition for filed applications
-     * @return A map containing relevant information
+     * @param condition The search condition for querying menu items.
+     * @return A map containing menu items based on the page and condition.
      */
     @Override
     public Map<String, Object> queryMenuByPage(FiledApplicationSerachCondition condition){
@@ -81,10 +69,10 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
     }
 
     /**
-     * Query columns based on the provided list of columns.
+     * Query columns and their values based on the specified list of columns.
      *
-     * @param columns The list of columns to query
-     * @return A map containing column data as lists of strings
+     * @param columns The list of columns to query.
+     * @return A map containing column names as keys and lists of values as values.
      */
     @Override
     public Map<String, List<String>> queryColumn(final List<String> columns) {
@@ -124,6 +112,11 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
         return FieldApplicationConverter.toColumn(columnList, underlineToCamelColumn);
     }
 
+    /**
+     * Query a list of FiledApplicationVo objects.
+     *
+     * @return A list of FiledApplicationVo objects.
+     */
     @Override
     public List<FiledApplicationVo> queryVoList() {
         List<FieldApplicationDO> doList = fieldAppMapper.selectList(null);

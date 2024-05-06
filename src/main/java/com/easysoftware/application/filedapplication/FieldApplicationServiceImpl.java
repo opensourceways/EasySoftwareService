@@ -1,21 +1,5 @@
 package com.easysoftware.application.filedapplication;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
 import com.easysoftware.application.epkgpackage.EPKGPackageService;
@@ -24,6 +8,7 @@ import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
 import com.easysoftware.application.filedapplication.dto.FieldColumnSearchCondition;
 import com.easysoftware.application.filedapplication.dto.FieldDetailSearchCondition;
 import com.easysoftware.application.filedapplication.dto.FiledApplicationSerachCondition;
+import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
 import com.easysoftware.application.rpmpackage.RPMPackageService;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
@@ -46,6 +31,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -125,6 +111,11 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
     }
 
 
+    /**
+     * Search the main page and return a list of maps containing key-value pairs.
+     *
+     * @return A list of maps with key-value pairs from the main page search.
+     */
     private List<Map<String, Object>> searchMainPage() {
         Map<String, List<Object>> cateMap = getCategorys();
         List<FiledApplicationVo> fList = domainGateway.queryVoList();
@@ -135,6 +126,12 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         return assembleMainPage(cateMap);
     }
 
+    /**
+     * Assemble the main page using the provided category map and return a list of maps containing key-value pairs.
+     *
+     * @param cateMap The category map used for assembling the main page.
+     * @return A list of maps with key-value pairs from the assembled main page.
+     */
     private List<Map<String, Object>> assembleMainPage(Map<String, List<Object>> cateMap) {
         List<Map<String, Object>> res = new ArrayList<>();
         for (Map.Entry<String, List<Object>> cateEntry : cateMap.entrySet()) {
@@ -146,6 +143,11 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         return res;
     }
 
+    /**
+     * Get categories and their associated objects.
+     *
+     * @return A map containing category names as keys and lists of associated objects as values.
+     */
     private Map<String, List<Object>> getCategorys() {
         Map<String, List<Object>> map = new HashMap<>();
         for (AppCategoryEnum categoryEnum : AppCategoryEnum.values()) {
@@ -155,6 +157,12 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         return map;
     }
 
+    /**
+     * Search the domain menu based on the specified search condition.
+     *
+     * @param condition The search condition for filtering domain menu items.
+     * @return A map containing domain menu items with their associated objects.
+     */
     private Map<String, Object> searchDomainMenu(FiledApplicationSerachCondition condition) {
         condition.setName("");
         return domainGateway.queryMenuByPage(condition);
