@@ -34,9 +34,10 @@ COPY --chown=easysoftware --from=Builder /EasySoftware/target ${WORKSPACE}/targe
 
 RUN echo "umask 027" >> /home/easysoftware/.bashrc \
     && source /home/easysoftware/.bashrc \
-    && mkdir /home/easysoftware/tomcat \
+    && mkdir /home/easysoftware/tomcat/log \
     && chmod 550 -R /home/easysoftware \
-    && chown -R easysoftware:easysoftware /home/easysoftware/tomcat \
+    && chown -R easysoftware:easysoftware /home/easysoftware/tomcat/ \
+    && chmod 750 /home/easysoftware/tomcat/log \
 	&& echo "set +o history" >> /etc/bashrc \
     && sed -i "s|HISTSIZE=1000|HISTSIZE=0|" /etc/profile \
     && sed -i "s|PASS_MAX_DAYS[ \t]*99999|PASS_MAX_DAYS 30|" /etc/login.defs
