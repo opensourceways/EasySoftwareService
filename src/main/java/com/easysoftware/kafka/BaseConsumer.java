@@ -1,38 +1,56 @@
 package com.easysoftware.kafka;
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import com.easysoftware.application.BaseIService;
+import com.easysoftware.application.ServiceMap;
+import com.easysoftware.common.utils.ObjectMapperUtil;
+import lombok.Generated;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.easysoftware.application.BaseIService;
-import com.easysoftware.application.ServiceMap;
-import com.easysoftware.common.utils.ObjectMapperUtil;
 
-import lombok.Generated;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BaseConsumer {
+
+    /**
+     * Autowired ServiceMap instance.
+     */
     @Autowired
-    ServiceMap serviceMap;
+    private ServiceMap serviceMap;
 
-    private static final Logger logger = LoggerFactory.getLogger(BaseConsumer.class);
-    protected ArrayList<KafkaConsumer<String, String>> KafkaConsumerList = new ArrayList<>();
+    /**
+     * Logger for BaseConsumer class.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(BaseConsumer.class);
 
+    /**
+     * List to hold KafkaConsumer instances for String keys and values.
+     */
+    protected ArrayList<KafkaConsumer<String, String>> kafkaConsumerList = new ArrayList<>();
+
+
+    /**
+     * Custom tasks method to perform Kafka to MySQL data transfer.
+     */
     // @Scheduled(fixedRate = 5000)
     @Generated
     public void tasks() {
-        KafkaToMysql();
+        kafkaToMysql();
     }
 
+    /**
+     * Method to transfer data from Kafka to MySQL by processing ConsumerRecords.
+     */
     @Generated
-    public void KafkaToMysql() {
+    public void kafkaToMysql() {
         while (true) {
-            for (KafkaConsumer<String, String> customer : KafkaConsumerList) {
+            for (KafkaConsumer<String, String> customer : kafkaConsumerList) {
                 ConsumerRecords<String, String> poll = customer.poll(Duration.ofSeconds(5));
                 dealDataToTableByBatch(poll);
                 customer.commitAsync();
@@ -40,8 +58,13 @@ public class BaseConsumer {
         }
     }
 
+    /**
+     * Processes ConsumerRecords in batches and deals with the data to insert into a table.
+     *
+     * @param records The ConsumerRecords to process.
+     */
     // The data of a topic can only be written to the same table
-    public void dealDataToTableByBatch(ConsumerRecords<String, String> records) {
+    public void dealDataToTableByBatch(final ConsumerRecords<String, String> records) {
         ArrayList<String> appList = new ArrayList<>();
         BaseIService baseIService = null;
         int partition = 0;
@@ -57,24 +80,29 @@ public class BaseConsumer {
                 partition = record.partition();
                 offset = record.offset();
             } catch (Exception e) {
-                logger.error(e.getMessage() + ":" + value, e);
+                LOGGER.error(e.getMessage() + ":" + value, e);
             }
         }
         long endTime1 = System.nanoTime();
         long duration = (endTime1 - startTime) / 1000000;
-        logger.info("处理records用时： " + duration + " 毫秒，" + "数据量：" + appList.size());
+        LOGGER.info("处理records用时： " + duration + " 毫秒，" + "数据量：" + appList.size());
         if (!appList.isEmpty()) {
-            logger.info("partation: " + partition + ", offset: " + offset);
+            LOGGER.info("partation: " + partition + ", offset: " + offset);
             baseIService.saveDataObjectBatch(appList);
         }
         long endTime2 = System.nanoTime();
         duration = (endTime2 - endTime1) / 1000000;
-        logger.info("写入数据库用时： " + duration + " 毫秒，" + "数据量：" + appList.size());
+        LOGGER.info("写入数据库用时： " + duration + " 毫秒，" + "数据量：" + appList.size());
     }
 
+    /**
+     * Processes ConsumerRecords and deals with the data to insert into multiple tables.
+     *
+     * @param records The ConsumerRecords to process.
+     */
     // The data of a topic may be written to multiple tables
     @Generated
-    public void dealDataToMultipleTables(ConsumerRecords<String, String> records) {
+    public void dealDataToMultipleTables(final ConsumerRecords<String, String> records) {
         Map<String, ArrayList<String>> resMap = new HashMap<>();
         int partition = 0;
         long offset = 0;
@@ -96,7 +124,7 @@ public class BaseConsumer {
                 partition = record.partition();
                 offset = record.offset();
             } catch (Exception e) {
-                logger.error(e.getMessage() + ": " + value, e);
+                LOGGER.error(e.getMessage() + ": " + value, e);
             }
         }
         resMap.forEach((table, values) -> {
@@ -104,7 +132,7 @@ public class BaseConsumer {
                 serviceMap.getIService(table + "Service").saveDataObjectBatch(values);
             }
         });
-        logger.info("Partition: " + partition + ", Offset: " + offset);
+        LOGGER.info("Partition: " + partition + ", Offset: " + offset);
     }
 
 }

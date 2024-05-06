@@ -1,8 +1,5 @@
 package com.easysoftware.common.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.config.SaslConfigs;
@@ -17,25 +14,49 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Configuration
 @EnableKafka
 public class KafkaConsumerConfig {
 
+    /**
+     * Bootstrap servers for Kafka connection.
+     */
     @Value("${bootstrap.servers}")
     private String bootstrapServers;
 
+    /**
+     * Consumer group ID for Kafka consumer.
+     */
     @Value("${consumer.groupId}")
     private String groupId;
 
+    /**
+     * SASL JAAS configuration for authentication.
+     */
     @Value("${spring.kafka.properties.sasl.jaas.config}")
     private String authConfig;
 
+    /**
+     * SASL mechanism for authentication.
+     */
     @Value("${spring.kafka.properties.sasl.mechanism}")
     private String mechanism;
 
+    /**
+     * Location of the SSL trust store.
+     */
     @Value("${spring.kafka.properties.ssl.truststore.location}")
     private String trustStoreLocation;
 
+
+    /**
+     * Configures a ConsumerFactory for processing Kafka messages with String key and value types.
+     *
+     * @return The configured ConsumerFactory.
+     */
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
         Map<String, Object> configProps = new HashMap<>();
@@ -54,6 +75,11 @@ public class KafkaConsumerConfig {
         return new DefaultKafkaConsumerFactory<>(configProps);
     }
 
+    /**
+     * Configures a Kafka listener container factory for processing Kafka messages.
+     *
+     * @return The ConcurrentKafkaListenerContainerFactory for String key and value types.
+     */
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();

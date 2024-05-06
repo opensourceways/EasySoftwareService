@@ -6,13 +6,22 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Documented  
-@Target(ElementType.METHOD)  
-@Retention(RetentionPolicy.RUNTIME)  
+@Documented
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface RequestLimitRedis {
-    // 限制时间 单位：秒(默认值：30s）  
-    long period() default 30;  
-  
-    // 允许请求的次数(默认值：5次）  
-    long count() default 5;  
+    /**
+     * Specifies the time limit in seconds (default value: 30s).
+     *
+     * @return The time limit in seconds.
+     */
+    long period() default 30;
+
+    /**
+     * Specifies the number of allowed requests (default value: 5).
+     *
+     * @return The number of allowed requests.
+     */
+    long count() default 5;
+
 }

@@ -1,22 +1,56 @@
 package com.easysoftware.common.exception.enumvalid;
 
 public enum DomainNameEnum {
+    /**
+     * Enum representing the APPPKG domain.
+     */
     APPPKG("apppkg"),
+
+    /**
+     * Enum representing the EPKGPKG domain.
+     */
     EPKGPKG("epkgpkg"),
+
+    /**
+     * Enum representing the RPMPKG domain.
+     */
     RPMPKG("rpmpkg"),
+
+    /**
+     * Enum representing all domains.
+     */
     ALL("all");
 
-    private String alias;
+    /**
+     * Alias for the domain name.
+     */
+    private final String alias;
 
-    DomainNameEnum(String alias) {
+    /**
+     * Constructor for DomainNameEnum with an alias.
+     *
+     * @param alias The alias for the domain name
+     */
+    DomainNameEnum(final String alias) {
         this.alias = alias;
     }
 
+    /**
+     * Get the alias for the domain name.
+     *
+     * @return The alias for the domain name
+     */
     public String getAlias() {
         return this.alias;
     }
 
-    public static boolean isValidCategory(String alias) {
+    /**
+     * Check if a given alias is a valid domain name type.
+     *
+     * @param alias The alias to check
+     * @return True if the alias represents a valid domain name type, false otherwise
+     */
+    public static boolean isValidCategory(final String alias) {
         for (DomainNameEnum categoryEnum : DomainNameEnum.values()) {
             if (categoryEnum.getAlias().equals(alias)) {
                 return true;

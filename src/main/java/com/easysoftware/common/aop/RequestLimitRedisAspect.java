@@ -1,4 +1,5 @@
 package com.easysoftware.common.aop;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -28,32 +29,57 @@ import java.util.concurrent.TimeUnit;
 @Component
 
 public class RequestLimitRedisAspect {
-    private static final Logger logger = LoggerFactory.getLogger(RequestLimitRedisAspect.class);
+    /**
+     * Logger for logging messages in RequestLimitRedisAspect class.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(RequestLimitRedisAspect.class);
 
+    /**
+     * Autowired RedisTemplate for interacting with Redis.
+     */
     @Autowired
-    RedisTemplate  redisTemplate;
+    private RedisTemplate redisTemplate;
 
-    @Value("${dos-global.rejectPeriod}") 
-    long rejectPeriod;
+    /**
+     * Value of the rejection period configured globally.
+     */
+    @Value("${dos-global.rejectPeriod}")
+    private long rejectPeriod;
 
-    @Value("${dos-global.rejectCount}") 
-    long rejectCount;
+    /**
+     * Value of the rejection count configured globally.
+     */
+    @Value("${dos-global.rejectCount}")
+    private long rejectCount;
 
-    // 切点
+    /**
+     * Pointcut method to define where the aspect applies based on the RequestLimitRedis annotation.
+     *
+     * @param requestLimit The RequestLimitRedis annotation.
+     */
     @Pointcut("@annotation(requestLimit)")
-    public void controllerAspect(RequestLimitRedis requestLimit) {}
+    public void controllerAspect(final RequestLimitRedis requestLimit) {
+    }
 
+    /**
+     * Advice method that intercepts the method calls annotated with RequestLimitRedis and enforces request limiting.
+     *
+     * @param joinPoint The ProceedingJoinPoint representing the intercepted method.
+     * @param requestLimit The RequestLimitRedis annotation containing request limiting criteria.
+     * @return The result of the intercepted method execution.
+     * @throws Throwable if an error occurs during method execution.
+     */
     @Around("controllerAspect(requestLimit)")
-    public Object before(ProceedingJoinPoint joinPoint, RequestLimitRedis requestLimit) throws Throwable {
-        
+    public Object before(final ProceedingJoinPoint joinPoint, final RequestLimitRedis requestLimit) throws Throwable {
+
         long period = rejectPeriod;
         long limitCount = rejectCount;
-        
+
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
         // 获取url
         String ip = ClientUtil.getClientIpAddress(request);
-        String uri = request.getRequestURI() ; 
+        String uri = request.getRequestURI();
         String key = "req_limit:".concat(uri).concat(ip);
 
 
@@ -62,7 +88,7 @@ public class RequestLimitRedisAspect {
         long currentMs = System.currentTimeMillis();
         zSetOperations.add(key, currentMs, currentMs);
 
-   
+
         redisTemplate.expire(key, period, TimeUnit.SECONDS);
 
         // remove the value that out of current window
@@ -70,15 +96,15 @@ public class RequestLimitRedisAspect {
 
         // 检查访问次数
         Long count = zSetOperations.zCard(key);
-   
+
         if (count > limitCount) {
             // 审计日志
-            logger.error("接口拦截：{}，请求超过限制频率【{}次/{}s】,IP：{}", uri, limitCount, period, ip);
+            LOGGER.error("接口拦截：{}，请求超过限制频率【{}次/{}s】,IP：{}", uri, limitCount, period, ip);
             return ResultUtil.fail(HttpStatus.TOO_MANY_REQUESTS, MessageCode.EC00010);
         }
 
-  
-        return  joinPoint.proceed();
+
+        return joinPoint.proceed();
     }
 
 }

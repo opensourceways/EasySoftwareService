@@ -1,7 +1,6 @@
 package com.easysoftware;
 
-import java.util.List;
-
+import com.baomidou.mybatisplus.autoconfigure.DdlApplicationRunner;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -10,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import com.baomidou.mybatisplus.autoconfigure.DdlApplicationRunner;
+import java.util.List;
 
 @SpringBootApplication
 @EnableScheduling
@@ -18,12 +17,23 @@ import com.baomidou.mybatisplus.autoconfigure.DdlApplicationRunner;
 @MapperScan("com.easysoftware.infrastructure.mapper")
 public class EasysoftwareApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(EasysoftwareApplication.class, args);
-	}
+    /**
+     * Main method for the Java application.
+     *
+     * @param args Command-line arguments
+     */
+    public static void main(String[] args) {
+        SpringApplication.run(EasysoftwareApplication.class, args);
+    }
 
-	@Bean
- 	public DdlApplicationRunner ddlApplicationRunner(@Autowired(required = false) List ddlList) {
+    /**
+     * Bean definition for DdlApplicationRunner.
+     *
+     * @param ddlList List of DDLs (Data Definition Language)
+     * @return An instance of DdlApplicationRunner
+     */
+    @Bean
+    public DdlApplicationRunner ddlApplicationRunner(@Autowired(required = false) final List ddlList) {
         return new DdlApplicationRunner(ddlList);
     }
 }

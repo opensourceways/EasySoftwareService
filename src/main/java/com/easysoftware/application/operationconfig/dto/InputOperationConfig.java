@@ -8,8 +8,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InputOperationConfig {
+    /**
+     * Categories.
+     */
     private String categorys;
+
+    /**
+     * Order index.
+     */
     private String orderIndex;
+
+    /**
+     * Recommendation status.
+     */
     private String recommend;
+
+    /**
+     * Type.
+     */
     private String type;
+
 }

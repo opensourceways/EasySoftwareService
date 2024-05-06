@@ -16,53 +16,98 @@ import org.springframework.http.ResponseEntity;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    private static final Logger logger =  LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    /**
+     * Logger instance for logging exceptions.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    /**
+     * Handles exceptions of type MethodArgumentNotValidException.
+     *
+     * @param e The MethodArgumentNotValidException to handle
+     * @return ResponseEntity containing details about the exception
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Object> exception(MethodArgumentNotValidException e) {
-        logger.error(MessageCode.EC0002.getMsgEn());
+    public ResponseEntity<Object> exception(final MethodArgumentNotValidException e) {
+        LOGGER.error(MessageCode.EC0002.getMsgEn());
         return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
     }
 
+    /**
+     * Handles exceptions of type ParamErrorException.
+     *
+     * @param e The ParamErrorException to handle
+     * @return ResponseEntity containing details about the exception
+     */
     @ExceptionHandler(ParamErrorException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Object> exception(ParamErrorException e) {
-        logger.error(e.getMessage());
+    public ResponseEntity<Object> exception(final ParamErrorException e) {
+        LOGGER.error(e.getMessage());
         return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002, e.getMessage());
     }
 
+    /**
+     * Handles exceptions of type EnumValidException.
+     *
+     * @param e The EnumValidException to handle
+     * @return ResponseEntity containing details about the exception
+     */
     @ExceptionHandler(EnumValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Object> exception(EnumValidException e) {
-        logger.error(MessageCode.EC0002.getMsgEn());
+    public ResponseEntity<Object> exception(final EnumValidException e) {
+        LOGGER.error(MessageCode.EC0002.getMsgEn());
         return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
     }
 
+    /**
+     * Handles exceptions of type AppPkgIconException.
+     *
+     * @param e The AppPkgIconException to handle
+     * @return ResponseEntity containing details about the exception
+     */
     @ExceptionHandler(AppPkgIconException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Object> exception(AppPkgIconException e) {
-        logger.error(MessageCode.EC0009.getMsgEn());
+    public ResponseEntity<Object> exception(final AppPkgIconException e) {
+        LOGGER.error(MessageCode.EC0009.getMsgEn());
         return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0009);
     }
 
+    /**
+     * Handles exceptions of type AuthException.
+     *
+     * @param e The AuthException to handle
+     * @return ResponseEntity containing details about the exception
+     */
     @ExceptionHandler(AuthException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<Object> exception(AuthException e) {
-        logger.error(e.getMessage());
+    public ResponseEntity<Object> exception(final AuthException e) {
+        LOGGER.error(e.getMessage());
         return ResultUtil.fail(HttpStatus.UNAUTHORIZED, MessageCode.EC00012, e.getMessage());
     }
 
+    /**
+     * Handles general exceptions.
+     *
+     * @param e The Exception to handle
+     * @return ResponseEntity containing details about the exception
+     */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<Object> exception(Exception e) {
-        logger.error(e.getMessage());
+    public ResponseEntity<Object> exception(final Exception e) {
+        LOGGER.error(e.getMessage());
         return ResultUtil.fail(HttpStatus.INTERNAL_SERVER_ERROR, MessageCode.ES0001);
     }
 
+    /**
+     * Handles runtime exceptions.
+     *
+     * @param e The RuntimeException to handle
+     * @return ResponseEntity containing details about the exception
+     */
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<Object> exception(RuntimeException e) {
+    public ResponseEntity<Object> exception(final RuntimeException e) {
         return ResultUtil.fail(HttpStatus.INTERNAL_SERVER_ERROR, MessageCode.ES0001, e.getMessage());
     }
 }

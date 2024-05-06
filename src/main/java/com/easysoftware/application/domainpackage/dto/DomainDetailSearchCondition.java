@@ -11,12 +11,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DomainDetailSearchCondition {
+    /**
+     * RPM package ID with a maximum length of PackageConstant.MAX_FIELD_LENGTH.
+     */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String rpmPkgId;
 
+    /**
+     * EPKG package ID with a maximum length of PackageConstant.MAX_FIELD_LENGTH.
+     */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String epkgPkgId;
 
+    /**
+     * Application package ID with a maximum length of PackageConstant.MAX_FIELD_LENGTH.
+     */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String appPkgId;
+
 }

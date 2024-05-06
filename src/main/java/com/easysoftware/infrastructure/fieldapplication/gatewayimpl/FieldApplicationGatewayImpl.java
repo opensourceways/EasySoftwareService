@@ -1,17 +1,5 @@
 package com.easysoftware.infrastructure.fieldapplication.gatewayimpl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.BadSqlGrammarException;
-import org.springframework.stereotype.Component;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -24,17 +12,33 @@ import com.easysoftware.infrastructure.fieldapplication.gatewayimpl.converter.Fi
 import com.easysoftware.infrastructure.fieldapplication.gatewayimpl.dataobject.FieldApplicationDO;
 import com.easysoftware.infrastructure.mapper.FieldApplicationDOMapper;
 import com.power.common.util.StringUtil;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.BadSqlGrammarException;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 @Slf4j
 public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
+
+    /**
+     * Autowired FieldApplicationDOMapper for database operations.
+     */
     @Autowired
     private FieldApplicationDOMapper fieldAppMapper;
 
-    private static final Logger logger = LoggerFactory.getLogger(FieldApplicationGatewayImpl.class);
-
+    /**
+     * Query menu items by page based on the specified search condition.
+     *
+     * @param condition The search condition for querying menu items.
+     * @return A map containing menu items based on the page and condition.
+     */
     @Override
     public Map<String, Object> queryMenuByPage(FiledApplicationSerachCondition condition){
         Page<FieldApplicationDO> page = createPage(condition);
@@ -51,15 +55,27 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
         );
     }
 
-    private Page<FieldApplicationDO> createPage(FiledApplicationSerachCondition condition) {
+    /**
+     * Creates a Page of FieldApplicationDO based on the provided search condition.
+     *
+     * @param condition The FieldApplicationSearchCondition object to create the page from.
+     * @return A Page of FieldApplicationDO entities.
+     */
+    private Page<FieldApplicationDO> createPage(final FiledApplicationSerachCondition condition) {
         int pageNum = condition.getPageNum();
         int pageSize = condition.getPageSize();
         Page<FieldApplicationDO> page = new Page<>(pageNum, pageSize);
         return page;
     }
 
+    /**
+     * Query columns and their values based on the specified list of columns.
+     *
+     * @param columns The list of columns to query.
+     * @return A map containing column names as keys and lists of values as values.
+     */
     @Override
-    public Map<String, List<String>> queryColumn(List<String> columns) {
+    public Map<String, List<String>> queryColumn(final List<String> columns) {
         Map<String, List<String>> res = new HashMap<>();
         for (String column : columns) {
             List<String> colList = queryColumn(column);
@@ -68,12 +84,18 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
         return res;
     }
 
-    public List<String> queryColumn(String column) {
+    /**
+     * Query a specific column and return the results as a list of strings.
+     *
+     * @param column The name of the column to query.
+     * @return A list of strings representing the queried column.
+     */
+    public List<String> queryColumn(final String column) {
         // 白名单列
-        List<String> allowedColumns = Arrays.asList("category", "os", "arch"); 
+        List<String> allowedColumns = Arrays.asList("category", "os", "arch");
 
-        if (!allowedColumns.contains(column)) {  
-            throw new ParamErrorException("Unsupported column: " + column);  
+        if (!allowedColumns.contains(column)) {
+            throw new ParamErrorException("Unsupported column: " + column);
         }
 
         QueryWrapper<FieldApplicationDO> wrapper = new QueryWrapper<>();
@@ -86,10 +108,15 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
             throw new ParamErrorException("unsupported param: " + column);
         }
 
-        column = StringUtil.underlineToCamel(column);
-        return FieldApplicationConverter.toColumn(columnList, column);
+        String underlineToCamelColumn = StringUtil.underlineToCamel(column);
+        return FieldApplicationConverter.toColumn(columnList, underlineToCamelColumn);
     }
 
+    /**
+     * Query a list of FiledApplicationVo objects.
+     *
+     * @return A list of FiledApplicationVo objects.
+     */
     @Override
     public List<FiledApplicationVo> queryVoList() {
         List<FieldApplicationDO> doList = fieldAppMapper.selectList(null);

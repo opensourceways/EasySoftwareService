@@ -14,20 +14,34 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/apppkg")
 public class ApplicationPackageQueryAdapter {
+
+    /**
+     * Autowired service for managing application packages.
+     */
     @Autowired
     private ApplicationPackageService appPkgService;
 
+    /**
+     * Endpoint to query application packages by name.
+     *
+     * @param condition The search condition for querying application packages.
+     * @return ResponseEntity<Object>.
+     */
     @GetMapping("")
     @RequestLimitRedis(period = 10, count = 5) // 10s内同一ip连续访问5次，拒绝访问
-    public ResponseEntity<Object> queryByName(@Valid ApplicationPackageSearchCondition condition) {
-        ResponseEntity<Object> res = appPkgService.searchAppPkg(condition);
-        return res;
+    public ResponseEntity<Object> queryByName(@Valid final ApplicationPackageSearchCondition condition) {
+        return appPkgService.searchAppPkg(condition);
     }
 
+    /**
+     * Endpoint to query application packages by tags.
+     *
+     * @param condition The search condition for querying application packages.
+     * @return ResponseEntity<Object>.
+     */
     @GetMapping("/tags")
-    @RequestLimitRedis() 
-    public ResponseEntity<Object> queryByTags(@Valid ApplicationPackageSearchCondition condition) {
-        ResponseEntity<Object> res = appPkgService.queryPkgByTags(condition);
-        return res;
+    @RequestLimitRedis()
+    public ResponseEntity<Object> queryByTags(@Valid final ApplicationPackageSearchCondition condition) {
+        return appPkgService.queryPkgByTags(condition);
     }
 }

@@ -1,22 +1,62 @@
 package com.easysoftware.domain.applicationversion;
 
-import java.io.Serial;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serial;
 
 @Getter
 @Setter
 public class ApplicationVersion {
+    /**
+     * Class representing a specific entity with various properties.
+     */
     @Serial
     private static final long serialVersionUID = 1L;
-    public String name;
-    public String upHomepage;
-    public String eulerHomepage;
-    public String backend;
-    public String upstreamVersion;
-    public String openeulerVersion;
-    public String ciVersion;
-    public String status;
+
+    /**
+     * Name of the entity.
+     */
+    private String name;
+
+    /**
+     * URL for the upstream homepage.
+     */
+    private String upHomepage;
+
+    /**
+     * URL for the EulerOS homepage.
+     */
+    private String eulerHomepage;
+
+    /**
+     * Backend information.
+     */
+    private String backend;
+
+    /**
+     * Upstream version details.
+     */
+    private String upstreamVersion;
+
+    /**
+     * OpenEuler version details.
+     */
+    private String openeulerVersion;
+
+    /**
+     * Continuous Integration (CI) version details.
+     */
+    private String ciVersion;
+
+    /**
+     * Status of the entity.
+     */
+    private String status;
+
+    /**
+     * Unique identifier of the entity.
+     */
     private String id;
+
 }

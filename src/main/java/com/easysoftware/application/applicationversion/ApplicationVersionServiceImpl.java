@@ -1,14 +1,4 @@
 package com.easysoftware.application.applicationversion;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
@@ -22,35 +12,62 @@ import com.easysoftware.domain.applicationversion.gateway.ApplicationVersionGate
 import com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobject.ApplicationVersionDO;
 import com.easysoftware.infrastructure.mapper.ApplicationVersionDOMapper;
 import com.easysoftware.kafka.Producer;
-
 import jakarta.annotation.Resource;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service("ApplicationVersionService")
 public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersionDOMapper, ApplicationVersionDO> implements ApplicationVersionService {
+
+    /**
+     * Autowired Kafka producer for sending messages.
+     */
     @Autowired
-    Producer kafkaProducer;
+    private Producer kafkaProducer;
 
+    /**
+     * Topic name for the Kafka producer related to application versions.
+     */
     @Value("${producer.topic}")
-    String topicAppVersion;
+    private String topicAppVersion;
 
+    /**
+     * API endpoint for repository information.
+     */
     @Value("${api.repoInfo}")
-    String repoInfoApi;
+    private String repoInfoApi;
 
+    /**
+     * Resource for interacting with Application Version Gateway.
+     */
     @Resource
-    ApplicationVersionGateway AppVersionGateway;
+    private ApplicationVersionGateway appVersionGateway;
 
 
+    /**
+     * Inserts a new application version based on the provided input.
+     *
+     * @param inputAppVersion The input application version to be inserted.
+     * @return ResponseEntity<Object>.
+     */
     @Override
-    public ResponseEntity<Object> insertAppVersion(InputApplicationVersion inputAppVersion) {
+    public ResponseEntity<Object> insertAppVersion(final InputApplicationVersion inputAppVersion) {
         // 数据库中是否已存在该包
-        boolean found = AppVersionGateway.existApp(inputAppVersion.getName());
-        if (found) {
+        if (appVersionGateway.existApp(inputAppVersion.getName())) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0008);
         }
-        ApplicationVersion AppVersion = new ApplicationVersion();
-        BeanUtils.copyProperties(inputAppVersion, AppVersion);
+        ApplicationVersion appVersion = new ApplicationVersion();
+        BeanUtils.copyProperties(inputAppVersion, appVersion);
 
-        Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(AppVersion);
+        Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(appVersion);
         kafkaMsg.put("table", "ApplicationVersion");
         kafkaMsg.put("unique", inputAppVersion.getName());
         kafkaProducer.sendMess(topicAppVersion + "_version", UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(kafkaMsg));
@@ -58,54 +75,60 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
         return ResultUtil.success(HttpStatus.OK);
     }
 
+    /**
+     * Searches for application versions based on the specified search conditions.
+     *
+     * @param condition The search conditions to filter application versions.
+     * @return ResponseEntity<Object>.
+     */
     @Override
-    public ResponseEntity<Object> searchAppVersion(ApplicationVersionSearchCondition condition) {
-        Map<String, Object> res = AppVersionGateway.queryByName(condition);
+    public ResponseEntity<Object> searchAppVersion(final ApplicationVersionSearchCondition condition) {
+        Map<String, Object> res = appVersionGateway.queryByName(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
+    /**
+     * Updates an existing application version using the provided input.
+     *
+     * @param inputAppVersion The updated application version information.
+     * @return ResponseEntity<Object>.
+     */
     @Override
-    public ResponseEntity<Object> updateAppVersion(InputApplicationVersion inputAppVersion) {
+    public ResponseEntity<Object> updateAppVersion(final InputApplicationVersion inputAppVersion) {
         // 数据库中是否已存在该包
-        boolean found = AppVersionGateway.existApp(inputAppVersion.getName());
-        if (!found) {
+        if (!appVersionGateway.existApp(inputAppVersion.getName())) {
             return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0009);
         }
-        ApplicationVersion AppVersion = new ApplicationVersion();
-        BeanUtils.copyProperties(inputAppVersion, AppVersion);
+        ApplicationVersion appVersion = new ApplicationVersion();
+        BeanUtils.copyProperties(inputAppVersion, appVersion);
 
-        boolean succeed = AppVersionGateway.update(AppVersion);
-        if (!succeed) {
-            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0004);
-        }
-        return ResultUtil.success(HttpStatus.OK);
+        boolean succeed = appVersionGateway.update(appVersion);
+        return succeed ? ResultUtil.success(HttpStatus.OK)
+                : ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0004);
     }
 
+    /**
+     * Deletes application versions based on the provided list of names.
+     *
+     * @param names List of names of application versions to be deleted.
+     * @return ResponseEntity<Object>.
+     */
     @Override
-    public ResponseEntity<Object> deleteAppVersion(List<String> names) {
-        List<String> existedNames = new ArrayList<>();
-        for (String name : names) {
-            boolean found = AppVersionGateway.existApp(name);
-            if (found) {
-                existedNames.add(name);
-            }
-        }
-
-        List<String> deletedNames = new ArrayList<>(); 
-        for (String name : existedNames) {
-            boolean deleted = AppVersionGateway.delete(name);
-            if (deleted) {
-                deletedNames.add(name);
-            }
-        }
-
-        String msg = String.format("请求删除的数据: %s, 在数据库中的数据: %s, 成功删除的数据: %s"
-                , names.toString(), existedNames.toString(), deletedNames.toString());
+    public ResponseEntity<Object> deleteAppVersion(final List<String> names) {
+        List<String> existedNames = names.stream().filter(appVersionGateway::existApp).toList();
+        List<String> deletedNames = existedNames.stream().filter(appVersionGateway::delete).toList();
+        String msg = String.format("请求删除的数据: %s, 在数据库中的数据: %s, 成功删除的数据: %s",
+                names, existedNames, deletedNames);
         return ResultUtil.success(HttpStatus.OK, msg);
     }
 
+    /**
+     * Saves a batch of data objects.
+     *
+     * @param dataObject An ArrayList containing the data objects to be saved.
+     */
     @Override
-    public void saveDataObjectBatch(ArrayList<String> dataObject) {
-        saveOrUpdateBatch(AppVersionGateway.convertBatch(dataObject));
+    public void saveDataObjectBatch(final ArrayList<String> dataObject) {
+        saveOrUpdateBatch(appVersionGateway.convertBatch(dataObject));
     }
 }

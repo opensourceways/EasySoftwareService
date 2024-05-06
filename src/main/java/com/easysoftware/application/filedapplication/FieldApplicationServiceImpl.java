@@ -1,21 +1,5 @@
 package com.easysoftware.application.filedapplication;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
 import com.easysoftware.application.epkgpackage.EPKGPackageService;
@@ -38,33 +22,73 @@ import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
 import com.easysoftware.domain.fieldapplication.gateway.FieldapplicationGateway;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 import com.easysoftware.infrastructure.fieldapplication.gatewayimpl.converter.FieldApplicationConverter;
-
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 public class FieldApplicationServiceImpl implements FieldApplicationService {
-    private static final Logger logger = LoggerFactory.getLogger(FieldApplicationServiceImpl.class);
+    /**
+     * Logger for FieldApplicationServiceImpl.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(FieldApplicationServiceImpl.class);
 
+    /**
+     * Domain gateway for FieldApplicationService.
+     */
     @Autowired
-    FieldapplicationGateway domainGateway;
+    private FieldapplicationGateway domainGateway;
 
+    /**
+     * RPM Package Service.
+     */
     @Resource
-    RPMPackageService rpmService;
+    private RPMPackageService rpmService;
 
+    /**
+     * RPM Package Gateway.
+     */
     @Resource
-    RPMPackageGateway rpmGateway;
+    private RPMPackageGateway rpmGateway;
 
+    /**
+     * EPKG Package Service.
+     */
     @Resource
-    EPKGPackageService epkgService;
+    private EPKGPackageService epkgService;
 
+    /**
+     * EPKG Package Gateway.
+     */
     @Resource
-    EPKGPackageGateway epkgGateway;
+    private EPKGPackageGateway epkgGateway;
 
+    /**
+     * Application Package Gateway.
+     */
     @Resource
-    ApplicationPackageGateway appGateway;
+    private ApplicationPackageGateway appGateway;
 
+    /**
+     * Query menu by name.
+     *
+     * @param condition The search condition for querying the menu.
+     * @return ResponseEntity object containing the query results.
+     */
     @Override
-    public ResponseEntity<Object> queryMenuByName(FiledApplicationSerachCondition condition) {
+    public ResponseEntity<Object> queryMenuByName(final FiledApplicationSerachCondition condition) {
         String name = StringUtils.trimToEmpty(condition.getName());
         if ("apppkg".equals(name)) {
             Map<String, Object> res = searchAppMenu(condition);
@@ -87,6 +111,11 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
     }
 
 
+    /**
+     * Search the main page and return a list of maps containing key-value pairs.
+     *
+     * @return A list of maps with key-value pairs from the main page search.
+     */
     private List<Map<String, Object>> searchMainPage() {
         Map<String, List<Object>> cateMap = getCategorys();
         List<FiledApplicationVo> fList = domainGateway.queryVoList();
@@ -97,6 +126,12 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         return assembleMainPage(cateMap);
     }
 
+    /**
+     * Assemble the main page using the provided category map and return a list of maps containing key-value pairs.
+     *
+     * @param cateMap The category map used for assembling the main page.
+     * @return A list of maps with key-value pairs from the assembled main page.
+     */
     private List<Map<String, Object>> assembleMainPage(Map<String, List<Object>> cateMap) {
         List<Map<String, Object>> res = new ArrayList<>();
         for (Map.Entry<String, List<Object>> cateEntry : cateMap.entrySet()) {
@@ -108,6 +143,11 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         return res;
     }
 
+    /**
+     * Get categories and their associated objects.
+     *
+     * @return A map containing category names as keys and lists of associated objects as values.
+     */
     private Map<String, List<Object>> getCategorys() {
         Map<String, List<Object>> map = new HashMap<>();
         for (AppCategoryEnum categoryEnum : AppCategoryEnum.values()) {
@@ -117,28 +157,61 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         return map;
     }
 
+    /**
+     * Search the domain menu based on the specified search condition.
+     *
+     * @param condition The search condition for filtering domain menu items.
+     * @return A map containing domain menu items with their associated objects.
+     */
     private Map<String, Object> searchDomainMenu(FiledApplicationSerachCondition condition) {
         condition.setName("");
         return domainGateway.queryMenuByPage(condition);
     } 
 
-    private Map<String, Object> searchEpkgMenu(FiledApplicationSerachCondition condition) {
+
+    /**
+     * Search EPKG menu based on the specified search condition.
+     *
+     * @param condition The search condition for EPKG menu search.
+     * @return A map containing the search results with string keys and object values.
+     */
+    private Map<String, Object> searchEpkgMenu(final FiledApplicationSerachCondition condition) {
         EPKGPackageSearchCondition epkg = FieldApplicationConverter.toEpkg(condition);
         return epkgService.queryAllEPKGPkgMenu(epkg);
     }
 
-    private Map<String, Object> searchRpmMenu(FiledApplicationSerachCondition condition) {
+
+    /**
+     * Search Rpm menu based on the specified search condition.
+     *
+     * @param condition The search condition for Rpm menu search.
+     * @return A map containing the search results with string keys and object values.
+     */
+    private Map<String, Object> searchRpmMenu(final FiledApplicationSerachCondition condition) {
         RPMPackageSearchCondition rpm = FieldApplicationConverter.toRpm(condition);
         return rpmService.queryAllRPMPkgMenu(rpm);
     }
 
-    private Map<String, Object> searchAppMenu(FiledApplicationSerachCondition condtion) {
-        ApplicationPackageSearchCondition app = FieldApplicationConverter.toApp(condtion);
+
+    /**
+     * Search Application menu based on the specified search condition.
+     *
+     * @param condition The search condition for Application menu search.
+     * @return A map containing the search results with string keys and object values.
+     */
+    private Map<String, Object> searchAppMenu(final FiledApplicationSerachCondition condition) {
+        ApplicationPackageSearchCondition app = FieldApplicationConverter.toApp(condition);
         return appGateway.queryMenuByName(app);
     }
 
+    /**
+     * Search column.
+     *
+     * @param condition The search condition for column search.
+     * @return ResponseEntity object containing the search results.
+     */
     @Override
-    public ResponseEntity<Object> searchColumn(FieldColumnSearchCondition condition) {
+    public ResponseEntity<Object> searchColumn(final FieldColumnSearchCondition condition) {
         List<String> columns = QueryWrapperUtil.splitStr(condition.getColumn());
 
         String name = StringUtils.trimToEmpty(condition.getName());
@@ -159,15 +232,22 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         }
     }
 
+
+    /**
+     * Query detail by name.
+     *
+     * @param condition The search condition for querying the detail.
+     * @return ResponseEntity object containing the query results.
+     */
     @Override
-    public ResponseEntity<Object> queryDetailByName(FieldDetailSearchCondition condition) {
+    public ResponseEntity<Object> queryDetailByName(final FieldDetailSearchCondition condition) {
         String appPkgId = StringUtils.trimToEmpty(condition.getAppPkgId());
         String rpmPkgId = StringUtils.trimToEmpty(condition.getRpmPkgId());
         String epkgPkgId = StringUtils.trimToEmpty(condition.getEpkgPkgId());
 
         Map<String, Object> res = new HashMap<>();
         Set<String> tags = new HashSet<>();
-        
+
         ApplicationPackageDetailVo app = searchAppDetail(appPkgId);
         if (app != null) {
             res.put("IMAGE", app);
@@ -190,43 +270,67 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
-    private EPKGPackageDetailVo searchEpkgDetail(String epkgPkgId) {
+    /**
+     * Search EPKG package detail by the specified EPKG package ID.
+     *
+     * @param epkgPkgId The ID of the EPKG package to search for.
+     * @return An EPKGPackageDetailVo object containing the details of the EPKG package.
+     */
+    private EPKGPackageDetailVo searchEpkgDetail(final String epkgPkgId) {
         List<EPKGPackageDetailVo> pkgList = epkgGateway.queryDetailByPkgId(epkgPkgId);
         if (pkgList.size() >= 1) {
             return pkgList.get(0);
         }
-        logger.error(String.format(MessageCode.EC00014.getMsgEn(), "epkgPkgId"));
+        LOGGER.error(String.format(MessageCode.EC00014.getMsgEn(), "epkgPkgId"));
         return null;
     }
 
-    private RPMPackageDetailVo searchRpmDetail(String rpmPkgId) {
+    /**
+     * Search RPM package detail by the specified RPM package ID.
+     *
+     * @param rpmPkgId The ID of the RPM package to search for.
+     * @return An RPMPackageDetailVo object containing the details of the RPM package.
+     */
+    private RPMPackageDetailVo searchRpmDetail(final String rpmPkgId) {
         List<RPMPackageDetailVo> pkgList = rpmGateway.queryDetailByPkgId(rpmPkgId);
         if (pkgList.size() >= 1) {
             return pkgList.get(0);
         }
-        logger.error(String.format(MessageCode.EC00014.getMsgEn(), "rpmPkgId"));
+        LOGGER.error(String.format(MessageCode.EC00014.getMsgEn(), "rpmPkgId"));
         return null;
     }
 
-    private ApplicationPackageDetailVo searchAppDetail(String appPkgId) {
+    /**
+     * Search application package detail by the specified application package ID.
+     *
+     * @param appPkgId The ID of the application package to search for.
+     * @return An ApplicationPackageDetailVo object containing the details of the application package.
+     */
+    private ApplicationPackageDetailVo searchAppDetail(final String appPkgId) {
         List<ApplicationPackageDetailVo> pkgList = appGateway.queryDetailByPkgId(appPkgId);
         if (pkgList.size() >= 1) {
             return pkgList.get(0);
         }
-        logger.error(String.format(MessageCode.EC00014.getMsgEn(), "appPkgId"));
+        LOGGER.error(String.format(MessageCode.EC00014.getMsgEn(), "appPkgId"));
         return null;
     }
 
+
+    /**
+     * Query statistics.
+     *
+     * @return ResponseEntity object containing the statistical information.
+     */
     @Override
     public ResponseEntity<Object> queryStat() {
-        Long rpmNum = rpmGateway.queryTableLength();
+        long rpmNum = rpmGateway.queryTableLength();
         Long appNum = appGateway.queryTableLength();
-        Long epkgNum = epkgGateway.queryTableLength();
+        long epkgNum = epkgGateway.queryTableLength();
 
         Map<String, Long> res = new HashMap<>();
         res.put("apppkg", appNum);
         res.put("total", Math.addExact(rpmNum, epkgNum));
         return ResultUtil.success(HttpStatus.OK, res);
     }
-    
+
 }

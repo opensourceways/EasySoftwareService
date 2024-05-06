@@ -1,24 +1,5 @@
 package com.easysoftware.application.domainpackage;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import java.util.concurrent.TimeUnit;
 import com.easysoftware.application.applicationpackage.ApplicationPackageService;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
@@ -43,52 +24,100 @@ import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
 import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
-import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
 import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
-import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
-import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter.ApplicationPackageConverter;
-import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
 import com.easysoftware.ranking.Ranker;
 import com.easysoftware.redis.RedisGateway;
-import com.easysoftware.redis.RedisServiceImpl;
 import com.easysoftware.redis.RedisUtil;
-import org.springframework.beans.factory.annotation.Value;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class DomainPackageServiceImpl implements DomainPackageService {
-    private static final Logger logger = LoggerFactory.getLogger(DomainPackageServiceImpl.class);
 
+    /**
+     * Logger for DomainPackageServiceImpl class.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(DomainPackageServiceImpl.class);
+
+    /**
+     * Resource injection for the ApplicationPackageService.
+     */
     @Resource
-    ApplicationPackageService appPkgService;
+    private ApplicationPackageService appPkgService;
 
+    /**
+     * Resource injection for the RPMPackageService.
+     */
     @Resource
-    RPMPackageService rPMPkgService;
+    private RPMPackageService rPMPkgService;
 
+    /**
+     * Resource injection for the EPKGPackageService.
+     */
     @Resource
-    EPKGPackageService epkgPackageService;
+    private EPKGPackageService epkgPackageService;
 
+    /**
+     * Resource injection for the RPMPackageGateway.
+     */
     @Resource
-    RPMPackageGateway rpmPackageGateway;
+    private RPMPackageGateway rpmPackageGateway;
 
+    /**
+     * Resource injection for the EPKGPackageGateway.
+     */
     @Resource
-    EPKGPackageGateway epkgPackageGateway;
+    private EPKGPackageGateway epkgPackageGateway;
 
+    /**
+     * Resource injection for the ApplicationPackageGateway.
+     */
     @Resource
-    ApplicationPackageGateway applicationPackageGateway;
+    private ApplicationPackageGateway applicationPackageGateway;
 
+    /**
+     * Resource injection for the RedisGateway.
+     */
     @Resource
     private RedisGateway redisGateway;
 
+    /**
+     * Resource injection for the Ranker.
+     */
     @Resource
     private Ranker ranker;
 
+    /**
+     * Timeout value for Redis global expiration.
+     */
     @Value("${redis-global.expiration}")
-    int timeOut;
+    private int timeOut;
 
+    /**
+     * Search for domains based on the provided search condition.
+     *
+     * @param condition The DomainSearchCondition for searching.
+     * @return ResponseEntity<Object>.
+     */
     @Override
-    public ResponseEntity<Object> searchDomain(DomainSearchCondition condition) {
+    public ResponseEntity<Object> searchDomain(final DomainSearchCondition condition) {
         String name = condition.getName();
         String entity = condition.getEntity();
 
@@ -103,65 +132,85 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         }
     }
 
-    private ResponseEntity<Object> searchDomainEntity(DomainSearchCondition conditon) {
-        String entity = conditon.getEntity();
+    /**
+     * Search domain entity based on the provided search condition.
+     *
+     * @param condition The DomainSearchCondition for searching.
+     * @return ResponseEntity<Object>.
+     */
+    private ResponseEntity<Object> searchDomainEntity(final DomainSearchCondition condition) {
+        String entity = condition.getEntity();
         DomainPackageMenuVo domain = new DomainPackageMenuVo();
         domain.setName(entity);
-
-        domain = extendIds(domain);
-
-        Map res = Map.ofEntries(
+        extendIds(domain);
+        Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", "-1"),
                 Map.entry("list", domain)
         );
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
-    private ResponseEntity<Object> searchDomainPage(DomainSearchCondition condition) {
+
+    /**
+     * Search for a domain page based on the provided search condition.
+     *
+     * @param condition The DomainSearchCondition for searching.
+     * @return ResponseEntity<Object> containing the search results.
+     */
+    private ResponseEntity<Object> searchDomainPage(final DomainSearchCondition condition) {
         // 展示精品应用
         if ("apppkg".equals(condition.getName())) {
             Map<String, Object> res = searchAppPkgPage(condition);
             return ResultUtil.success(HttpStatus.OK, res);
-        // 展示rpm软件包
+            // 展示rpm软件包
         } else if ("rpmpkg".equals(condition.getName())) {
             RPMPackageSearchCondition rpmCon = DomainPackageConverter.toRpm(condition);
             Map<String, Object> rpmMenuList = rPMPkgService.queryAllRPMPkgMenu(rpmCon);
             return ResultUtil.success(HttpStatus.OK, rpmMenuList);
-        // 展示epkg软件包
+            // 展示epkg软件包
         } else if ("epkgpkg".equals(condition.getName())) {
             EPKGPackageSearchCondition epkgCon = DomainPackageConverter.toEpkg(condition);
             Map<String, Object> epkgMenu = epkgPackageService.queryAllEPKGPkgMenu(epkgCon);
             return ResultUtil.success(HttpStatus.OK, epkgMenu);
-        // 展示领域应用
+            // 展示领域应用
         } else if ("all".equals(condition.getName())) {
-            ResponseEntity<Object> res = searchAllEntity(condition);
-            return res;
+            return searchAllEntity(condition);
         } else {
             throw new ParamErrorException("unsupported param: " + condition.getName());
         }
     }
 
-    private Map<String, Object> searchAppPkgPage(DomainSearchCondition condition) {
+    /**
+     * Search application package page based on the provided search condition.
+     *
+     * @param condition The DomainSearchCondition for searching.
+     * @return A Map containing the search results.
+     */
+    private Map<String, Object> searchAppPkgPage(final DomainSearchCondition condition) {
         ApplicationPackageSearchCondition appCon = DomainPackageConverter.toApp(condition);
         return applicationPackageGateway.queryMenuByName(appCon);
     }
 
-    private ResponseEntity<Object> searchAllEntity(DomainSearchCondition condition) {
+    /**
+     * Search all entities based on the provided search condition.
+     *
+     * @param condition The DomainSearchCondition for searching.
+     * @return ResponseEntity containing the search results.
+     */
+    private ResponseEntity<Object> searchAllEntity(final DomainSearchCondition condition) {
         // 根据请求参数生成唯一redis key
         String redisKeyStr = RedisUtil.objectToString(condition);
         String redisKeyFormat = "domainPage_%s";
-        String redisKey = String.format(redisKeyFormat,RedisUtil.getSHA256(redisKeyStr));
-
-
+        String redisKey = String.format(redisKeyFormat, RedisUtil.getSHA256(redisKeyStr));
         try {
             // 结果未过期，直接返回
-            if(redisGateway.hasKey(redisKey)){
+            if (redisGateway.hasKey(redisKey)) {
                 String resJson = redisGateway.get(redisKey);
                 Object res = RedisUtil.convertToObject(resJson);
                 return ResultUtil.success(HttpStatus.OK, res);
             }
         } catch (Exception e) {
-            logger.info(MessageCode.EC00015.getMsgEn());
+            LOGGER.info(MessageCode.EC00015.getMsgEn());
         }
 
         ApplicationPackageSearchCondition appCon = DomainPackageConverter.toApp(condition);
@@ -174,39 +223,34 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         List<RPMPackageDomainVo> rpmMenus = rPMPkgService.queryPartAppPkgMenu(rpmCon);
 
         List<DomainPackageMenuVo> domainMenus = mergeMenuVOs(appMenus, rpmMenus);
-
-        for (DomainPackageMenuVo menu : domainMenus) {
-            menu = extendIds(menu);
-        }
-
+        //对 domainMenus 中的每个菜单调用 extendIds 方法。
+        domainMenus.forEach(this::extendIds);
         Map<String, List<Object>> cateMap = getCategorys();
-        for (DomainPackageMenuVo menu : domainMenus) {
-            String cate = menu.getCategory();
-            cateMap.get(cate).add(menu);
-        }
+        //对 domainMenus 中的每个菜单，将其添加到 cateMap 中对应类别的列表中。
+        domainMenus.forEach(menu -> cateMap.get(menu.getCategory()).add(menu));
         List<Map<String, Object>> mapList = assembleMap(cateMap);
-
         List<Map<String, Object>> rankedMapList = ranker.rankingDomainPageByOperationConfig(mapList);
-
-        Map res = Map.ofEntries(
+        Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", domainMenus.size()),
                 Map.entry("list", rankedMapList)
         );
-
         try {
             // 结果转json
             String resJson = RedisUtil.convertToJson(res);
             // 设置超时时间 配置默认超时时间
             redisGateway.setWithExpire(redisKey, resJson, timeOut, TimeUnit.HOURS);
         } catch (Exception e) {
-            logger.info(MessageCode.EC00015.getMsgEn());
+            LOGGER.info(MessageCode.EC00015.getMsgEn());
         }
-
-
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
-    private DomainPackageMenuVo extendIds(DomainPackageMenuVo domain) {
+    /**
+     * Extend IDs for a DomainPackageMenuVo object.
+     *
+     * @param domain The DomainPackageMenuVo to extend IDs for.
+     */
+    private void extendIds(final DomainPackageMenuVo domain) {
         String name = domain.getName();
         Set<String> tags = domain.getTags();
 
@@ -228,96 +272,125 @@ public class DomainPackageServiceImpl implements DomainPackageService {
             domain.getPkgIds().put("EPKG", epkg.getPkgId());
         }
 
-        return domain;
     }
 
-    private List<DomainPackageMenuVo> mergeMenuVOs(List<ApplicationPackageMenuVo> appMenus,
-                                                   List<RPMPackageDomainVo> rpmMenus) {
+    /**
+     * Merge menu VOs from ApplicationPackageMenuVo and RPMPackageDomainVo.
+     *
+     * @param appMenus List of ApplicationPackageMenuVo instances.
+     * @param rpmMenus List of RPMPackageDomainVo instances.
+     * @return List of merged DomainPackageMenuVo instances.
+     */
+    private List<DomainPackageMenuVo> mergeMenuVOs(final List<ApplicationPackageMenuVo> appMenus,
+                                                   final List<RPMPackageDomainVo> rpmMenus) {
         Map<String, DomainPackageMenuVo> domainMap = new HashMap<>();
-        for (ApplicationPackageMenuVo app: appMenus) {
+        // 遍历 appMenus 列表
+        appMenus.forEach(app -> {
+            // 创建新的 DomainPackageMenuVo 对象，复制属性并设置标签和包 ID，然后将其放入 domainMap 中
             DomainPackageMenuVo domain = new DomainPackageMenuVo();
             BeanUtils.copyProperties(app, domain);
             domain.getTags().add("IMAGE");
             domain.getPkgIds().put("IMAGE", app.getPkgId());
             domainMap.put(app.getName(), domain);
-        }
+        });
 
-        for (RPMPackageDomainVo rpm: rpmMenus) {
+        // 遍历 rpmMenus 列表
+        rpmMenus.forEach(rpm -> {
             String name = rpm.getName();
+            // 如果 domainMap 包含名称，则将 "RPM" 添加到标签中并继续下一个循环
             if (domainMap.containsKey(name)) {
                 domainMap.get(name).getTags().add("RPM");
-                continue;
+                return;
             }
-
+            // 创建新的 DomainPackageMenuVo 对象，复制属性并设置标签和包 ID，然后将其放入 domainMap 中
             DomainPackageMenuVo domain = new DomainPackageMenuVo();
             BeanUtils.copyProperties(rpm, domain);
             domain.getTags().add("RPM");
             domain.getPkgIds().put("RPM", rpm.getPkgId());
-            domainMap.put(rpm.getName(), domain);
-        }
+            domainMap.put(name, domain);
+        });
 
-        return new ArrayList<DomainPackageMenuVo>(domainMap.values());
+        return new ArrayList<>(domainMap.values());
     }
 
+    /**
+     * Get categories with corresponding objects.
+     *
+     * @return A Map containing category names as keys and lists of objects as values.
+     */
     private Map<String, List<Object>> getCategorys() {
         Map<String, List<Object>> map = new HashMap<>();
-        for (AppCategoryEnum categoryEnum : AppCategoryEnum.values()) {
-            String category = categoryEnum.getAlias();
-            map.put(category, new ArrayList<>());
-        }
+        // 使用流遍历所有的 AppCategoryEnum 值，将别名映射为新的 ArrayList 放入 map 中。
+        Arrays.stream(AppCategoryEnum.values())
+                .map(AppCategoryEnum::getAlias)
+                .forEach(category -> map.put(category, new ArrayList<>()));
         return map;
     }
 
-    private List<Map<String, Object>> assembleMap(Map<String, List<Object>> mapObj) {
+    /**
+     * Assemble a list of maps from a map of objects.
+     *
+     * @param mapObj The map of objects to assemble.
+     * @return A list of maps containing the assembled data.
+     */
+    private List<Map<String, Object>> assembleMap(final Map<String, List<Object>> mapObj) {
         List<Map<String, Object>> res = new ArrayList<>();
-        for (Map.Entry<String, List<Object>> entry : mapObj.entrySet()) {
-            String category = entry.getKey();
-            List<Object> list = entry.getValue();
-
+        mapObj.forEach((category, list) -> {
             // 为支持排序需求，修改为可变map
             Map<String, Object> map = new HashMap<>();
             map.put("name", category);
             map.put("children", list);
             res.add(map);
-        }
+        });
         return res;
     }
 
+    /**
+     * Search for columns based on the provided condition.
+     *
+     * @param condition The DomainColumnCondition for searching.
+     * @return ResponseEntity<Object>.
+     */
     @Override
-    public ResponseEntity<Object> searchColumn(DomainColumnCondition condition) {
+    public ResponseEntity<Object> searchColumn(final DomainColumnCondition condition) {
         List<String> columns = QueryWrapperUtil.splitStr(condition.getColumn());
         if ("rpmpkg".equals(condition.getName())) {
-            try{
+            try {
                 Map<String, List<String>> res = rpmPackageGateway.queryColumn(columns);
                 return ResultUtil.success(HttpStatus.OK, res);
-            } catch(ParamErrorException e){
+            } catch (ParamErrorException e) {
                 return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
             }
         } else if ("epkgpkg".equals(condition.getName())) {
-            try{
+            try {
                 Map<String, List<String>> res = epkgPackageGateway.queryColumn(columns);
                 return ResultUtil.success(HttpStatus.OK, res);
-            } catch(ParamErrorException e){
+            } catch (ParamErrorException e) {
                 return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
             }
         } else if ("apppkg".equals(condition.getName())) {
-            try{
+            try {
                 Map<String, List<String>> res = applicationPackageGateway.queryColumn(columns);
                 return ResultUtil.success(HttpStatus.OK, res);
-            } catch(ParamErrorException e){
+            } catch (ParamErrorException e) {
                 return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
             }
 
-        }else {
+        } else {
             throw new ParamErrorException("unsupported param: " + condition.getName());
         }
     }
 
+    /**
+     * Query statistics.
+     *
+     * @return ResponseEntity<Object>.
+     */
     @Override
     public ResponseEntity<Object> queryStat() {
-        Long rpmNum = rpmPackageGateway.queryTableLength();
+        long rpmNum = rpmPackageGateway.queryTableLength();
         Long appNum = applicationPackageGateway.queryTableLength();
-        Long epkgNum = epkgPackageGateway.queryTableLength();
+        long epkgNum = epkgPackageGateway.queryTableLength();
 
         Map<String, Long> res = Map.ofEntries(
                 Map.entry("apppkg", appNum),
@@ -326,8 +399,14 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
+    /**
+     * Search for domain details based on the provided search condition.
+     *
+     * @param condition The DomainDetailSearchCondition for searching.
+     * @return ResponseEntity<Object>.
+     */
     @Override
-    public ResponseEntity<Object> searchDomainDetail(DomainDetailSearchCondition condition) {
+    public ResponseEntity<Object> searchDomainDetail(final DomainDetailSearchCondition condition) {
         Map<String, Object> res = new HashMap<>();
         Set<String> tags = new HashSet<>();
 
@@ -357,7 +436,13 @@ public class DomainPackageServiceImpl implements DomainPackageService {
 
     }
 
-    private EPKGPackageDetailVo searchEpkgDetail(String epkgPkgId) {
+    /**
+     * Search for EPKG package detail based on the provided EPKG package ID.
+     *
+     * @param epkgPkgId The EPKG package ID to search for.
+     * @return An EPKGPackageDetailVo object containing the details.
+     */
+    private EPKGPackageDetailVo searchEpkgDetail(final String epkgPkgId) {
         List<EPKGPackageDetailVo> epkgList = epkgPackageGateway.queryDetailByPkgId(epkgPkgId);
         if (epkgList.size() != 1) {
             throw new ParamErrorException(String.format(MessageCode.EC00014.getMsgEn(), "epkgPkgId"));
@@ -365,7 +450,13 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         return epkgList.get(0);
     }
 
-    private ApplicationPackageDetailVo searchAppDetail(String appPkgId) {
+    /**
+     * Search for application package detail based on the provided application package ID.
+     *
+     * @param appPkgId The application package ID to search for.
+     * @return An ApplicationPackageDetailVo object containing the details.
+     */
+    private ApplicationPackageDetailVo searchAppDetail(final String appPkgId) {
         List<ApplicationPackageDetailVo> appList = applicationPackageGateway.queryDetailByPkgId(appPkgId);
         if (appList.size() != 1) {
             throw new ParamErrorException(String.format(MessageCode.EC00014.getMsgEn(), "appPkgId"));
@@ -373,7 +464,13 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         return appList.get(0);
     }
 
-    private RPMPackageDetailVo searchRpmDetail(String rpmPkgId) {
+    /**
+     * Search for RPM package detail based on the provided RPM package ID.
+     *
+     * @param rpmPkgId The RPM package ID to search for.
+     * @return An RPMPackageDetailVo object containing the details.
+     */
+    private RPMPackageDetailVo searchRpmDetail(final String rpmPkgId) {
         List<RPMPackageDetailVo> rpmList = rpmPackageGateway.queryDetailByPkgId(rpmPkgId);
         if (rpmList.size() != 1) {
             throw new ParamErrorException(String.format(MessageCode.EC00014.getMsgEn(), "rpmPkgId"));

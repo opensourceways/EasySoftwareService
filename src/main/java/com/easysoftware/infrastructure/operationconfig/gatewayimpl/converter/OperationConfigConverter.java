@@ -1,22 +1,40 @@
 package com.easysoftware.infrastructure.operationconfig.gatewayimpl.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.BeanUtils;
-
 import com.easysoftware.application.operationconfig.dto.InputOperationConfig;
 import com.easysoftware.application.operationconfig.vo.OperationConfigVo;
 import com.easysoftware.infrastructure.operationconfig.gatewayimpl.dataobject.OperationConfigDO;
+import org.springframework.beans.BeanUtils;
 
-public class OperationConfigConverter {
-    public static OperationConfigDO toDataObject(InputOperationConfig input) {
+import java.util.ArrayList;
+import java.util.List;
+
+public final class OperationConfigConverter {
+
+    // Private constructor to prevent instantiation of the PackageConstant class
+    private OperationConfigConverter() {
+        // private constructor to hide the implicit public one
+        throw new AssertionError("OperationConfigConverter class cannot be instantiated.");
+    }
+
+    /**
+     * Converts an InputOperationConfig object to an OperationConfigDO data object.
+     *
+     * @param input The InputOperationConfig object to convert.
+     * @return The converted OperationConfigDO data object.
+     */
+    public static OperationConfigDO toDataObject(final InputOperationConfig input) {
         OperationConfigDO operationConfigDO = new OperationConfigDO();
         BeanUtils.copyProperties(input, operationConfigDO);
         return operationConfigDO;
     }
 
-    public static List<OperationConfigVo> toVo(List<OperationConfigDO> doList) {
+    /**
+     * Converts a list of OperationConfigDO objects to a list of OperationConfigVo view objects.
+     *
+     * @param doList The list of OperationConfigDO objects to convert.
+     * @return A list of OperationConfigVo view objects.
+     */
+    public static List<OperationConfigVo> toVo(final List<OperationConfigDO> doList) {
         List<OperationConfigVo> res = new ArrayList<>();
         for (OperationConfigDO op : doList) {
             OperationConfigVo vo = toVo(op);
@@ -25,11 +43,17 @@ public class OperationConfigConverter {
         return res;
     }
 
-    public static OperationConfigVo toVo(OperationConfigDO opDo) {
+    /**
+     * Converts an OperationConfigDO object to an OperationConfigVo view object.
+     *
+     * @param opDo The OperationConfigDO object to convert.
+     * @return The converted OperationConfigVo view object.
+     */
+    public static OperationConfigVo toVo(final OperationConfigDO opDo) {
         OperationConfigVo opVo = new OperationConfigVo();
         BeanUtils.copyProperties(opDo, opVo);
         return opVo;
     }
 
-    
+
 }

@@ -1,17 +1,10 @@
 package com.easysoftware.infrastructure.externalos.gatewayimpl;
 
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.externalos.dto.ExternalOsSearchCondiiton;
-import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.domain.externalos.ExternalOs;
 import com.easysoftware.domain.externalos.ExternalOsUnique;
@@ -19,16 +12,29 @@ import com.easysoftware.domain.externalos.gateway.ExternalOsGateway;
 import com.easysoftware.infrastructure.externalos.gatewayimpl.converter.ExternalOsConverter;
 import com.easysoftware.infrastructure.externalos.gatewayimpl.dataobject.ExternalOsDO;
 import com.easysoftware.infrastructure.mapper.ExternalOsDOMapper;
-import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class ExternalOsGatewayImpl implements ExternalOsGateway {
+
+    /**
+     * Autowired ExternalOsDOMapper for database operations.
+     */
     @Autowired
     private ExternalOsDOMapper externalOsDOMapper;
 
-
+    /**
+     * Query package mapping based on the provided search condition.
+     *
+     * @param condition The search condition for querying package mappings
+     * @return A map containing relevant information
+     */
     @Override
-    public Map<String, Object> queryPkgMap(ExternalOsSearchCondiiton condition) {
+    public Map<String, Object> queryPkgMap(final ExternalOsSearchCondiiton condition) {
         Page<ExternalOsDO> page = createPage(condition);
         QueryWrapper<ExternalOsDO> wrapper = QueryWrapperUtil.createQueryWrapper(new ExternalOsDO(), condition, "");
         IPage<ExternalOsDO> resPage = externalOsDOMapper.selectPage(page, wrapper);
@@ -37,22 +43,34 @@ public class ExternalOsGatewayImpl implements ExternalOsGateway {
         long total = resPage.getTotal();
 
         Map<String, Object> res = Map.ofEntries(
-            Map.entry("total", total),
-            Map.entry("list", exs)
+                Map.entry("total", total),
+                Map.entry("list", exs)
         );
         return res;
     }
-    
 
-    private Page<ExternalOsDO> createPage(ExternalOsSearchCondiiton condition) {
+
+    /**
+     * Creates a Page of ExternalOsDO based on the provided search condition.
+     *
+     * @param condition The ExternalOsSearchCondition object to create the page from.
+     * @return A Page of ExternalOsDO entities.
+     */
+    private Page<ExternalOsDO> createPage(final ExternalOsSearchCondiiton condition) {
         int pageNum = condition.getPageNum();
         int pageSize = condition.getPageSize();
         Page<ExternalOsDO> page = new Page<>(pageNum, pageSize);
         return page;
     }
 
+    /**
+     * Delete external operating systems by their IDs.
+     *
+     * @param ids A list of IDs of external operating systems to delete
+     * @return the number of rows deleted
+     */
     @Override
-    public int delete(List<String> ids) {
+    public int delete(final List<String> ids) {
         QueryWrapper<ExternalOsDO> wrapper = new QueryWrapper<>();
         wrapper.in("id", ids);
         int mark = externalOsDOMapper.delete(wrapper);
@@ -60,36 +78,57 @@ public class ExternalOsGatewayImpl implements ExternalOsGateway {
     }
 
 
+    /**
+     * Check if an external operating system exists based on its unique identifier.
+     *
+     * @param uni The unique identifier of the external operating system
+     * @return true if the external operating system exists, false otherwise
+     */
     @Override
-    public boolean existExternalOs(ExternalOsUnique uni) {
+    public boolean existExternalOs(final ExternalOsUnique uni) {
         QueryWrapper<ExternalOsDO> wrapper = QueryWrapperUtil.createQueryWrapper(new ExternalOsDO(), uni, "");
         return externalOsDOMapper.exists(wrapper);
     }
 
 
+    /**
+     * Check if an external operating system exists based on its ID.
+     *
+     * @param id The ID of the external operating system
+     * @return true if the external operating system exists, false otherwise
+     */
     @Override
-    public boolean existExternalOs(String id) {
+    public boolean existExternalOs(final String id) {
         QueryWrapper<ExternalOsDO> wrapper = new QueryWrapper<>();
         wrapper.eq("id", id);
         return externalOsDOMapper.exists(wrapper);
     }
 
-
+    /**
+     * Save an ExternalOs object.
+     *
+     * @param ex The ExternalOs object to save
+     * @return true if the save operation was successful, false otherwise
+     */
     @Override
-    public boolean save(ExternalOs ex) {
+    public boolean save(final ExternalOs ex) {
         ExternalOsDO exDO = ExternalOsConverter.toDataObjectForCreate(ex);
         int mark = externalOsDOMapper.insert(exDO);
         return mark == 1;
     }
 
 
+    /**
+     * Update an existing ExternalOs object.
+     *
+     * @param ex The ExternalOs object to update
+     * @return the number of rows affected by the update operation
+     */
     @Override
-    public int update(ExternalOs ex) {
+    public int update(final ExternalOs ex) {
         ExternalOsDO exDO = ExternalOsConverter.toDataObjectForUpdate(ex);
         UpdateWrapper<ExternalOsDO> wrapper = new UpdateWrapper<>();
         wrapper.eq("id", ex.getId());
-        
-        int mark = externalOsDOMapper.update(exDO, wrapper);
-        return mark;
+        return externalOsDOMapper.update(exDO, wrapper);
     }
 }

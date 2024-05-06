@@ -4,19 +4,37 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class ClientUtil {
-    private static final Logger logger = LoggerFactory.getLogger(ClientUtil.class);
+public final class ClientUtil {
 
-    public static String getClientIpAddress(HttpServletRequest request) {
+
+    // Private constructor to prevent instantiation of the utility class
+    private ClientUtil() {
+        // private constructor to hide the implicit public one
+        throw new AssertionError("ClientUtil class cannot be instantiated.");
+    }
+
+    /**
+     * Logger instance for ClientUtil.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientUtil.class);
+
+    /**
+     * Retrieve the client's IP address from the HttpServletRequest.
+     *
+     * @param request The HttpServletRequest object
+     * @return The client's IP address as a string
+     */
+    public static String getClientIpAddress(final HttpServletRequest request) {
         // 获取请求主机IP地址,如果通过代理进来，则透过防火墙获取真实IP地址
         String headerName = "x-forwarded-for";
         String ip = request.getHeader(headerName);
         if (null != ip && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
             // 多次反向代理后会有多个IP值，第一个IP才是真实IP,它们按照英文逗号','分割
-            if (ip.indexOf(",") != -1) {
+            if (ip.contains(",")) {
                 ip = ip.split(",")[0];
             }
         }
@@ -50,7 +68,7 @@ public class ClientUtil {
                 try {
                     inet = InetAddress.getLocalHost();
                 } catch (UnknownHostException e) {
-                    logger.error("get local host error: " + e.getMessage());
+                    LOGGER.error("get local host error: " + e.getMessage());
                 }
                 ip = inet.getHostAddress();
             }
@@ -58,10 +76,13 @@ public class ClientUtil {
         return ip;
     }
 
-    private static boolean checkIp(String ip) {
-        if (null == ip || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            return true;
-        }
-        return false;
+    /**
+     * Check if the provided string is a valid IP address.
+     *
+     * @param ip The IP address to check.
+     * @return true if the IP address is valid, false otherwise.
+     */
+    private static boolean checkIp(final String ip) {
+        return null == ip || ip.length() == 0 || "unknown".equalsIgnoreCase(ip);
     }
 }

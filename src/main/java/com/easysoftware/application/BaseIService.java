@@ -1,9 +1,14 @@
 package com.easysoftware.application;
 
-import java.util.ArrayList;
-
 import com.baomidou.mybatisplus.extension.service.IService;
 
-public interface BaseIService<T> extends IService<T>{
+import java.util.ArrayList;
+
+public interface BaseIService<T> extends IService<T> {
+    /**
+     * Saves a batch of data objects.
+     *
+     * @param dataObject An ArrayList containing the data objects to be saved.
+     */
     void saveDataObjectBatch(ArrayList<String> dataObject);
 }

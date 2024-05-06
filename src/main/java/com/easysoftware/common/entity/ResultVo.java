@@ -10,8 +10,24 @@ import java.io.Serializable;
 @Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResultVo  implements Serializable {
+    /**
+     * Error code.
+     */
     private int code;
+
+    /**
+     * Error message.
+     */
     private Object msg;
+
+    /**
+     * Data associated with the error.
+     */
     private Object data;
+
+    /**
+     * Description of the error.
+     */
     private String error;
+
 }

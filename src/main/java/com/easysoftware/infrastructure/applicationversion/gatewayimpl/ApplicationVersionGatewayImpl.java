@@ -1,12 +1,5 @@
 package com.easysoftware.infrastructure.applicationversion.gatewayimpl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -17,14 +10,32 @@ import com.easysoftware.domain.applicationversion.gateway.ApplicationVersionGate
 import com.easysoftware.infrastructure.applicationversion.gatewayimpl.converter.ApplicationVersionConvertor;
 import com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobject.ApplicationVersionDO;
 import com.easysoftware.infrastructure.mapper.ApplicationVersionDOMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway {
+
+    /**
+     * Autowired field for the ApplicationVersionDOMapper.
+     */
     @Autowired
     private ApplicationVersionDOMapper appVersionMapper;
 
+
+    /**
+     * Delete an application by name.
+     *
+     * @param name The name of the application to delete
+     * @return true if the delete operation was successful, false otherwise
+     */
     @Override
-    public boolean delete(String name) {
+    public boolean delete(final String name) {
         QueryWrapper<ApplicationVersionDO> wrapper = new QueryWrapper<>();
         wrapper.in("name", name);
         int mark = appVersionMapper.delete(wrapper);
@@ -32,24 +43,42 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
     }
 
 
+    /**
+     * Check if an application exists based on its name.
+     *
+     * @param name The name of the application
+     * @return true if the application exists, false otherwise
+     */
     @Override
-    public boolean existApp(String name) {
+    public boolean existApp(final String name) {
         QueryWrapper<ApplicationVersionDO> wrapper = new QueryWrapper<>();
         wrapper.eq("name", name);
         return appVersionMapper.exists(wrapper);
     }
 
 
+    /**
+     * Save an ApplicationVersion object.
+     *
+     * @param appVersion The ApplicationVersion object to save
+     * @return true if the save operation was successful, false otherwise
+     */
     @Override
-    public boolean save(ApplicationVersion appVersion) {
+    public boolean save(final ApplicationVersion appVersion) {
         ApplicationVersionDO appVersionDO = ApplicationVersionConvertor.toDataObjectForCreate(appVersion);
         int mark = appVersionMapper.insert(appVersionDO);
         return mark == 1;
     }
 
 
+    /**
+     * Update an existing ApplicationVersion object.
+     *
+     * @param appVersion The ApplicationVersion object to update
+     * @return true if the update operation was successful, false otherwise
+     */
     @Override
-    public boolean update(ApplicationVersion appVersion) {
+    public boolean update(final ApplicationVersion appVersion) {
         ApplicationVersionDO appVersionDO = ApplicationVersionConvertor.toDataObjectForUpdate(appVersion);
 
         UpdateWrapper<ApplicationVersionDO> wrapper = new UpdateWrapper<>();
@@ -59,8 +88,14 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
         return mark == 1;
     }
 
+    /**
+     * Query information based on the provided search condition.
+     *
+     * @param condition The search condition for querying application versions
+     * @return A map containing relevant information
+     */
     @Override
-    public Map<String, Object> queryByName(ApplicationVersionSearchCondition condition) {
+    public Map<String, Object> queryByName(final ApplicationVersionSearchCondition condition) {
         int pageNum = condition.getPageNum();
         int pageSize = condition.getPageSize();
         String name = condition.getName();
@@ -68,29 +103,35 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
         Page<ApplicationVersionDO> page = new Page<>(pageNum, pageSize);
 
         QueryWrapper<ApplicationVersionDO> wrapper = new QueryWrapper<>();
-        wrapper = name == null ? null :  wrapper.eq("name", name);
+        wrapper = name == null ? null : wrapper.eq("name", name);
 
         Page<ApplicationVersionDO> resPage = appVersionMapper.selectPage(page, wrapper);
         List<ApplicationVersionDO> appDOs = resPage.getRecords();
         List<ApplicationVersion> appDetails = ApplicationVersionConvertor.toEntity(appDOs);
 
         Map<String, Object> res = Map.ofEntries(
-            Map.entry("total", resPage.getTotal()),
-            Map.entry("list", appDetails)
+                Map.entry("total", resPage.getTotal()),
+                Map.entry("list", appDetails)
         );
-        
+
         return res;
     }
 
+    /**
+     * Convert a batch of data objects to ApplicationVersionDO objects.
+     *
+     * @param dataObject A collection of data objects to convert
+     * @return A collection of ApplicationVersionDO objects
+     */
     @Override
-    public Collection<ApplicationVersionDO> convertBatch(Collection<String> dataObject){
-        Collection<ApplicationVersionDO> ObjList = new ArrayList<>();
+    public Collection<ApplicationVersionDO> convertBatch(final Collection<String> dataObject) {
+        Collection<ApplicationVersionDO> objList = new ArrayList<>();
         for (String obj : dataObject) {
             ApplicationVersion appVer = ObjectMapperUtil.jsonToObject(obj, ApplicationVersion.class);
             ApplicationVersionDO appVersionDO = ApplicationVersionConvertor.toDataObjectForCreate(appVer);
-            ObjList.add(appVersionDO);
+            objList.add(appVersionDO);
         }
-        return ObjList;
+        return objList;
     }
 }
 
