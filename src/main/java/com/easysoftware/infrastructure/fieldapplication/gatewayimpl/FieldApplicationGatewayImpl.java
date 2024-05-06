@@ -1,5 +1,17 @@
 package com.easysoftware.infrastructure.fieldapplication.gatewayimpl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.BadSqlGrammarException;
+import org.springframework.stereotype.Component;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -40,7 +52,7 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
      * @return A map containing relevant information
      */
     @Override
-    public Map<String, Object> queryAll(final FiledApplicationSerachCondition condition) {
+    public Map<String, Object> queryMenuByPage(FiledApplicationSerachCondition condition){
         Page<FieldApplicationDO> page = createPage(condition);
         QueryWrapper<FieldApplicationDO> wrapper = QueryWrapperUtil.createQueryWrapper(new FieldApplicationDO(),
                 condition, null);
@@ -110,5 +122,11 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
 
         String underlineToCamelColumn = StringUtil.underlineToCamel(column);
         return FieldApplicationConverter.toColumn(columnList, underlineToCamelColumn);
+    }
+
+    @Override
+    public List<FiledApplicationVo> queryVoList() {
+        List<FieldApplicationDO> doList = fieldAppMapper.selectList(null);
+        return FieldApplicationConverter.toVo(doList);
     }
 }

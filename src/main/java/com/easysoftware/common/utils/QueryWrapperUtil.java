@@ -1,5 +1,17 @@
 package com.easysoftware.common.utils;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.exception.enumvalid.TimeOrderEnum;
@@ -107,5 +119,15 @@ public final class QueryWrapperUtil {
             res.add(sp);
         }
         return res;
+    }
+
+    public static List<String> sortOsColumn(List<String> colList) {
+        Map<Boolean, List<String>> partMap = colList.stream()
+                .collect(Collectors.partitioningBy(e -> !e.contains("preview")));
+        List<String> con = partMap.get(true);
+        List<String> don = partMap.get(false);
+        Collections.sort(con, Collections.reverseOrder());
+        con.addAll(don);
+        return con;
     }
 }
