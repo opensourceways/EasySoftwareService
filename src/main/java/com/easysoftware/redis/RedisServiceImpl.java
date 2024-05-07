@@ -157,7 +157,7 @@ public class RedisServiceImpl implements RedisService {
      * @return ResponseEntity with the result of the operation.
      */
     @Override
-    public ResponseEntity<Object> updateRedisByNameSapce(final String namespace) {
+    public ResponseEntity<Object> updateRedisByNameSapce(final String namespace){
         List<String> resKeys = redisGateway.scanKey(namespace);
 
         Map<String, String> resMap = new HashMap<>();
