@@ -33,7 +33,7 @@ public class InputDomainPackage {
      * Description with a license length of 10000 characters.
      */
     @Size(max = 1000, message = "the length of arch can not exceed 1000")
-    public String license;
+    private String license;
 
     /**
      * Download information with a maximum length of 10000 characters.
