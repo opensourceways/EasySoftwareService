@@ -34,13 +34,15 @@ public class ApplicationPackageSearchCondition {
     private String subPath;
 
     /**
-     * Page number within the range of PackageConstant.MIN_PAGE_NUM to PackageConstant.MAX_PAGE_NUM, default value is 1.
+     * Page number within the range of PackageConstant.MIN_PAGE_NUM to PackageConstant.
+     * MAX_PAGE_NUM, default value is 1.
      */
     @Range(min = PackageConstant.MIN_PAGE_NUM, max = PackageConstant.MAX_PAGE_NUM)
     private Integer pageNum = 1;
 
     /**
-     * Page size within the range of PackageConstant.MIN_PAGE_SIZE to PackageConstant.MAX_PAGE_SIZE, default value is 10.
+     * Page size within the range of PackageConstant.MIN_PAGE_SIZE to PackageConstant.
+     * MAX_PAGE_SIZE, default value is 10.
      */
     @Range(min = PackageConstant.MIN_PAGE_SIZE, max = PackageConstant.MAX_PAGE_SIZE)
     private Integer pageSize = 10;
@@ -76,7 +78,8 @@ public class ApplicationPackageSearchCondition {
     private String appUpdateAt;
 
     /**
-     * Time order, validated using EnumValue annotation against TimeOrderEnum, must be a valid category, default value is "desc".
+     * Time order, validated using EnumValue annotation against TimeOrderEnum,
+     * must be a valid category, default value is "desc".
      */
     @EnumValue(enumClass = TimeOrderEnum.class, enumMethod = "isValidCategory")
     private String timeOrder = "desc";
