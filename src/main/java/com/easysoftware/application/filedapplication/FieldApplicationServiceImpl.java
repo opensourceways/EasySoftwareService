@@ -166,7 +166,7 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
     private Map<String, Object> searchDomainMenu(FiledApplicationSerachCondition condition) {
         condition.setName("");
         return domainGateway.queryMenuByPage(condition);
-    } 
+    }
 
 
     /**

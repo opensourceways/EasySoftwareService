@@ -32,7 +32,7 @@ public class BaseConsumer {
     /**
      * List to hold KafkaConsumer instances for String keys and values.
      */
-    protected ArrayList<KafkaConsumer<String, String>> kafkaConsumerList = new ArrayList<>();
+    private final ArrayList<KafkaConsumer<String, String>> kafkaConsumerList = new ArrayList<>();
 
 
     /**

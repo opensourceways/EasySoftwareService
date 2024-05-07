@@ -27,7 +27,8 @@ import java.util.List;
 import java.util.Map;
 
 @Service("EPKGPackageService")
-public class EPKGPackageServiceImpl extends ServiceImpl<EPKGPackageDOMapper, EPKGPackageDO> implements EPKGPackageService {
+public class EPKGPackageServiceImpl extends
+        ServiceImpl<EPKGPackageDOMapper, EPKGPackageDO> implements EPKGPackageService {
     /**
      * Gateway for EPKG package operations.
      */
@@ -76,7 +77,7 @@ public class EPKGPackageServiceImpl extends ServiceImpl<EPKGPackageDOMapper, EPK
      * Inserts an EPKG package.
      *
      * @param inputEPKGPackage InputEPKGPackage object.
-     * @return  ResponseEntity<Object>.
+     * @return ResponseEntity<Object>.
      */
     @Override
     public ResponseEntity<Object> insertEPKGPkg(final InputEPKGPackage inputEPKGPackage) {
@@ -85,7 +86,8 @@ public class EPKGPackageServiceImpl extends ServiceImpl<EPKGPackageDOMapper, EPK
 
         Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(inputEPKGPackage);
         kafkaMsg.put("table", "EPKGPackage");
-        kafkaProducer.sendMess(topicAppVersion + "_epkg", UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(kafkaMsg));
+        kafkaProducer.sendMess(topicAppVersion + "_epkg", UuidUtil.getUUID32(),
+                ObjectMapperUtil.writeValueAsString(kafkaMsg));
 
         return ResultUtil.success(HttpStatus.OK);
     }
