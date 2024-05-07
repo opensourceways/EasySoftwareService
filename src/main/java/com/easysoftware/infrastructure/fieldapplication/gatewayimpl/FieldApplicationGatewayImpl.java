@@ -40,7 +40,7 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
      * @return A map containing menu items based on the page and condition.
      */
     @Override
-    public Map<String, Object> queryMenuByPage(FiledApplicationSerachCondition condition){
+    public Map<String, Object> queryMenuByPage(FiledApplicationSerachCondition condition) {
         Page<FieldApplicationDO> page = createPage(condition);
         QueryWrapper<FieldApplicationDO> wrapper = QueryWrapperUtil.createQueryWrapper(new FieldApplicationDO(),
                 condition, null);

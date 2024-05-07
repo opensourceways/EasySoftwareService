@@ -25,7 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 @Service("ApplicationVersionService")
-public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersionDOMapper, ApplicationVersionDO> implements ApplicationVersionService {
+public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersionDOMapper,
+        ApplicationVersionDO> implements ApplicationVersionService {
 
     /**
      * Autowired Kafka producer for sending messages.
@@ -70,7 +71,8 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
         Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(appVersion);
         kafkaMsg.put("table", "ApplicationVersion");
         kafkaMsg.put("unique", inputAppVersion.getName());
-        kafkaProducer.sendMess(topicAppVersion + "_version", UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(kafkaMsg));
+        kafkaProducer.sendMess(topicAppVersion + "_version",
+                UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(kafkaMsg));
 
         return ResultUtil.success(HttpStatus.OK);
     }

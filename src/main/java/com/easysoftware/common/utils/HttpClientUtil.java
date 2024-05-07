@@ -137,14 +137,21 @@ public final class HttpClientUtil {
      * @param cookie    The cookie value to include in the request.
      * @return The HTTP client as a string.
      */
-    public static String getHttpClient(final String uri, final String token, final String userToken, final String cookie) {
+    public static String getHttpClient(final String uri, final String token,
+                                       final String userToken, final String cookie) {
         HttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(uri);
         httpGet.setConfig(REQUEST_CONFIG);
 
-        if (token != null) httpGet.addHeader(HttpConstant.TOKEN, token);
-        if (userToken != null) httpGet.addHeader(HttpConstant.USER_TOKEN, userToken);
-        if (cookie != null) httpGet.addHeader(HttpConstant.COOKIE, "_Y_G_=" + cookie);
+        if (token != null) {
+            httpGet.addHeader(HttpConstant.TOKEN, token);
+        }
+        if (userToken != null) {
+            httpGet.addHeader(HttpConstant.USER_TOKEN, userToken);
+        }
+        if (cookie != null) {
+            httpGet.addHeader(HttpConstant.COOKIE, "_Y_G_=" + cookie);
+        }
 
         try {
             HttpResponse response = httpClient.execute(httpGet);
