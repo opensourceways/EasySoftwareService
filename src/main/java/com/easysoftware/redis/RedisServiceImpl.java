@@ -68,7 +68,8 @@ public class RedisServiceImpl implements RedisService {
      * @return ResponseEntity with the result of the operation.
      */
     @Override
-    public ResponseEntity<Object> setKeyWithExpire(final String key, final String value, final long timeout, final TimeUnit unit) {
+    public ResponseEntity<Object> setKeyWithExpire(final String key, final String value,
+                                                   final long timeout, final TimeUnit unit) {
         redisGateway.setWithExpire(key, value, timeout, unit);
 
         Map<String, Object> res = Map.ofEntries(

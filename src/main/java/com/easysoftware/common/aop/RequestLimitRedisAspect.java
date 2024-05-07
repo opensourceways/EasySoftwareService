@@ -75,7 +75,8 @@ public class RequestLimitRedisAspect {
         long period = rejectPeriod;
         long limitCount = rejectCount;
 
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        HttpServletRequest request = ((ServletRequestAttributes)
+                RequestContextHolder.getRequestAttributes()).getRequest();
 
         // 获取url
         String ip = ClientUtil.getClientIpAddress(request);

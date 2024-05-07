@@ -268,6 +268,12 @@ public final class ObjectMapperUtil {
         }
     }
 
+    /**
+     * Converts the input content to a JsonNode.
+     *
+     * @param content The content to convert to JsonNode
+     * @return JsonNode representing the input content
+     */
     public static JsonNode toJsonNode(final String content) {
         try {
             return objectMapper.readTree(content);
