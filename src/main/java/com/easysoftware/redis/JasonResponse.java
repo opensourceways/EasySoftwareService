@@ -56,7 +56,7 @@ public class JasonResponse {
     }
 
 
-    // Inner class for each item in the list  
+    // Inner class for each item in the list
     public static class Category {
         /**
          * List of Child objects.
@@ -111,7 +111,7 @@ public class JasonResponse {
 
     }
 
-    // Inner class for each child in the children list  
+    // Inner class for each child in the children list
     public static class Child {
         /**
          * Category string.

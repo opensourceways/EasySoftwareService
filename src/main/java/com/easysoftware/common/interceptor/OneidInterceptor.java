@@ -168,7 +168,8 @@ public class OneidInterceptor implements HandlerInterceptor {
      * @return A list of user permissions
      */
     @SneakyThrows
-    private List<String> getUserPermission(final HttpServletRequest httpServletRequest, final Cookie tokenCookie, final String userToken) {
+    private List<String> getUserPermission(final HttpServletRequest httpServletRequest,
+                                           final Cookie tokenCookie, final String userToken) {
         String token = getManageToken();
         String tokenCookieValue = tokenCookie.getValue();
         String response = HttpClientUtil.getHttpClient(permissionApi, token, userToken, tokenCookieValue);
