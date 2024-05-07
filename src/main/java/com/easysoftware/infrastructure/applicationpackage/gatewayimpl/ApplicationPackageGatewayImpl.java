@@ -248,6 +248,9 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         Map<String, List<String>> res = new HashMap<>();
         for (String column : columns) {
             List<String> colList = queryColumn(column);
+            if ("os".equals(column)) {
+                colList = QueryWrapperUtil.sortOsColumn(colList);
+            }
             res.put(column, colList);
         }
         return res;
