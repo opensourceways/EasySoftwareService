@@ -20,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
 
-public class ResultUtil {
+public final class ResultUtil {
 
     // Private constructor to prevent instantiation of the utility class
     private ResultUtil() {
@@ -103,7 +103,8 @@ public class ResultUtil {
     }
 
     /**
-     * Create a ResponseEntity representing a failure response with the specified HTTP status, message code, and error message.
+     * Create a ResponseEntity representing a failure response with the specified HTTP status,
+     * message code, and error message.
      *
      * @param status  The HTTP status for the response
      * @param msgCode The message code associated with the failure response

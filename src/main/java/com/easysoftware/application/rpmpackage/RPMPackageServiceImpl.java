@@ -108,7 +108,8 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
         BeanUtils.copyProperties(inputrPMPackage, rPMPkg);
         Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(inputrPMPackage);
         kafkaMsg.put("table", "RPMPackage");
-        kafkaProducer.sendMess(topicAppVersion + "_rpm", UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(kafkaMsg));
+        kafkaProducer.sendMess(topicAppVersion + "_rpm",
+                UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(kafkaMsg));
         return ResultUtil.success(HttpStatus.OK);
     }
 
@@ -215,7 +216,8 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
      * @return Updated RPM package with maintainer information.
      */
     public RPMPackage addRPMPkgMaintainerInfo(final RPMPackage rPMPkg) {
-        Map<String, String> maintainer = ApiUtil.getApiResponseMaintainer(String.format(repoMaintainerApi, rPMPkg.getName()));
+        Map<String, String> maintainer = ApiUtil.getApiResponseMaintainer(
+                String.format(repoMaintainerApi, rPMPkg.getName()));
         rPMPkg.setMaintainerGiteeId(maintainer.get(MapConstant.MAINTAINER_GITEE_ID));
         rPMPkg.setMaintainerId(maintainer.get(MapConstant.MAINTAINER_ID));
         rPMPkg.setMaintainerEmail(maintainer.get(MapConstant.MAINTAINER_EMAIL));

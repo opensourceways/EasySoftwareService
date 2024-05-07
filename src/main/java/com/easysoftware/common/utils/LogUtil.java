@@ -43,7 +43,9 @@ public final class LogUtil {
      * @param returnObject The object returned from the operation
      */
     @SneakyThrows
-    public static void managementOperate(final JoinPoint joinPoint, final HttpServletRequest request, final HttpServletResponse response,
+    public static void managementOperate(final JoinPoint joinPoint,
+                                         final HttpServletRequest request,
+                                         final HttpServletResponse response,
                                          final Object returnObject) {
         ManagementLog log = new ManagementLog();
         log.setType("OmOperate");
