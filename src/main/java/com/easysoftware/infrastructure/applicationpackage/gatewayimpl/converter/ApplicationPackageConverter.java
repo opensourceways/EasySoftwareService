@@ -71,7 +71,8 @@ public final class ApplicationPackageConverter {
     }
 
     /**
-     * Aggregate a list of ApplicationPackageDO objects by tags and return the result as a list of ApplicationPackageTagsVo objects.
+     * Aggregate a list of ApplicationPackageDO objects by tags
+     * and return the result as a list of ApplicationPackageTagsVo objects.
      *
      * @param appPkgDOs The list of ApplicationPackageDO objects to aggregate
      * @return A list of ApplicationPackageTagsVo objects containing the aggregated data
@@ -230,7 +231,8 @@ public final class ApplicationPackageConverter {
     }
 
     /**
-     * Extract a specific column from a list of ApplicationPackageDO objects and return the results as a list of strings.
+     * Extract a specific column from a list of ApplicationPackageDO objects
+     * and return the results as a list of strings.
      *
      * @param appDOs The list of ApplicationPackageDO objects
      * @param column The column to extract
