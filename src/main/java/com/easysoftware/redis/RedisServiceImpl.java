@@ -157,7 +157,7 @@ public class RedisServiceImpl implements RedisService {
      * @return ResponseEntity with the result of the operation.
      */
     @Override
-    public ResponseEntity<Object> updateRedisByNameSapce(final String namespace) {
+    public ResponseEntity<Object> updateRedisByNameSapce(final String namespace){
         List<String> resKeys = redisGateway.scanKey(namespace);
 
         Map<String, String> resMap = new HashMap<>();
@@ -166,7 +166,7 @@ public class RedisServiceImpl implements RedisService {
             // key 检查 key不存在直接返回
             boolean keyExsit = redisGateway.hasKey(key);
             if (!keyExsit) {
-                resMap.put(key, "key does't exsit");
+                resMap.put(key, "key does't exsit12");
                 continue;
             }
 
