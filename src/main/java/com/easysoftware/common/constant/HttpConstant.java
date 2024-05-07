@@ -1,6 +1,6 @@
 package com.easysoftware.common.constant;
 
-public final class HttpConstant {
+public final class HttpConstant{
 
     // Private constructor to prevent instantiation of the HttpConstant class
     private HttpConstant() {
