@@ -5,7 +5,7 @@ import com.easysoftware.application.operationconfig.vo.OperationConfigVo;
 
 import java.util.List;
 
-public interface OperationConfigGateway {
+public interface OperationConfigGateway{
     /**
      * Insert an operation configuration based on the input.
      *
