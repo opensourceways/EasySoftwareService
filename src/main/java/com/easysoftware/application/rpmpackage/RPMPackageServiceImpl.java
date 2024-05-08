@@ -5,8 +5,6 @@ import com.easysoftware.application.rpmpackage.dto.InputRPMPackage;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
-import com.easysoftware.common.constant.MapConstant;
-import com.easysoftware.common.utils.ApiUtil;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.common.utils.UuidUtil;
@@ -207,48 +205,6 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
     @Transactional
     public void saveDataObjectBatch(final ArrayList<String> dataObject) {
         saveBatch(rPMPkgGateway.convertBatch(dataObject));
-    }
-
-    /**
-     * Adds RPM package maintainer information to the given RPM package.
-     *
-     * @param rPMPkg The RPM package to which maintainer info will be added.
-     * @return Updated RPM package with maintainer information.
-     */
-    public RPMPackage addRPMPkgMaintainerInfo(final RPMPackage rPMPkg) {
-        Map<String, String> maintainer = ApiUtil.getApiResponseMaintainer(
-                String.format(repoMaintainerApi, rPMPkg.getName()));
-        rPMPkg.setMaintainerGiteeId(maintainer.get(MapConstant.MAINTAINER_GITEE_ID));
-        rPMPkg.setMaintainerId(maintainer.get(MapConstant.MAINTAINER_ID));
-        rPMPkg.setMaintainerEmail(maintainer.get(MapConstant.MAINTAINER_EMAIL));
-        return rPMPkg;
-    }
-
-    /**
-     * Adds repository signature information to the given RPM package.
-     *
-     * @param rPMPkg The RPM package to which repository signature will be added.
-     * @return Updated RPM package with repository signature.
-     */
-    public RPMPackage addRPMPkgRepoSig(final RPMPackage rPMPkg) {
-        String resp = ApiUtil.getApiResponseData(String.format(repoSigApi, rPMPkg.getName()));
-        String category = (resp != null && MapConstant.CATEGORY_MAP.containsKey(resp))
-                ? MapConstant.CATEGORY_MAP.get(resp)
-                : MapConstant.CATEGORY_MAP.get(MapConstant.CATEGORY_OTHER);
-        rPMPkg.setCategory(category);
-        return rPMPkg;
-    }
-
-    /**
-     * Adds repository download information to the given RPM package.
-     *
-     * @param rPMPkg The RPM package to which repository download information will be added.
-     * @return Updated RPM package with repository download information.
-     */
-    public RPMPackage addRPMPkgRepoDownload(final RPMPackage rPMPkg) {
-        String resp = ApiUtil.getApiResponseData(String.format(repoDownloadApi, rPMPkg.getName()));
-        rPMPkg.setDownloadCount(resp);
-        return rPMPkg;
     }
 
     /**
