@@ -33,12 +33,14 @@ WORKDIR ${WORKSPACE}
 COPY --chown=easysoftware --from=Builder /EasySoftware/target ${WORKSPACE}/target
 
 RUN echo "umask 027" >> /home/easysoftware/.bashrc \
+    && echo "umask 027" >> /root/.bashrc \
     && source /home/easysoftware/.bashrc \
     && mkdir -p /home/easysoftware/tomcat/log \
     && chmod 550 -R /home/easysoftware \
     && chown -R easysoftware:easysoftware /home/easysoftware/tomcat/ \
     && chmod 750 /home/easysoftware/tomcat/log \
 	&& echo "set +o history" >> /etc/bashrc \
+    && echo "set +o history" >> /home/easysoftware/bashrc \
     && sed -i "s|HISTSIZE=1000|HISTSIZE=0|" /etc/profile \
     && sed -i "s|PASS_MAX_DAYS[ \t]*99999|PASS_MAX_DAYS 30|" /etc/login.defs
 
@@ -66,6 +68,7 @@ RUN rm -rf `find / -iname "*tcpdump*"` \
     && rm -rf `find / -iname "*mirror*"` \
     && rm -rf `find / -iname "*JDK*"` \
     && rm -rf /root/.m2/repository/*
+    && rm -rf /tmp/*
 
 RUN rm -rf /usr/bin/gdb* \
     && rm -rf /usr/share/gdb \
