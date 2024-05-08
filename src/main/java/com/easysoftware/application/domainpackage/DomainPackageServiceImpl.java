@@ -30,6 +30,7 @@ import com.easysoftware.ranking.Ranker;
 import com.easysoftware.redis.RedisGateway;
 import com.easysoftware.redis.RedisUtil;
 import jakarta.annotation.Resource;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -201,7 +202,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         // 根据请求参数生成唯一redis key
         String redisKeyStr = RedisUtil.objectToString(condition);
         String redisKeyFormat = "domainPage_%s";
-        String redisKey = String.format(redisKeyFormat, RedisUtil.getSHA256(redisKeyStr));
+        String redisKey = String.format(redisKeyFormat, DigestUtils.sha256Hex(redisKeyStr));
         try {
             // 结果未过期，直接返回
             if (redisGateway.hasKey(redisKey)) {
