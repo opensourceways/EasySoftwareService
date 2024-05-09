@@ -6,15 +6,12 @@ import com.easysoftware.application.applicationversion.dto.InputApplicationVersi
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
-import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.applicationversion.ApplicationVersion;
 import com.easysoftware.domain.applicationversion.gateway.ApplicationVersionGateway;
 import com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobject.ApplicationVersionDO;
 import com.easysoftware.infrastructure.mapper.ApplicationVersionDOMapper;
-import com.easysoftware.kafka.Producer;
 import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,11 +25,11 @@ import java.util.Map;
 public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersionDOMapper,
         ApplicationVersionDO> implements ApplicationVersionService {
 
-    /**
-     * Autowired Kafka producer for sending messages.
-     */
-    @Autowired
-    private Producer kafkaProducer;
+//    /**
+//     * Autowired Kafka producer for sending messages.
+//     */
+//    @Autowired
+//    private Producer kafkaProducer;
 
     /**
      * Topic name for the Kafka producer related to application versions.
@@ -71,8 +68,8 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
         Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(appVersion);
         kafkaMsg.put("table", "ApplicationVersion");
         kafkaMsg.put("unique", inputAppVersion.getName());
-        kafkaProducer.sendMess(topicAppVersion + "_version",
-                UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(kafkaMsg));
+//        kafkaProducer.sendMess(topicAppVersion + "_version",
+//                UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(kafkaMsg));
 
         return ResultUtil.success(HttpStatus.OK);
     }
