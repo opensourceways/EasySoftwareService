@@ -67,7 +67,7 @@ RUN rm -rf `find / -iname "*tcpdump*"` \
     && rm -rf `find / -iname "*dexdump*"` \
     && rm -rf `find / -iname "*mirror*"` \
     && rm -rf `find / -iname "*JDK*"` \
-    && rm -rf /root/.m2/repository/*
+    && rm -rf /root/.m2/repository/* \
     && rm -rf /tmp/*
 
 RUN rm -rf /usr/bin/gdb* \
