@@ -7,9 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -122,39 +119,6 @@ public final class RedisUtil {
         } catch (IOException e) {
             LOGGER.error(MessageCode.EC0001.getMsgEn(), e);
             return null;
-        }
-    }
-
-    /**
-     * Generate the SHA-256 hash of an input string.
-     *
-     * @param input The input string to generate the hash for.
-     * @return The SHA-256 hash of the input string.
-     */
-    public static String getSHA256(final String input) {
-        try {
-            // 初始化MessageDigest实例，并指定SHA-256算法
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-
-            // 将输入字符串转换为字节数组，并更新摘要
-            md.update(input.getBytes(StandardCharsets.UTF_8));
-
-            // 完成哈希计算，并获取哈希值的字节表示
-            byte[] hash = md.digest();
-
-            // 将字节数组转换为十六进制字符串
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hash) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) {
-                    hexString.append('0');
-                }
-                hexString.append(hex);
-            }
-
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
         }
     }
 }
