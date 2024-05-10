@@ -100,7 +100,8 @@ public class RequestLimitRedisAspect {
 
         if (count > limitCount) {
             // 审计日志
-            LOGGER.error("接口拦截：{}，请求超过限制频率【{}次/{}s】,IP：{}", uri, limitCount, period, ip);
+            LOGGER.error("the current uri is{}，the request frequency of uri exceeds the limited frequency: "
+                    + "{} times/{}s ,IP：{}", uri, limitCount, period, ip);
             return ResultUtil.fail(HttpStatus.TOO_MANY_REQUESTS, MessageCode.EC00010);
         }
 

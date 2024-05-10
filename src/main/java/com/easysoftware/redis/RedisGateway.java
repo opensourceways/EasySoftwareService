@@ -84,14 +84,13 @@ public class RedisGateway {
         String query = wildCard(namespace);
         List<String> listKeys = new ArrayList<>();
         ScanOptions options = ScanOptions.scanOptions().match(query).build();
-        Cursor<String> curosr = stringRedisTemplate.scan(options);
 
-        while (curosr.hasNext()) {
-            String key = curosr.next();
-            listKeys.add(key);
+        try (Cursor<String> curosr = stringRedisTemplate.scan(options)) {
+            while (curosr.hasNext()) {
+                String key = curosr.next();
+                listKeys.add(key);
+            }
         }
-        // 关闭cursor
-        curosr.close();
 
         return listKeys;
     }
