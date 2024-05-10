@@ -45,6 +45,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -202,7 +203,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         // 根据请求参数生成唯一redis key
         String redisKeyStr = RedisUtil.objectToString(condition);
         String redisKeyFormat = "domainPage_%s";
-        String redisKey = String.format(redisKeyFormat, DigestUtils.sha256Hex(redisKeyStr));
+        String redisKey = String.format(Locale.ROOT, redisKeyFormat, DigestUtils.sha256Hex(redisKeyStr));
         try {
             // 结果未过期，直接返回
             if (redisGateway.hasKey(redisKey)) {
@@ -446,7 +447,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     private EPKGPackageDetailVo searchEpkgDetail(final String epkgPkgId) {
         List<EPKGPackageDetailVo> epkgList = epkgPackageGateway.queryDetailByPkgId(epkgPkgId);
         if (epkgList.size() != 1) {
-            throw new ParamErrorException(String.format(MessageCode.EC00014.getMsgEn(), "epkgPkgId"));
+            throw new ParamErrorException(String.format(Locale.ROOT, MessageCode.EC00014.getMsgEn(), "epkgPkgId"));
         }
         return epkgList.get(0);
     }
@@ -460,7 +461,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     private ApplicationPackageDetailVo searchAppDetail(final String appPkgId) {
         List<ApplicationPackageDetailVo> appList = applicationPackageGateway.queryDetailByPkgId(appPkgId);
         if (appList.size() != 1) {
-            throw new ParamErrorException(String.format(MessageCode.EC00014.getMsgEn(), "appPkgId"));
+            throw new ParamErrorException(String.format(Locale.ROOT, MessageCode.EC00014.getMsgEn(), "appPkgId"));
         }
         return appList.get(0);
     }
@@ -474,7 +475,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     private RPMPackageDetailVo searchRpmDetail(final String rpmPkgId) {
         List<RPMPackageDetailVo> rpmList = rpmPackageGateway.queryDetailByPkgId(rpmPkgId);
         if (rpmList.size() != 1) {
-            throw new ParamErrorException(String.format(MessageCode.EC00014.getMsgEn(), "rpmPkgId"));
+            throw new ParamErrorException(String.format(Locale.ROOT, MessageCode.EC00014.getMsgEn(), "rpmPkgId"));
         }
         return rpmList.get(0);
     }

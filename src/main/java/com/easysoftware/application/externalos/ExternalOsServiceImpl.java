@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Service
@@ -45,7 +46,7 @@ public class ExternalOsServiceImpl implements ExternalOsService {
     @Override
     public ResponseEntity<Object> deletePkgMap(final List<String> ids) {
         int mark = externalOsGateway.delete(ids);
-        String msg = String.format("the number of deleted : %d", mark);
+        String msg = String.format(Locale.ROOT, "the number of deleted : %d", mark);
         return ResultUtil.success(HttpStatus.OK, msg);
     }
 
@@ -82,7 +83,7 @@ public class ExternalOsServiceImpl implements ExternalOsService {
         BeanUtils.copyProperties(input, ex);
 
         int mark = externalOsGateway.update(ex);
-        String msg = String.format("the number of updated : %d", mark);
+        String msg = String.format(Locale.ROOT, "the number of updated : %d", mark);
         return ResultUtil.success(HttpStatus.OK, msg);
     }
 
