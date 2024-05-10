@@ -6,17 +6,14 @@ import com.easysoftware.application.epkgpackage.dto.InputEPKGPackage;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
-import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.epkgpackage.EPKGPackage;
 import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
 import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
 import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.dataobject.EPKGPackageDO;
 import com.easysoftware.infrastructure.mapper.EPKGPackageDOMapper;
-import com.easysoftware.kafka.Producer;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,12 +32,6 @@ public class EPKGPackageServiceImpl extends
      */
     @Resource
     private EPKGPackageGateway ePKGPackageGateway;
-
-    /**
-     * Kafka producer for messaging.
-     */
-    @Autowired
-    private Producer kafkaProducer;
 
     /**
      * API endpoint for repository maintainers.
@@ -87,8 +78,6 @@ public class EPKGPackageServiceImpl extends
 
         Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(inputEPKGPackage);
         kafkaMsg.put("table", "EPKGPackage");
-        kafkaProducer.sendMess(topicAppVersion + "_epkg", UuidUtil.getUUID32(),
-                ObjectMapperUtil.writeValueAsString(kafkaMsg));
 
         return ResultUtil.success(HttpStatus.OK);
     }

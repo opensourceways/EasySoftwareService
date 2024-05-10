@@ -7,17 +7,14 @@ import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
-import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
 import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 import com.easysoftware.infrastructure.mapper.RPMPackageDOMapper;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
-import com.easysoftware.kafka.Producer;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
@@ -33,11 +30,6 @@ import java.util.Map;
 @Primary
 @Service("RPMPackageService")
 public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPackageDO> implements RPMPackageService {
-    /**
-     * Autowired Kafka producer.
-     */
-    @Autowired
-    private Producer kafkaProducer;
 
     /**
      * Resource for RPM Package Gateway.
@@ -107,8 +99,6 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
         BeanUtils.copyProperties(inputrPMPackage, rPMPkg);
         Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(inputrPMPackage);
         kafkaMsg.put("table", "RPMPackage");
-        kafkaProducer.sendMess(topicAppVersion + "_rpm",
-                UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(kafkaMsg));
         return ResultUtil.success(HttpStatus.OK);
     }
 
