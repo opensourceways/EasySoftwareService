@@ -15,6 +15,7 @@ import lombok.SneakyThrows;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public final class LogUtil {
 
@@ -54,7 +55,7 @@ public final class LogUtil {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         log.setTime(dateTime.format(formatter));
 
-        log.setFunc(String.format("%s.%s", joinPoint.getSignature().getDeclaringTypeName(),
+        log.setFunc(String.format(Locale.ROOT, "%s.%s", joinPoint.getSignature().getDeclaringTypeName(),
                 joinPoint.getSignature().getName()));
 
         log.setRequestUrl(request.getRequestURI());

@@ -32,6 +32,6 @@ public final class PackageConstant {
     /**
      * Maximum field length allowed.
      */
-    public static final int MAX_FIELD_LENGTH = 255;
+    public static final int MAX_FIELD_LENGTH = 1000;
 
 }

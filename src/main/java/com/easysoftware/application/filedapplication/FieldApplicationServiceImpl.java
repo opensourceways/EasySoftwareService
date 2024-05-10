@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -281,7 +282,7 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         if (pkgList.size() >= 1) {
             return pkgList.get(0);
         }
-        LOGGER.error(String.format(MessageCode.EC00014.getMsgEn(), "epkgPkgId"));
+        LOGGER.error(String.format(Locale.ROOT, MessageCode.EC00014.getMsgEn(), "epkgPkgId"));
         return null;
     }
 
@@ -296,7 +297,7 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         if (pkgList.size() >= 1) {
             return pkgList.get(0);
         }
-        LOGGER.error(String.format(MessageCode.EC00014.getMsgEn(), "rpmPkgId"));
+        LOGGER.error(String.format(Locale.ROOT, MessageCode.EC00014.getMsgEn(), "rpmPkgId"));
         return null;
     }
 
@@ -311,7 +312,7 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         if (pkgList.size() >= 1) {
             return pkgList.get(0);
         }
-        LOGGER.error(String.format(MessageCode.EC00014.getMsgEn(), "appPkgId"));
+        LOGGER.error(String.format(Locale.ROOT, MessageCode.EC00014.getMsgEn(), "appPkgId"));
         return null;
     }
 

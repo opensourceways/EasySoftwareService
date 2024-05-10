@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -126,7 +127,7 @@ public class RedisServiceImpl implements RedisService {
             return ResultUtil.success(HttpStatus.OK, res);
         }
 
-        String msg = String.format("成功删除key %s", key);
+        String msg = String.format(Locale.ROOT, "成功删除key %s", key);
         return ResultUtil.success(HttpStatus.OK, msg);
     }
 
