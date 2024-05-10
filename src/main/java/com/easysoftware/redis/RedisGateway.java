@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -102,6 +103,6 @@ public class RedisGateway {
      * @return The string with wildcard applied.
      */
     private String wildCard(final String str) {
-        return String.format("%s*", str);
+        return String.format(Locale.ROOT, "%s*", str);
     }
 }

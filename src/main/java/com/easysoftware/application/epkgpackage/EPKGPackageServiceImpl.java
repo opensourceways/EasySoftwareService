@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Service("EPKGPackageService")
@@ -69,7 +70,7 @@ public class EPKGPackageServiceImpl extends
     @Override
     public ResponseEntity<Object> deleteEPKGPkg(final List<String> ids) {
         int mark = ePKGPackageGateway.delete(ids);
-        String msg = String.format("the number of deleted : %d", mark);
+        String msg = String.format(Locale.ROOT, "the number of deleted : %d", mark);
         return ResultUtil.success(HttpStatus.OK, msg);
     }
 
@@ -150,7 +151,7 @@ public class EPKGPackageServiceImpl extends
         EPKGPackage epkgPkg = new EPKGPackage();
         BeanUtils.copyProperties(inputEPKGPackage, epkgPkg);
         int mark = ePKGPackageGateway.update(epkgPkg);
-        String msg = String.format("the number of updated : %d", mark);
+        String msg = String.format(Locale.ROOT, "the number of updated : %d", mark);
         return ResultUtil.success(HttpStatus.OK, msg);
     }
 

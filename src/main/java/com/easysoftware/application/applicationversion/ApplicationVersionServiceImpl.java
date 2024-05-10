@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Service("ApplicationVersionService")
@@ -119,7 +120,7 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
     public ResponseEntity<Object> deleteAppVersion(final List<String> names) {
         List<String> existedNames = names.stream().filter(appVersionGateway::existApp).toList();
         List<String> deletedNames = existedNames.stream().filter(appVersionGateway::delete).toList();
-        String msg = String.format("请求删除的数据: %s, 在数据库中的数据: %s, 成功删除的数据: %s",
+        String msg = String.format(Locale.ROOT, "请求删除的数据: %s, 在数据库中的数据: %s, 成功删除的数据: %s",
                 names, existedNames, deletedNames);
         return ResultUtil.success(HttpStatus.OK, msg);
     }
