@@ -147,12 +147,6 @@
 			<artifactId>bcprov-jdk18on</artifactId>
 			<version>1.78.1</version>
 		</dependency>
-		<!-- kafka -->
-<!--		<dependency>-->
-<!--			<groupId>org.apache.kafka</groupId>-->
-<!--			<artifactId>kafka-clients</artifactId>-->
-<!--			<version>3.7.0</version>-->
-<!--		</dependency>-->
 
 		<!-- OBS -->
 		<dependency>
@@ -166,11 +160,6 @@
 			<artifactId>httpclient</artifactId>
 			<version>4.5.13</version>
 		</dependency>
-
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.kafka</groupId>-->
-<!--			<artifactId>spring-kafka</artifactId>-->
-<!--		</dependency>-->
 
 		<dependency>
 			<groupId>commons-codec</groupId>

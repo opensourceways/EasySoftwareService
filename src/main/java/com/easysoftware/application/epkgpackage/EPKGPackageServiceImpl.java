@@ -32,12 +32,6 @@ public class EPKGPackageServiceImpl extends
     @Resource
     private EPKGPackageGateway ePKGPackageGateway;
 
-//    /**
-//     * Kafka producer for messaging.
-//     */
-//    @Autowired
-//    private Producer kafkaProducer;
-
     /**
      * API endpoint for repository maintainers.
      */
@@ -83,8 +77,6 @@ public class EPKGPackageServiceImpl extends
 
         Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(inputEPKGPackage);
         kafkaMsg.put("table", "EPKGPackage");
-//        kafkaProducer.sendMess(topicAppVersion + "_epkg", UuidUtil.getUUID32(),
-//                ObjectMapperUtil.writeValueAsString(kafkaMsg));
 
         return ResultUtil.success(HttpStatus.OK);
     }

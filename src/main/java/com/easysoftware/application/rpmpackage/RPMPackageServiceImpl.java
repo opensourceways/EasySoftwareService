@@ -29,11 +29,6 @@ import java.util.Map;
 @Primary
 @Service("RPMPackageService")
 public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPackageDO> implements RPMPackageService {
-//    /**
-//     * Autowired Kafka producer.
-//     */
-//    @Autowired
-//    private Producer kafkaProducer;
 
     /**
      * Resource for RPM Package Gateway.
@@ -103,8 +98,6 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
         BeanUtils.copyProperties(inputrPMPackage, rPMPkg);
         Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(inputrPMPackage);
         kafkaMsg.put("table", "RPMPackage");
-//        kafkaProducer.sendMess(topicAppVersion + "_rpm",
-//                UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(kafkaMsg));
         return ResultUtil.success(HttpStatus.OK);
     }
 
