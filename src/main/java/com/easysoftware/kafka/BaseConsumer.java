@@ -85,14 +85,14 @@ public class BaseConsumer {
         }
         long endTime1 = System.nanoTime();
         long duration = (endTime1 - startTime) / 1000000;
-        LOGGER.info("处理records用时： " + duration + " 毫秒，" + "数据量：" + appList.size());
+        LOGGER.info("time used to convert record: " + duration + " millisecond, appList.size(): " + appList.size());
         if (!appList.isEmpty()) {
             LOGGER.info("partation: " + partition + ", offset: " + offset);
             baseIService.saveDataObjectBatch(appList);
         }
         long endTime2 = System.nanoTime();
         duration = (endTime2 - endTime1) / 1000000;
-        LOGGER.info("写入数据库用时： " + duration + " 毫秒，" + "数据量：" + appList.size());
+        LOGGER.info("time to database: " + duration + " millisecond, appList.size(): " + appList.size());
     }
 
     /**
