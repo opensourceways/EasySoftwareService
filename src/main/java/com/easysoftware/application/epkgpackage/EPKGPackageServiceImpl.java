@@ -2,29 +2,21 @@ package com.easysoftware.application.epkgpackage;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
-import com.easysoftware.application.epkgpackage.dto.InputEPKGPackage;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
-import com.easysoftware.common.utils.UuidUtil;
-import com.easysoftware.domain.epkgpackage.EPKGPackage;
 import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
 import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
 import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.dataobject.EPKGPackageDO;
 import com.easysoftware.infrastructure.mapper.EPKGPackageDOMapper;
-import com.easysoftware.kafka.Producer;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 @Service("EPKGPackageService")
@@ -35,63 +27,6 @@ public class EPKGPackageServiceImpl extends
      */
     @Resource
     private EPKGPackageGateway ePKGPackageGateway;
-
-    /**
-     * Kafka producer for messaging.
-     */
-    @Autowired
-    private Producer kafkaProducer;
-
-    /**
-     * API endpoint for repository maintainers.
-     */
-    @Value("${api.repoMaintainer}")
-    private String repoMaintainerApi;
-
-    /**
-     * API endpoint for repository signatures.
-     */
-    @Value("${api.repoSig}")
-    private String repoSigApi;
-
-    /**
-     * Kafka topic for application version messages.
-     */
-    @Value("${producer.topic}")
-    private String topicAppVersion;
-
-
-    /**
-     * Deletes EPKG packages by their names.
-     *
-     * @param ids List of package names to delete.
-     * @return ResponseEntity<Object>.
-     */
-    @Override
-    public ResponseEntity<Object> deleteEPKGPkg(final List<String> ids) {
-        int mark = ePKGPackageGateway.delete(ids);
-        String msg = String.format(Locale.ROOT, "the number of deleted : %d", mark);
-        return ResultUtil.success(HttpStatus.OK, msg);
-    }
-
-    /**
-     * Inserts an EPKG package.
-     *
-     * @param inputEPKGPackage InputEPKGPackage object.
-     * @return ResponseEntity<Object>.
-     */
-    @Override
-    public ResponseEntity<Object> insertEPKGPkg(final InputEPKGPackage inputEPKGPackage) {
-        EPKGPackage epkgPkg = new EPKGPackage();
-        BeanUtils.copyProperties(inputEPKGPackage, epkgPkg);
-
-        Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(inputEPKGPackage);
-        kafkaMsg.put("table", "EPKGPackage");
-        kafkaProducer.sendMess(topicAppVersion + "_epkg", UuidUtil.getUUID32(),
-                ObjectMapperUtil.writeValueAsString(kafkaMsg));
-
-        return ResultUtil.success(HttpStatus.OK);
-    }
 
     /**
      * Queries all EPKG package menus based on search conditions.
@@ -141,28 +76,13 @@ public class EPKGPackageServiceImpl extends
     }
 
     /**
-     * Updates an EPKG package.
-     *
-     * @param inputEPKGPackage InputEPKGPackage object.
-     * @return ResponseEntity<Object>.
-     */
-    @Override
-    public ResponseEntity<Object> updateEPKGPkg(final InputEPKGPackage inputEPKGPackage) {
-        EPKGPackage epkgPkg = new EPKGPackage();
-        BeanUtils.copyProperties(inputEPKGPackage, epkgPkg);
-        int mark = ePKGPackageGateway.update(epkgPkg);
-        String msg = String.format(Locale.ROOT, "the number of updated : %d", mark);
-        return ResultUtil.success(HttpStatus.OK, msg);
-    }
-
-    /**
      * Saves a batch of data objects.
      *
      * @param dataObject ArrayList of data objects to save.
      */
     @Override
     public void saveDataObjectBatch(final ArrayList<String> dataObject) {
-        saveBatch(ePKGPackageGateway.convertBatch(dataObject));
+        return;
     }
 
     /**
@@ -176,15 +96,4 @@ public class EPKGPackageServiceImpl extends
         EPKGPackageUnique uniquePkg = ObjectMapperUtil.jsonToObject(unique, EPKGPackageUnique.class);
         return ePKGPackageGateway.existEPKG(uniquePkg);
     }
-
-    /**
-     * Saves a single data object.
-     *
-     * @param dataObject Data object to save.
-     */
-    @Override
-    public void saveDataObject(final String dataObject) {
-    }
-
-
 }

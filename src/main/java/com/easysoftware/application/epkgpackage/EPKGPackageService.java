@@ -2,39 +2,12 @@ package com.easysoftware.application.epkgpackage;
 
 import com.easysoftware.application.BaseIService;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
-import com.easysoftware.application.epkgpackage.dto.InputEPKGPackage;
 import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.dataobject.EPKGPackageDO;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public interface EPKGPackageService extends BaseIService<EPKGPackageDO> {
-    /**
-     * Inserts an EPKG package.
-     *
-     * @param inputrPMPackage InputEPKGPackage object.
-     * @return  ResponseEntity<Object>.
-     */
-    ResponseEntity<Object> insertEPKGPkg(InputEPKGPackage inputrPMPackage);
-
-    /**
-     * Updates an EPKG package.
-     *
-     * @param inputrPMPackage InputEPKGPackage object.
-     * @return ResponseEntity<Object>.
-     */
-    ResponseEntity<Object> updateEPKGPkg(InputEPKGPackage inputrPMPackage);
-
-    /**
-     * Deletes EPKG packages by their names.
-     *
-     * @param names List of package names to delete.
-     * @return ResponseEntity<Object>.
-     */
-    ResponseEntity<Object> deleteEPKGPkg(List<String> names);
-
     /**
      * Searches for EPKG packages based on search conditions.
      *
@@ -58,19 +31,4 @@ public interface EPKGPackageService extends BaseIService<EPKGPackageDO> {
      * @return boolean indicating if the application exists.
      */
     boolean existApp(String name);
-
-    /**
-     * Saves a single data object.
-     *
-     * @param dataObject Data object to save.
-     */
-    void saveDataObject(String dataObject);
-
-    /**
-     * Saves a batch of data objects.
-     *
-     * @param dataObject ArrayList of data objects to save.
-     */
-    void saveDataObjectBatch(ArrayList<String> dataObject);
-
 }
