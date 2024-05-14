@@ -61,10 +61,6 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
      */
     @Override
     public ResponseEntity<Object> insertAppVersion(final InputApplicationVersion inputAppVersion) {
-        // 数据库中是否已存在该包
-        if (appVersionGateway.existApp(inputAppVersion.getName())) {
-            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0008);
-        }
         ApplicationVersion appVersion = new ApplicationVersion();
         BeanUtils.copyProperties(inputAppVersion, appVersion);
 
@@ -97,10 +93,6 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
      */
     @Override
     public ResponseEntity<Object> updateAppVersion(final InputApplicationVersion inputAppVersion) {
-        // 数据库中是否已存在该包
-        if (!appVersionGateway.existApp(inputAppVersion.getName())) {
-            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0009);
-        }
         ApplicationVersion appVersion = new ApplicationVersion();
         BeanUtils.copyProperties(inputAppVersion, appVersion);
 
