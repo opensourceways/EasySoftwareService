@@ -75,7 +75,7 @@ public class ApplicationVersionDO {
     private Timestamp updateAt;
 
     /**
-     * Version of openEuler os: openEuler-22.03
+     * Version of openEuler os: openEuler-22.03.
      */
     private String eulerOsVersion;
 }

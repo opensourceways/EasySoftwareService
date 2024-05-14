@@ -60,7 +60,7 @@ public class ApplicationVersion {
     private String id;
 
     /**
-     * Version of openEuler os: openEuler-22.03
+     * Version of openEuler os: openEuler-22.03.
      */
     private String eulerOsVersion;
 }
