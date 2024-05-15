@@ -5,6 +5,7 @@ import com.easysoftware.domain.applicationversion.ApplicationVersion;
 import com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobject.ApplicationVersionDO;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 
@@ -50,6 +51,14 @@ public interface ApplicationVersionGateway {
     Map<String, Object> queryByName(ApplicationVersionSearchCondition condition);
 
     /**
+     * Query information based on the provided search condition.
+     *
+     * @param condition The search condition for querying application versions
+     * @return A map containing relevant information
+     */
+    Map<String, Object> queryByEulerOsVersion(ApplicationVersionSearchCondition condition);
+
+    /**
      * Convert a batch of data objects to ApplicationVersionDO objects.
      *
      * @param dataObject A collection of data objects to convert
@@ -57,5 +66,12 @@ public interface ApplicationVersionGateway {
      */
     Collection<ApplicationVersionDO> convertBatch(Collection<String> dataObject);
 
+    /**
+     * Search column.
+     *
+     * @param columns columns
+     * @return A collection of ApplicationVersionDO objects
+     */
+    Map<String, List<String>> queryColumn(List<String> columns);
 }
 

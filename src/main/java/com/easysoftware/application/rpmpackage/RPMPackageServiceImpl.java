@@ -206,7 +206,7 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
     @Override
     @Transactional
     public void saveDataObjectBatch(final ArrayList<String> dataObject) {
-        saveBatch(rPMPkgGateway.convertBatch(dataObject));
+        saveOrUpdateBatch(rPMPkgGateway.convertBatch(dataObject));
     }
 
     /**
