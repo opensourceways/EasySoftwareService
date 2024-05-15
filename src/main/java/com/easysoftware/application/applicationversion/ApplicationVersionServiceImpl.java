@@ -4,9 +4,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
 import com.easysoftware.application.applicationversion.dto.InputApplicationVersion;
 import com.easysoftware.common.entity.MessageCode;
-import com.easysoftware.common.utils.ObjectMapperUtil;
+import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
-import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.applicationversion.ApplicationVersion;
 import com.easysoftware.domain.applicationversion.gateway.ApplicationVersionGateway;
 import com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobject.ApplicationVersionDO;
@@ -63,14 +62,9 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
     public ResponseEntity<Object> insertAppVersion(final InputApplicationVersion inputAppVersion) {
         ApplicationVersion appVersion = new ApplicationVersion();
         BeanUtils.copyProperties(inputAppVersion, appVersion);
-
-        Map<String, Object> kafkaMsg = ObjectMapperUtil.jsonToMap(appVersion);
-        kafkaMsg.put("table", "ApplicationVersion");
-        kafkaMsg.put("unique", inputAppVersion.getName());
-        kafkaProducer.sendMess(topicAppVersion + "_version",
-                UuidUtil.getUUID32(), ObjectMapperUtil.writeValueAsString(kafkaMsg));
-
-        return ResultUtil.success(HttpStatus.OK);
+        boolean success = appVersionGateway.save(appVersion);
+        return success ? ResultUtil.success(HttpStatus.OK)
+                : ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0006);
     }
 
     /**
@@ -81,7 +75,7 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
      */
     @Override
     public ResponseEntity<Object> searchAppVersion(final ApplicationVersionSearchCondition condition) {
-        Map<String, Object> res = appVersionGateway.queryByName(condition);
+        Map<String, Object> res = appVersionGateway.queryByEulerOsVersion(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
@@ -124,5 +118,17 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
     @Override
     public void saveDataObjectBatch(final ArrayList<String> dataObject) {
         saveOrUpdateBatch(appVersionGateway.convertBatch(dataObject));
+    }
+
+    /**
+     * Search column.
+     *
+     * @param condition condition.
+     */
+    @Override
+    public ResponseEntity<Object> searchAppVerColumn(ApplicationVersionSearchCondition condition) {
+        List<String> columns = QueryWrapperUtil.splitStr(condition.getColumn());
+        Map<String, List<String>> res = appVersionGateway.queryColumn(columns);
+        return ResultUtil.success(HttpStatus.OK, res);
     }
 }
