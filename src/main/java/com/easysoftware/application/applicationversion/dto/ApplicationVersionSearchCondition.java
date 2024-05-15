@@ -32,5 +32,16 @@ public class ApplicationVersionSearchCondition {
     @Range(min = PackageConstant.MIN_PAGE_SIZE, max = PackageConstant.MAX_PAGE_SIZE)
     private Integer pageSize = 10;
 
+    /**
+     * eulerOSVersion.
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    private String eulerOsVersion;
+
+    /**
+     * column.
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    private String column;
 }
 

@@ -41,4 +41,11 @@ public interface ApplicationVersionService extends BaseIService<ApplicationVersi
      */
     ResponseEntity<Object> searchAppVersion(ApplicationVersionSearchCondition condition);
 
+    /**
+     * Searches for column based on the specified search conditions.
+     *
+     * @param condition The search conditions to filter application versions.
+     * @return ResponseEntity<Object>.
+     */
+    ResponseEntity<Object> searchAppVerColumn(ApplicationVersionSearchCondition condition);
 }
