@@ -2,8 +2,7 @@ package com.easysoftware.ranking;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.easysoftware.application.domainpackage.vo.DomainPackageMenuVo;
+import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
 import com.easysoftware.application.operationconfig.vo.OperationConfigVo;
 import com.easysoftware.domain.operationconfig.gateway.OperationConfigGateway;
 
@@ -96,7 +95,7 @@ public class RankerImpl implements Ranker {
             Iterator<Object> iterator = menuVoList.iterator();
             while (iterator.hasNext()) {
                 Object menuVoObj = iterator.next();
-                DomainPackageMenuVo menuVo = (DomainPackageMenuVo) menuVoObj;
+                FiledApplicationVo menuVo = (FiledApplicationVo) menuVoObj;
                 String softWareName = (String) menuVo.getName();
                 if (softWareName.equals(name)) {
                     rankingList.add(menuVo);
