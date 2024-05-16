@@ -22,6 +22,8 @@ import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
 import com.easysoftware.domain.fieldapplication.gateway.FieldapplicationGateway;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 import com.easysoftware.infrastructure.fieldapplication.gatewayimpl.converter.FieldApplicationConverter;
+import com.easysoftware.ranking.Ranker;
+
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -82,6 +84,12 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
     private ApplicationPackageGateway appGateway;
 
     /**
+     * Resource injection for the Ranker.
+     */
+    @Resource
+    private Ranker ranker;
+
+    /**
      * Query menu by name.
      *
      * @param condition The search condition for querying the menu.
@@ -123,7 +131,9 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
             String cate = field.getCategory();
             cateMap.get(cate).add(field);
         }
-        return assembleMainPage(cateMap);
+
+        List<Map<String, Object>> mList = assembleMainPage(cateMap);
+        return ranker.rankingDomainPageByOperationConfig(mList);
     }
 
     /**

@@ -8,6 +8,7 @@ import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -252,7 +253,10 @@ public final class ApplicationPackageConverter {
                     continue;
                 }
                 String value = (String) field.get(appDo);
-                res.add(value);
+                if (StringUtils.isNotBlank(value)) {
+                    res.add(value);
+                }
+
             }
         } catch (Exception e) {
             LOGGER.error(MessageCode.EC00011.getMsgEn(), e);
