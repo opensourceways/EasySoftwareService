@@ -178,6 +178,7 @@ public class RPMPackageDO {
     /**
      * Package ID.
      */
+    @TableId
     private String pkgId;
 
     /**
