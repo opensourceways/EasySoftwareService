@@ -207,6 +207,9 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
             if ("os".equals(column)) {
                 colList = QueryWrapperUtil.sortOsColumn(colList);
             }
+            if ("category".equals(column)) {
+                colList = QueryWrapperUtil.sortCategoryColumn(colList);
+            }
             res.put(column, colList);
         }
         return res;
