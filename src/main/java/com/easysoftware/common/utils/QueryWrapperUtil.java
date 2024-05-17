@@ -129,4 +129,18 @@ public final class QueryWrapperUtil {
         con.addAll(don);
         return con;
     }
+
+    /**
+     * Sorts the list of strings representing category in ascending order.
+     *
+     * @param colList The list of strings representing category to be sorted
+     * @return A sorted list of strings representing category in ascending order
+     */
+    public static List<String> sortCategoryColumn(List<String> colList) {
+        if (colList.contains("其他")) {
+            colList.remove("其他");
+            colList.add("其他");
+        }
+        return colList;
+    }
 }
