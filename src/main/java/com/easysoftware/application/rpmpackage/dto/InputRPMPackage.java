@@ -203,7 +203,7 @@ public class InputRPMPackage {
     /**
      * License.
      */
-    @Size(max = 255, message = "the length of license can not exceed 255")
+    @Size(max = 10_000, message = "the length of license can not exceed 10000")
     private String license;
 
 }

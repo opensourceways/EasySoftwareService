@@ -51,6 +51,12 @@ public class FiledApplicationSerachCondition {
     /**
      * Time order.
      */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String timeOrder;
 
+    /**
+     * Name order.
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    private String nameOrder;
 }

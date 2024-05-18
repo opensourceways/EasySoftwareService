@@ -43,5 +43,11 @@ public class ApplicationVersionSearchCondition {
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String column;
+
+    /**
+     * Name order.
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    private String nameOrder;
 }
 

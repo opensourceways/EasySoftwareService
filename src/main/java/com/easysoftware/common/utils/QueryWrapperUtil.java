@@ -30,6 +30,46 @@ public final class QueryWrapperUtil {
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(QueryWrapperUtil.class);
 
+    /**
+     * get field value.
+     *
+     * @param field    The field
+     * @param u        The second generic type U
+     * @param <U>      the type of array elements
+     * @return A String
+     */
+    private static <U> String getFieldValue(Field field, U u) {
+        field.setAccessible(true);
+
+        Object value = null;
+        try {
+            value = field.get(u);
+        } catch (Exception e) {
+            LOGGER.error(MessageCode.EC00011.getMsgEn(), e);
+        }
+        if (!(value instanceof String)) {
+            return "";
+        }
+
+        String vStr = (String) value;
+        return StringUtils.trimToEmpty(vStr);
+    }
+
+    /**
+     * setColumnOrder.
+     *
+     * @param wrapper    The wrapper
+     * @param column   The column
+     * @param vStr       the vStr
+     * @param <T>      the type of array elements
+     */
+    private static <T> void setColumnOrder(QueryWrapper<T> wrapper, String column, String vStr) {
+        if (TimeOrderEnum.DESC.getAlias().equals(vStr)) {
+            wrapper.orderByDesc(column);
+        } else if (TimeOrderEnum.ASC.getAlias().equals(vStr)) {
+            wrapper.orderByAsc(column);
+        }
+    }
 
     /**
      * Create a QueryWrapper for given generic types T and U, with an updateAt parameter.
@@ -46,47 +86,27 @@ public final class QueryWrapperUtil {
 
         Field[] fields = u.getClass().getDeclaredFields();
         for (Field field : fields) {
-            field.setAccessible(true);
+            String vStr = getFieldValue(field, u);
 
-            Object value = null;
-            try {
-                value = field.get(u);
-            } catch (Exception e) {
-                LOGGER.error(MessageCode.EC00011.getMsgEn(), e);
-            }
-            if (!(value instanceof String)) {
+            if ("timeOrder".equals(field.getName())) {
+                setColumnOrder(wrapper, updateAt, vStr);
                 continue;
             }
 
-            String vStr = (String) value;
-            vStr = StringUtils.trimToEmpty(vStr);
-            if (StringUtils.isBlank(vStr)) {
-                continue;
-            }
-
-            if ("timeOrder".equals(field.getName()) && TimeOrderEnum.DESC.getAlias().equals(vStr)) {
-                wrapper.orderByDesc(updateAt);
-                continue;
-            }
-            if ("timeOrder".equals(field.getName()) && TimeOrderEnum.ASC.getAlias().equals(vStr)) {
-                wrapper.orderByAsc(updateAt);
+            if ("nameOrder".equals(field.getName())) {
+                setColumnOrder(wrapper, "name", vStr);
                 continue;
             }
 
             String undLine = StringUtil.camelToUnderline(field.getName());
 
             //","代表该字段有多个参数
-            if (vStr.contains(",")) {
-                List<String> items = splitStr(vStr);
-                if (items.size() == 0) {
-                    continue;
-                }
+            List<String> items = splitStr(vStr);
+            if (items.size() >= 2) {
                 wrapper.in(undLine, items);
-            } else {
-                vStr = StringUtils.trimToEmpty(vStr);
-                wrapper.eq(undLine, vStr);
+            } else if (items.size() == 1) {
+                wrapper.eq(undLine, items.get(0));
             }
-
         }
         return wrapper;
     }
