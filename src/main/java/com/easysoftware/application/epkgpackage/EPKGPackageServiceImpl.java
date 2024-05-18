@@ -161,7 +161,7 @@ public class EPKGPackageServiceImpl extends
      */
     @Override
     public void saveDataObjectBatch(final ArrayList<String> dataObject) {
-        saveBatch(ePKGPackageGateway.convertBatch(dataObject));
+        saveOrUpdateBatch(ePKGPackageGateway.convertBatch(dataObject));
     }
 
     /**
