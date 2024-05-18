@@ -45,4 +45,9 @@ public class RPMPackageDomainVo {
      */
     private String subPath;
 
+    /**
+     * License.
+     */
+    private String license;
+
 }

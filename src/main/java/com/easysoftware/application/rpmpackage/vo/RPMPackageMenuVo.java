@@ -68,4 +68,9 @@ public class RPMPackageMenuVo {
      */
     private String subPath;
 
+    /**
+     * License.
+     */
+    private String license;
+
 }
