@@ -168,4 +168,9 @@ public class EPKGPackageDetailVo {
      */
     private String subPath;
 
+    /**
+     * License.
+     */
+    private String license;
+
 }

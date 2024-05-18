@@ -187,4 +187,9 @@ public class RPMPackageDO {
      */
     private String subPath;
 
+    /**
+     * License.
+     */
+    private String license;
+
 }
