@@ -194,4 +194,9 @@ public class EPKGPackageDO {
      * subPath.
      */
     private String subPath;
+
+    /**
+     * License.
+     */
+    private String license;
 }

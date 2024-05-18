@@ -176,4 +176,9 @@ public class EPKGPackage {
      */
     private String subPath;
 
+    /**
+     * License.
+     */
+    private String license;
+
 }

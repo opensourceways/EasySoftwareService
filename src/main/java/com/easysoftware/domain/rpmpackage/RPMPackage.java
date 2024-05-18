@@ -171,4 +171,8 @@ public class RPMPackage {
      */
     private String subPath;
 
+    /**
+     * License.
+     */
+    private String license;
 }
