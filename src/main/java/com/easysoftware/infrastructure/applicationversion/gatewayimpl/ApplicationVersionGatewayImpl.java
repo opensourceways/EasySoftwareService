@@ -14,7 +14,6 @@ import com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobject
 import com.easysoftware.infrastructure.mapper.ApplicationVersionDOMapper;
 import com.power.common.util.StringUtil;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Component;
@@ -153,11 +152,8 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
     public Map<String, Object> queryByEulerOsVersion(ApplicationVersionSearchCondition condition) {
         Page<ApplicationVersionDO> page = this.<ApplicationVersionDO>createPage(condition);
 
-        QueryWrapper<ApplicationVersionDO> wrapper = null;
-        if (StringUtils.isNotBlank(StringUtils.trimToEmpty(condition.getEulerOsVersion()))) {
-            wrapper = new QueryWrapper<>();
-            wrapper.eq("euler_os_version", StringUtils.trimToEmpty(condition.getEulerOsVersion()));
-        }
+        QueryWrapper<ApplicationVersionDO> wrapper = QueryWrapperUtil.createQueryWrapper(new ApplicationVersionDO(),
+                condition, "");
 
         Page<ApplicationVersionDO> resPage = appVersionMapper.selectPage(page, wrapper);
         List<ApplicationVersionDO> appList = resPage.getRecords();
