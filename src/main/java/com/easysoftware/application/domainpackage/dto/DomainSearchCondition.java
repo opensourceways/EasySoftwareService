@@ -69,7 +69,7 @@ public class DomainSearchCondition {
     private Integer pageSize = 10;
 
     /**
-     * Name order
+     * Name order.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String nameOrder;
