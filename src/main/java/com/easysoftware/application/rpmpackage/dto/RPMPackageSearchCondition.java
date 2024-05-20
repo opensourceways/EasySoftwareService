@@ -3,8 +3,6 @@ package com.easysoftware.application.rpmpackage.dto;
 import org.hibernate.validator.constraints.Range;
 
 import com.easysoftware.common.constant.PackageConstant;
-import com.easysoftware.common.exception.enumvalid.EnumValue;
-import com.easysoftware.common.exception.enumvalid.TimeOrderEnum;
 
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -78,10 +76,14 @@ public class RPMPackageSearchCondition {
     private String rpmUpdateAt;
 
     /**
-     * Field for timeOrder that must be a valid category according to TimeOrderEnum.
-     * Default value is "desc".
+     * Time order.
      */
-    @EnumValue(enumClass = TimeOrderEnum.class, enumMethod = "isValidCategory")
-    private String timeOrder = "desc";
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    private String timeOrder;
 
+    /**
+     * Name order.
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    private String nameOrder;
 }

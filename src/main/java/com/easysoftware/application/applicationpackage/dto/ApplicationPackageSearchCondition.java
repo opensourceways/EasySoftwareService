@@ -3,8 +3,6 @@ package com.easysoftware.application.applicationpackage.dto;
 import org.hibernate.validator.constraints.Range;
 
 import com.easysoftware.common.constant.PackageConstant;
-import com.easysoftware.common.exception.enumvalid.EnumValue;
-import com.easysoftware.common.exception.enumvalid.TimeOrderEnum;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -78,10 +76,15 @@ public class ApplicationPackageSearchCondition {
     private String appUpdateAt;
 
     /**
-     * Time order, validated using EnumValue annotation against TimeOrderEnum,
-     * must be a valid category, default value is "desc".
+     * Time order.
      */
-    @EnumValue(enumClass = TimeOrderEnum.class, enumMethod = "isValidCategory")
-    private String timeOrder = "desc";
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    private String timeOrder;
+
+    /**
+     * Name order.
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    private String nameOrder;
 }
 

@@ -210,7 +210,7 @@ public class InputEPKGPackage {
     /**
      * License.
      */
-    @Size(max = 255, message = "the length of license cannot exceed 255")
+    @Size(max = 10_000, message = "the length of license cannot exceed 10000")
     private String license;
 
 }
