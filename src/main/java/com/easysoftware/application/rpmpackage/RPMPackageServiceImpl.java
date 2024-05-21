@@ -70,7 +70,6 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
     @Value("${producer.topic}")
     private String topicAppVersion;
 
-
     /**
      * Queries all RPM package menus.
      *
@@ -80,6 +79,30 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
     @Override
     public Map<String, Object> queryAllRPMPkgMenu(final RPMPackageSearchCondition condition) {
         return rPMPkgGateway.queryMenuByName(condition);
+    }
+
+    /**
+     * Queries all available openEuler version of RPM package.
+     *
+     * @param condition The search condition.
+     * @return Map containing the RPM package menu.
+     */
+    @Override
+    public ResponseEntity<Object> queryEulerVersionsByName(RPMPackageSearchCondition condition) {
+        Map<String, Object> res = rPMPkgGateway.queryEulerVersionByName(condition);
+        return ResultUtil.success(HttpStatus.OK, res);
+    }
+
+    /**
+     * Queries all available openEuler archs of RPM package.
+     *
+     * @param condition The search condition.
+     * @return Map containing the RPM package menu.
+     */
+    @Override
+    public ResponseEntity<Object> queryEulerArchsByName(RPMPackageSearchCondition condition) {
+        Map<String, Object> res = rPMPkgGateway.queryEulerArchsByName(condition);
+        return ResultUtil.success(HttpStatus.OK, res);
     }
 
     /**
@@ -127,8 +150,7 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
         if (!rpmList.isEmpty()) {
             Map<String, Object> res = Map.ofEntries(
                     Map.entry("total", rpmList.size()),
-                    Map.entry("list", rpmList)
-            );
+                    Map.entry("list", rpmList));
             return ResultUtil.success(HttpStatus.OK, res);
         }
 
@@ -158,7 +180,6 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
         String pkgId = cSb.toString();
         return pkgId;
     }
-
 
     /**
      * Updates an RPM package.
@@ -242,7 +263,8 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
     /**
      * Adds repository download information to the given RPM package.
      *
-     * @param rPMPkg The RPM package to which repository download information will be added.
+     * @param rPMPkg The RPM package to which repository download information will
+     *               be added.
      * @return Updated RPM package with repository download information.
      */
     public RPMPackage addRPMPkgRepoDownload(final RPMPackage rPMPkg) {
@@ -262,6 +284,5 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
         Map<String, Object> rPMMenu = rPMPkgGateway.queryPartRPMPkgMenu(condition);
         return (List<RPMPackageDomainVo>) rPMMenu.get("list");
     }
-
 
 }

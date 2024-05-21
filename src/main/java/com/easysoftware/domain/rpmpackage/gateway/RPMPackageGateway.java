@@ -53,7 +53,8 @@ public interface RPMPackageGateway {
     int delete(List<String> id);
 
     /**
-     * Query detailed information based on the provided search condition for RPM packages.
+     * Query detailed information based on the provided search condition for RPM
+     * packages.
      *
      * @param condition The search condition for querying RPM package details
      * @return A map containing detailed information
@@ -102,7 +103,8 @@ public interface RPMPackageGateway {
     /**
      * Query part of the RPM package menu based on the provided search condition.
      *
-     * @param condition The search condition for querying a part of the RPM package menu
+     * @param condition The search condition for querying a part of the RPM package
+     *                  menu
      * @return A map containing relevant information
      */
     Map<String, Object> queryPartRPMPkgMenu(RPMPackageSearchCondition condition);
@@ -114,5 +116,21 @@ public interface RPMPackageGateway {
      * @return The selected RPMPackageMenuVo object
      */
     RPMPackageMenuVo selectOne(String name);
+
+    /**
+     * Query Euler Version based on the provided search condition.
+     *
+     * @param condition The search condition for querying EulerVersion
+     * @return A map containing tags information
+     */
+    Map<String, Object> queryEulerVersionByName(RPMPackageSearchCondition condition);
+
+    /**
+     * Query Euler archs based on the provided search condition.
+     *
+     * @param condition The search condition for querying EulerVersion
+     * @return A map containing tags information
+     */
+    Map<String, Object> queryEulerArchsByName(RPMPackageSearchCondition condition);
 
 }
