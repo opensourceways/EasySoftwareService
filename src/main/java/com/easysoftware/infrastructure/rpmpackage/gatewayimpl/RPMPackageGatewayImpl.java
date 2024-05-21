@@ -318,7 +318,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         List<String> columns = ClassField.getFieldNames(pkgVo);
         wrapper.eq("name", condition.getName())
                 .select(columns)
-                .groupBy("os");
+                .groupBy("os", "arch");
         List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
         List<RPMPackageEulerVersionVo> versions = RPMPackageConverter.toVersion(rpmList);
         Map<String, Object> res = Map.ofEntries(

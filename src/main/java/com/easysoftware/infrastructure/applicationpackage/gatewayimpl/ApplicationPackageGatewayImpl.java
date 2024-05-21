@@ -299,7 +299,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         List<String> columns = ClassField.getFieldNames(pkgVo);
         wrapper.eq("name", condition.getName())
                 .select(columns)
-                .groupBy("os");
+                .groupBy("os", "arch");
         List<ApplicationPackageDO> appkgList = appPkgMapper.selectList(wrapper);
         List<ApplicationPackageEulerVersionVo> versions = ApplicationPackageConverter.toVersion(appkgList);
         Map<String, Object> res = Map.ofEntries(
