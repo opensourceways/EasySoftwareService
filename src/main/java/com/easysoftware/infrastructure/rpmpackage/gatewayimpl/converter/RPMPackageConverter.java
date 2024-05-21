@@ -168,6 +168,8 @@ public final class RPMPackageConverter {
         for (RPMPackageDO rpm : rpmPkgDOs) {
             RPMPackageEulerVersionVo version = new RPMPackageEulerVersionVo();
             version.setOs(rpm.getOs());
+            version.setArch(rpm.getArch());
+            version.setPkgId(rpm.getPkgId());
             res.add(version);
         }
         return res;

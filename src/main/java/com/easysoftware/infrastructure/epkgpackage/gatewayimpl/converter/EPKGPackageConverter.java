@@ -72,6 +72,8 @@ public final class EPKGPackageConverter {
         for (EPKGPackageDO epkg : epkgDOs) {
             EPKGPackageEulerVersionVo version = new EPKGPackageEulerVersionVo();
             version.setOs(epkg.getOs());
+            version.setArch(epkg.getArch());
+            version.setPkgId(epkg.getPkgId());
             res.add(version);
         }
         return res;
