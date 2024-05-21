@@ -107,4 +107,19 @@ public interface EPKGPackageGateway {
      */
     Collection<EPKGPackageDO> convertBatch(Collection<String> dataObject);
 
+    /**
+     * Query Euler Version based on the provided search condition.
+     *
+     * @param condition The search condition for querying EulerVersion
+     * @return A map containing tags information
+     */
+    Map<String, Object> queryEulerVersionByName(EPKGPackageSearchCondition condition);
+
+    /**
+     * Query Euler archs based on the provided search condition.
+     *
+     * @param condition The search condition for querying EulerVersion
+     * @return A map containing tags information
+     */
+    Map<String, Object> queryEulerArchsByName(EPKGPackageSearchCondition condition);
 }

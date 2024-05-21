@@ -44,4 +44,32 @@ public class ApplicationPackageQueryAdapter {
     public ResponseEntity<Object> queryByTags(@Valid final ApplicationPackageSearchCondition condition) {
         return appPkgService.queryPkgByTags(condition);
     }
+
+    /**
+     * Endpoint to query for all avalaible openEuler version of application packages
+     * based
+     * on the provided search condition.
+     *
+     * @param condition The search condition for querying application packages.
+     * @return ResponseEntity<Object>.
+     */
+    @GetMapping("/eulerver")
+    @RequestLimitRedis()
+    public ResponseEntity<Object> queryEulerVersionsByName(@Valid final ApplicationPackageSearchCondition condition) {
+        return appPkgService.queryEulerVersionsByName(condition);
+    }
+
+    /**
+     * Endpoint to query for all avalaible openEuler arch of application packages
+     * based
+     * on the provided search condition.
+     *
+     * @param condition The search condition for querying application packages.
+     * @return ResponseEntity<Object>.
+     */
+    @GetMapping("/eulerarch")
+    @RequestLimitRedis()
+    public ResponseEntity<Object> queryEulerArchsByName(@Valid final ApplicationPackageSearchCondition condition) {
+        return appPkgService.queryEulerArchsByName(condition);
+    }
 }
