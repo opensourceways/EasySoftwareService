@@ -161,4 +161,8 @@ public class ApplicationPackage {
      */
     private String imageUsage;
 
+    /**
+     * latestOsSupport.
+     */
+    private String latestOsSupport;
 }
