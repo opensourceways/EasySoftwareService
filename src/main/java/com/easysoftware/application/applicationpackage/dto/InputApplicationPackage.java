@@ -172,4 +172,9 @@ public class InputApplicationPackage {
      */
     @Size(max = 10000, message = "the length of usage can not exceed 10000")
     private String imageUsage;
+/**
+     * imageUsage with a maximum length of 10000 characters.
+     */
+    @Size(max = 50, message = "the length of latestOsSupport can not exceed 50")
+    private String latestOsSupport;
 }
