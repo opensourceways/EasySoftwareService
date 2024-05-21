@@ -61,6 +61,8 @@ public final class ApplicationPackageConverter {
         for (ApplicationPackageDO appkg : appkgDOs) {
             ApplicationPackageEulerVersionVo version = new ApplicationPackageEulerVersionVo();
             version.setOs(appkg.getOs());
+            version.setArch(appkg.getArch());
+            version.setPkgId(appkg.getPkgId());
             res.add(version);
         }
         return res;

@@ -320,7 +320,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         List<String> columns = ClassField.getFieldNames(pkgVo);
         wrapper.eq("name", condition.getName())
                 .select(columns)
-                .groupBy("os");
+                .groupBy("os", "arch");
         List<EPKGPackageDO> epkgList = ePKGPkgMapper.selectList(wrapper);
         List<EPKGPackageEulerVersionVo> versions = EPKGPackageConverter.toVersion(epkgList);
         Map<String, Object> res = Map.ofEntries(

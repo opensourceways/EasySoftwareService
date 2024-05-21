@@ -12,4 +12,13 @@ public class EPKGPackageEulerVersionVo {
      * OpenEuler version of the package.
      */
     private String os;
+    /**
+     * OpenEuler arch of the package.
+     */
+    private String arch;
+
+    /**
+     * pkgId of the package.
+     */
+    private String pkgId;
 }
