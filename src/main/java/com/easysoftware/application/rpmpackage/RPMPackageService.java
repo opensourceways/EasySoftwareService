@@ -53,6 +53,22 @@ public interface RPMPackageService extends BaseIService<RPMPackageDO> {
     Map<String, Object> queryAllRPMPkgMenu(RPMPackageSearchCondition condition);
 
     /**
+     * Queries available openEuler version of RPM package.
+     *
+     * @param condition The search condition.
+     * @return Map containing the openEuler versions.
+     */
+    ResponseEntity<Object> queryEulerVersionsByName(RPMPackageSearchCondition condition);
+
+    /**
+     * Queries available openEuler archs of RPM package.
+     *
+     * @param condition The search condition.
+     * @return Map containing the openEuler versions.
+     */
+    ResponseEntity<Object> queryEulerArchsByName(RPMPackageSearchCondition condition);
+
+    /**
      * Checks if an application exists.
      *
      * @param name The name of the application.
