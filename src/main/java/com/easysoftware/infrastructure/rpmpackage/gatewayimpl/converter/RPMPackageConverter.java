@@ -184,9 +184,9 @@ public final class RPMPackageConverter {
     public static List<RPMPackageEulerArchsVo> toArchs(final List<RPMPackageDO> rpmPkgDOs) {
         List<RPMPackageEulerArchsVo> res = new ArrayList<>();
         for (RPMPackageDO rpm : rpmPkgDOs) {
-            RPMPackageEulerArchsVo version = new RPMPackageEulerArchsVo();
-            version.setArch(rpm.getArch());
-            res.add(version);
+            RPMPackageEulerArchsVo archs = new RPMPackageEulerArchsVo();
+            archs.setArch(rpm.getArch());
+            res.add(archs);
         }
         return res;
     }

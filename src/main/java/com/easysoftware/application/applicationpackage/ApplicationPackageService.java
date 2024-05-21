@@ -41,7 +41,8 @@ public interface ApplicationPackageService {
     ResponseEntity<Object> searchAppPkg(ApplicationPackageSearchCondition condition);
 
     /**
-     * Query a list of application package menus based on the provided search condition.
+     * Query a list of application package menus based on the provided search
+     * condition.
      *
      * @param condition The search condition for querying application package menus.
      * @return List of ApplicationPackageMenuVo representing the menu list.
@@ -51,8 +52,25 @@ public interface ApplicationPackageService {
     /**
      * Query application packages based on specified tags.
      *
-     * @param condition The search condition containing tags for querying application packages.
+     * @param condition The search condition containing tags for querying
+     *                  application packages.
      * @return ResponseEntity<Object>.
      */
     ResponseEntity<Object> queryPkgByTags(ApplicationPackageSearchCondition condition);
+
+    /**
+     * Queries available openEuler version of application package.
+     *
+     * @param condition The search condition.
+     * @return Map containing the openEuler versions.
+     */
+    ResponseEntity<Object> queryEulerVersionsByName(ApplicationPackageSearchCondition condition);
+
+    /**
+     * Queries available openEuler archs of application package.
+     *
+     * @param condition The search condition.
+     * @return Map containing the openEuler versions.
+     */
+    ResponseEntity<Object> queryEulerArchsByName(ApplicationPackageSearchCondition condition);
 }
