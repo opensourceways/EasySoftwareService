@@ -15,7 +15,7 @@ public interface EPKGPackageService extends BaseIService<EPKGPackageDO> {
      * Inserts an EPKG package.
      *
      * @param inputrPMPackage InputEPKGPackage object.
-     * @return  ResponseEntity<Object>.
+     * @return ResponseEntity<Object>.
      */
     ResponseEntity<Object> insertEPKGPkg(InputEPKGPackage inputrPMPackage);
 
@@ -72,5 +72,21 @@ public interface EPKGPackageService extends BaseIService<EPKGPackageDO> {
      * @param dataObject ArrayList of data objects to save.
      */
     void saveDataObjectBatch(ArrayList<String> dataObject);
+
+    /**
+     * Queries available openEuler version of epkg package.
+     *
+     * @param condition The search condition.
+     * @return Map containing the openEuler versions.
+     */
+    ResponseEntity<Object> queryEulerVersionsByName(EPKGPackageSearchCondition condition);
+
+    /**
+     * Queries available openEuler archs of epkg package.
+     *
+     * @param condition The search condition.
+     * @return Map containing the openEuler versions.
+     */
+    ResponseEntity<Object> queryEulerArchsByName(EPKGPackageSearchCondition condition);
 
 }

@@ -59,7 +59,6 @@ public class EPKGPackageServiceImpl extends
     @Value("${producer.topic}")
     private String topicAppVersion;
 
-
     /**
      * Deletes EPKG packages by their names.
      *
@@ -130,8 +129,7 @@ public class EPKGPackageServiceImpl extends
         if (!epkgList.isEmpty()) {
             Map<String, Object> res = Map.ofEntries(
                     Map.entry("total", epkgList.size()),
-                    Map.entry("list", epkgList)
-            );
+                    Map.entry("list", epkgList));
             return ResultUtil.success(HttpStatus.OK, res);
         }
 
@@ -185,5 +183,28 @@ public class EPKGPackageServiceImpl extends
     public void saveDataObject(final String dataObject) {
     }
 
+    /**
+     * Queries all available openEuler version of epkg package.
+     *
+     * @param condition The search condition.
+     * @return Map containing the epkg package menu.
+     */
+    @Override
+    public ResponseEntity<Object> queryEulerVersionsByName(EPKGPackageSearchCondition condition) {
+        Map<String, Object> res = ePKGPackageGateway.queryEulerVersionByName(condition);
+        return ResultUtil.success(HttpStatus.OK, res);
+    }
+
+    /**
+     * Queries all available openEuler archs of epkg package.
+     *
+     * @param condition The search condition.
+     * @return Map containing the epkg package menu.
+     */
+    @Override
+    public ResponseEntity<Object> queryEulerArchsByName(EPKGPackageSearchCondition condition) {
+        Map<String, Object> res = ePKGPackageGateway.queryEulerArchsByName(condition);
+        return ResultUtil.success(HttpStatus.OK, res);
+    }
 
 }
