@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
+import com.easysoftware.application.applicationpackage.vo.ApplicationPackageEulerArchsVo;
+import com.easysoftware.application.applicationpackage.vo.ApplicationPackageEulerVersionVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageTagsVo;
 import com.easysoftware.common.exception.ParamErrorException;
@@ -42,7 +44,6 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
     @Value("${apppkg.icon.path}")
     private String apppkgIconPath;
 
-
     /**
      * Delete an application by name.
      *
@@ -57,7 +58,6 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         return mark == 1;
     }
 
-
     /**
      * Check if an application exists based on its name.
      *
@@ -71,7 +71,6 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         return appPkgMapper.exists(wrapper);
     }
 
-
     /**
      * Save an ApplicationPackage object.
      *
@@ -84,7 +83,6 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         int mark = appPkgMapper.insert(appPkgDO);
         return mark == 1;
     }
-
 
     /**
      * Update an existing ApplicationPackage object.
@@ -150,8 +148,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
 
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", total),
-                Map.entry("list", aggregatePkgs)
-        );
+                Map.entry("list", aggregatePkgs));
         return res;
     }
 
@@ -174,12 +171,12 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
 
         return Map.ofEntries(
                 Map.entry("total", total),
-                Map.entry("list", appDetails)
-        );
+                Map.entry("list", appDetails));
     }
 
     /**
-     * Create a page of ApplicationPackageDO objects based on the provided search condition.
+     * Create a page of ApplicationPackageDO objects based on the provided search
+     * condition.
      *
      * @param condition The search condition for creating the page
      * @return A page of ApplicationPackageDO objects
@@ -202,7 +199,6 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         return appPkgMapper.selectCount(wrapper);
     }
 
-
     /**
      * Select a single ApplicationPackageMenuVo object by name.
      *
@@ -221,7 +217,6 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         }
         return ApplicationPackageConverter.toMenu(appList.get(0));
     }
-
 
     /**
      * Query detailed information by package ID.
@@ -260,7 +255,8 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
     }
 
     /**
-     * Query a specific column in the database and return the results as a list of strings.
+     * Query a specific column in the database and return the results as a list of
+     * strings.
      *
      * @param column The column to query
      * @return A list of strings containing the query results
@@ -286,5 +282,53 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         String underlineToCamelColumn = StringUtil.underlineToCamel(column);
 
         return ApplicationPackageConverter.toColumn(rpmColumn, underlineToCamelColumn);
+    }
+
+    /**
+     * Query the Euler Version based on the provided search condition.
+     *
+     * @param condition The search condition for querying a part of the appkg Euler
+     *                  Version
+     * @return A map containing relevant information
+     */
+    @Override
+    public Map<String, Object> queryEulerVersionByName(final ApplicationPackageSearchCondition condition) {
+        QueryWrapper<ApplicationPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new ApplicationPackageDO(),
+                condition, "");
+        ApplicationPackageEulerVersionVo pkgVo = new ApplicationPackageEulerVersionVo();
+        List<String> columns = ClassField.getFieldNames(pkgVo);
+        wrapper.eq("name", condition.getName())
+                .select(columns)
+                .groupBy("os");
+        List<ApplicationPackageDO> appkgList = appPkgMapper.selectList(wrapper);
+        List<ApplicationPackageEulerVersionVo> versions = ApplicationPackageConverter.toVersion(appkgList);
+        Map<String, Object> res = Map.ofEntries(
+                Map.entry("total", versions.size()),
+                Map.entry("list", versions));
+        return res;
+    }
+
+    /**
+     * Query the Euler archs based on the provided search condition.
+     *
+     * @param condition The search condition for querying a part of the appkg Euler
+     *                  archs
+     * @return A map containing relevant information
+     */
+    @Override
+    public Map<String, Object> queryEulerArchsByName(final ApplicationPackageSearchCondition condition) {
+        QueryWrapper<ApplicationPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new ApplicationPackageDO(),
+                condition, "");
+        ApplicationPackageEulerArchsVo pkgVo = new ApplicationPackageEulerArchsVo();
+        List<String> columns = ClassField.getFieldNames(pkgVo);
+        wrapper.eq("name", condition.getName())
+                .select(columns)
+                .groupBy("arch");
+        List<ApplicationPackageDO> appkgList = appPkgMapper.selectList(wrapper);
+        List<ApplicationPackageEulerArchsVo> versions = ApplicationPackageConverter.toArchs(appkgList);
+        Map<String, Object> res = Map.ofEntries(
+                Map.entry("total", versions.size()),
+                Map.entry("list", versions));
+        return res;
     }
 }
