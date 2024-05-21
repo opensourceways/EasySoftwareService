@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageEulerArchsVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageEulerVersionVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
@@ -51,7 +53,6 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     @Autowired
     private ObjectMapper objectMapper;
 
-
     /**
      * Logger for RPMPackageGatewayImpl class.
      */
@@ -93,7 +94,8 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     }
 
     /**
-     * Query detailed information based on the provided search condition for RPM packages.
+     * Query detailed information based on the provided search condition for RPM
+     * packages.
      *
      * @param condition The search condition for querying RPM package details
      * @return A map containing detailed information
@@ -110,8 +112,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
 
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", total),
-                Map.entry("list", rPMDetails)
-        );
+                Map.entry("list", rPMDetails));
 
         return res;
     }
@@ -179,15 +180,15 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
 
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", total),
-                Map.entry("list", rPMMenus)
-        );
+                Map.entry("list", rPMMenus));
         return res;
     }
 
     /**
      * Creates a Page of RPMPackageDO based on the provided search condition.
      *
-     * @param condition The RPMPackageSearchCondition object to create the page from.
+     * @param condition The RPMPackageSearchCondition object to create the page
+     *                  from.
      * @return A Page of RPMPackageDO entities.
      */
     private Page<RPMPackageDO> createPage(final RPMPackageSearchCondition condition) {
@@ -282,7 +283,8 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     /**
      * Query part of the RPM package menu based on the provided search condition.
      *
-     * @param condition The search condition for querying a part of the RPM package menu
+     * @param condition The search condition for querying a part of the RPM package
+     *                  menu
      * @return A map containing relevant information
      */
     @Override
@@ -297,8 +299,55 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         List<RPMPackageDomainVo> menus = RPMPackageConverter.toDomain(rpmList);
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", menus.size()),
-                Map.entry("list", menus)
-        );
+                Map.entry("list", menus));
+        return res;
+    }
+
+    /**
+     * Query the Euler Version based on the provided search condition.
+     *
+     * @param condition The search condition for querying a part of the RPM Euler
+     *                  Version
+     * @return A map containing relevant information
+     */
+    @Override
+    public Map<String, Object> queryEulerVersionByName(final RPMPackageSearchCondition condition) {
+        QueryWrapper<RPMPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new RPMPackageDO(),
+                condition, "");
+        RPMPackageEulerVersionVo pkgVo = new RPMPackageEulerVersionVo();
+        List<String> columns = ClassField.getFieldNames(pkgVo);
+        wrapper.eq("name", condition.getName())
+                .select(columns)
+                .groupBy("os");
+        List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
+        List<RPMPackageEulerVersionVo> versions = RPMPackageConverter.toVersion(rpmList);
+        Map<String, Object> res = Map.ofEntries(
+                Map.entry("total", versions.size()),
+                Map.entry("list", versions));
+        return res;
+    }
+
+    /**
+     * Query the Euler archs based on the provided search condition.
+     *
+     * @param condition The search condition for querying a part of the RPM Euler
+     *                  archs
+     * @return A map containing relevant information
+     */
+    @Override
+    public Map<String, Object> queryEulerArchsByName(final RPMPackageSearchCondition condition) {
+        QueryWrapper<RPMPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new RPMPackageDO(),
+                condition, "");
+        RPMPackageEulerArchsVo pkgVo = new RPMPackageEulerArchsVo();
+        List<String> columns = ClassField.getFieldNames(pkgVo);
+        wrapper.eq("name", condition.getName())
+                .select(columns)
+                .groupBy("arch");
+        List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
+        List<RPMPackageEulerArchsVo> versions = RPMPackageConverter.toArchs(rpmList);
+        Map<String, Object> res = Map.ofEntries(
+                Map.entry("total", versions.size()),
+                Map.entry("list", versions));
         return res;
     }
 
