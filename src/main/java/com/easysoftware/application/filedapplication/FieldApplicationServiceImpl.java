@@ -5,6 +5,7 @@ import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDeta
 import com.easysoftware.application.epkgpackage.EPKGPackageService;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
+import com.easysoftware.application.fieldpkg.dto.FieldPkgSearchCondition;
 import com.easysoftware.application.filedapplication.dto.FieldColumnSearchCondition;
 import com.easysoftware.application.filedapplication.dto.FieldDetailSearchCondition;
 import com.easysoftware.application.filedapplication.dto.FiledApplicationSerachCondition;
@@ -20,6 +21,7 @@ import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
 import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
 import com.easysoftware.domain.fieldapplication.gateway.FieldapplicationGateway;
+import com.easysoftware.domain.fieldpkg.gateway.FieldPkgGateway;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 import com.easysoftware.infrastructure.fieldapplication.gatewayimpl.converter.FieldApplicationConverter;
 import com.easysoftware.ranking.Ranker;
@@ -82,6 +84,13 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
      */
     @Resource
     private ApplicationPackageGateway appGateway;
+
+    /**
+     * FieldPkgGateway Package Gateway.
+     */
+    @Resource
+    private FieldPkgGateway fieldPkgGateway;
+
 
     /**
      * Resource injection for the Ranker.
@@ -174,8 +183,8 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
      * @return A map containing domain menu items with their associated objects.
      */
     private Map<String, Object> searchDomainMenu(FiledApplicationSerachCondition condition) {
-        condition.setName("");
-        return domainGateway.queryMenuByPage(condition);
+        FieldPkgSearchCondition con = FieldApplicationConverter.toFieldPkg(condition);
+        return fieldPkgGateway.queryMenuByPage(con);
     }
 
 
@@ -235,7 +244,7 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
             Map<String, List<String>> res = appGateway.queryColumn(columns);
             return ResultUtil.success(HttpStatus.OK, res);
         } else if ("domain".equals(name)) {
-            Map<String, List<String>> res = domainGateway.queryColumn(columns);
+            Map<String, List<String>> res = fieldPkgGateway.queryColumn(columns);
             return ResultUtil.success(HttpStatus.OK, res);
         } else {
             throw new ParamErrorException("unsupported param: " + condition.getName());
