@@ -43,10 +43,7 @@ COPY --chown=easysoftware --from=Builder /EasySoftware/target ${WORKSPACE}/targe
 RUN echo "umask 027" >> /home/easysoftware/.bashrc \
     && echo "umask 027" >> /root/.bashrc \
     && source /home/easysoftware/.bashrc \
-    && mkdir -p /home/easysoftware/tomcat/log \
     && chmod 550 -R /home/easysoftware \
-    && chown -R easysoftware:easysoftware /home/easysoftware/tomcat/ \
-    && chmod 700 -R /home/easysoftware/tomcat \
 	&& echo "set +o history" >> /etc/bashrc \
     && echo "set +o history" >> /home/easysoftware/bashrc \
     && sed -i "s|HISTSIZE=1000|HISTSIZE=0|" /etc/profile \
