@@ -2,6 +2,8 @@ package com.easysoftware.infrastructure.rpmpackage.gatewayimpl.converter;
 
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageEulerArchsVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageEulerVersionVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.UuidUtil;
@@ -42,10 +44,11 @@ public final class RPMPackageConverter {
     }
 
     /**
-     * Extracts a specific column from a list of RPMPackageDO objects and returns it as a list of strings.
+     * Extracts a specific column from a list of RPMPackageDO objects and returns it
+     * as a list of strings.
      *
      * @param rPMPkgDOs The list of RPMPackageDO objects.
-     * @param column The name of the column to extract.
+     * @param column    The name of the column to extract.
      * @return A list of strings representing the extracted column values.
      */
     public static List<String> toColumn(final List<RPMPackageDO> rPMPkgDOs, final String column) {
@@ -86,7 +89,8 @@ public final class RPMPackageConverter {
     }
 
     /**
-     * Converts a list of RPMPackageDO objects to a list of RPMPackageDetailVo view objects.
+     * Converts a list of RPMPackageDO objects to a list of RPMPackageDetailVo view
+     * objects.
      *
      * @param rPMPkgDOs The list of RPMPackageDO objects to convert.
      * @return A list of RPMPackageDetailVo view objects.
@@ -103,7 +107,8 @@ public final class RPMPackageConverter {
     }
 
     /**
-     * Converts a list of RPMPackageDO objects to a list of RPMPackageMenuVo view objects.
+     * Converts a list of RPMPackageDO objects to a list of RPMPackageMenuVo view
+     * objects.
      *
      * @param rPMPkgDOs The list of RPMPackageDO objects to convert.
      * @return A list of RPMPackageMenuVo view objects.
@@ -131,7 +136,8 @@ public final class RPMPackageConverter {
     }
 
     /**
-     * Converts a list of RPMPackageDO objects to a list of RPMPackageDomainVo view objects.
+     * Converts a list of RPMPackageDO objects to a list of RPMPackageDomainVo view
+     * objects.
      *
      * @param rpmPkgDOs The list of RPMPackageDO objects to convert.
      * @return A list of RPMPackageDomainVo view objects.
@@ -145,6 +151,44 @@ public final class RPMPackageConverter {
             domain.setCategory(rpm.getCategory());
 
             res.add(domain);
+        }
+        return res;
+    }
+
+    /**
+     * Converts a list of RPMPackageDO objects to a list of RPMPackageEulerVersionVo
+     * view
+     * objects.
+     *
+     * @param rpmPkgDOs The list of RPMPackageDO objects to convert.
+     * @return A list of RPMPackageEulerVersionVo view objects.
+     */
+    public static List<RPMPackageEulerVersionVo> toVersion(final List<RPMPackageDO> rpmPkgDOs) {
+        List<RPMPackageEulerVersionVo> res = new ArrayList<>();
+        for (RPMPackageDO rpm : rpmPkgDOs) {
+            RPMPackageEulerVersionVo version = new RPMPackageEulerVersionVo();
+            version.setOs(rpm.getOs());
+            version.setArch(rpm.getArch());
+            version.setPkgId(rpm.getPkgId());
+            res.add(version);
+        }
+        return res;
+    }
+
+    /**
+     * Converts a list of RPMPackageDO objects to a list of RPMPackageEulerArchsVo
+     * view
+     * objects.
+     *
+     * @param rpmPkgDOs The list of RPMPackageDO objects to convert.
+     * @return A list of RPMPackageEulerArchsVo view objects.
+     */
+    public static List<RPMPackageEulerArchsVo> toArchs(final List<RPMPackageDO> rpmPkgDOs) {
+        List<RPMPackageEulerArchsVo> res = new ArrayList<>();
+        for (RPMPackageDO rpm : rpmPkgDOs) {
+            RPMPackageEulerArchsVo archs = new RPMPackageEulerArchsVo();
+            archs.setArch(rpm.getArch());
+            res.add(archs);
         }
         return res;
     }

@@ -179,4 +179,8 @@ public class ApplicationPackageDO {
      */
     private String imageUsage;
 
+    /**
+     * latestOsSupport.
+     */
+    private String latestOsSupport;
 }

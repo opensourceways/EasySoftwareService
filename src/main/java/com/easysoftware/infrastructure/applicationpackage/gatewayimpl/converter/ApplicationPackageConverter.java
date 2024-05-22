@@ -1,6 +1,8 @@
 package com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter;
 
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
+import com.easysoftware.application.applicationpackage.vo.ApplicationPackageEulerArchsVo;
+import com.easysoftware.application.applicationpackage.vo.ApplicationPackageEulerVersionVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageTagsVo;
 import com.easysoftware.application.domainpackage.vo.DomainPackageMenuVo;
@@ -8,6 +10,7 @@ import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -45,7 +48,48 @@ public final class ApplicationPackageConverter {
     }
 
     /**
-     * Convert a list of ApplicationPackageDO objects to a list of ApplicationPackageDetailVo objects.
+     * Converts a list of ApplicationPackageDO objects to a list of
+     * ApplicationPackageEulerVersionVo
+     * view
+     * objects.
+     *
+     * @param appkgDOs The list of ApplicationPackageDO objects to convert.
+     * @return A list of ApplicationPackageEulerVersionVo view objects.
+     */
+    public static List<ApplicationPackageEulerVersionVo> toVersion(final List<ApplicationPackageDO> appkgDOs) {
+        List<ApplicationPackageEulerVersionVo> res = new ArrayList<>();
+        for (ApplicationPackageDO appkg : appkgDOs) {
+            ApplicationPackageEulerVersionVo version = new ApplicationPackageEulerVersionVo();
+            version.setOs(appkg.getOs());
+            version.setArch(appkg.getArch());
+            version.setPkgId(appkg.getPkgId());
+            res.add(version);
+        }
+        return res;
+    }
+
+    /**
+     * Converts a list of ApplicationPackageDO objects to a list of
+     * ApplicationPackageEulerArchsVo
+     * view
+     * objects.
+     *
+     * @param appkgDOs The list of ApplicationPackageDO objects to convert.
+     * @return A list of ApplicationPackageEulerArchsVo view objects.
+     */
+    public static List<ApplicationPackageEulerArchsVo> toArchs(final List<ApplicationPackageDO> appkgDOs) {
+        List<ApplicationPackageEulerArchsVo> res = new ArrayList<>();
+        for (ApplicationPackageDO appkg : appkgDOs) {
+            ApplicationPackageEulerArchsVo archs = new ApplicationPackageEulerArchsVo();
+            archs.setArch(appkg.getArch());
+            res.add(archs);
+        }
+        return res;
+    }
+
+    /**
+     * Convert a list of ApplicationPackageDO objects to a list of
+     * ApplicationPackageDetailVo objects.
      *
      * @param appPkgDOs The list of ApplicationPackageDO objects to convert
      * @return A list of ApplicationPackageDetailVo objects
@@ -59,7 +103,8 @@ public final class ApplicationPackageConverter {
     }
 
     /**
-     * Convert an ApplicationPackageDO object to an ApplicationPackageDetailVo object.
+     * Convert an ApplicationPackageDO object to an ApplicationPackageDetailVo
+     * object.
      *
      * @param app The ApplicationPackageDO object to convert
      * @return An ApplicationPackageDetailVo object
@@ -75,7 +120,8 @@ public final class ApplicationPackageConverter {
      * and return the result as a list of ApplicationPackageTagsVo objects.
      *
      * @param appPkgDOs The list of ApplicationPackageDO objects to aggregate
-     * @return A list of ApplicationPackageTagsVo objects containing the aggregated data
+     * @return A list of ApplicationPackageTagsVo objects containing the aggregated
+     *         data
      */
     public static List<ApplicationPackageTagsVo> aggregateByTags(final List<ApplicationPackageDO> appPkgDOs) {
 
@@ -113,7 +159,8 @@ public final class ApplicationPackageConverter {
     }
 
     /**
-     * Convert a list of ApplicationPackageDO objects to a list of ApplicationPackageMenuVo objects.
+     * Convert a list of ApplicationPackageDO objects to a list of
+     * ApplicationPackageMenuVo objects.
      *
      * @param appPkgDOs The list of ApplicationPackageDO objects to convert
      * @return A list of ApplicationPackageMenuVo objects
@@ -142,7 +189,8 @@ public final class ApplicationPackageConverter {
     }
 
     /**
-     * Convert a list of ApplicationPackageDO objects to a list of ApplicationPackage entities.
+     * Convert a list of ApplicationPackageDO objects to a list of
+     * ApplicationPackage entities.
      *
      * @param appDOs The list of ApplicationPackageDO objects to convert
      * @return A list of ApplicationPackage entities
@@ -169,7 +217,8 @@ public final class ApplicationPackageConverter {
     }
 
     /**
-     * Convert an ApplicationPackage entity to an ApplicationPackageDO data object specifically for creation.
+     * Convert an ApplicationPackage entity to an ApplicationPackageDO data object
+     * specifically for creation.
      *
      * @param appPkg The ApplicationPackage entity to convert
      * @return An ApplicationPackageDO data object tailored for creation
@@ -187,7 +236,8 @@ public final class ApplicationPackageConverter {
     }
 
     /**
-     * Convert an ApplicationPackage entity to an ApplicationPackageDO data object specifically for update.
+     * Convert an ApplicationPackage entity to an ApplicationPackageDO data object
+     * specifically for update.
      *
      * @param appPkg The ApplicationPackage entity to convert
      * @return An ApplicationPackageDO data object tailored for update
@@ -202,7 +252,8 @@ public final class ApplicationPackageConverter {
     }
 
     /**
-     * Convert a list of ApplicationPackageMenuVo objects to a list of DomainPackageMenuVo objects.
+     * Convert a list of ApplicationPackageMenuVo objects to a list of
+     * DomainPackageMenuVo objects.
      *
      * @param appList The list of ApplicationPackageMenuVo objects to convert
      * @return A list of DomainPackageMenuVo objects
@@ -252,7 +303,10 @@ public final class ApplicationPackageConverter {
                     continue;
                 }
                 String value = (String) field.get(appDo);
-                res.add(value);
+                if (StringUtils.isNotBlank(value)) {
+                    res.add(value);
+                }
+
             }
         } catch (Exception e) {
             LOGGER.error(MessageCode.EC00011.getMsgEn(), e);
@@ -260,4 +314,3 @@ public final class ApplicationPackageConverter {
         return res;
     }
 }
-

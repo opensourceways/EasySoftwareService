@@ -1,5 +1,6 @@
 package com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -178,11 +179,17 @@ public class RPMPackageDO {
     /**
      * Package ID.
      */
+    @TableId
     private String pkgId;
 
     /**
      * Sub-path information.
      */
     private String subPath;
+
+    /**
+     * License.
+     */
+    private String license;
 
 }

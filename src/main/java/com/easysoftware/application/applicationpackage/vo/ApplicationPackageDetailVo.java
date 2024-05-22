@@ -137,4 +137,8 @@ public class ApplicationPackageDetailVo {
      * Usage information for the software package.
      */
     private String imageUsage;
+    /**
+     * latestOsSupport.
+     */
+    private String latestOsSupport;
 }

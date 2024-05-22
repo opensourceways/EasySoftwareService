@@ -4,7 +4,6 @@ import org.hibernate.validator.constraints.Range;
 import com.easysoftware.common.constant.PackageConstant;
 import com.easysoftware.common.exception.enumvalid.DomainNameEnum;
 import com.easysoftware.common.exception.enumvalid.EnumValue;
-import com.easysoftware.common.exception.enumvalid.TimeOrderEnum;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -52,10 +51,10 @@ public class DomainSearchCondition {
     private String version;
 
     /**
-     * Time order with an enum value from TimeOrderEnum.isValidCategory, defaulting to "desc".
+     * Time order.
      */
-    @EnumValue(enumClass = TimeOrderEnum.class, enumMethod = "isValidCategory")
-    private String timeOrder = "desc";
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    private String timeOrder;
 
     /**
      * Page number within the range of PackageConstant.MIN_PAGE_NUM and PackageConstant.MAX_PAGE_NUM.
@@ -68,6 +67,12 @@ public class DomainSearchCondition {
      */
     @Range(min = PackageConstant.MIN_PAGE_SIZE, max = PackageConstant.MAX_PAGE_SIZE)
     private Integer pageSize = 10;
+
+    /**
+     * Name order.
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    private String nameOrder;
 
 }
 

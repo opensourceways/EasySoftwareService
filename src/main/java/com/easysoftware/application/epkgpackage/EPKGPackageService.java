@@ -31,4 +31,21 @@ public interface EPKGPackageService extends BaseIService<EPKGPackageDO> {
      * @return boolean indicating if the application exists.
      */
     boolean existApp(String name);
+
+    /**
+     * Queries available openEuler version of epkg package.
+     *
+     * @param condition The search condition.
+     * @return Map containing the openEuler versions.
+     */
+    ResponseEntity<Object> queryEulerVersionsByName(EPKGPackageSearchCondition condition);
+
+    /**
+     * Queries available openEuler archs of epkg package.
+     *
+     * @param condition The search condition.
+     * @return Map containing the openEuler versions.
+     */
+    ResponseEntity<Object> queryEulerArchsByName(EPKGPackageSearchCondition condition);
+
 }

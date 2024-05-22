@@ -3,6 +3,8 @@ package com.easysoftware.application.applicationversion;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
 import com.easysoftware.common.utils.ResultUtil;
+import com.easysoftware.common.utils.UuidUtil;
+import com.easysoftware.domain.applicationversion.ApplicationVersion;
 import com.easysoftware.domain.applicationversion.gateway.ApplicationVersionGateway;
 import com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobject.ApplicationVersionDO;
 import com.easysoftware.infrastructure.mapper.ApplicationVersionDOMapper;
@@ -16,8 +18,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 @Service("ApplicationVersionService")
-public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersionDOMapper,
-        ApplicationVersionDO> implements ApplicationVersionService {
+public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersionDOMapper, ApplicationVersionDO>
+        implements ApplicationVersionService {
     /**
      * API endpoint for repository information.
      */
@@ -38,7 +40,7 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
      */
     @Override
     public ResponseEntity<Object> searchAppVersion(final ApplicationVersionSearchCondition condition) {
-        Map<String, Object> res = appVersionGateway.queryByName(condition);
+        Map<String, Object> res = appVersionGateway.queryByEulerOsVersion(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
@@ -50,5 +52,17 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
     @Override
     public void saveDataObjectBatch(final ArrayList<String> dataObject) {
         saveOrUpdateBatch(appVersionGateway.convertBatch(dataObject));
+    }
+
+    /**
+     * Search column.
+     *
+     * @param condition condition.
+     */
+    @Override
+    public ResponseEntity<Object> searchAppVerColumn(ApplicationVersionSearchCondition condition) {
+        List<String> columns = QueryWrapperUtil.splitStr(condition.getColumn());
+        Map<String, List<String>> res = appVersionGateway.queryColumn(columns);
+        return ResultUtil.success(HttpStatus.OK, res);
     }
 }

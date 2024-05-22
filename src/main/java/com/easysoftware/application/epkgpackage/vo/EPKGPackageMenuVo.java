@@ -68,4 +68,9 @@ public class EPKGPackageMenuVo {
      */
     private String subPath;
 
+    /**
+     * License.
+     */
+    private String license;
+
 }

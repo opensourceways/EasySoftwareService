@@ -32,6 +32,30 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
     private RPMPackageGateway rPMPkgGateway;
 
     /**
+     * Value for Repository Maintainer API.
+     */
+    @Value("${api.repoMaintainer}")
+    private String repoMaintainerApi;
+
+    /**
+     * Value for Repository Signature API.
+     */
+    @Value("${api.repoSig}")
+    private String repoSigApi;
+
+    /**
+     * Value for Repository Download API.
+     */
+    @Value("${api.repoDownload}")
+    private String repoDownloadApi;
+
+    /**
+     * Value for Kafka producer topic related to application version.
+     */
+    @Value("${producer.topic}")
+    private String topicAppVersion;
+
+    /**
      * Queries all RPM package menus.
      *
      * @param condition The search condition.
@@ -40,6 +64,30 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
     @Override
     public Map<String, Object> queryAllRPMPkgMenu(final RPMPackageSearchCondition condition) {
         return rPMPkgGateway.queryMenuByName(condition);
+    }
+
+    /**
+     * Queries all available openEuler version of RPM package.
+     *
+     * @param condition The search condition.
+     * @return Map containing the RPM package menu.
+     */
+    @Override
+    public ResponseEntity<Object> queryEulerVersionsByName(RPMPackageSearchCondition condition) {
+        Map<String, Object> res = rPMPkgGateway.queryEulerVersionByName(condition);
+        return ResultUtil.success(HttpStatus.OK, res);
+    }
+
+    /**
+     * Queries all available openEuler archs of RPM package.
+     *
+     * @param condition The search condition.
+     * @return Map containing the RPM package menu.
+     */
+    @Override
+    public ResponseEntity<Object> queryEulerArchsByName(RPMPackageSearchCondition condition) {
+        Map<String, Object> res = rPMPkgGateway.queryEulerArchsByName(condition);
+        return ResultUtil.success(HttpStatus.OK, res);
     }
 
     /**
@@ -56,8 +104,7 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
         if (!rpmList.isEmpty()) {
             Map<String, Object> res = Map.ofEntries(
                     Map.entry("total", rpmList.size()),
-                    Map.entry("list", rpmList)
-            );
+                    Map.entry("list", rpmList));
             return ResultUtil.success(HttpStatus.OK, res);
         }
 
@@ -122,4 +169,5 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
         Map<String, Object> rPMMenu = rPMPkgGateway.queryPartRPMPkgMenu(condition);
         return (List<RPMPackageDomainVo>) rPMMenu.get("list");
     }
+
 }
