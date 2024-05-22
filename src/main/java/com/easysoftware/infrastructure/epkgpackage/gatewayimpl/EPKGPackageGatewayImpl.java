@@ -227,7 +227,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         List<String> allowedColumns = Arrays.asList("category", "os", "arch");
 
         if (!allowedColumns.contains(column)) {
-            throw new ParamErrorException("Unsupported column: " + column);
+            throw new ParamErrorException("Unsupported column");
         }
 
         QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
@@ -237,7 +237,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         try {
             rpmColumn = ePKGPkgMapper.selectList(wrapper);
         } catch (BadSqlGrammarException e) {
-            throw new ParamErrorException("unsupported param: " + column);
+            throw new ParamErrorException("unsupported param");
         }
         String underlineToCamelColumn = StringUtil.underlineToCamel(column);
 

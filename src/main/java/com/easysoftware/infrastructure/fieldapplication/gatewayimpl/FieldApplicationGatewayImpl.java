@@ -51,14 +51,14 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
 
         return Map.ofEntries(
                 Map.entry("total", total),
-                Map.entry("list", voList)
-        );
+                Map.entry("list", voList));
     }
 
     /**
      * Creates a Page of FieldApplicationDO based on the provided search condition.
      *
-     * @param condition The FieldApplicationSearchCondition object to create the page from.
+     * @param condition The FieldApplicationSearchCondition object to create the
+     *                  page from.
      * @return A Page of FieldApplicationDO entities.
      */
     private Page<FieldApplicationDO> createPage(final FiledApplicationSerachCondition condition) {
@@ -101,7 +101,7 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
         List<String> allowedColumns = Arrays.asList("category", "os", "arch");
 
         if (!allowedColumns.contains(column)) {
-            throw new ParamErrorException("Unsupported column: " + column);
+            throw new ParamErrorException("Unsupported column");
         }
 
         QueryWrapper<FieldApplicationDO> wrapper = new QueryWrapper<>();
@@ -111,7 +111,7 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
         try {
             columnList = fieldAppMapper.selectList(wrapper);
         } catch (BadSqlGrammarException e) {
-            throw new ParamErrorException("unsupported param: " + column);
+            throw new ParamErrorException("unsupported param");
         }
 
         String underlineToCamelColumn = StringUtil.underlineToCamel(column);

@@ -91,7 +91,6 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
     @Resource
     private FieldPkgGateway fieldPkgGateway;
 
-
     /**
      * Resource injection for the Ranker.
      */
@@ -123,10 +122,9 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
             List<Map<String, Object>> cateMap = searchMainPage();
             return ResultUtil.success(HttpStatus.OK, cateMap);
         } else {
-            throw new ParamErrorException("unsupported param: " + name);
+            throw new ParamErrorException("unsupported param");
         }
     }
-
 
     /**
      * Search the main page and return a list of maps containing key-value pairs.
@@ -146,7 +144,8 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
     }
 
     /**
-     * Assemble the main page using the provided category map and return a list of maps containing key-value pairs.
+     * Assemble the main page using the provided category map and return a list of
+     * maps containing key-value pairs.
      *
      * @param cateMap The category map used for assembling the main page.
      * @return A list of maps with key-value pairs from the assembled main page.
@@ -165,7 +164,8 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
     /**
      * Get categories and their associated objects.
      *
-     * @return A map containing category names as keys and lists of associated objects as values.
+     * @return A map containing category names as keys and lists of associated
+     *         objects as values.
      */
     private Map<String, List<Object>> getCategorys() {
         Map<String, List<Object>> map = new HashMap<>();
@@ -187,36 +187,36 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         return fieldPkgGateway.queryMenuByPage(con);
     }
 
-
     /**
      * Search EPKG menu based on the specified search condition.
      *
      * @param condition The search condition for EPKG menu search.
-     * @return A map containing the search results with string keys and object values.
+     * @return A map containing the search results with string keys and object
+     *         values.
      */
     private Map<String, Object> searchEpkgMenu(final FiledApplicationSerachCondition condition) {
         EPKGPackageSearchCondition epkg = FieldApplicationConverter.toEpkg(condition);
         return epkgService.queryAllEPKGPkgMenu(epkg);
     }
 
-
     /**
      * Search Rpm menu based on the specified search condition.
      *
      * @param condition The search condition for Rpm menu search.
-     * @return A map containing the search results with string keys and object values.
+     * @return A map containing the search results with string keys and object
+     *         values.
      */
     private Map<String, Object> searchRpmMenu(final FiledApplicationSerachCondition condition) {
         RPMPackageSearchCondition rpm = FieldApplicationConverter.toRpm(condition);
         return rpmService.queryAllRPMPkgMenu(rpm);
     }
 
-
     /**
      * Search Application menu based on the specified search condition.
      *
      * @param condition The search condition for Application menu search.
-     * @return A map containing the search results with string keys and object values.
+     * @return A map containing the search results with string keys and object
+     *         values.
      */
     private Map<String, Object> searchAppMenu(final FiledApplicationSerachCondition condition) {
         ApplicationPackageSearchCondition app = FieldApplicationConverter.toApp(condition);
@@ -247,10 +247,9 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
             Map<String, List<String>> res = fieldPkgGateway.queryColumn(columns);
             return ResultUtil.success(HttpStatus.OK, res);
         } else {
-            throw new ParamErrorException("unsupported param: " + condition.getName());
+            throw new ParamErrorException("unsupported param");
         }
     }
-
 
     /**
      * Query detail by name.
@@ -293,7 +292,8 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
      * Search EPKG package detail by the specified EPKG package ID.
      *
      * @param epkgPkgId The ID of the EPKG package to search for.
-     * @return An EPKGPackageDetailVo object containing the details of the EPKG package.
+     * @return An EPKGPackageDetailVo object containing the details of the EPKG
+     *         package.
      */
     private EPKGPackageDetailVo searchEpkgDetail(final String epkgPkgId) {
         List<EPKGPackageDetailVo> pkgList = epkgGateway.queryDetailByPkgId(epkgPkgId);
@@ -308,7 +308,8 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
      * Search RPM package detail by the specified RPM package ID.
      *
      * @param rpmPkgId The ID of the RPM package to search for.
-     * @return An RPMPackageDetailVo object containing the details of the RPM package.
+     * @return An RPMPackageDetailVo object containing the details of the RPM
+     *         package.
      */
     private RPMPackageDetailVo searchRpmDetail(final String rpmPkgId) {
         List<RPMPackageDetailVo> pkgList = rpmGateway.queryDetailByPkgId(rpmPkgId);
@@ -323,7 +324,8 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
      * Search application package detail by the specified application package ID.
      *
      * @param appPkgId The ID of the application package to search for.
-     * @return An ApplicationPackageDetailVo object containing the details of the application package.
+     * @return An ApplicationPackageDetailVo object containing the details of the
+     *         application package.
      */
     private ApplicationPackageDetailVo searchAppDetail(final String appPkgId) {
         List<ApplicationPackageDetailVo> pkgList = appGateway.queryDetailByPkgId(appPkgId);
@@ -333,7 +335,6 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         LOGGER.error(String.format(MessageCode.EC00014.getMsgEn(), "appPkgId"));
         return null;
     }
-
 
     /**
      * Query statistics.

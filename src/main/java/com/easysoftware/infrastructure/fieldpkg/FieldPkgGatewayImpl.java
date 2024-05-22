@@ -48,9 +48,8 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
         long total = resPage.getTotal();
 
         return Map.ofEntries(
-            Map.entry("total", total),
-            Map.entry("list", voList)
-        );
+                Map.entry("total", total),
+                Map.entry("list", voList));
     }
 
     /**
@@ -99,7 +98,7 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
         List<String> allowedColumns = Arrays.asList("category", "os", "arch");
 
         if (!allowedColumns.contains(column)) {
-            throw new ParamErrorException("Unsupported column: " + column);
+            throw new ParamErrorException("Unsupported column");
         }
 
         QueryWrapper<FieldPkgDO> wrapper = new QueryWrapper<>();
@@ -109,7 +108,7 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
         try {
             columnList = mapper.selectList(wrapper);
         } catch (BadSqlGrammarException e) {
-            throw new ParamErrorException("unsupported param: " + column);
+            throw new ParamErrorException("unsupported param");
         }
 
         String underlineToCamelColumn = StringUtil.underlineToCamel(column);
