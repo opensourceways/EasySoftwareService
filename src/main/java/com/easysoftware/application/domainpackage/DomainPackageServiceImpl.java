@@ -146,11 +146,9 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         extendIds(domain);
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", "-1"),
-                Map.entry("list", domain)
-        );
+                Map.entry("list", domain));
         return ResultUtil.success(HttpStatus.OK, res);
     }
-
 
     /**
      * Search for a domain page based on the provided search condition.
@@ -177,7 +175,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         } else if ("all".equals(condition.getName())) {
             return searchAllEntity(condition);
         } else {
-            throw new ParamErrorException("unsupported param: " + condition.getName());
+            throw new ParamErrorException("unsupported param");
         }
     }
 
@@ -224,17 +222,16 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         List<RPMPackageDomainVo> rpmMenus = rPMPkgService.queryPartAppPkgMenu(rpmCon);
 
         List<DomainPackageMenuVo> domainMenus = mergeMenuVOs(appMenus, rpmMenus);
-        //对 domainMenus 中的每个菜单调用 extendIds 方法。
+        // 对 domainMenus 中的每个菜单调用 extendIds 方法。
         domainMenus.forEach(this::extendIds);
         Map<String, List<Object>> cateMap = getCategorys();
-        //对 domainMenus 中的每个菜单，将其添加到 cateMap 中对应类别的列表中。
+        // 对 domainMenus 中的每个菜单，将其添加到 cateMap 中对应类别的列表中。
         domainMenus.forEach(menu -> cateMap.get(menu.getCategory()).add(menu));
         List<Map<String, Object>> mapList = assembleMap(cateMap);
         List<Map<String, Object>> rankedMapList = ranker.rankingDomainPageByOperationConfig(mapList);
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", domainMenus.size()),
-                Map.entry("list", rankedMapList)
-        );
+                Map.entry("list", rankedMapList));
         try {
             // 结果转json
             String resJson = RedisUtil.convertToJson(res);
@@ -283,7 +280,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
      * @return List of merged DomainPackageMenuVo instances.
      */
     private List<DomainPackageMenuVo> mergeMenuVOs(final List<ApplicationPackageMenuVo> appMenus,
-                                                   final List<RPMPackageDomainVo> rpmMenus) {
+            final List<RPMPackageDomainVo> rpmMenus) {
         Map<String, DomainPackageMenuVo> domainMap = new HashMap<>();
         // 遍历 appMenus 列表
         appMenus.forEach(app -> {
@@ -317,7 +314,8 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     /**
      * Get categories with corresponding objects.
      *
-     * @return A Map containing category names as keys and lists of objects as values.
+     * @return A Map containing category names as keys and lists of objects as
+     *         values.
      */
     private Map<String, List<Object>> getCategorys() {
         Map<String, List<Object>> map = new HashMap<>();
@@ -378,7 +376,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
             }
 
         } else {
-            throw new ParamErrorException("unsupported param: " + condition.getName());
+            throw new ParamErrorException("unsupported param");
         }
     }
 
@@ -395,8 +393,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
 
         Map<String, Long> res = Map.ofEntries(
                 Map.entry("apppkg", appNum),
-                Map.entry("total", Math.addExact(rpmNum, epkgNum))
-        );
+                Map.entry("total", Math.addExact(rpmNum, epkgNum)));
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
@@ -452,7 +449,8 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     }
 
     /**
-     * Search for application package detail based on the provided application package ID.
+     * Search for application package detail based on the provided application
+     * package ID.
      *
      * @param appPkgId The application package ID to search for.
      * @return An ApplicationPackageDetailVo object containing the details.
