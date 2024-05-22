@@ -66,8 +66,7 @@ public class EPKGPackageServiceImpl extends
         if (!epkgList.isEmpty()) {
             Map<String, Object> res = Map.ofEntries(
                     Map.entry("total", epkgList.size()),
-                    Map.entry("list", epkgList)
-            );
+                    Map.entry("list", epkgList));
             return ResultUtil.success(HttpStatus.OK, res);
         }
 
@@ -96,4 +95,14 @@ public class EPKGPackageServiceImpl extends
         EPKGPackageUnique uniquePkg = ObjectMapperUtil.jsonToObject(unique, EPKGPackageUnique.class);
         return ePKGPackageGateway.existEPKG(uniquePkg);
     }
+
+    /**
+     * Saves a single data object.
+     *
+     * @param dataObject Data object to save.
+     */
+    @Override
+    public void saveDataObject(final String dataObject) {
+    }
+
 }

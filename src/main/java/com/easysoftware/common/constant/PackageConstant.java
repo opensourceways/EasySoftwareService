@@ -2,7 +2,6 @@ package com.easysoftware.common.constant;
 
 public final class PackageConstant {
 
-
     // Private constructor to prevent instantiation of the PackageConstant class
     private PackageConstant() {
         // private constructor to hide the implicit public one
@@ -12,7 +11,7 @@ public final class PackageConstant {
     /**
      * Maximum page number allowed.
      */
-    public static final int MAX_PAGE_NUM = 1_0000;
+    public static final int MAX_PAGE_NUM = 100000;
 
     /**
      * Minimum page number allowed.

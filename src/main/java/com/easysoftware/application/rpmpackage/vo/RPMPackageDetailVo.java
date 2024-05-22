@@ -168,4 +168,9 @@ public class RPMPackageDetailVo {
      */
     private String subPath;
 
+    /**
+     * License.
+     */
+    private String license;
+
 }

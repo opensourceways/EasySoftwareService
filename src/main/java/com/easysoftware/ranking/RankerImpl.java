@@ -2,22 +2,18 @@ package com.easysoftware.ranking;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.easysoftware.application.domainpackage.vo.DomainPackageMenuVo;
+import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
 import com.easysoftware.application.operationconfig.vo.OperationConfigVo;
 import com.easysoftware.domain.operationconfig.gateway.OperationConfigGateway;
 
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
-
 @Component
 public class RankerImpl implements Ranker {
-
 
     /**
      * OperationConfigGateway instance for handling operation configurations.
@@ -35,7 +31,6 @@ public class RankerImpl implements Ranker {
         return null;
     }
 
-
     /**
      * Rank domain pages based on operation configuration.
      *
@@ -52,7 +47,6 @@ public class RankerImpl implements Ranker {
 
         for (OperationConfigVo config : rankingConfig) {
             String rankingCatego = config.getCategorys();
-
             // 排序边栏
             Iterator<Map<String, Object>> iterator = domainPage.iterator();
             while (iterator.hasNext()) {
@@ -66,10 +60,10 @@ public class RankerImpl implements Ranker {
                 }
             }
         }
-        // 逆序排列 rankingList
-        Collections.reverse(rankingList);
-        // 一次性将 rankingList 添加到 domainPage 的开头
-        domainPage.addAll(0, rankingList);
+
+        for (int i = rankingList.size() - 1; i >= 0; i--) {
+            domainPage.add(0, rankingList.get(i));
+        }
 
         return domainPage;
     }
@@ -96,7 +90,7 @@ public class RankerImpl implements Ranker {
             Iterator<Object> iterator = menuVoList.iterator();
             while (iterator.hasNext()) {
                 Object menuVoObj = iterator.next();
-                DomainPackageMenuVo menuVo = (DomainPackageMenuVo) menuVoObj;
+                FiledApplicationVo menuVo = (FiledApplicationVo) menuVoObj;
                 String softWareName = (String) menuVo.getName();
                 if (softWareName.equals(name)) {
                     rankingList.add(menuVo);

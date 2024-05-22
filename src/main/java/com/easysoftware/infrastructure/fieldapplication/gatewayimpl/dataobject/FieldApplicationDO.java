@@ -11,7 +11,6 @@ import java.io.Serial;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-// TODO 修改表名
 @TableName("domain_package")
 public class FieldApplicationDO {
     /**

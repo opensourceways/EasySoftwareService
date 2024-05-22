@@ -1,5 +1,9 @@
 FROM openeuler/openeuler:22.03-lts-sp1 as BUILDER
 
+RUN sed -i "s|repo.openeuler.org|mirrors.nju.edu.cn/openeuler|g" /etc/yum.repos.d/openEuler.repo \
+    && sed -i '/metalink/d' /etc/yum.repos.d/openEuler.repo \
+    && sed -i '/metadata_expire/d' /etc/yum.repos.d/openEuler.repo 
+
 RUN cd / \
     && yum install -y wget \
     && wget https://mirrors.tuna.tsinghua.edu.cn/Adoptium/17/jdk/x64/linux/OpenJDK17U-jdk_x64_linux_hotspot_17.0.11_9.tar.gz \
@@ -20,6 +24,10 @@ RUN cd /EasySoftware \
 
 FROM openeuler/openeuler:22.03-lts-sp1
 
+RUN sed -i "s|repo.openeuler.org|mirrors.nju.edu.cn/openeuler|g" /etc/yum.repos.d/openEuler.repo \
+    && sed -i '/metalink/d' /etc/yum.repos.d/openEuler.repo \
+    && sed -i '/metadata_expire/d' /etc/yum.repos.d/openEuler.repo 
+
 RUN yum update -y \
     && yum install -y shadow passwd
 
@@ -38,7 +46,7 @@ RUN echo "umask 027" >> /home/easysoftware/.bashrc \
     && mkdir -p /home/easysoftware/tomcat/log \
     && chmod 550 -R /home/easysoftware \
     && chown -R easysoftware:easysoftware /home/easysoftware/tomcat/ \
-    && chmod 750 /home/easysoftware/tomcat/log \
+    && chmod 700 -R /home/easysoftware/tomcat \
 	&& echo "set +o history" >> /etc/bashrc \
     && echo "set +o history" >> /home/easysoftware/bashrc \
     && sed -i "s|HISTSIZE=1000|HISTSIZE=0|" /etc/profile \
@@ -53,7 +61,8 @@ RUN passwd -l easysoftware \
 
 RUN dnf install -y wget \
     && wget https://mirrors.tuna.tsinghua.edu.cn/Adoptium/17/jre/x64/linux/OpenJDK17U-jre_x64_linux_hotspot_17.0.11_9.tar.gz \
-    && tar -zxvf OpenJDK17U-jre_x64_linux_hotspot_17.0.11_9.tar.gz
+    && tar -zxvf OpenJDK17U-jre_x64_linux_hotspot_17.0.11_9.tar.gz \
+    && rm OpenJDK17U-jre_x64_linux_hotspot_17.0.11_9.tar.gz
 
 RUN rm -rf `find / -iname "*tcpdump*"` \
     && rm -rf `find / -iname "*sniffer*"` \

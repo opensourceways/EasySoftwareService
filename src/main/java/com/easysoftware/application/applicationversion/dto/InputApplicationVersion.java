@@ -66,4 +66,9 @@ public class InputApplicationVersion {
     @Size(max = 45, message = "the length of compatibleVersion can not exceed 45")
     private String ciVersion;
 
+    /**
+     * Version of openEuler os: openEuler-22.03.
+     */
+    @Size(max = 45, message = "the length of compatibleVersion can not exceed 45")
+    private String eulerOsVersion;
 }

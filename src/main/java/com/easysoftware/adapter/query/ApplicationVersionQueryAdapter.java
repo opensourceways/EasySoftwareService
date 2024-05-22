@@ -36,4 +36,18 @@ public class ApplicationVersionQueryAdapter {
         return appVersionService.searchAppVersion(condition);
     }
 
+    /**
+     * Endpoint to search for application versions based on the provided search condition.
+     *
+     * @param condition The search condition for querying application versions.
+     * @return ResponseEntity<Object>.
+     */
+    @GetMapping("/column")
+    @LimitRequest()
+    // @OneidToken
+    // @CompatibleToken
+    public ResponseEntity<Object> searchAppVerColumn(@Valid final ApplicationVersionSearchCondition condition) {
+        return appVersionService.searchAppVerColumn(condition);
+    }
+
 }

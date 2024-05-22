@@ -3,8 +3,6 @@ package com.easysoftware.application.epkgpackage.dto;
 import org.hibernate.validator.constraints.Range;
 
 import com.easysoftware.common.constant.PackageConstant;
-import com.easysoftware.common.exception.enumvalid.EnumValue;
-import com.easysoftware.common.exception.enumvalid.TimeOrderEnum;
 
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -82,9 +80,15 @@ public class EPKGPackageSearchCondition {
     private String epkgUpdateAt;
 
     /**
-     * Time order field validated against TimeOrderEnum's valid categories.
+     * Time order.
      */
-    @EnumValue(enumClass = TimeOrderEnum.class, enumMethod = "isValidCategory")
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     private String timeOrder;
+
+    /**
+     * Name order.
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    private String nameOrder;
 
 }
