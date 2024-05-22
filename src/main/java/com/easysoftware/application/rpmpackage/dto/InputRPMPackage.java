@@ -200,4 +200,10 @@ public class InputRPMPackage {
     @Size(max = 255, message = "the length of subPath can not exceed 255")
     private String subPath;
 
+    /**
+     * License.
+     */
+    @Size(max = 10_000, message = "the length of license can not exceed 10000")
+    private String license;
+
 }

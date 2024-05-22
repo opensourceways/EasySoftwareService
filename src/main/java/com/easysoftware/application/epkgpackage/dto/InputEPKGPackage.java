@@ -207,4 +207,10 @@ public class InputEPKGPackage {
     @Size(max = 255, message = "the length of subPath cannot exceed 255")
     private String subPath;
 
+    /**
+     * License.
+     */
+    @Size(max = 10_000, message = "the length of license cannot exceed 10000")
+    private String license;
+
 }

@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
+import com.easysoftware.application.epkgpackage.vo.EPKGPackageEulerArchsVo;
+import com.easysoftware.application.epkgpackage.vo.EPKGPackageEulerVersionVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
@@ -119,8 +121,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
 
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", total),
-                Map.entry("list", rPMDetails)
-        );
+                Map.entry("list", rPMDetails));
 
         return res;
     }
@@ -146,8 +147,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
 
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", total),
-                Map.entry("list", rPMMenus)
-        );
+                Map.entry("list", rPMMenus));
         return res;
     }
 
@@ -183,7 +183,8 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
     /**
      * Creates a Page of EPKGPackageDO based on the provided search condition.
      *
-     * @param condition The EPKGPackageSearchCondition object to create the page from.
+     * @param condition The EPKGPackageSearchCondition object to create the page
+     *                  from.
      * @return A Page of EPKGPackageDO entities.
      */
     private Page<EPKGPackageDO> createPage(final EPKGPackageSearchCondition condition) {
@@ -207,6 +208,9 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
             if ("os".equals(column)) {
                 colList = QueryWrapperUtil.sortOsColumn(colList);
             }
+            if ("category".equals(column)) {
+                colList = QueryWrapperUtil.sortCategoryColumn(colList);
+            }
             res.put(column, colList);
         }
         return res;
@@ -223,7 +227,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         List<String> allowedColumns = Arrays.asList("category", "os", "arch");
 
         if (!allowedColumns.contains(column)) {
-            throw new ParamErrorException("Unsupported column: " + column);
+            throw new ParamErrorException("Unsupported column");
         }
 
         QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
@@ -233,7 +237,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         try {
             rpmColumn = ePKGPkgMapper.selectList(wrapper);
         } catch (BadSqlGrammarException e) {
-            throw new ParamErrorException("unsupported param: " + column);
+            throw new ParamErrorException("unsupported param");
         }
         String underlineToCamelColumn = StringUtil.underlineToCamel(column);
 
@@ -300,4 +304,53 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         List<EPKGPackageDO> epkgList = ePKGPkgMapper.selectList(wrapper);
         return EPKGPackageConverter.toDetail(epkgList);
     }
+
+    /**
+     * Query the Euler Version based on the provided search condition.
+     *
+     * @param condition The search condition for querying a part of the epkg Euler
+     *                  Version
+     * @return A map containing relevant information
+     */
+    @Override
+    public Map<String, Object> queryEulerVersionByName(final EPKGPackageSearchCondition condition) {
+        QueryWrapper<EPKGPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new EPKGPackageDO(),
+                condition, "");
+        EPKGPackageEulerVersionVo pkgVo = new EPKGPackageEulerVersionVo();
+        List<String> columns = ClassField.getFieldNames(pkgVo);
+        wrapper.eq("name", condition.getName())
+                .select(columns)
+                .groupBy("os", "arch");
+        List<EPKGPackageDO> epkgList = ePKGPkgMapper.selectList(wrapper);
+        List<EPKGPackageEulerVersionVo> versions = EPKGPackageConverter.toVersion(epkgList);
+        Map<String, Object> res = Map.ofEntries(
+                Map.entry("total", versions.size()),
+                Map.entry("list", versions));
+        return res;
+    }
+
+    /**
+     * Query the Euler archs based on the provided search condition.
+     *
+     * @param condition The search condition for querying a part of the epkg Euler
+     *                  archs
+     * @return A map containing relevant information
+     */
+    @Override
+    public Map<String, Object> queryEulerArchsByName(final EPKGPackageSearchCondition condition) {
+        QueryWrapper<EPKGPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new EPKGPackageDO(),
+                condition, "");
+        EPKGPackageEulerArchsVo pkgVo = new EPKGPackageEulerArchsVo();
+        List<String> columns = ClassField.getFieldNames(pkgVo);
+        wrapper.eq("name", condition.getName())
+                .select(columns)
+                .groupBy("arch");
+        List<EPKGPackageDO> epkgList = ePKGPkgMapper.selectList(wrapper);
+        List<EPKGPackageEulerArchsVo> versions = EPKGPackageConverter.toArchs(epkgList);
+        Map<String, Object> res = Map.ofEntries(
+                Map.entry("total", versions.size()),
+                Map.entry("list", versions));
+        return res;
+    }
+
 }

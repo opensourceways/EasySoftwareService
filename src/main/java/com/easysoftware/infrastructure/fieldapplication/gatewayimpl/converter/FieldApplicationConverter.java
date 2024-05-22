@@ -3,6 +3,7 @@ package com.easysoftware.infrastructure.fieldapplication.gatewayimpl.converter;
 
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
+import com.easysoftware.application.fieldpkg.dto.FieldPkgSearchCondition;
 import com.easysoftware.application.filedapplication.dto.FiledApplicationSerachCondition;
 import com.easysoftware.application.filedapplication.dto.InputFiledApplication;
 import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
@@ -158,5 +159,18 @@ public final class FieldApplicationConverter {
         BeanUtils.copyProperties(con, eCon);
         eCon.setName("");
         return eCon;
+    }
+
+    /**
+     * Converts a FieldApplicationSearchCondition object to an FieldPkgSearchCondition object.
+     *
+     * @param con The FiledApplicationSerachCondition object to convert.
+     * @return The converted FieldPkgSearchCondition object.
+     */
+    public static FieldPkgSearchCondition toFieldPkg(final FiledApplicationSerachCondition con) {
+        FieldPkgSearchCondition fCon = new FieldPkgSearchCondition();
+        BeanUtils.copyProperties(con, fCon);
+        fCon.setName("");
+        return fCon;
     }
 }

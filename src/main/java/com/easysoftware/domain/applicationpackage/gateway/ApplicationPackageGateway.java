@@ -96,4 +96,20 @@ public interface ApplicationPackageGateway {
      */
     Map<String, Object> queryTagsByName(ApplicationPackageSearchCondition condition);
 
+    /**
+     * Query Euler Version based on the provided search condition.
+     *
+     * @param condition The search condition for querying EulerVersion
+     * @return A map containing tags information
+     */
+    Map<String, Object> queryEulerVersionByName(ApplicationPackageSearchCondition condition);
+
+    /**
+     * Query Euler archs based on the provided search condition.
+     *
+     * @param condition The search condition for querying EulerVersion
+     * @return A map containing tags information
+     */
+    Map<String, Object> queryEulerArchsByName(ApplicationPackageSearchCondition condition);
+
 }

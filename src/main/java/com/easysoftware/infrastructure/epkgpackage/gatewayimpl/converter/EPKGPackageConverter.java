@@ -1,6 +1,8 @@
 package com.easysoftware.infrastructure.epkgpackage.gatewayimpl.converter;
 
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
+import com.easysoftware.application.epkgpackage.vo.EPKGPackageEulerArchsVo;
+import com.easysoftware.application.epkgpackage.vo.EPKGPackageEulerVersionVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.UuidUtil;
@@ -17,7 +19,6 @@ import java.util.List;
 
 public final class EPKGPackageConverter {
 
-
     // Private constructor to prevent instantiation of the utility class
     private EPKGPackageConverter() {
         // private constructor to hide the implicit public one
@@ -30,7 +31,8 @@ public final class EPKGPackageConverter {
     private static final Logger LOGGER = LoggerFactory.getLogger(EPKGPackageConverter.class);
 
     /**
-     * Convert a list of EPKGPackageDO objects to a list of EPKGPackageMenuVo objects.
+     * Convert a list of EPKGPackageDO objects to a list of EPKGPackageMenuVo
+     * objects.
      *
      * @param rPMPkgDOs The list of EPKGPackageDO objects to convert
      * @return A list of EPKGPackageMenuVo objects
@@ -54,6 +56,45 @@ public final class EPKGPackageConverter {
         EPKGPackageMenuVo menu = new EPKGPackageMenuVo();
         BeanUtils.copyProperties(epkg, menu);
         return menu;
+    }
+
+    /**
+     * Converts a list of EPKGPackageDO objects to a list of
+     * EPKGPackageEulerVersionVo
+     * view
+     * objects.
+     *
+     * @param epkgDOs The list of EPKGPackageDO objects to convert.
+     * @return A list of EPKGPackageEulerVersionVo view objects.
+     */
+    public static List<EPKGPackageEulerVersionVo> toVersion(final List<EPKGPackageDO> epkgDOs) {
+        List<EPKGPackageEulerVersionVo> res = new ArrayList<>();
+        for (EPKGPackageDO epkg : epkgDOs) {
+            EPKGPackageEulerVersionVo version = new EPKGPackageEulerVersionVo();
+            version.setOs(epkg.getOs());
+            version.setArch(epkg.getArch());
+            version.setPkgId(epkg.getPkgId());
+            res.add(version);
+        }
+        return res;
+    }
+
+    /**
+     * Converts a list of EPKGPackageDO objects to a list of EPKGPackageEulerArchsVo
+     * view
+     * objects.
+     *
+     * @param epkgDOs The list of EPKGPackageDO objects to convert.
+     * @return A list of EPKGPackageEulerArchsVo view objects.
+     */
+    public static List<EPKGPackageEulerArchsVo> toArchs(final List<EPKGPackageDO> epkgDOs) {
+        List<EPKGPackageEulerArchsVo> res = new ArrayList<>();
+        for (EPKGPackageDO epkg : epkgDOs) {
+            EPKGPackageEulerArchsVo archs = new EPKGPackageEulerArchsVo();
+            archs.setArch(epkg.getArch());
+            res.add(archs);
+        }
+        return res;
     }
 
     /**
@@ -86,7 +127,8 @@ public final class EPKGPackageConverter {
     }
 
     /**
-     * Convert a list of EPKGPackageDO objects to a list of EPKGPackageDetailVo objects.
+     * Convert a list of EPKGPackageDO objects to a list of EPKGPackageDetailVo
+     * objects.
      *
      * @param rPMPkgDOs The list of EPKGPackageDO objects to convert
      * @return A list of EPKGPackageDetailVo objects
