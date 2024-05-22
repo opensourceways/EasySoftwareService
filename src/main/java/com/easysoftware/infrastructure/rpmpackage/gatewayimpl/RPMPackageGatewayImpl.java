@@ -272,7 +272,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         }
         long endTime1 = System.nanoTime();
         long duration = (endTime1 - startTime) / 1000000;
-        LOGGER.info("转换时间： " + duration + " 毫秒，" + "数据量：" + dataObject.size());
+        LOGGER.info("time used: " + duration + " millisecond, dataObject.size():" + dataObject.size());
         return objList;
     }
 
