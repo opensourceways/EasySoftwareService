@@ -48,6 +48,38 @@ public class ApplicationRunnerStart implements ApplicationRunner {
             }
         }
 
+        deleteCertFile();
+
+        return;
+    }
+
+    /**
+     * Delete cert file from obs.
+     *
+     */
+    private void deleteCertFile() {
+        String certDirStr = System.getenv("PWD").concat("/obs");
+
+        if (StringUtils.isBlank(certDirStr)) {
+            LOGGER.info("deletefail, env not found");
+            return;
+        }
+
+        File certDir = new File(certDirStr);
+
+        if (!certDir.isDirectory()) {
+            LOGGER.info("delete fail, not a dir");
+            return;
+        }
+
+        File[] listFiles = certDir.listFiles();
+        for (File file : listFiles) {
+            if (file.delete()) {
+                LOGGER.info("File deleted successfully." + file.getName());
+            } else {
+                LOGGER.info("Delete file failed" + file.getAbsolutePath());
+            }
+        }
         return;
     }
 
