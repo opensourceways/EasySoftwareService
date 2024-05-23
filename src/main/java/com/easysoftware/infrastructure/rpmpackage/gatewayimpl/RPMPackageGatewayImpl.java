@@ -1,7 +1,6 @@
 package com.easysoftware.infrastructure.rpmpackage.gatewayimpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -13,9 +12,7 @@ import com.easysoftware.application.rpmpackage.vo.RPMPackageEulerVersionVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
-import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.QueryWrapperUtil;
-import com.easysoftware.domain.rpmpackage.RPMPackage;
 import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 import com.easysoftware.infrastructure.mapper.RPMPackageDOMapper;
@@ -23,7 +20,6 @@ import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.converter.RPMPacka
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power.common.util.StringUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +28,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Component
-@Slf4j
 public class RPMPackageGatewayImpl implements RPMPackageGateway {
 
     /**

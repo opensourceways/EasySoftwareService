@@ -1,16 +1,12 @@
 package com.easysoftware.infrastructure.externalos.gatewayimpl.converter;
 
-import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.externalos.ExternalOs;
 import com.easysoftware.infrastructure.externalos.gatewayimpl.dataobject.ExternalOsDO;
 import org.springframework.beans.BeanUtils;
-
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class ExternalOsConverter {
-
     // Private constructor to prevent instantiation of the MapConstant class
     private ExternalOsConverter() {
         // private constructor to hide the implicit public one

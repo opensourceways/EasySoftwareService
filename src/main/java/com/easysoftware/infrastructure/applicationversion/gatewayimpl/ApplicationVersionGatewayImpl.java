@@ -1,11 +1,9 @@
 package com.easysoftware.infrastructure.applicationversion.gatewayimpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
 import com.easysoftware.common.exception.ParamErrorException;
-import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.domain.applicationversion.ApplicationVersion;
 import com.easysoftware.domain.applicationversion.gateway.ApplicationVersionGateway;
@@ -20,7 +18,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
