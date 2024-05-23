@@ -9,6 +9,7 @@ import com.easysoftware.application.applicationpackage.vo.ApplicationPackageEule
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageEulerVersionVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageTagsVo;
+import com.easysoftware.common.exception.NoneResException;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
@@ -76,10 +77,13 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         wrapper.select(columns);
 
         IPage<ApplicationPackageDO> resPage = appPkgMapper.selectPage(page, wrapper);
-        List<ApplicationPackageDO> appDOs = resPage.getRecords();
         long total = resPage.getTotal();
-        List<ApplicationPackageMenuVo> menus = ApplicationPackageConverter.toMenu(appDOs);
+        if (total == 0) {
+            throw new NoneResException("the image package does not exist");
+        }
 
+        List<ApplicationPackageDO> appDOs = resPage.getRecords();
+        List<ApplicationPackageMenuVo> menus = ApplicationPackageConverter.toMenu(appDOs);
         Map<String, Object> res = new HashMap<>();
         res.put("total", total);
         res.put("list", menus);
@@ -101,6 +105,10 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         List<ApplicationPackageDO> appDOs = resPage.getRecords();
         List<ApplicationPackageTagsVo> aggregatePkgs = ApplicationPackageConverter.aggregateByTags(appDOs);
         long total = aggregatePkgs.size();
+
+        if (total == 0) {
+            throw new NoneResException("the tag does not exist");
+        }
 
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", total),
@@ -124,6 +132,11 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         List<ApplicationPackageDO> appDOs = resPage.getRecords();
         List<ApplicationPackageDetailVo> appDetails = ApplicationPackageConverter.toDetail(appDOs);
         long total = resPage.getTotal();
+
+
+        if (total == 0) {
+            throw new NoneResException("the image package does not exist");
+        }
 
         return Map.ofEntries(
                 Map.entry("total", total),
