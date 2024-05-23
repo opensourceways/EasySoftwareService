@@ -54,51 +54,6 @@ public final class ApplicationVersionConvertor {
     }
 
     /**
-     * Convert an ApplicationVersion entity to an ApplicationVersionDO data object.
-     *
-     * @param appVersion The ApplicationVersion entity to convert
-     * @return An ApplicationVersionDO data object
-     */
-    public static ApplicationVersionDO toDataObject(final ApplicationVersion appVersion) {
-        ApplicationVersionDO appVersionDO = new ApplicationVersionDO();
-        BeanUtils.copyProperties(appVersion, appVersionDO);
-        return appVersionDO;
-    }
-
-    /**
-     * Convert an ApplicationVersion entity to an ApplicationVersionDO data object for creation.
-     *
-     * @param appVersion The ApplicationVersion entity to convert
-     * @return An ApplicationVersionDO data object for creation
-     */
-    public static ApplicationVersionDO toDataObjectForCreate(final ApplicationVersion appVersion) {
-        ApplicationVersionDO appVersionDO = toDataObject(appVersion);
-
-        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        String id = UuidUtil.getUUID32();
-        appVersionDO.setCreatedAt(currentTime);
-        appVersionDO.setUpdateAt(currentTime);
-        appVersionDO.setId(id);
-
-        return appVersionDO;
-    }
-
-    /**
-     * Convert an ApplicationVersion entity to an ApplicationVersionDO data object for update.
-     *
-     * @param appVersion The ApplicationVersion entity to convert
-     * @return An ApplicationVersionDO data object for update
-     */
-    public static ApplicationVersionDO toDataObjectForUpdate(final ApplicationVersion appVersion) {
-        ApplicationVersionDO appVersionDO = toDataObject(appVersion);
-
-        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        appVersionDO.setUpdateAt(currentTime);
-
-        return appVersionDO;
-    }
-
-    /**
      * Extracts a specific column from a list of RPMPackageDO objects and returns it as a list of strings.
      *
      * @param columnList The list of ApplicationVersionDO objects.

@@ -192,48 +192,4 @@ public final class RPMPackageConverter {
         }
         return res;
     }
-
-    /**
-     * Converts an RPMPackage entity to an RPMPackageDO data object.
-     *
-     * @param rPMPkg The RPMPackage entity to convert.
-     * @return The converted RPMPackageDO data object.
-     */
-    public static RPMPackageDO toDataObject(final RPMPackage rPMPkg) {
-        RPMPackageDO rPMPkgDO = new RPMPackageDO();
-        BeanUtils.copyProperties(rPMPkg, rPMPkgDO);
-        return rPMPkgDO;
-    }
-
-    /**
-     * Converts an RPMPackage entity to an RPMPackageDO data object for creation.
-     *
-     * @param rPMPkg The RPMPackage entity to convert.
-     * @return The converted RPMPackageDO data object for creation.
-     */
-    public static RPMPackageDO toDataObjectForCreate(final RPMPackage rPMPkg) {
-        RPMPackageDO rPMPkgDO = toDataObject(rPMPkg);
-
-        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        String id = UuidUtil.getUUID32();
-        rPMPkgDO.setCreateAt(currentTime);
-        rPMPkgDO.setUpdateAt(currentTime);
-        rPMPkgDO.setId(id);
-
-        return rPMPkgDO;
-    }
-
-    /**
-     * Converts an RPMPackage entity to an RPMPackageDO data object for update.
-     *
-     * @param rPMPkg The RPMPackage entity to convert.
-     * @return The converted RPMPackageDO data object for update.
-     */
-    public static RPMPackageDO toDataObjectForUpdate(final RPMPackage rPMPkg) {
-        RPMPackageDO rPMPkgDO = toDataObject(rPMPkg);
-
-        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        rPMPkgDO.setUpdateAt(currentTime);
-        return rPMPkgDO;
-    }
 }

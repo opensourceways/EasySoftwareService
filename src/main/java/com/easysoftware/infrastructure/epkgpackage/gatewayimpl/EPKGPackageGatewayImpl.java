@@ -56,19 +56,6 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
     private ObjectMapper objectMapper;
 
     /**
-     * Delete EPKG packages by their IDs.
-     *
-     * @param ids A list of IDs of EPKG packages to delete
-     * @return the number of rows deleted
-     */
-    @Override
-    public int delete(final List<String> ids) {
-        QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
-        wrapper.in("pkg_id", ids);
-        return ePKGPkgMapper.delete(wrapper);
-    }
-
-    /**
      * Check if an EPKG package exists based on its unique identifier.
      *
      * @param unique The unique identifier of the EPKG package
@@ -149,35 +136,6 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
                 Map.entry("total", total),
                 Map.entry("list", rPMMenus));
         return res;
-    }
-
-    /**
-     * Save an EPKGPackage object.
-     *
-     * @param epkg The EPKGPackage object to save
-     * @return true if the save operation was successful, false otherwise
-     */
-    @Override
-    public boolean save(final EPKGPackage epkg) {
-        EPKGPackageDO epkgPackageDO = EPKGPackageConverter.toDataObjectForCreate(epkg);
-        int mark = ePKGPkgMapper.insert(epkgPackageDO);
-        return mark == 1;
-    }
-
-    /**
-     * Update an existing EPKGPackage object.
-     *
-     * @param epkg The EPKGPackage object to update
-     * @return the number of rows affected by the update operation
-     */
-    @Override
-    public int update(final EPKGPackage epkg) {
-        EPKGPackageDO epkgPackageDO = EPKGPackageConverter.toDataObjectForUpdate(epkg);
-
-        UpdateWrapper<EPKGPackageDO> wrapper = new UpdateWrapper<>();
-        wrapper.eq("pkg_id", epkg.getPkgId());
-
-        return ePKGPkgMapper.update(epkgPackageDO, wrapper);
     }
 
     /**
@@ -271,24 +229,6 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
             return new EPKGPackageMenuVo();
         }
         return EPKGPackageConverter.toMenu(epkgList.get(0));
-    }
-
-    /**
-     * Convert a batch of data objects to EPKGPackageDO objects.
-     *
-     * @param dataObject A collection of data objects to convert
-     * @return A collection of EPKGPackageDO objects
-     */
-    @Override
-    public Collection<EPKGPackageDO> convertBatch(final Collection<String> dataObject) {
-        Collection<EPKGPackageDO> objList = new ArrayList<>();
-        for (String obj : dataObject) {
-            EPKGPackage epkg = ObjectMapperUtil.jsonToObject(obj, EPKGPackage.class);
-            EPKGPackageDO epkgDO = EPKGPackageConverter.toDataObjectForCreate(epkg);
-            LOGGER.info("convert pkgId: {}", epkgDO.getPkgId());
-            objList.add(epkgDO);
-        }
-        return objList;
     }
 
     /**

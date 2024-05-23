@@ -25,35 +25,10 @@ public interface ExternalOsGateway {
     boolean existExternalOs(String id);
 
     /**
-     * Delete external operating systems by their IDs.
-     *
-     * @param ids A list of IDs of external operating systems to delete
-     * @return the number of rows deleted
-     */
-    int delete(List<String> ids);
-
-    /**
      * Check if an external operating system exists based on its unique identifier.
      *
      * @param uni The unique identifier of the external operating system
      * @return true if the external operating system exists, false otherwise
      */
     boolean existExternalOs(ExternalOsUnique uni);
-
-    /**
-     * Save an ExternalOs object.
-     *
-     * @param ex The ExternalOs object to save
-     * @return true if the save operation was successful, false otherwise
-     */
-    boolean save(ExternalOs ex);
-
-    /**
-     * Update an existing ExternalOs object.
-     *
-     * @param ex The ExternalOs object to update
-     * @return the number of rows affected by the update operation
-     */
-    int update(ExternalOs ex);
-
 }
