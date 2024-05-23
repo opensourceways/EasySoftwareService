@@ -83,7 +83,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         if (total == 0 || menus.size() == 0) {
             throw new NoneResException("the image package does not exist");
         }
-        
+
         Map<String, Object> res = new HashMap<>();
         res.put("total", total);
         res.put("list", menus);
