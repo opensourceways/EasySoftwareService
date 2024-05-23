@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.Range;
 
 import com.easysoftware.common.constant.PackageConstant;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -24,12 +25,14 @@ public class ApplicationVersionSearchCondition {
      * Page number within the allowable range.
      */
     @Range(min = PackageConstant.MIN_PAGE_NUM, max = PackageConstant.MAX_PAGE_NUM)
+    @NotNull
     private Integer pageNum = 1;
 
     /**
      * Page size within the allowable range.
      */
     @Range(min = PackageConstant.MIN_PAGE_SIZE, max = PackageConstant.MAX_PAGE_SIZE)
+    @NotNull
     private Integer pageSize = 10;
 
     /**

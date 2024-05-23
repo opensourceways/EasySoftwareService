@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.Range;
 
 import com.easysoftware.common.constant.PackageConstant;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,12 +36,14 @@ public class EPKGPackageSearchCondition {
      * Page number within the specified range defined by PackageConstant.MIN_PAGE_NUM and PackageConstant.MAX_PAGE_NUM.
      */
     @Range(min = PackageConstant.MIN_PAGE_NUM, max = PackageConstant.MAX_PAGE_NUM)
+    @NotNull
     private Integer pageNum = 1;
 
     /**
      * Page size within the specified range defined by PackageConstant.MIN_PAGE_SIZE and PackageConstant.MAX_PAGE_SIZE.
      */
     @Range(min = PackageConstant.MIN_PAGE_SIZE, max = PackageConstant.MAX_PAGE_SIZE)
+    @NotNull
     private Integer pageSize = 10;
 
     /**
