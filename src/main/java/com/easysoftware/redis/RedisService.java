@@ -4,7 +4,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.concurrent.TimeUnit;
 
-
 public interface RedisService {
     /**
      * Set a key-value pair in Redis.
@@ -41,14 +40,6 @@ public interface RedisService {
      * @return ResponseEntity with the result of the operation.
      */
     ResponseEntity<Object> hasKey(String key);
-
-    /**
-     * Delete a key from Redis.
-     *
-     * @param key The key to delete.
-     * @return ResponseEntity with the result of the operation.
-     */
-    ResponseEntity<Object> deleteKey(String key);
 
     /**
      * Scan keys in Redis based on a namespace.
