@@ -68,7 +68,7 @@ public class RedisGateway {
      * @param key The key to delete.
      * @return True if the key was deleted successfully, false otherwise.
      */
-    public boolean delteKey(final String key) {
+    public boolean deleteKey(final String key) {
         return Boolean.TRUE.equals(stringRedisTemplate.delete(key));
     }
 

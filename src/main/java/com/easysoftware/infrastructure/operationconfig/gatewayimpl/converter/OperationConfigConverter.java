@@ -1,6 +1,5 @@
 package com.easysoftware.infrastructure.operationconfig.gatewayimpl.converter;
 
-import com.easysoftware.application.operationconfig.dto.InputOperationConfig;
 import com.easysoftware.application.operationconfig.vo.OperationConfigVo;
 import com.easysoftware.infrastructure.operationconfig.gatewayimpl.dataobject.OperationConfigDO;
 import org.springframework.beans.BeanUtils;
@@ -9,23 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class OperationConfigConverter {
-
     // Private constructor to prevent instantiation of the PackageConstant class
     private OperationConfigConverter() {
         // private constructor to hide the implicit public one
         throw new AssertionError("OperationConfigConverter class cannot be instantiated.");
-    }
-
-    /**
-     * Converts an InputOperationConfig object to an OperationConfigDO data object.
-     *
-     * @param input The InputOperationConfig object to convert.
-     * @return The converted OperationConfigDO data object.
-     */
-    public static OperationConfigDO toDataObject(final InputOperationConfig input) {
-        OperationConfigDO operationConfigDO = new OperationConfigDO();
-        BeanUtils.copyProperties(input, operationConfigDO);
-        return operationConfigDO;
     }
 
     /**
