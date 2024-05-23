@@ -35,20 +35,6 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
     private ApplicationVersionDOMapper appVersionMapper;
 
     /**
-     * Delete an application by name.
-     *
-     * @param name The name of the application to delete
-     * @return true if the delete operation was successful, false otherwise
-     */
-    @Override
-    public boolean delete(final String name) {
-        QueryWrapper<ApplicationVersionDO> wrapper = new QueryWrapper<>();
-        wrapper.in("name", name);
-        int mark = appVersionMapper.delete(wrapper);
-        return mark == 1;
-    }
-
-    /**
      * Check if an application exists based on its name.
      *
      * @param name The name of the application
@@ -59,36 +45,6 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
         QueryWrapper<ApplicationVersionDO> wrapper = new QueryWrapper<>();
         wrapper.eq("name", name);
         return appVersionMapper.exists(wrapper);
-    }
-
-    /**
-     * Save an ApplicationVersion object.
-     *
-     * @param appVersion The ApplicationVersion object to save
-     * @return true if the save operation was successful, false otherwise
-     */
-    @Override
-    public boolean save(final ApplicationVersion appVersion) {
-        ApplicationVersionDO appVersionDO = ApplicationVersionConvertor.toDataObjectForCreate(appVersion);
-        int mark = appVersionMapper.insert(appVersionDO);
-        return mark == 1;
-    }
-
-    /**
-     * Update an existing ApplicationVersion object.
-     *
-     * @param appVersion The ApplicationVersion object to update
-     * @return true if the update operation was successful, false otherwise
-     */
-    @Override
-    public boolean update(final ApplicationVersion appVersion) {
-        ApplicationVersionDO appVersionDO = ApplicationVersionConvertor.toDataObjectForUpdate(appVersion);
-
-        UpdateWrapper<ApplicationVersionDO> wrapper = new UpdateWrapper<>();
-        wrapper.eq("name", appVersion.getName());
-
-        int mark = appVersionMapper.update(appVersionDO, wrapper);
-        return mark == 1;
     }
 
     /**
@@ -117,23 +73,6 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
                 Map.entry("list", appDetails));
 
         return res;
-    }
-
-    /**
-     * Convert a batch of data objects to ApplicationVersionDO objects.
-     *
-     * @param dataObject A collection of data objects to convert
-     * @return A collection of ApplicationVersionDO objects
-     */
-    @Override
-    public Collection<ApplicationVersionDO> convertBatch(final Collection<String> dataObject) {
-        Collection<ApplicationVersionDO> objList = new ArrayList<>();
-        for (String obj : dataObject) {
-            ApplicationVersion appVer = ObjectMapperUtil.jsonToObject(obj, ApplicationVersion.class);
-            ApplicationVersionDO appVersionDO = ApplicationVersionConvertor.toDataObjectForCreate(appVer);
-            objList.add(appVersionDO);
-        }
-        return objList;
     }
 
     /**

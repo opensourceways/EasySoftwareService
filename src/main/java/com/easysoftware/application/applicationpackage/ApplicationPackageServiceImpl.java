@@ -74,63 +74,6 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
     }
 
     /**
-     * Insert a new application package.
-     *
-     * @param inputAppPkg The input application package to be inserted.
-     * @return ResponseEntity<Object>.
-     */
-    @Override
-    public ResponseEntity<Object> insertAppPkg(final InputApplicationPackage inputAppPkg) {
-        ApplicationPackage appPkg = new ApplicationPackage();
-        BeanUtils.copyProperties(inputAppPkg, appPkg);
-        boolean succeed = appPkgGateway.save(appPkg);
-        return succeed ? ResultUtil.success(HttpStatus.OK)
-                : ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0006);
-    }
-
-    /**
-     * Update an existing application package.
-     *
-     * @param inputAppPkg The input application package for updating.
-     * @return ResponseEntity<Object>.
-     */
-    @Override
-    public ResponseEntity<Object> updateAppPkg(final InputApplicationPackage inputAppPkg) {
-        // 数据库中是否已存在该包
-        ApplicationPackage appPkg = new ApplicationPackage();
-        BeanUtils.copyProperties(inputAppPkg, appPkg);
-        boolean succeed = appPkgGateway.update(appPkg);
-        return succeed ? ResultUtil.success(HttpStatus.OK)
-                : ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0004);
-    }
-
-    /**
-     * Delete application packages by their names.
-     *
-     * @param names List of names of the application packages to be deleted.
-     * @return ResponseEntity<Object>.
-     */
-    @Override
-    public ResponseEntity<Object> deleteAppPkg(final List<String> names) {
-        List<String> existedNames = new ArrayList<>();
-        for (String name : names) {
-            if (appPkgGateway.existApp(name)) {
-                existedNames.add(name);
-            }
-        }
-        List<String> deletedNames = new ArrayList<>();
-        for (String name : existedNames) {
-            if (appPkgGateway.delete(name)) {
-                deletedNames.add(name);
-            }
-        }
-
-        String msg = String.format(Locale.ROOT, "请求删除的数据: %s, 在数据库中的数据: %s, 成功删除的数据: %s",
-                names, existedNames, deletedNames);
-        return ResultUtil.success(HttpStatus.OK);
-    }
-
-    /**
      * Search for application packages based on the provided search condition.
      *
      * @param condition The search condition for querying application packages.

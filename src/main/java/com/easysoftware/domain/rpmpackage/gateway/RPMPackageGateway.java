@@ -29,30 +29,6 @@ public interface RPMPackageGateway {
     boolean existRPM(String id);
 
     /**
-     * Save an RPMPackage object.
-     *
-     * @param appPkg The RPMPackage object to save
-     * @return true if the save operation was successful, false otherwise
-     */
-    boolean save(RPMPackage appPkg);
-
-    /**
-     * Update an existing RPMPackage object.
-     *
-     * @param appPkg The RPMPackage object to update
-     * @return the number of rows affected by the update operation
-     */
-    int update(RPMPackage appPkg);
-
-    /**
-     * Delete RPM packages by their IDs.
-     *
-     * @param id A list of IDs of RPM packages to delete
-     * @return the number of rows deleted
-     */
-    int delete(List<String> id);
-
-    /**
      * Query detailed information based on the provided search condition for RPM
      * packages.
      *
@@ -91,14 +67,6 @@ public interface RPMPackageGateway {
      * @return The total number of records in the table
      */
     long queryTableLength();
-
-    /**
-     * Convert a batch of data objects to RPMPackageDO objects.
-     *
-     * @param dataObject A collection of data objects to convert
-     * @return A collection of RPMPackageDO objects
-     */
-    Collection<RPMPackageDO> convertBatch(Collection<String> dataObject);
 
     /**
      * Query part of the RPM package menu based on the provided search condition.

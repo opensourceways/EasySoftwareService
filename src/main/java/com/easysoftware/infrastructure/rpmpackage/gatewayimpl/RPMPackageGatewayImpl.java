@@ -59,19 +59,6 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     private static final Logger LOGGER = LoggerFactory.getLogger(RPMPackageGatewayImpl.class);
 
     /**
-     * Delete RPM packages by their IDs.
-     *
-     * @param id A list of IDs of RPM packages to delete
-     * @return the number of rows deleted
-     */
-    @Override
-    public int delete(final List<String> id) {
-        QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
-        wrapper.in("pkg_id", id);
-        return rPMPkgMapper.delete(wrapper);
-    }
-
-    /**
      * Check if an RPM package exists based on its unique identifier.
      *
      * @param unique The unique identifier of the RPM package
@@ -115,35 +102,6 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
                 Map.entry("list", rPMDetails));
 
         return res;
-    }
-
-    /**
-     * Save an RPMPackage object.
-     *
-     * @param rPMPkg The RPMPackage object to save
-     * @return true if the save operation was successful, false otherwise
-     */
-    @Override
-    public boolean save(final RPMPackage rPMPkg) {
-        RPMPackageDO rPMPkgDO = RPMPackageConverter.toDataObjectForCreate(rPMPkg);
-        int mark = rPMPkgMapper.insert(rPMPkgDO);
-        return mark == 1;
-    }
-
-    /**
-     * Update an existing RPMPackage object.
-     *
-     * @param rPMPkg The RPMPackage object to update
-     * @return the number of rows affected by the update operation
-     */
-    @Override
-    public int update(final RPMPackage rPMPkg) {
-        RPMPackageDO rPMPkgDO = RPMPackageConverter.toDataObjectForUpdate(rPMPkg);
-
-        UpdateWrapper<RPMPackageDO> wrapper = new UpdateWrapper<>();
-        wrapper.eq("pkg_id", rPMPkg.getPkgId());
-
-        return rPMPkgMapper.update(rPMPkgDO, wrapper);
     }
 
     /**
@@ -256,28 +214,6 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     @Override
     public long queryTableLength() {
         return rPMPkgMapper.selectCount(null);
-    }
-
-    /**
-     * Convert a batch of data objects to RPMPackageDO objects.
-     *
-     * @param dataObject A collection of data objects to convert
-     * @return A collection of RPMPackageDO objects
-     */
-    @Override
-    public Collection<RPMPackageDO> convertBatch(final Collection<String> dataObject) {
-        long startTime = System.nanoTime();
-        Collection<RPMPackageDO> objList = new ArrayList<>();
-        for (String obj : dataObject) {
-            RPMPackage rpmPackage = ObjectMapperUtil.jsonToObject(obj, RPMPackage.class);
-            RPMPackageDO rpmDO = RPMPackageConverter.toDataObjectForCreate(rpmPackage);
-            log.info("convert pkgId: {}", rpmDO.getPkgId());
-            objList.add(rpmDO);
-        }
-        long endTime1 = System.nanoTime();
-        long duration = (endTime1 - startTime) / 1000000;
-        LOGGER.info("time used: " + duration + " millisecond, dataObject.size():" + dataObject.size());
-        return objList;
     }
 
     /**

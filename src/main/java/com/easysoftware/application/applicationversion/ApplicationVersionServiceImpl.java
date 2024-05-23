@@ -50,7 +50,7 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
      */
     @Override
     public void saveDataObjectBatch(final ArrayList<String> dataObject) {
-        saveOrUpdateBatch(appVersionGateway.convertBatch(dataObject));
+        return;
     }
 
     /**

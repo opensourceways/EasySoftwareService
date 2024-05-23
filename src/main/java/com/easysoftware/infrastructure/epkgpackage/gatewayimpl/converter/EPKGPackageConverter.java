@@ -154,37 +154,4 @@ public final class EPKGPackageConverter {
         BeanUtils.copyProperties(epkg, epkgPackageDO);
         return epkgPackageDO;
     }
-
-    /**
-     * Convert an EPKGPackage entity to an EPKGPackageDO data object for creation.
-     *
-     * @param epkg The EPKGPackage entity to convert
-     * @return An EPKGPackageDO data object for creation
-     */
-    public static EPKGPackageDO toDataObjectForCreate(final EPKGPackage epkg) {
-        EPKGPackageDO epkgPackageDO = toDataObject(epkg);
-
-        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        String id = UuidUtil.getUUID32();
-        epkgPackageDO.setCreateAt(currentTime);
-        epkgPackageDO.setUpdateAt(currentTime);
-        epkgPackageDO.setId(id);
-
-        return epkgPackageDO;
-    }
-
-    /**
-     * Convert an EPKGPackage entity to an EPKGPackageDO data object for update.
-     *
-     * @param rPMPkg The EPKGPackage entity to convert
-     * @return An EPKGPackageDO data object for update
-     */
-    public static EPKGPackageDO toDataObjectForUpdate(final EPKGPackage rPMPkg) {
-        EPKGPackageDO rPMPkgDO = toDataObject(rPMPkg);
-
-        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        rPMPkgDO.setUpdateAt(currentTime);
-
-        return rPMPkgDO;
-    }
 }
