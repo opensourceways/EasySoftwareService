@@ -1,6 +1,7 @@
 package com.easysoftware.application.epkgpackage;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.easysoftware.application.epkgpackage.dto.EPKGPackageNameSearchCondition;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
 import com.easysoftware.common.utils.ObjectMapperUtil;
@@ -103,7 +104,7 @@ public class EPKGPackageServiceImpl extends
      * @return Map containing the epkg package menu.
      */
     @Override
-    public ResponseEntity<Object> queryEulerVersionsByName(EPKGPackageSearchCondition condition) {
+    public ResponseEntity<Object> queryEulerVersionsByName(EPKGPackageNameSearchCondition condition) {
         Map<String, Object> res = ePKGPackageGateway.queryEulerVersionByName(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }
@@ -115,7 +116,7 @@ public class EPKGPackageServiceImpl extends
      * @return Map containing the epkg package menu.
      */
     @Override
-    public ResponseEntity<Object> queryEulerArchsByName(EPKGPackageSearchCondition condition) {
+    public ResponseEntity<Object> queryEulerArchsByName(EPKGPackageNameSearchCondition condition) {
         Map<String, Object> res = ePKGPackageGateway.queryEulerArchsByName(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.easysoftware.application.applicationversion.ApplicationVersionService;
+import com.easysoftware.application.applicationversion.dto.ApplicationColumnSearchCondition;
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
 import com.easysoftware.common.aop.RequestLimitRedis;
 
@@ -42,7 +43,7 @@ public class ApplicationVersionQueryAdapter {
      */
     @GetMapping("/column")
     @RequestLimitRedis()
-    public ResponseEntity<Object> searchAppVerColumn(@Valid final ApplicationVersionSearchCondition condition) {
+    public ResponseEntity<Object> searchAppVerColumn(@Valid final ApplicationColumnSearchCondition condition) {
         return appVersionService.searchAppVerColumn(condition);
     }
 }

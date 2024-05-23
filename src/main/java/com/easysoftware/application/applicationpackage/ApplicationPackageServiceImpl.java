@@ -1,5 +1,6 @@
 package com.easysoftware.application.applicationpackage;
 
+import com.easysoftware.application.applicationpackage.dto.ApplicationPackageNameSearchCondition;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.common.utils.ResultUtil;
@@ -53,7 +54,7 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
      * @return ResponseEntity<Object>.
      */
     @Override
-    public ResponseEntity<Object> queryPkgByTags(final ApplicationPackageSearchCondition condition) {
+    public ResponseEntity<Object> queryPkgByTags(final ApplicationPackageNameSearchCondition condition) {
         Map<String, Object> res = appPkgGateway.queryTagsByName(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }
@@ -91,7 +92,7 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
      * @return Map containing the epkg package menu.
      */
     @Override
-    public ResponseEntity<Object> queryEulerVersionsByName(ApplicationPackageSearchCondition condition) {
+    public ResponseEntity<Object> queryEulerVersionsByName(ApplicationPackageNameSearchCondition condition) {
         Map<String, Object> res = appPkgGateway.queryEulerVersionByName(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }
@@ -103,7 +104,7 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
      * @return Map containing the epkg package menu.
      */
     @Override
-    public ResponseEntity<Object> queryEulerArchsByName(ApplicationPackageSearchCondition condition) {
+    public ResponseEntity<Object> queryEulerArchsByName(ApplicationPackageNameSearchCondition condition) {
         Map<String, Object> res = appPkgGateway.queryEulerArchsByName(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }

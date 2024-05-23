@@ -1,5 +1,6 @@
 package com.easysoftware.domain.applicationpackage.gateway;
 
+import com.easysoftware.application.applicationpackage.dto.ApplicationPackageNameSearchCondition;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
@@ -69,7 +70,7 @@ public interface ApplicationPackageGateway {
      * @param condition The search condition for querying tags
      * @return A map containing tags information
      */
-    Map<String, Object> queryTagsByName(ApplicationPackageSearchCondition condition);
+    Map<String, Object> queryTagsByName(ApplicationPackageNameSearchCondition condition);
 
     /**
      * Query Euler Version based on the provided search condition.
@@ -77,7 +78,7 @@ public interface ApplicationPackageGateway {
      * @param condition The search condition for querying EulerVersion
      * @return A map containing tags information
      */
-    Map<String, Object> queryEulerVersionByName(ApplicationPackageSearchCondition condition);
+    Map<String, Object> queryEulerVersionByName(ApplicationPackageNameSearchCondition condition);
 
     /**
      * Query Euler archs based on the provided search condition.
@@ -85,6 +86,6 @@ public interface ApplicationPackageGateway {
      * @param condition The search condition for querying EulerVersion
      * @return A map containing tags information
      */
-    Map<String, Object> queryEulerArchsByName(ApplicationPackageSearchCondition condition);
+    Map<String, Object> queryEulerArchsByName(ApplicationPackageNameSearchCondition condition);
 
 }
