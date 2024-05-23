@@ -2,11 +2,9 @@ package com.easysoftware.application.applicationpackage;
 
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
-import com.easysoftware.common.obs.ObsService;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +20,6 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
      */
     @Resource
     private ApplicationPackageGateway appPkgGateway;
-
-    /**
-     * Autowired service for interacting with Object Storage Service (OBS).
-     */
-    @Autowired
-    private ObsService obsService;
 
     /**
      * Value injection for the repoMaintainerApi configuration property.
