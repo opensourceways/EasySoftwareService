@@ -78,12 +78,12 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
 
         IPage<ApplicationPackageDO> resPage = appPkgMapper.selectPage(page, wrapper);
         long total = resPage.getTotal();
-        if (total == 0) {
-            throw new NoneResException("the image package does not exist");
-        }
-
         List<ApplicationPackageDO> appDOs = resPage.getRecords();
         List<ApplicationPackageMenuVo> menus = ApplicationPackageConverter.toMenu(appDOs);
+        if (total == 0 || menus.size() == 0) {
+            throw new NoneResException("the image package does not exist");
+        }
+        
         Map<String, Object> res = new HashMap<>();
         res.put("total", total);
         res.put("list", menus);
@@ -106,7 +106,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         List<ApplicationPackageTagsVo> aggregatePkgs = ApplicationPackageConverter.aggregateByTags(appDOs);
         long total = aggregatePkgs.size();
 
-        if (total == 0) {
+        if (total == 0 || aggregatePkgs.size() == 0) {
             throw new NoneResException("the tag does not exist");
         }
 
@@ -134,7 +134,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         long total = resPage.getTotal();
 
 
-        if (total == 0) {
+        if (total == 0 || appDetails.size() == 0) {
             throw new NoneResException("the image package does not exist");
         }
 

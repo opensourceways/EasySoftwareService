@@ -42,7 +42,7 @@ public class ExternalOsGatewayImpl implements ExternalOsGateway {
         List<ExternalOs> exs = ExternalOsConverter.toEntity(resList);
         long total = resPage.getTotal();
 
-        if (total == 0) {
+        if (total == 0 || exs.size() == 0) {
             throw new NoneResException("the external os does not exist");
         }
 
