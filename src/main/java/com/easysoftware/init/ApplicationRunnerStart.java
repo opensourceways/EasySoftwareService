@@ -42,12 +42,56 @@ public class ApplicationRunnerStart implements ApplicationRunner {
         File[] listFiles = secretsDir.listFiles();
         for (File file : listFiles) {
             if (file.delete()) {
-                LOGGER.info("File deleted successfully." + file.getName());
+                LOGGER.info(
+                        "ID:easysoftware " + "Client Ip: localhost " + "Type: Delete " + " Resource:"
+                                + file.getAbsolutePath()
+                                + " Result: success.");
             } else {
-                LOGGER.info("Delete file failed");
+                LOGGER.error(
+                        "ID:easysoftware " + "Client Ip: localhost " + "Type: Delete " + " Resource:"
+                                + file.getAbsolutePath()
+                                + " Result: failed.");
             }
         }
 
+        deleteCertFile();
+
+        return;
+    }
+
+    /**
+     * Delete cert file from obs.
+     *
+     */
+    private void deleteCertFile() {
+        String certDirStr = System.getenv("PWD").concat("/obs");
+
+        if (StringUtils.isBlank(certDirStr)) {
+            LOGGER.info("deletefail, env not found");
+            return;
+        }
+
+        File certDir = new File(certDirStr);
+
+        if (!certDir.isDirectory()) {
+            LOGGER.info("delete fail, not a dir");
+            return;
+        }
+
+        File[] listFiles = certDir.listFiles();
+        for (File file : listFiles) {
+            if (file.delete()) {
+                LOGGER.info(
+                        "ID:easysoftware " + "Client Ip: localhost " + "Type: Delete " + " Resource:"
+                                + file.getAbsolutePath()
+                                + " Result: success.");
+            } else {
+                LOGGER.error(
+                        "ID:easysoftware " + "Client Ip: localhost " + "Type: Delete " + " Resource:"
+                                + file.getAbsolutePath()
+                                + " Result: failed.");
+            }
+        }
         return;
     }
 
