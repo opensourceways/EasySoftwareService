@@ -1,10 +1,6 @@
 package com.easysoftware.domain.applicationversion.gateway;
 
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
-import com.easysoftware.domain.applicationversion.ApplicationVersion;
-import com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobject.ApplicationVersionDO;
-
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
