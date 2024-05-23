@@ -1,5 +1,6 @@
 package com.easysoftware.application.applicationpackage;
 
+import com.easysoftware.application.applicationpackage.dto.ApplicationPackageNameSearchCondition;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public interface ApplicationPackageService {
      *                  application packages.
      * @return ResponseEntity<Object>.
      */
-    ResponseEntity<Object> queryPkgByTags(ApplicationPackageSearchCondition condition);
+    ResponseEntity<Object> queryPkgByTags(ApplicationPackageNameSearchCondition condition);
 
     /**
      * Queries available openEuler version of application package.
@@ -39,7 +40,7 @@ public interface ApplicationPackageService {
      * @param condition The search condition.
      * @return Map containing the openEuler versions.
      */
-    ResponseEntity<Object> queryEulerVersionsByName(ApplicationPackageSearchCondition condition);
+    ResponseEntity<Object> queryEulerVersionsByName(ApplicationPackageNameSearchCondition condition);
 
     /**
      * Queries available openEuler archs of application package.
@@ -47,5 +48,5 @@ public interface ApplicationPackageService {
      * @param condition The search condition.
      * @return Map containing the openEuler versions.
      */
-    ResponseEntity<Object> queryEulerArchsByName(ApplicationPackageSearchCondition condition);
+    ResponseEntity<Object> queryEulerArchsByName(ApplicationPackageNameSearchCondition condition);
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.easysoftware.application.epkgpackage.EPKGPackageService;
+import com.easysoftware.application.epkgpackage.dto.EPKGPackageNameSearchCondition;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.common.aop.RequestLimitRedis;
 
@@ -43,7 +44,7 @@ public class EPKGPackageQueryAdapter {
      */
     @GetMapping("/eulerver")
     @RequestLimitRedis()
-    public ResponseEntity<Object> queryEulerVersionsByName(@Valid final EPKGPackageSearchCondition condition) {
+    public ResponseEntity<Object> queryEulerVersionsByName(@Valid final EPKGPackageNameSearchCondition condition) {
         return ePKGPackageService.queryEulerVersionsByName(condition);
     }
 
@@ -56,7 +57,7 @@ public class EPKGPackageQueryAdapter {
      */
     @GetMapping("/eulerarch")
     @RequestLimitRedis()
-    public ResponseEntity<Object> queryEulerArchsByName(@Valid final EPKGPackageSearchCondition condition) {
+    public ResponseEntity<Object> queryEulerArchsByName(@Valid final EPKGPackageNameSearchCondition condition) {
         return ePKGPackageService.queryEulerArchsByName(condition);
     }
 }

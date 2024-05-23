@@ -3,6 +3,7 @@ package com.easysoftware.infrastructure.applicationpackage.gatewayimpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.easysoftware.application.applicationpackage.dto.ApplicationPackageNameSearchCondition;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageEulerArchsVo;
@@ -97,12 +98,10 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
      * @return A map containing tags information
      */
     @Override
-    public Map<String, Object> queryTagsByName(final ApplicationPackageSearchCondition condition) {
-        Page<ApplicationPackageDO> page = createPage(condition);
+    public Map<String, Object> queryTagsByName(final ApplicationPackageNameSearchCondition condition) {
         QueryWrapper<ApplicationPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new ApplicationPackageDO(),
                 condition, null);
-        IPage<ApplicationPackageDO> resPage = appPkgMapper.selectPage(page, wrapper);
-        List<ApplicationPackageDO> appDOs = resPage.getRecords();
+        List<ApplicationPackageDO> appDOs = appPkgMapper.selectList(wrapper);
         List<ApplicationPackageTagsVo> aggregatePkgs = ApplicationPackageConverter.aggregateByTags(appDOs);
         long total = aggregatePkgs.size();
 
@@ -132,7 +131,6 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         List<ApplicationPackageDO> appDOs = resPage.getRecords();
         List<ApplicationPackageDetailVo> appDetails = ApplicationPackageConverter.toDetail(appDOs);
         long total = resPage.getTotal();
-
 
         if (total == 0 || appDetails.size() == 0) {
             throw new NoneResException("the image package does not exist");
@@ -265,7 +263,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
      * @return A map containing relevant information
      */
     @Override
-    public Map<String, Object> queryEulerVersionByName(final ApplicationPackageSearchCondition condition) {
+    public Map<String, Object> queryEulerVersionByName(final ApplicationPackageNameSearchCondition condition) {
         QueryWrapper<ApplicationPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new ApplicationPackageDO(),
                 condition, "");
         ApplicationPackageEulerVersionVo pkgVo = new ApplicationPackageEulerVersionVo();
@@ -291,7 +289,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
      * @return A map containing relevant information
      */
     @Override
-    public Map<String, Object> queryEulerArchsByName(final ApplicationPackageSearchCondition condition) {
+    public Map<String, Object> queryEulerArchsByName(final ApplicationPackageNameSearchCondition condition) {
         QueryWrapper<ApplicationPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new ApplicationPackageDO(),
                 condition, "");
         ApplicationPackageEulerArchsVo pkgVo = new ApplicationPackageEulerArchsVo();

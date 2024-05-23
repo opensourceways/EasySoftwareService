@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.easysoftware.application.applicationpackage.ApplicationPackageService;
+import com.easysoftware.application.applicationpackage.dto.ApplicationPackageNameSearchCondition;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.common.aop.RequestLimitRedis;
 
@@ -41,7 +42,7 @@ public class ApplicationPackageQueryAdapter {
      */
     @GetMapping("/tags")
     @RequestLimitRedis()
-    public ResponseEntity<Object> queryByTags(@Valid final ApplicationPackageSearchCondition condition) {
+    public ResponseEntity<Object> queryByTags(@Valid final ApplicationPackageNameSearchCondition condition) {
         return appPkgService.queryPkgByTags(condition);
     }
 
@@ -55,7 +56,8 @@ public class ApplicationPackageQueryAdapter {
      */
     @GetMapping("/eulerver")
     @RequestLimitRedis()
-    public ResponseEntity<Object> queryEulerVersionsByName(@Valid final ApplicationPackageSearchCondition condition) {
+    public ResponseEntity<Object> queryEulerVersionsByName(
+            @Valid final ApplicationPackageNameSearchCondition condition) {
         return appPkgService.queryEulerVersionsByName(condition);
     }
 
@@ -69,7 +71,7 @@ public class ApplicationPackageQueryAdapter {
      */
     @GetMapping("/eulerarch")
     @RequestLimitRedis()
-    public ResponseEntity<Object> queryEulerArchsByName(@Valid final ApplicationPackageSearchCondition condition) {
+    public ResponseEntity<Object> queryEulerArchsByName(@Valid final ApplicationPackageNameSearchCondition condition) {
         return appPkgService.queryEulerArchsByName(condition);
     }
 }

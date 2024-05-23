@@ -1,6 +1,7 @@
 package com.easysoftware.application.rpmpackage;
 
 import com.easysoftware.application.BaseIService;
+import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
@@ -31,7 +32,7 @@ public interface RPMPackageService extends BaseIService<RPMPackageDO> {
      * @param condition The search condition.
      * @return Map containing the openEuler versions.
      */
-    ResponseEntity<Object> queryEulerVersionsByName(RPMPackageSearchCondition condition);
+    ResponseEntity<Object> queryEulerVersionsByName(RPMPackageNameSearchCondition condition);
 
     /**
      * Queries available openEuler archs of RPM package.
@@ -39,7 +40,7 @@ public interface RPMPackageService extends BaseIService<RPMPackageDO> {
      * @param condition The search condition.
      * @return Map containing the openEuler versions.
      */
-    ResponseEntity<Object> queryEulerArchsByName(RPMPackageSearchCondition condition);
+    ResponseEntity<Object> queryEulerArchsByName(RPMPackageNameSearchCondition condition);
 
     /**
      * Checks if an application exists.
