@@ -3,6 +3,8 @@ package com.easysoftware.application.applicationpackage.dto;
 import org.hibernate.validator.constraints.Range;
 
 import com.easysoftware.common.constant.PackageConstant;
+
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,6 +38,7 @@ public class ApplicationPackageSearchCondition {
      * MAX_PAGE_NUM, default value is 1.
      */
     @Range(min = PackageConstant.MIN_PAGE_NUM, max = PackageConstant.MAX_PAGE_NUM)
+    @NotNull
     private Integer pageNum = 1;
 
     /**
@@ -43,6 +46,7 @@ public class ApplicationPackageSearchCondition {
      * MAX_PAGE_SIZE, default value is 10.
      */
     @Range(min = PackageConstant.MIN_PAGE_SIZE, max = PackageConstant.MAX_PAGE_SIZE)
+    @NotNull
     private Integer pageSize = 10;
 
     /**
