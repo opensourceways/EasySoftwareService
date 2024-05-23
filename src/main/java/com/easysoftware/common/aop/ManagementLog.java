@@ -3,18 +3,9 @@ package com.easysoftware.common.aop;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serial;
-import java.io.Serializable;
-
 @Getter
 @Setter
-public class ManagementLog implements Serializable {
-    /**
-     * Unique identifier for serialization purposes.
-     */
-    @Serial
-    private static final long serialVersionUID = 1L;
-
+public class ManagementLog {
     /**
      * Type of the log event.
      */

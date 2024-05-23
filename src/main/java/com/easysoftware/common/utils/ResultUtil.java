@@ -174,20 +174,4 @@ public final class ResultUtil {
         }
         return new ResponseEntity<>(res, status);
     }
-
-/*    public static ResponseEntity<Object> paramError(HttpStatus status, MessageCode msgCode, String parameter) {
-        ResultEntity res = new ResultEntity()
-                .setCode(status.value())
-                .setMsg(new ResultMsgEntity()
-                        .setCode(msgCode.getCode())
-                        .setMsgEn(msgCode.getMsgEn())
-                        .setMsgZh(msgCode.getMsgZh()))
-                .setError();
-        return new ResponseEntity<>(res, status);
-    }*/
-
-    /*public static ResponseEntity<Object> paramError(String parameter) {
-        String error = MessageCode.EC0004.getMsgEn() + ": " + parameter;
-        return fail(HttpStatus.BAD_REQUEST, MessageCode.EC0004, error);
-    }*/
 }
