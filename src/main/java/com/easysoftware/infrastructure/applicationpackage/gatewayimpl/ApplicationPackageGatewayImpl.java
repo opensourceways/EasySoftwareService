@@ -239,7 +239,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         List<String> allowedColumns = Arrays.asList("category", "os", "arch");
 
         if (!allowedColumns.contains(column)) {
-            throw new ParamErrorException("Unsupported column");
+            throw new ParamErrorException("the value of parameter column: category, os, arch");
         }
 
         QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
@@ -249,7 +249,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         try {
             rpmColumn = appPkgMapper.selectList(wrapper);
         } catch (BadSqlGrammarException e) {
-            throw new ParamErrorException("unsupported param");
+            throw new ParamErrorException("the value of parameter column: category, os, arch");
         }
 
         String underlineToCamelColumn = StringUtil.underlineToCamel(column);
