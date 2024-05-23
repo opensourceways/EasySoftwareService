@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     /**
@@ -44,7 +43,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Object> exception(final ParamErrorException e) {
         LOGGER.error(e.getMessage());
-        return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002, e.getMessage());
+        return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
     }
 
     /**
@@ -70,7 +69,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<Object> exception(final NoneResException e) {
         LOGGER.error(MessageCode.EC0002.getMsgEn());
-        return ResultUtil.fail(HttpStatus.NOT_FOUND, MessageCode.EC0009.getMsgEn() + ", detail: " + e.getMessage());
+        return ResultUtil.fail(HttpStatus.NOT_FOUND, MessageCode.EC0009.getMsgEn());
     }
 
     /**
@@ -96,7 +95,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<Object> exception(final AuthException e) {
         LOGGER.error(e.getMessage());
-        return ResultUtil.fail(HttpStatus.UNAUTHORIZED, MessageCode.EC00012, e.getMessage());
+        return ResultUtil.fail(HttpStatus.UNAUTHORIZED, MessageCode.EC00012);
     }
 
     /**
