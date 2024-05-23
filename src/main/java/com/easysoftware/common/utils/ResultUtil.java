@@ -89,6 +89,21 @@ public final class ResultUtil {
      * Create a ResponseEntity representing a failure response with the specified HTTP status and message code.
      *
      * @param status  The HTTP status for the response
+     * @param msg The msg
+     * @return A ResponseEntity object representing failure
+     */
+    public static ResponseEntity<Object> fail(HttpStatus status, String msg) {
+        ResultVo res = new ResultVo()
+                .setCode(status.value())
+                .setMsg(status.getReasonPhrase())
+                .setError(msg);
+        return new ResponseEntity<>(res, status);
+    }
+
+        /**
+     * Create a ResponseEntity representing a failure response with the specified HTTP status and message code.
+     *
+     * @param status  The HTTP status for the response
      * @param msgCode The message code associated with the failure response
      * @return A ResponseEntity object representing failure
      */

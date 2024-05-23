@@ -61,7 +61,6 @@ public final class ObjectMapperUtil {
         javaTimeModule.addSerializer(
                 LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern("HH:mm:ss")));
         objectMapper.setSerializationInclusion(Include.NON_NULL);
-        // objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         objectMapper.registerModule(javaTimeModule);
         // 设置时区
         objectMapper.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
