@@ -45,20 +45,6 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
     private String apppkgIconPath;
 
     /**
-     * Delete an application by name.
-     *
-     * @param name The name of the application to delete
-     * @return true if the delete operation was successful, false otherwise
-     */
-    @Override
-    public boolean delete(final String name) {
-        QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
-        wrapper.eq("name", name);
-        int mark = appPkgMapper.delete(wrapper);
-        return mark == 1;
-    }
-
-    /**
      * Check if an application exists based on its name.
      *
      * @param name The name of the application
@@ -69,36 +55,6 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
         wrapper.eq("name", name);
         return appPkgMapper.exists(wrapper);
-    }
-
-    /**
-     * Save an ApplicationPackage object.
-     *
-     * @param appPkg The ApplicationPackage object to save
-     * @return true if the save operation was successful, false otherwise
-     */
-    @Override
-    public boolean save(final ApplicationPackage appPkg) {
-        ApplicationPackageDO appPkgDO = ApplicationPackageConverter.toDataObjectForCreate(appPkg);
-        int mark = appPkgMapper.insert(appPkgDO);
-        return mark == 1;
-    }
-
-    /**
-     * Update an existing ApplicationPackage object.
-     *
-     * @param appPkg The ApplicationPackage object to update
-     * @return true if the update operation was successful, false otherwise
-     */
-    @Override
-    public boolean update(final ApplicationPackage appPkg) {
-        ApplicationPackageDO appPkgDO = ApplicationPackageConverter.toDataObjectForUpdate(appPkg);
-
-        UpdateWrapper<ApplicationPackageDO> wrapper = new UpdateWrapper<>();
-        wrapper.eq("name", appPkg.getName());
-
-        int mark = appPkgMapper.update(appPkgDO, wrapper);
-        return mark == 1;
     }
 
     /**

@@ -205,53 +205,6 @@ public final class ApplicationPackageConverter {
     }
 
     /**
-     * Convert an ApplicationPackage entity to an ApplicationPackageDO data object.
-     *
-     * @param appPkg The ApplicationPackage entity to convert
-     * @return An ApplicationPackageDO data object
-     */
-    public static ApplicationPackageDO toDataObject(final ApplicationPackage appPkg) {
-        ApplicationPackageDO appPkgDO = new ApplicationPackageDO();
-        BeanUtils.copyProperties(appPkg, appPkgDO);
-        return appPkgDO;
-    }
-
-    /**
-     * Convert an ApplicationPackage entity to an ApplicationPackageDO data object
-     * specifically for creation.
-     *
-     * @param appPkg The ApplicationPackage entity to convert
-     * @return An ApplicationPackageDO data object tailored for creation
-     */
-    public static ApplicationPackageDO toDataObjectForCreate(final ApplicationPackage appPkg) {
-        ApplicationPackageDO appPkgDO = toDataObject(appPkg);
-
-        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        String id = UuidUtil.getUUID32();
-        appPkgDO.setCreateAt(currentTime);
-        appPkgDO.setUpdateAt(currentTime);
-        appPkgDO.setId(id);
-
-        return appPkgDO;
-    }
-
-    /**
-     * Convert an ApplicationPackage entity to an ApplicationPackageDO data object
-     * specifically for update.
-     *
-     * @param appPkg The ApplicationPackage entity to convert
-     * @return An ApplicationPackageDO data object tailored for update
-     */
-    public static ApplicationPackageDO toDataObjectForUpdate(final ApplicationPackage appPkg) {
-        ApplicationPackageDO appPkgDO = toDataObject(appPkg);
-
-        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        appPkgDO.setUpdateAt(currentTime);
-
-        return appPkgDO;
-    }
-
-    /**
      * Convert a list of ApplicationPackageMenuVo objects to a list of
      * DomainPackageMenuVo objects.
      *
