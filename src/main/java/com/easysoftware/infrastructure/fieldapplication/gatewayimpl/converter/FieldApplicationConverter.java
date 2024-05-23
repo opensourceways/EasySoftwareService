@@ -4,7 +4,6 @@ import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSea
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.fieldpkg.dto.FieldPkgSearchCondition;
 import com.easysoftware.application.filedapplication.dto.FiledApplicationSerachCondition;
-import com.easysoftware.application.filedapplication.dto.InputFiledApplication;
 import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.common.entity.MessageCode;
@@ -34,18 +33,6 @@ public final class FieldApplicationConverter {
      * Logger instance for FieldApplicationConverter.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(FieldApplicationConverter.class);
-
-    /**
-     * Converts an InputFieldApplication object to a FieldApplicationDO data object.
-     *
-     * @param input The InputFieldApplication object to convert.
-     * @return The converted FieldApplicationDO data object.
-     */
-    public static FieldApplicationDO toDataObject(final InputFiledApplication input) {
-        FieldApplicationDO fieldApplicationDO = new FieldApplicationDO();
-        BeanUtils.copyProperties(input, fieldApplicationDO);
-        return fieldApplicationDO;
-    }
 
     /**
      * Converts a list of FieldApplicationDO objects to a list of FieldApplicationVo
