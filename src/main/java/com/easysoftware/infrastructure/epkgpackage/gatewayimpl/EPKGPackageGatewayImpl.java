@@ -9,6 +9,7 @@ import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageEulerArchsVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageEulerVersionVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
+import com.easysoftware.common.exception.NoneResException;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
@@ -104,6 +105,10 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         List<EPKGPackageDetailVo> rPMDetails = EPKGPackageConverter.toDetail(rPMDOs);
         long total = resPage.getTotal();
 
+        if (total == 0) {
+            throw new NoneResException("the epkg package does not exist");
+        }
+
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", total),
                 Map.entry("list", rPMDetails));
@@ -129,6 +134,10 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         List<EPKGPackageDO> rpmDOs = resPage.getRecords();
         List<EPKGPackageMenuVo> rPMMenus = EPKGPackageConverter.toMenu(rpmDOs);
         long total = resPage.getTotal();
+
+        if (total == 0) {
+            throw new NoneResException("the epkg package does not exist");
+        }
 
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", total),

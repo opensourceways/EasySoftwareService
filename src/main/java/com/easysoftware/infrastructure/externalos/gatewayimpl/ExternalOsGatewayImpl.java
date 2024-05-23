@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.externalos.dto.ExternalOsSearchCondiiton;
+import com.easysoftware.common.exception.NoneResException;
 import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.domain.externalos.ExternalOs;
 import com.easysoftware.domain.externalos.ExternalOsUnique;
@@ -40,6 +41,10 @@ public class ExternalOsGatewayImpl implements ExternalOsGateway {
         List<ExternalOsDO> resList = resPage.getRecords();
         List<ExternalOs> exs = ExternalOsConverter.toEntity(resList);
         long total = resPage.getTotal();
+
+        if (total == 0) {
+            throw new NoneResException("the external os does not exist");
+        }
 
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", total),

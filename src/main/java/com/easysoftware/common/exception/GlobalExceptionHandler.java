@@ -61,6 +61,19 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Handles exceptions of type EnumValidException.
+     *
+     * @param e The EnumValidException to handle
+     * @return ResponseEntity containing details about the exception
+     */
+    @ExceptionHandler(NoneResException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Object> exception(final NoneResException e) {
+        LOGGER.error(MessageCode.EC0002.getMsgEn());
+        return ResultUtil.fail(HttpStatus.NOT_FOUND, MessageCode.EC0009.getMsgEn() + ", detail: " + e.getMessage());
+    }
+
+    /**
      * Handles exceptions of type AppPkgIconException.
      *
      * @param e The AppPkgIconException to handle
