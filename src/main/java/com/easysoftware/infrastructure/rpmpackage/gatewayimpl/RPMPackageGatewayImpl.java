@@ -38,7 +38,6 @@ import java.util.Map;
 @Component
 @Slf4j
 public class RPMPackageGatewayImpl implements RPMPackageGateway {
-
     /**
      * Autowired RPMPackageDOMapper for database operations.
      */
@@ -51,24 +50,11 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     @Autowired
     private ObjectMapper objectMapper;
 
-
     /**
      * Logger for RPMPackageGatewayImpl class.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(RPMPackageGatewayImpl.class);
 
-    /**
-     * Delete RPM packages by their IDs.
-     *
-     * @param id A list of IDs of RPM packages to delete
-     * @return the number of rows deleted
-     */
-    @Override
-    public int delete(final List<String> id) {
-        QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
-        wrapper.in("pkg_id", id);
-        return rPMPkgMapper.delete(wrapper);
-    }
 
     /**
      * Check if an RPM package exists based on its unique identifier.
@@ -114,35 +100,6 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         );
 
         return res;
-    }
-
-    /**
-     * Save an RPMPackage object.
-     *
-     * @param rPMPkg The RPMPackage object to save
-     * @return true if the save operation was successful, false otherwise
-     */
-    @Override
-    public boolean save(final RPMPackage rPMPkg) {
-        RPMPackageDO rPMPkgDO = RPMPackageConverter.toDataObjectForCreate(rPMPkg);
-        int mark = rPMPkgMapper.insert(rPMPkgDO);
-        return mark == 1;
-    }
-
-    /**
-     * Update an existing RPMPackage object.
-     *
-     * @param rPMPkg The RPMPackage object to update
-     * @return the number of rows affected by the update operation
-     */
-    @Override
-    public int update(final RPMPackage rPMPkg) {
-        RPMPackageDO rPMPkgDO = RPMPackageConverter.toDataObjectForUpdate(rPMPkg);
-
-        UpdateWrapper<RPMPackageDO> wrapper = new UpdateWrapper<>();
-        wrapper.eq("pkg_id", rPMPkg.getPkgId());
-
-        return rPMPkgMapper.update(rPMPkgDO, wrapper);
     }
 
     /**

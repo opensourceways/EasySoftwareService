@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class ClassField {
-
-
     // Private constructor to prevent instantiation of the utility class
     private ClassField() {
         // private constructor to hide the implicit public one

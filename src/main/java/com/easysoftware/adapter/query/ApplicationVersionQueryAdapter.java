@@ -30,8 +30,6 @@ public class ApplicationVersionQueryAdapter {
      */
     @GetMapping()
     @LimitRequest()
-    // @OneidToken
-    // @CompatibleToken
     public ResponseEntity<Object> searchAppVersion(@Valid final ApplicationVersionSearchCondition condition) {
         return appVersionService.searchAppVersion(condition);
     }

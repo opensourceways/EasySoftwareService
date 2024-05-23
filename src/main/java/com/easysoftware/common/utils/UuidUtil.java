@@ -3,7 +3,6 @@ package com.easysoftware.common.utils;
 import java.util.UUID;
 
 public final class UuidUtil {
-
     // Private constructor to prevent instantiation of the utility class
     private UuidUtil() {
         // private constructor to hide the implicit public one

@@ -29,30 +29,6 @@ public interface RPMPackageGateway {
     boolean existRPM(String id);
 
     /**
-     * Save an RPMPackage object.
-     *
-     * @param appPkg The RPMPackage object to save
-     * @return true if the save operation was successful, false otherwise
-     */
-    boolean save(RPMPackage appPkg);
-
-    /**
-     * Update an existing RPMPackage object.
-     *
-     * @param appPkg The RPMPackage object to update
-     * @return the number of rows affected by the update operation
-     */
-    int update(RPMPackage appPkg);
-
-    /**
-     * Delete RPM packages by their IDs.
-     *
-     * @param id A list of IDs of RPM packages to delete
-     * @return the number of rows deleted
-     */
-    int delete(List<String> id);
-
-    /**
      * Query detailed information based on the provided search condition for RPM packages.
      *
      * @param condition The search condition for querying RPM package details

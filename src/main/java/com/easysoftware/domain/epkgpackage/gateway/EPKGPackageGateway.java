@@ -29,30 +29,6 @@ public interface EPKGPackageGateway {
     boolean existEPKG(String id);
 
     /**
-     * Save an EPKGPackage object.
-     *
-     * @param appPkg The EPKGPackage object to save
-     * @return true if the save operation was successful, false otherwise
-     */
-    boolean save(EPKGPackage appPkg);
-
-    /**
-     * Update an existing EPKGPackage object.
-     *
-     * @param appPkg The EPKGPackage object to update
-     * @return the number of rows affected by the update operation
-     */
-    int update(EPKGPackage appPkg);
-
-    /**
-     * Delete EPKG packages by their IDs.
-     *
-     * @param id A list of IDs of EPKG packages to delete
-     * @return the number of rows deleted
-     */
-    int delete(List<String> id);
-
-    /**
      * Query detailed information based on the provided search condition.
      *
      * @param condition The search condition for querying EPKG package details

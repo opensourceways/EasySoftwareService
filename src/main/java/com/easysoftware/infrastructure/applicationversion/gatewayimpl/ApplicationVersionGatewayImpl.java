@@ -27,22 +27,6 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
     @Autowired
     private ApplicationVersionDOMapper appVersionMapper;
 
-
-    /**
-     * Delete an application by name.
-     *
-     * @param name The name of the application to delete
-     * @return true if the delete operation was successful, false otherwise
-     */
-    @Override
-    public boolean delete(final String name) {
-        QueryWrapper<ApplicationVersionDO> wrapper = new QueryWrapper<>();
-        wrapper.in("name", name);
-        int mark = appVersionMapper.delete(wrapper);
-        return mark == 1;
-    }
-
-
     /**
      * Check if an application exists based on its name.
      *
@@ -54,38 +38,6 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
         QueryWrapper<ApplicationVersionDO> wrapper = new QueryWrapper<>();
         wrapper.eq("name", name);
         return appVersionMapper.exists(wrapper);
-    }
-
-
-    /**
-     * Save an ApplicationVersion object.
-     *
-     * @param appVersion The ApplicationVersion object to save
-     * @return true if the save operation was successful, false otherwise
-     */
-    @Override
-    public boolean save(final ApplicationVersion appVersion) {
-        ApplicationVersionDO appVersionDO = ApplicationVersionConvertor.toDataObjectForCreate(appVersion);
-        int mark = appVersionMapper.insert(appVersionDO);
-        return mark == 1;
-    }
-
-
-    /**
-     * Update an existing ApplicationVersion object.
-     *
-     * @param appVersion The ApplicationVersion object to update
-     * @return true if the update operation was successful, false otherwise
-     */
-    @Override
-    public boolean update(final ApplicationVersion appVersion) {
-        ApplicationVersionDO appVersionDO = ApplicationVersionConvertor.toDataObjectForUpdate(appVersion);
-
-        UpdateWrapper<ApplicationVersionDO> wrapper = new UpdateWrapper<>();
-        wrapper.eq("name", appVersion.getName());
-
-        int mark = appVersionMapper.update(appVersionDO, wrapper);
-        return mark == 1;
     }
 
     /**

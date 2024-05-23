@@ -18,30 +18,6 @@ public interface ApplicationPackageGateway {
     boolean existApp(String name);
 
     /**
-     * Save an ApplicationPackage object.
-     *
-     * @param appPkg The ApplicationPackage object to save
-     * @return true if the save operation was successful, false otherwise
-     */
-    boolean save(ApplicationPackage appPkg);
-
-    /**
-     * Update an existing ApplicationPackage object.
-     *
-     * @param appPkg The ApplicationPackage object to update
-     * @return true if the update operation was successful, false otherwise
-     */
-    boolean update(ApplicationPackage appPkg);
-
-    /**
-     * Delete an application by name.
-     *
-     * @param name The name of the application to delete
-     * @return true if the delete operation was successful, false otherwise
-     */
-    boolean delete(String name);
-
-    /**
      * Query menu items based on the provided search condition.
      *
      * @param condition The search condition for querying menu items

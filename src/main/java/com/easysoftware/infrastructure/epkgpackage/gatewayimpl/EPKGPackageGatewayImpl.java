@@ -54,19 +54,6 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
     private ObjectMapper objectMapper;
 
     /**
-     * Delete EPKG packages by their IDs.
-     *
-     * @param ids A list of IDs of EPKG packages to delete
-     * @return the number of rows deleted
-     */
-    @Override
-    public int delete(final List<String> ids) {
-        QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
-        wrapper.in("pkg_id", ids);
-        return ePKGPkgMapper.delete(wrapper);
-    }
-
-    /**
      * Check if an EPKG package exists based on its unique identifier.
      *
      * @param unique The unique identifier of the EPKG package
@@ -149,35 +136,6 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
                 Map.entry("list", rPMMenus)
         );
         return res;
-    }
-
-    /**
-     * Save an EPKGPackage object.
-     *
-     * @param epkg The EPKGPackage object to save
-     * @return true if the save operation was successful, false otherwise
-     */
-    @Override
-    public boolean save(final EPKGPackage epkg) {
-        EPKGPackageDO epkgPackageDO = EPKGPackageConverter.toDataObjectForCreate(epkg);
-        int mark = ePKGPkgMapper.insert(epkgPackageDO);
-        return mark == 1;
-    }
-
-    /**
-     * Update an existing EPKGPackage object.
-     *
-     * @param epkg The EPKGPackage object to update
-     * @return the number of rows affected by the update operation
-     */
-    @Override
-    public int update(final EPKGPackage epkg) {
-        EPKGPackageDO epkgPackageDO = EPKGPackageConverter.toDataObjectForUpdate(epkg);
-
-        UpdateWrapper<EPKGPackageDO> wrapper = new UpdateWrapper<>();
-        wrapper.eq("pkg_id", epkg.getPkgId());
-
-        return ePKGPkgMapper.update(epkgPackageDO, wrapper);
     }
 
     /**

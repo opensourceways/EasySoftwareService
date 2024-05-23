@@ -17,8 +17,6 @@ import java.util.stream.Collectors;
 
 
 public final class QueryWrapperUtil {
-
-
     // Private constructor to prevent instantiation of the utility class
     private QueryWrapperUtil() {
         // private constructor to hide the implicit public one

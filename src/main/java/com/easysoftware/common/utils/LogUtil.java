@@ -18,8 +18,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public final class LogUtil {
-
-
     // Private constructor to prevent instantiation of the utility class
     private LogUtil() {
         // private constructor to hide the implicit public one

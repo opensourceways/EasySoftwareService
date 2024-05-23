@@ -1,8 +1,6 @@
 package com.easysoftware.common.constant;
 
 public final class PackageConstant {
-
-
     // Private constructor to prevent instantiation of the PackageConstant class
     private PackageConstant() {
         // private constructor to hide the implicit public one
@@ -33,5 +31,4 @@ public final class PackageConstant {
      * Maximum field length allowed.
      */
     public static final int MAX_FIELD_LENGTH = 1000;
-
 }

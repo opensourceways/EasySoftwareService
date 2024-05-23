@@ -64,21 +64,6 @@ public class ExternalOsGatewayImpl implements ExternalOsGateway {
     }
 
     /**
-     * Delete external operating systems by their IDs.
-     *
-     * @param ids A list of IDs of external operating systems to delete
-     * @return the number of rows deleted
-     */
-    @Override
-    public int delete(final List<String> ids) {
-        QueryWrapper<ExternalOsDO> wrapper = new QueryWrapper<>();
-        wrapper.in("id", ids);
-        int mark = externalOsDOMapper.delete(wrapper);
-        return mark;
-    }
-
-
-    /**
      * Check if an external operating system exists based on its unique identifier.
      *
      * @param uni The unique identifier of the external operating system
@@ -102,33 +87,5 @@ public class ExternalOsGatewayImpl implements ExternalOsGateway {
         QueryWrapper<ExternalOsDO> wrapper = new QueryWrapper<>();
         wrapper.eq("id", id);
         return externalOsDOMapper.exists(wrapper);
-    }
-
-    /**
-     * Save an ExternalOs object.
-     *
-     * @param ex The ExternalOs object to save
-     * @return true if the save operation was successful, false otherwise
-     */
-    @Override
-    public boolean save(final ExternalOs ex) {
-        ExternalOsDO exDO = ExternalOsConverter.toDataObjectForCreate(ex);
-        int mark = externalOsDOMapper.insert(exDO);
-        return mark == 1;
-    }
-
-
-    /**
-     * Update an existing ExternalOs object.
-     *
-     * @param ex The ExternalOs object to update
-     * @return the number of rows affected by the update operation
-     */
-    @Override
-    public int update(final ExternalOs ex) {
-        ExternalOsDO exDO = ExternalOsConverter.toDataObjectForUpdate(ex);
-        UpdateWrapper<ExternalOsDO> wrapper = new UpdateWrapper<>();
-        wrapper.eq("id", ex.getId());
-        return externalOsDOMapper.update(exDO, wrapper);
     }
 }
