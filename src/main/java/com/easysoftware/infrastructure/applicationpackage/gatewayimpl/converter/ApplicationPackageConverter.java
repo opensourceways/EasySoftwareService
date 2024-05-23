@@ -250,6 +250,12 @@ public final class ApplicationPackageConverter {
                     continue;
                 }
                 Object obj = field.get(appDo);
+
+                if (obj == null) {
+                    LOGGER.warn("Field value is null for appDo: {}", appDo);
+                    continue;
+                }
+
                 if (!(obj instanceof String)) {
                     continue;
                 }

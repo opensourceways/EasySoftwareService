@@ -72,7 +72,8 @@ public final class FieldPkgConverter {
     }
 
     /**
-     * Extracts a specific column from a list of FieldApplicationDO objects and returns it as a list of strings.
+     * Extracts a specific column from a list of FieldApplicationDO objects and
+     * returns it as a list of strings.
      *
      * @param columnList The list of FieldApplicationDO objects.
      * @param column     The name of the column to extract.
@@ -88,6 +89,12 @@ public final class FieldPkgConverter {
                     continue;
                 }
                 Object obj = field.get(pkg);
+
+                if (obj == null) {
+                    LOGGER.warn("Field value is null for pkg: {}", pkg);
+                    continue;
+                }
+
                 if (!(obj instanceof String)) {
                     continue;
                 }

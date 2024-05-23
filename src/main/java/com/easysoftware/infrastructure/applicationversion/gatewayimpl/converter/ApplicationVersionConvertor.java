@@ -37,7 +37,8 @@ public final class ApplicationVersionConvertor {
     }
 
     /**
-     * Convert a list of ApplicationVersionDO objects to a list of ApplicationVersion entities.
+     * Convert a list of ApplicationVersionDO objects to a list of
+     * ApplicationVersion entities.
      *
      * @param appDOs The list of ApplicationVersionDO objects to convert
      * @return A list of ApplicationVersion entities
@@ -52,10 +53,11 @@ public final class ApplicationVersionConvertor {
     }
 
     /**
-     * Extracts a specific column from a list of RPMPackageDO objects and returns it as a list of strings.
+     * Extracts a specific column from a list of RPMPackageDO objects and returns it
+     * as a list of strings.
      *
      * @param columnList The list of ApplicationVersionDO objects.
-     * @param column The name of the column to extract.
+     * @param column     The name of the column to extract.
      * @return A list of strings representing the extracted column values.
      */
     public static List<String> toColumn(final List<ApplicationVersionDO> columnList, final String column) {
@@ -68,6 +70,12 @@ public final class ApplicationVersionConvertor {
                     continue;
                 }
                 Object obj = field.get(rPMPkgDO);
+
+                if (obj == null) {
+                    LOGGER.warn("Field value is null for rPMPkgDO: {}", rPMPkgDO);
+                    continue;
+                }
+
                 if (!(obj instanceof String)) {
                     continue;
                 }
@@ -80,4 +88,3 @@ public final class ApplicationVersionConvertor {
         return res;
     }
 }
-
