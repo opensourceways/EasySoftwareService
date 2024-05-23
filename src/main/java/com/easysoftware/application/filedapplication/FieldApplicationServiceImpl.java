@@ -36,6 +36,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -285,8 +287,30 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
             tags.add("EPKG");
         }
 
-        res.put("tags", tags);
+        List<String> sortedTags = sortTags(tags);
+        res.put("tags", sortedTags);
         return ResultUtil.success(HttpStatus.OK, res);
+    }
+
+    /**
+     * Sort tags.
+     *
+     * @param tags The tags.
+     * @return An list.
+     */
+    private List<String> sortTags(Set<String> tags) {
+        List<String> list = new ArrayList<>(tags);
+
+        Comparator<String> myCom = (s1, s2) -> {
+            List<String> orders = List.of("RPM", "IMAGE", "EPKG");
+            Integer i1 = orders.indexOf(s1);
+            Integer i2 = orders.indexOf(s2);
+            return i1.compareTo(i2);
+        };
+
+        Collections.sort(list, myCom);
+
+        return list;
     }
 
     /**
