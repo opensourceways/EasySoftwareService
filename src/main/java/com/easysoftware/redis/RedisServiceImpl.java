@@ -118,8 +118,8 @@ public class RedisServiceImpl implements RedisService {
         }
 
         // key存在时执行删除
-        boolean keyDelte = redisGateway.delteKey(key);
-        if (!keyDelte) {
+        boolean keydelete = redisGateway.deleteKey(key);
+        if (!keydelete) {
             Map<String, Object> res = Map.ofEntries(
                     Map.entry("key", key),
                     Map.entry("msg", MessageCode.EC00017.getMsgZh())
@@ -171,7 +171,7 @@ public class RedisServiceImpl implements RedisService {
                 continue;
             }
 
-            boolean isSuccess = redisGateway.delteKey(key);
+            boolean isSuccess = redisGateway.deleteKey(key);
             if (!isSuccess) {
                 resMap.put(key, "key delete failed");
             } else {
