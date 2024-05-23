@@ -1,10 +1,8 @@
 package com.easysoftware.domain.externalos.gateway;
 
 import com.easysoftware.application.externalos.dto.ExternalOsSearchCondiiton;
-import com.easysoftware.domain.externalos.ExternalOs;
 import com.easysoftware.domain.externalos.ExternalOsUnique;
 
-import java.util.List;
 import java.util.Map;
 
 public interface ExternalOsGateway {

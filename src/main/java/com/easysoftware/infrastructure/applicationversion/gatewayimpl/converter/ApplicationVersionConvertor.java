@@ -1,7 +1,6 @@
 package com.easysoftware.infrastructure.applicationversion.gatewayimpl.converter;
 
 import com.easysoftware.common.entity.MessageCode;
-import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.applicationversion.ApplicationVersion;
 import com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobject.ApplicationVersionDO;
 
@@ -10,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
 import java.lang.reflect.Field;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 

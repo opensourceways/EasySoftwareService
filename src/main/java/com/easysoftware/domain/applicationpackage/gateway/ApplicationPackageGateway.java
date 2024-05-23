@@ -3,7 +3,6 @@ package com.easysoftware.domain.applicationpackage.gateway;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
-import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 
 import java.util.List;
 import java.util.Map;
