@@ -1,6 +1,7 @@
 package com.easysoftware.application.rpmpackage;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
@@ -73,7 +74,7 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
      * @return Map containing the RPM package menu.
      */
     @Override
-    public ResponseEntity<Object> queryEulerVersionsByName(RPMPackageSearchCondition condition) {
+    public ResponseEntity<Object> queryEulerVersionsByName(RPMPackageNameSearchCondition condition) {
         Map<String, Object> res = rPMPkgGateway.queryEulerVersionByName(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }
@@ -85,7 +86,7 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
      * @return Map containing the RPM package menu.
      */
     @Override
-    public ResponseEntity<Object> queryEulerArchsByName(RPMPackageSearchCondition condition) {
+    public ResponseEntity<Object> queryEulerArchsByName(RPMPackageNameSearchCondition condition) {
         Map<String, Object> res = rPMPkgGateway.queryEulerArchsByName(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }

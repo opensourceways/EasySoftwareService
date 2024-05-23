@@ -1,6 +1,7 @@
 package com.easysoftware.application.applicationversion;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.easysoftware.application.applicationversion.dto.ApplicationColumnSearchCondition;
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
 import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
@@ -59,7 +60,7 @@ public class ApplicationVersionServiceImpl extends ServiceImpl<ApplicationVersio
      * @param condition condition.
      */
     @Override
-    public ResponseEntity<Object> searchAppVerColumn(ApplicationVersionSearchCondition condition) {
+    public ResponseEntity<Object> searchAppVerColumn(ApplicationColumnSearchCondition condition) {
         List<String> columns = QueryWrapperUtil.splitStr(condition.getColumn());
         Map<String, List<String>> res = appVersionGateway.queryColumn(columns);
         return ResultUtil.success(HttpStatus.OK, res);

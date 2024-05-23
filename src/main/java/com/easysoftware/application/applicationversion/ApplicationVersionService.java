@@ -1,6 +1,7 @@
 package com.easysoftware.application.applicationversion;
 
 import com.easysoftware.application.BaseIService;
+import com.easysoftware.application.applicationversion.dto.ApplicationColumnSearchCondition;
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
 import com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobject.ApplicationVersionDO;
 import org.springframework.http.ResponseEntity;
@@ -20,5 +21,5 @@ public interface ApplicationVersionService extends BaseIService<ApplicationVersi
      * @param condition The search conditions to filter application versions.
      * @return ResponseEntity<Object>.
      */
-    ResponseEntity<Object> searchAppVerColumn(ApplicationVersionSearchCondition condition);
+    ResponseEntity<Object> searchAppVerColumn(ApplicationColumnSearchCondition condition);
 }
