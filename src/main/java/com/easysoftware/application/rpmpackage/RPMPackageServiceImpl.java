@@ -11,6 +11,7 @@ import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 import com.easysoftware.infrastructure.mapper.RPMPackageDOMapper;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Value;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,6 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
      */
     @Resource
     private RPMPackageGateway rPMPkgGateway;
-
     /**
      * Value for Repository Maintainer API.
      */

@@ -97,12 +97,26 @@ public class EPKGPackageServiceImpl extends
     }
 
     /**
-     * Saves a single data object.
+     * Queries all available openEuler version of epkg package.
      *
-     * @param dataObject Data object to save.
+     * @param condition The search condition.
+     * @return Map containing the epkg package menu.
      */
     @Override
-    public void saveDataObject(final String dataObject) {
+    public ResponseEntity<Object> queryEulerVersionsByName(EPKGPackageSearchCondition condition) {
+        Map<String, Object> res = ePKGPackageGateway.queryEulerVersionByName(condition);
+        return ResultUtil.success(HttpStatus.OK, res);
     }
 
+    /**
+     * Queries all available openEuler archs of epkg package.
+     *
+     * @param condition The search condition.
+     * @return Map containing the epkg package menu.
+     */
+    @Override
+    public ResponseEntity<Object> queryEulerArchsByName(EPKGPackageSearchCondition condition) {
+        Map<String, Object> res = ePKGPackageGateway.queryEulerArchsByName(condition);
+        return ResultUtil.success(HttpStatus.OK, res);
+    }
 }
