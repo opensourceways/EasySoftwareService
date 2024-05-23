@@ -123,7 +123,7 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
             List<Map<String, Object>> cateMap = searchMainPage();
             return ResultUtil.success(HttpStatus.OK, cateMap);
         } else {
-            throw new ParamErrorException("unsupported param");
+            throw new ParamErrorException("the value of parameter name: apppkg, rpmpkg, epkgpkg, all");
         }
     }
 
@@ -248,7 +248,7 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
             Map<String, List<String>> res = fieldPkgGateway.queryColumn(columns);
             return ResultUtil.success(HttpStatus.OK, res);
         } else {
-            throw new ParamErrorException("unsupported param");
+            throw new ParamErrorException("the value of parameter name: apppkg, rpmpkg, epkgpkg, all");
         }
     }
 

@@ -104,7 +104,7 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
         List<String> allowedColumns = Arrays.asList("category", "os", "arch");
 
         if (!allowedColumns.contains(column)) {
-            throw new ParamErrorException("Unsupported column");
+            throw new ParamErrorException("the value of parameter column: category, os, arch");
         }
 
         QueryWrapper<FieldPkgDO> wrapper = new QueryWrapper<>();
@@ -114,7 +114,7 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
         try {
             columnList = mapper.selectList(wrapper);
         } catch (BadSqlGrammarException e) {
-            throw new ParamErrorException("unsupported param");
+            throw new ParamErrorException("the value of parameter column: category, os, arch");
         }
 
         String underlineToCamelColumn = StringUtil.underlineToCamel(column);

@@ -176,7 +176,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         } else if ("all".equals(condition.getName())) {
             return searchAllEntity(condition);
         } else {
-            throw new ParamErrorException("unsupported param");
+            throw new ParamErrorException("the value of parameter name: apppkg, rpmpkg, epkgpkg, all");
         }
     }
 
@@ -201,7 +201,7 @@ public class DomainPackageServiceImpl implements DomainPackageService {
         // 根据请求参数生成唯一redis key
         String redisKeyStr = RedisUtil.objectToString(condition);
         String redisKeyFormat = "domainPage_%s";
-        String redisKey = String.format(redisKeyFormat, DigestUtils.sha256Hex(redisKeyStr));
+        String redisKey = String.format(Locale.ROOT, redisKeyFormat, DigestUtils.sha256Hex(redisKeyStr));
         try {
             // 结果未过期，直接返回
             if (redisGateway.hasKey(redisKey)) {
@@ -355,29 +355,16 @@ public class DomainPackageServiceImpl implements DomainPackageService {
     public ResponseEntity<Object> searchColumn(final DomainColumnCondition condition) {
         List<String> columns = QueryWrapperUtil.splitStr(condition.getColumn());
         if ("rpmpkg".equals(condition.getName())) {
-            try {
-                Map<String, List<String>> res = rpmPackageGateway.queryColumn(columns);
-                return ResultUtil.success(HttpStatus.OK, res);
-            } catch (ParamErrorException e) {
-                return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
-            }
+            Map<String, List<String>> res = rpmPackageGateway.queryColumn(columns);
+            return ResultUtil.success(HttpStatus.OK, res);
         } else if ("epkgpkg".equals(condition.getName())) {
-            try {
-                Map<String, List<String>> res = epkgPackageGateway.queryColumn(columns);
-                return ResultUtil.success(HttpStatus.OK, res);
-            } catch (ParamErrorException e) {
-                return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
-            }
+            Map<String, List<String>> res = epkgPackageGateway.queryColumn(columns);
+            return ResultUtil.success(HttpStatus.OK, res);
         } else if ("apppkg".equals(condition.getName())) {
-            try {
-                Map<String, List<String>> res = applicationPackageGateway.queryColumn(columns);
-                return ResultUtil.success(HttpStatus.OK, res);
-            } catch (ParamErrorException e) {
-                return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0002);
-            }
-
+            Map<String, List<String>> res = applicationPackageGateway.queryColumn(columns);
+            return ResultUtil.success(HttpStatus.OK, res);
         } else {
-            throw new ParamErrorException("unsupported param");
+            throw new ParamErrorException("the value of parameter name: apppkg, rpmpkg, epkgpkg, all");
         }
     }
 
