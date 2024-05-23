@@ -1,7 +1,6 @@
 
 package com.easysoftware.redis;
 
-import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ResultUtil;
 import jakarta.annotation.Resource;
 import org.springframework.http.HttpStatus;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -36,8 +34,7 @@ public class RedisServiceImpl implements RedisService {
 
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("key", key),
-                Map.entry("msg", "Successfully set the key")
-        );
+                Map.entry("msg", "Successfully set the key"));
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
@@ -53,8 +50,7 @@ public class RedisServiceImpl implements RedisService {
 
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("key", key),
-                Map.entry("value", value)
-        );
+                Map.entry("value", value));
 
         return ResultUtil.success(HttpStatus.OK, res);
     }
@@ -70,14 +66,13 @@ public class RedisServiceImpl implements RedisService {
      */
     @Override
     public ResponseEntity<Object> setKeyWithExpire(final String key, final String value,
-                                                   final long timeout, final TimeUnit unit) {
+            final long timeout, final TimeUnit unit) {
         redisGateway.setWithExpire(key, value, timeout, unit);
 
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("key", key),
                 Map.entry("timeout", timeout),
-                Map.entry("msg", "Successfully set the key with expiration")
-        );
+                Map.entry("msg", "Successfully set the key with expiration"));
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
@@ -92,43 +87,9 @@ public class RedisServiceImpl implements RedisService {
         boolean keyExsit = redisGateway.hasKey(key);
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("key", key),
-                Map.entry("keyExsit", keyExsit)
-        );
+                Map.entry("keyExsit", keyExsit));
 
         return ResultUtil.success(HttpStatus.OK, res);
-    }
-
-
-    /**
-     * Delete a key from Redis.
-     *
-     * @param key The key to delete.
-     * @return ResponseEntity with the result of the operation.
-     */
-    @Override
-    public ResponseEntity<Object> deleteKey(final String key) {
-        boolean keyExsit = redisGateway.hasKey(key);
-        // key检查 不存在key直接返回
-        if (!keyExsit) {
-            Map<String, Object> res = Map.ofEntries(
-                    Map.entry("key", key),
-                    Map.entry("msg", MessageCode.EC00016.getMsgZh())
-            );
-            return ResultUtil.success(HttpStatus.OK, res);
-        }
-
-        // key存在时执行删除
-        boolean keydelete = redisGateway.deleteKey(key);
-        if (!keydelete) {
-            Map<String, Object> res = Map.ofEntries(
-                    Map.entry("key", key),
-                    Map.entry("msg", MessageCode.EC00017.getMsgZh())
-            );
-            return ResultUtil.success(HttpStatus.OK, res);
-        }
-
-        String msg = String.format(Locale.ROOT, "成功删除key %s", key);
-        return ResultUtil.success(HttpStatus.OK, msg);
     }
 
     /**
@@ -144,12 +105,10 @@ public class RedisServiceImpl implements RedisService {
 
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", resKeys.size()),
-                Map.entry("keys", resKeys)
-        );
+                Map.entry("keys", resKeys));
 
         return ResultUtil.success(HttpStatus.OK, res);
     }
-
 
     /**
      * Update Redis based on a namespace.
