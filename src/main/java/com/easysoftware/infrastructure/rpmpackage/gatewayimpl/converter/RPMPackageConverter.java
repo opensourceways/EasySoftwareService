@@ -59,6 +59,12 @@ public final class RPMPackageConverter {
                     continue;
                 }
                 Object obj = field.get(rPMPkgDO);
+
+                if (obj == null) {
+                    LOGGER.warn("Field value is null for pkg: {}", rPMPkgDO);
+                    continue;
+                }
+
                 if (!(obj instanceof String)) {
                     continue;
                 }

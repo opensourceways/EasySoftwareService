@@ -107,7 +107,9 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     @Override
     public boolean existRPM(final String id) {
         QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
-        wrapper.eq("id", id);
+        if (id != null) {
+            wrapper.eq("id", id);
+        }
         return rPMPkgMapper.exists(wrapper);
     }
 
@@ -246,9 +248,11 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
                 condition, "");
         RPMPackageEulerVersionVo pkgVo = new RPMPackageEulerVersionVo();
         List<String> columns = ClassField.getFieldNames(pkgVo);
-        wrapper.eq("name", condition.getName())
-                .select(columns)
-                .groupBy("os", "arch");
+        if (condition.getName() != null) {
+            wrapper.eq("name", condition.getName());
+        }
+        wrapper.select(columns);
+        wrapper.groupBy("os", "arch");
         List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
         List<RPMPackageEulerVersionVo> versions = RPMPackageConverter.toVersion(rpmList);
         Map<String, Object> res = Map.ofEntries(
@@ -270,9 +274,11 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
                 condition, "");
         RPMPackageEulerArchsVo pkgVo = new RPMPackageEulerArchsVo();
         List<String> columns = ClassField.getFieldNames(pkgVo);
-        wrapper.eq("name", condition.getName())
-                .select(columns)
-                .groupBy("arch");
+        if (condition.getName() != null) {
+            wrapper.eq("name", condition.getName());
+        }
+        wrapper.select(columns);
+        wrapper.groupBy("arch");
         List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
         List<RPMPackageEulerArchsVo> versions = RPMPackageConverter.toArchs(rpmList);
         Map<String, Object> res = Map.ofEntries(
@@ -290,7 +296,9 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     @Override
     public RPMPackageMenuVo selectOne(final String name) {
         QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
-        wrapper.eq("name", name);
+        if (name != null) {
+            wrapper.eq("name", name);
+        }
         wrapper.select("pkg_id");
         wrapper.last("order by rpm_update_at desc limit 1");
         List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
@@ -309,7 +317,9 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     @Override
     public List<RPMPackageDetailVo> queryDetailByPkgId(final String pkgId) {
         QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
-        wrapper.eq("pkg_id", pkgId);
+        if (pkgId != null) {
+            wrapper.eq("pkg_id", pkgId);
+        }
         List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
         return RPMPackageConverter.toDetail(rpmList);
     }

@@ -40,7 +40,9 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
     @Override
     public boolean existApp(final String name) {
         QueryWrapper<ApplicationVersionDO> wrapper = new QueryWrapper<>();
-        wrapper.eq("name", name);
+        if (name != null) {
+            wrapper.eq("name", name);
+        }
         return appVersionMapper.exists(wrapper);
     }
 
@@ -59,8 +61,9 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
         Page<ApplicationVersionDO> page = new Page<>(pageNum, pageSize);
 
         QueryWrapper<ApplicationVersionDO> wrapper = new QueryWrapper<>();
-        wrapper = name == null ? null : wrapper.eq("name", name);
-
+        if (name != null) {
+            wrapper.eq("name", name);
+        }
         Page<ApplicationVersionDO> resPage = appVersionMapper.selectPage(page, wrapper);
         List<ApplicationVersionDO> appDOs = resPage.getRecords();
         List<ApplicationVersion> appDetails = ApplicationVersionConvertor.toEntity(appDOs);

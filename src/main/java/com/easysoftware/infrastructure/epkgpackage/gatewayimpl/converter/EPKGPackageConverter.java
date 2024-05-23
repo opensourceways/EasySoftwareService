@@ -112,6 +112,12 @@ public final class EPKGPackageConverter {
                     continue;
                 }
                 Object obj = field.get(epkgDO);
+
+                if (obj == null) {
+                    LOGGER.warn("Field value is null for epkgDO: {}", epkgDO);
+                    continue;
+                }
+
                 if (!(obj instanceof String)) {
                     continue;
                 }
