@@ -15,7 +15,6 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/appVersion")
 public class ApplicationVersionQueryAdapter {
-
     /**
      * Autowired service for handling application version-related operations.
      */
@@ -30,8 +29,6 @@ public class ApplicationVersionQueryAdapter {
      */
     @GetMapping()
     @LimitRequest()
-    // @OneidToken
-    // @CompatibleToken
     public ResponseEntity<Object> searchAppVersion(@Valid final ApplicationVersionSearchCondition condition) {
         return appVersionService.searchAppVersion(condition);
     }
@@ -44,10 +41,7 @@ public class ApplicationVersionQueryAdapter {
      */
     @GetMapping("/column")
     @LimitRequest()
-    // @OneidToken
-    // @CompatibleToken
     public ResponseEntity<Object> searchAppVerColumn(@Valid final ApplicationVersionSearchCondition condition) {
         return appVersionService.searchAppVerColumn(condition);
     }
-
 }
