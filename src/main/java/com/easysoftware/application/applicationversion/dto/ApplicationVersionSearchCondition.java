@@ -17,7 +17,7 @@ public class ApplicationVersionSearchCondition {
      * Name of the package. Restricted by length and character pattern.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
-    @Pattern(regexp = "^[\\u4E00-\\u9FA5A-Za-z0-9.()$\\-_ ]+$",
+    @Pattern(regexp = PackageConstant.STR_REG,
             message = "Include only letters, digits, and special characters(_-()$.)")
     private String name;
 
@@ -39,18 +39,24 @@ public class ApplicationVersionSearchCondition {
      * eulerOSVersion.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String eulerOsVersion;
 
     /**
      * column.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String column;
 
     /**
      * Name order.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String nameOrder;
 }
 

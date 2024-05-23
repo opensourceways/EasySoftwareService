@@ -33,4 +33,9 @@ public final class PackageConstant {
      */
     public static final int MAX_FIELD_LENGTH = 1000;
 
+    /**
+     * String reg.
+     */
+    public static final String STR_REG = "^[\\u4E00-\\u9FA5A-Za-z0-9.$-_+ ]+$";
+
 }

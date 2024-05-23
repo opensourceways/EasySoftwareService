@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Range;
 import com.easysoftware.common.constant.PackageConstant;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,36 +33,48 @@ public class ExternalOsSearchCondiiton {
      * Name of the original operating system (maximum 50 characters).
      */
     @Size(max = 50)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String originOsName;
 
     /**
      * Version of the original operating system (maximum 50 characters).
      */
     @Size(max = 50)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String originOsVer;
 
     /**
      * Name of the original package (maximum 50 characters).
      */
     @Size(max = 50)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String originPkg;
 
     /**
      * Name of the target operating system (maximum 50 characters).
      */
     @Size(max = 50)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String targetOsName;
 
     /**
      * Version of the target operating system (maximum 50 characters).
      */
     @Size(max = 50)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String targetOsVer;
 
     /**
      * Name of the target package (maximum 50 characters).
      */
     @Size(max = 50)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String targetPkg;
 
 }

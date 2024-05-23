@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Range;
 import com.easysoftware.common.constant.PackageConstant;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,18 +20,24 @@ public class ApplicationPackageSearchCondition {
      * Field name with a maximum length of PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String name;
 
     /**
      * Package ID with a maximum length of PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String pkgId;
 
     /**
      * Subpath with a maximum length of PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String subPath;
 
     /**
@@ -53,42 +60,56 @@ public class ApplicationPackageSearchCondition {
      * Version number with a maximum length of PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String version;
 
     /**
      * Operating system with a maximum length of PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String os;
 
     /**
      * Architecture with a maximum length of PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String arch;
 
     /**
      * Category with a maximum length of PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String category;
 
     /**
      * Application update time with a maximum length of PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String appUpdateAt;
 
     /**
      * Time order.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String timeOrder;
 
     /**
      * Name order.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String nameOrder;
 }
 
