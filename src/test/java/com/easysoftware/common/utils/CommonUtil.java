@@ -35,55 +35,6 @@ public class CommonUtil {
         return res;
     }
 
-    public static ResultVo executePost(MockMvc mockMvc, String url, String jsonRequest) throws Exception {
-        String content = mockMvc.perform(MockMvcRequestBuilders.post(url)
-            .content(jsonRequest)
-            .contentType(MediaType.APPLICATION_JSON))
-            .andReturn().getResponse()
-            .getContentAsString(StandardCharsets.UTF_8);
-
-        ResultVo res = ObjectMapperUtil.toObject(ResultVo.class, content);
-        return res;
-    }
-
-    public static ResultVo executePut(MockMvc mockMvc, String url, String jsonRequest) throws Exception {
-        String content = mockMvc.perform(MockMvcRequestBuilders.put(url)
-            .content(jsonRequest)
-            .contentType(MediaType.APPLICATION_JSON))
-            .andReturn().getResponse()
-            .getContentAsString(StandardCharsets.UTF_8);
-
-        ResultVo res = ObjectMapperUtil.toObject(ResultVo.class, content);
-        return res;
-    }
-
-    public static ResultVo executeDelete(MockMvc mockMvc, String url) throws Exception {
-        String content = mockMvc.perform(MockMvcRequestBuilders.delete(url)
-            .contentType(MediaType.APPLICATION_JSON))
-            .andReturn().getResponse()
-            .getContentAsString(StandardCharsets.UTF_8);
-
-        ResultVo res = ObjectMapperUtil.toObject(ResultVo.class, content);
-        return res;
-    }
-
-    public static ResultVo executeDelete(MockMvc mockMvc, String url, MultiValueMap<String, String> paramMap) 
-            throws Exception {
-        String content = "";
-        if (null == paramMap) {
-            content = mockMvc.perform(MockMvcRequestBuilders.delete(url)
-                    .accept(MediaType.APPLICATION_JSON))
-                    .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
-        } else {
-            content = mockMvc.perform(MockMvcRequestBuilders.delete(url)
-                    .params(paramMap)
-                    .accept(MediaType.APPLICATION_JSON))
-                    .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
-        }
-        ResultVo res = ObjectMapperUtil.toObject(ResultVo.class, content);
-        return res;
-    }
-
     public static void assertOk(ResultVo res) {
         assertEquals(res.getCode(), HttpStatus.OK.value());
         assertEquals(res.getMsg(), HttpStatus.OK.getReasonPhrase());
