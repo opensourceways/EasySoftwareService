@@ -50,7 +50,7 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
         List<FiledApplicationVo> voList = FieldApplicationConverter.toVo(list);
         long total = resPage.getTotal();
 
-        if (total == 0) {
+        if (total == 0 || voList.size() == 0) {
             throw new NoneResException("the field package does not exist");
         }
 

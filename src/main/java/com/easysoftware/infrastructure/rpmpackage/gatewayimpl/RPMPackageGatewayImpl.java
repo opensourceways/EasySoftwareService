@@ -92,7 +92,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         List<RPMPackageDetailVo> rPMDetails = RPMPackageConverter.toDetail(rPMDOs);
         long total = resPage.getTotal();
 
-        if (total == 0) {
+        if (total == 0 || rPMDetails.size() == 0) {
             throw new NoneResException("the rpm package does not exist");
         }
 
