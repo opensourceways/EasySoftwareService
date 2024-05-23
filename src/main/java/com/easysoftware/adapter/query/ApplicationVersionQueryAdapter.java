@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.easysoftware.application.applicationversion.ApplicationVersionService;
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
-import com.easysoftware.common.aop.LimitRequest;
 import com.easysoftware.common.aop.RequestLimitRedis;
 
 import jakarta.validation.Valid;
