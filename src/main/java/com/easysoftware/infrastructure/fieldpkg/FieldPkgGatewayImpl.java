@@ -49,7 +49,7 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
         List<FieldPkgVo> voList = FieldPkgConverter.toVo(list);
         long total = resPage.getTotal();
 
-        if (total == 0) {
+        if (total == 0 || voList.size() == 0) {
             throw new NoneResException("the field package does not exist");
         }
 
