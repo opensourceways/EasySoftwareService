@@ -53,7 +53,9 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
     @Override
     public boolean existApp(final String name) {
         QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
-        wrapper.eq("name", name);
+        if (name != null) {
+            wrapper.eq("name", name);
+        }
         return appPkgMapper.exists(wrapper);
     }
 
@@ -165,7 +167,9 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
     public ApplicationPackageMenuVo selectOne(final String name) {
         QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
         wrapper.select("pkg_id");
-        wrapper.eq("name", name);
+        if (name != null) {
+            wrapper.eq("name", name);
+        }
         wrapper.last("limit 1");
         List<ApplicationPackageDO> appList = appPkgMapper.selectList(wrapper);
         if (appList.size() == 0) {
@@ -183,7 +187,9 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
     @Override
     public List<ApplicationPackageDetailVo> queryDetailByPkgId(final String pkgId) {
         QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
-        wrapper.eq("pkg_id", pkgId);
+        if (pkgId != null) {
+            wrapper.eq("pkg_id", pkgId);
+        }
         List<ApplicationPackageDO> appList = appPkgMapper.selectList(wrapper);
         return ApplicationPackageConverter.toDetail(appList);
     }
@@ -253,9 +259,11 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
                 condition, "");
         ApplicationPackageEulerVersionVo pkgVo = new ApplicationPackageEulerVersionVo();
         List<String> columns = ClassField.getFieldNames(pkgVo);
-        wrapper.eq("name", condition.getName())
-                .select(columns)
-                .groupBy("os", "arch");
+        if (condition.getName() != null) {
+            wrapper.eq("name", condition.getName());
+        }
+        wrapper.select(columns);
+        wrapper.groupBy("os", "arch");
         List<ApplicationPackageDO> appkgList = appPkgMapper.selectList(wrapper);
         List<ApplicationPackageEulerVersionVo> versions = ApplicationPackageConverter.toVersion(appkgList);
         Map<String, Object> res = Map.ofEntries(
@@ -277,9 +285,11 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
                 condition, "");
         ApplicationPackageEulerArchsVo pkgVo = new ApplicationPackageEulerArchsVo();
         List<String> columns = ClassField.getFieldNames(pkgVo);
-        wrapper.eq("name", condition.getName())
-                .select(columns)
-                .groupBy("arch");
+        if (condition.getName() != null) {
+            wrapper.eq("name", condition.getName());
+        }
+        wrapper.select(columns);
+        wrapper.groupBy("arch");
         List<ApplicationPackageDO> appkgList = appPkgMapper.selectList(wrapper);
         List<ApplicationPackageEulerArchsVo> versions = ApplicationPackageConverter.toArchs(appkgList);
         Map<String, Object> res = Map.ofEntries(

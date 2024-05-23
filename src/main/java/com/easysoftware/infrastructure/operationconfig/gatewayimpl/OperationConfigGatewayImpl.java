@@ -15,7 +15,6 @@ import java.util.List;
 @Service
 public class OperationConfigGatewayImpl implements OperationConfigGateway {
 
-
     /**
      * Autowired OperationConfigDOMapper for database operations.
      */
@@ -43,15 +42,19 @@ public class OperationConfigGatewayImpl implements OperationConfigGateway {
     @Override
     public boolean deleteByType(final String type) {
         QueryWrapper<OperationConfigDO> wrapper = new QueryWrapper<>();
-        wrapper.eq("type", type);
+        if (type != null) {
+            wrapper.eq("type", type);
+        }
         mapper.delete(wrapper);
         return true;
     }
 
     /**
-     * Select all operation configurations and return them as a list of OperationConfigVo objects.
+     * Select all operation configurations and return them as a list of
+     * OperationConfigVo objects.
      *
-     * @return A list of OperationConfigVo objects containing all operation configurations
+     * @return A list of OperationConfigVo objects containing all operation
+     *         configurations
      */
     @Override
     public List<OperationConfigVo> selectAll() {

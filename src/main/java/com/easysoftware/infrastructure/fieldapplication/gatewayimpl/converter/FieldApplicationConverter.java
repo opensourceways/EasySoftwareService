@@ -1,6 +1,5 @@
 package com.easysoftware.infrastructure.fieldapplication.gatewayimpl.converter;
 
-
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.fieldpkg.dto.FieldPkgSearchCondition;
@@ -23,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
 public final class FieldApplicationConverter {
 
     // Private constructor to prevent instantiation of the utility class
@@ -36,7 +34,6 @@ public final class FieldApplicationConverter {
      * Logger instance for FieldApplicationConverter.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(FieldApplicationConverter.class);
-
 
     /**
      * Converts an InputFieldApplication object to a FieldApplicationDO data object.
@@ -51,7 +48,8 @@ public final class FieldApplicationConverter {
     }
 
     /**
-     * Converts a list of FieldApplicationDO objects to a list of FieldApplicationVo view objects.
+     * Converts a list of FieldApplicationDO objects to a list of FieldApplicationVo
+     * view objects.
      *
      * @param doList The list of FieldApplicationDO objects to convert.
      * @return A list of FieldApplicationVo view objects.
@@ -93,7 +91,8 @@ public final class FieldApplicationConverter {
     }
 
     /**
-     * Extracts a specific column from a list of FieldApplicationDO objects and returns it as a list of strings.
+     * Extracts a specific column from a list of FieldApplicationDO objects and
+     * returns it as a list of strings.
      *
      * @param columnList The list of FieldApplicationDO objects.
      * @param column     The name of the column to extract.
@@ -109,6 +108,12 @@ public final class FieldApplicationConverter {
                     continue;
                 }
                 Object obj = field.get(pkg);
+
+                if (obj == null) {
+                    LOGGER.warn("Field value is null for pkg: {}", pkg);
+                    continue;
+                }
+
                 if (!(obj instanceof String)) {
                     continue;
                 }
@@ -122,7 +127,8 @@ public final class FieldApplicationConverter {
     }
 
     /**
-     * Converts a FiledApplicationSearchCondition object to an ApplicationPackageSearchCondition object.
+     * Converts a FiledApplicationSearchCondition object to an
+     * ApplicationPackageSearchCondition object.
      *
      * @param con The FiledApplicationSearchCondition object to convert.
      * @return The converted ApplicationPackageSearchCondition object.
@@ -136,7 +142,8 @@ public final class FieldApplicationConverter {
     }
 
     /**
-     * Converts a FieldApplicationSearchCondition object to an RPMPackageSearchCondition object.
+     * Converts a FieldApplicationSearchCondition object to an
+     * RPMPackageSearchCondition object.
      *
      * @param con The FieldApplicationSearchCondition object to convert.
      * @return The converted RPMPackageSearchCondition object.
@@ -149,7 +156,8 @@ public final class FieldApplicationConverter {
     }
 
     /**
-     * Converts a FieldApplicationSearchCondition object to an EPKGPackageSearchCondition object.
+     * Converts a FieldApplicationSearchCondition object to an
+     * EPKGPackageSearchCondition object.
      *
      * @param con The FieldApplicationSearchCondition object to convert.
      * @return The converted EPKGPackageSearchCondition object.
@@ -162,7 +170,8 @@ public final class FieldApplicationConverter {
     }
 
     /**
-     * Converts a FieldApplicationSearchCondition object to an FieldPkgSearchCondition object.
+     * Converts a FieldApplicationSearchCondition object to an
+     * FieldPkgSearchCondition object.
      *
      * @param con The FiledApplicationSerachCondition object to convert.
      * @return The converted FieldPkgSearchCondition object.

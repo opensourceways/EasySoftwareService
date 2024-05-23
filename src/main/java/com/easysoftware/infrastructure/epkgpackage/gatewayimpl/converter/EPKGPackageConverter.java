@@ -5,7 +5,6 @@ import com.easysoftware.application.epkgpackage.vo.EPKGPackageEulerArchsVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageEulerVersionVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
-import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.epkgpackage.EPKGPackage;
 import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.dataobject.EPKGPackageDO;
 import org.slf4j.Logger;
@@ -13,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
 import java.lang.reflect.Field;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,6 +112,12 @@ public final class EPKGPackageConverter {
                     continue;
                 }
                 Object obj = field.get(epkgDO);
+
+                if (obj == null) {
+                    LOGGER.warn("Field value is null for epkgDO: {}", epkgDO);
+                    continue;
+                }
+
                 if (!(obj instanceof String)) {
                     continue;
                 }

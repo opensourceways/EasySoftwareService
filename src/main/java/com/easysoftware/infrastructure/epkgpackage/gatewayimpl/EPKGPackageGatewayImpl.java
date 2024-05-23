@@ -1,7 +1,6 @@
 package com.easysoftware.infrastructure.epkgpackage.gatewayimpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -12,9 +11,7 @@ import com.easysoftware.application.epkgpackage.vo.EPKGPackageEulerVersionVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
-import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.QueryWrapperUtil;
-import com.easysoftware.domain.epkgpackage.EPKGPackage;
 import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
 import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
 import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.converter.EPKGPackageConverter;
@@ -86,7 +83,9 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
     @Override
     public boolean existEPKG(final String id) {
         QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
-        wrapper.eq("id", id);
+        if (id != null) {
+            wrapper.eq("id", id);
+        }
         return ePKGPkgMapper.exists(wrapper);
     }
 
@@ -222,7 +221,9 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
     public EPKGPackageMenuVo selectOne(final String name) {
         QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
         wrapper.select("pkg_id");
-        wrapper.eq("name", name);
+        if (name != null) {
+            wrapper.eq("name", name);
+        }
         wrapper.last("order by epkg_update_at desc limit 1");
         List<EPKGPackageDO> epkgList = ePKGPkgMapper.selectList(wrapper);
         if (epkgList.size() == 0) {
@@ -258,9 +259,11 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
                 condition, "");
         EPKGPackageEulerVersionVo pkgVo = new EPKGPackageEulerVersionVo();
         List<String> columns = ClassField.getFieldNames(pkgVo);
-        wrapper.eq("name", condition.getName())
-                .select(columns)
-                .groupBy("os", "arch");
+        if (condition.getName() != null) {
+            wrapper.eq("name", condition.getName());
+        }
+        wrapper.select(columns);
+        wrapper.groupBy("os", "arch");
         List<EPKGPackageDO> epkgList = ePKGPkgMapper.selectList(wrapper);
         List<EPKGPackageEulerVersionVo> versions = EPKGPackageConverter.toVersion(epkgList);
         Map<String, Object> res = Map.ofEntries(
@@ -282,9 +285,11 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
                 condition, "");
         EPKGPackageEulerArchsVo pkgVo = new EPKGPackageEulerArchsVo();
         List<String> columns = ClassField.getFieldNames(pkgVo);
-        wrapper.eq("name", condition.getName())
-                .select(columns)
-                .groupBy("arch");
+        if (condition.getName() != null) {
+            wrapper.eq("name", condition.getName());
+        }
+        wrapper.select(columns);
+        wrapper.groupBy("arch");
         List<EPKGPackageDO> epkgList = ePKGPkgMapper.selectList(wrapper);
         List<EPKGPackageEulerArchsVo> versions = EPKGPackageConverter.toArchs(epkgList);
         Map<String, Object> res = Map.ofEntries(
