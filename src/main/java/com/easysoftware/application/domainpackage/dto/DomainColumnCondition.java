@@ -6,6 +6,7 @@ import com.easysoftware.common.constant.PackageConstant;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,6 +36,8 @@ public class DomainColumnCondition {
      */
     @Size(max = 50)
     @NotBlank
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String name;
 
     /**
@@ -42,6 +45,8 @@ public class DomainColumnCondition {
      */
     @Size(max = 50)
     @NotBlank
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String column;
 
 }

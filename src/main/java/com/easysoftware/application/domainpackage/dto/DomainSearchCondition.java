@@ -6,6 +6,7 @@ import com.easysoftware.common.exception.enumvalid.DomainNameEnum;
 import com.easysoftware.common.exception.enumvalid.EnumValue;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,37 +26,48 @@ public class DomainSearchCondition {
      * Software package entity with a maximum length of PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
-    // 软件包名称
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String entity;
 
     /**
      * Operating system with a maximum length of PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String os;
 
     /**
      * Architecture with a maximum length of PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String arch;
 
     /**
      * Category with a maximum length of PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String category;
 
     /**
      * Version with a maximum length of PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String version;
 
     /**
      * Time order.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String timeOrder;
 
     /**
@@ -76,6 +88,8 @@ public class DomainSearchCondition {
      * Name order.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.STR_REG,
+            message = "Include only letters, digits, and special characters(_-()$.)")
     private String nameOrder;
 
 }
