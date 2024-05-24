@@ -21,8 +21,6 @@ import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.dataobject.EPKGPa
 import com.easysoftware.infrastructure.mapper.EPKGPackageDOMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power.common.util.StringUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Component;
@@ -35,11 +33,6 @@ import java.util.Map;
 
 @Component
 public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
-
-    /**
-     * Logger instance for EPKGPackageGatewayImpl.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(EPKGPackageGatewayImpl.class);
 
     /**
      * Autowired EPKGPackageDOMapper for database operations.

@@ -22,8 +22,6 @@ import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.converter.RPMPacka
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power.common.util.StringUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Component;
@@ -48,11 +46,6 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
      */
     @Autowired
     private ObjectMapper objectMapper;
-
-    /**
-     * Logger for RPMPackageGatewayImpl class.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(RPMPackageGatewayImpl.class);
 
     /**
      * Check if an RPM package exists based on its unique identifier.

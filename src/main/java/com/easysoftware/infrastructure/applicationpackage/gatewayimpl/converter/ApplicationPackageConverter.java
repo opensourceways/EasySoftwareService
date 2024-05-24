@@ -263,10 +263,9 @@ public final class ApplicationPackageConverter {
                 if (StringUtils.isNotBlank(value)) {
                     res.add(value);
                 }
-
             }
         } catch (Exception e) {
-            LOGGER.error(MessageCode.EC00011.getMsgEn(), e);
+            LOGGER.error(MessageCode.EC00011.getMsgEn(), e.getMessage());
         }
         return res;
     }

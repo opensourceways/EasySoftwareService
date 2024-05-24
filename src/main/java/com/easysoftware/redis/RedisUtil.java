@@ -48,7 +48,7 @@ public final class RedisUtil {
                 String fieldValue = String.valueOf(value);
                 sb.append(fieldName).append(":").append(fieldValue).append("_");
             } catch (IllegalAccessException e) {
-                LOGGER.error(MessageCode.EC0001.getMsgEn(), e);
+                LOGGER.error(MessageCode.EC0001.getMsgEn(), e.getMessage());
             }
         }
 
@@ -97,7 +97,7 @@ public final class RedisUtil {
 
             return objectMapper.readValue(json, JasonResponse.class);
         } catch (IOException e) {
-            LOGGER.error(MessageCode.EC0001.getMsgEn(), e);
+            LOGGER.error(MessageCode.EC0001.getMsgEn(), e.getMessage());
             return null;
         }
     }
@@ -117,7 +117,7 @@ public final class RedisUtil {
 
             return json;
         } catch (IOException e) {
-            LOGGER.error(MessageCode.EC0001.getMsgEn(), e);
+            LOGGER.error(MessageCode.EC0001.getMsgEn(), e.getMessage());
             return null;
         }
     }
