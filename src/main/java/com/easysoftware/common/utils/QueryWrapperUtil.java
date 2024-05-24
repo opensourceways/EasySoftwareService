@@ -2,6 +2,7 @@ package com.easysoftware.common.utils;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.exception.enumvalid.TimeOrderEnum;
 import com.power.common.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -59,15 +60,18 @@ public final class QueryWrapperUtil {
      * setColumnOrder.
      *
      * @param wrapper    The wrapper
-     * @param column   The column
-     * @param vStr       the vStr
+     * @param column     The column
+     * @param vStr       The vStr
+     * @param orderName  The orderName
      * @param <T>      the type of array elements
      */
-    private static <T> void setColumnOrder(QueryWrapper<T> wrapper, String column, String vStr) {
+    private static <T> void setColumnOrder(QueryWrapper<T> wrapper, String column, String vStr, String orderName) {
         if (TimeOrderEnum.DESC.getAlias().equals(vStr)) {
             wrapper.orderByDesc(column);
         } else if (TimeOrderEnum.ASC.getAlias().equals(vStr)) {
             wrapper.orderByAsc(column);
+        } else {
+            throw new ParamErrorException("the value of " + orderName + "can be one of: asc, desc");
         }
     }
 
@@ -89,12 +93,12 @@ public final class QueryWrapperUtil {
             String vStr = getFieldValue(field, u);
 
             if ("timeOrder".equals(field.getName())) {
-                setColumnOrder(wrapper, updateAt, vStr);
+                setColumnOrder(wrapper, updateAt, vStr, "timeOrder");
                 continue;
             }
 
             if ("nameOrder".equals(field.getName())) {
-                setColumnOrder(wrapper, "name", vStr);
+                setColumnOrder(wrapper, "name", vStr, "nameOrder");
                 continue;
             }
 
