@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -57,10 +56,10 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         Map<String, Object> map = objectMapper.convertValue(unique, HashMap.class);
 
         Map<String, Object> underlineMap = new HashMap<>();
-        for (String key : map.keySet()) {
+        map.forEach((key, value) -> {
             String underlineKey = StringUtil.camelToUnderline(key);
-            underlineMap.put(underlineKey, map.get(key));
-        }
+            underlineMap.put(underlineKey, value);
+        });
 
         QueryWrapper<EPKGPackageDO> wrapper = Wrappers.query();
         wrapper.setEntityClass(EPKGPackageDO.class);
@@ -192,7 +191,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
         // 安全地选择列，列名已经通过白名单验证
         wrapper.select("distinct " + column);
-        List<EPKGPackageDO> rpmColumn = new ArrayList<>();
+        List<EPKGPackageDO> rpmColumn;
         try {
             rpmColumn = ePKGPkgMapper.selectList(wrapper);
         } catch (BadSqlGrammarException e) {

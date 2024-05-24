@@ -11,12 +11,10 @@ import com.easysoftware.infrastructure.applicationversion.gatewayimpl.converter.
 import com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobject.ApplicationVersionDO;
 import com.easysoftware.infrastructure.mapper.ApplicationVersionDOMapper;
 import com.power.common.util.StringUtil;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -129,7 +127,7 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
 
         QueryWrapper<ApplicationVersionDO> wrapper = new QueryWrapper<>();
         wrapper.select("distinct " + StringUtil.camelToUnderline(column));
-        List<ApplicationVersionDO> columnList = new ArrayList<>();
+        List<ApplicationVersionDO> columnList;
         try {
             columnList = appVersionMapper.selectList(wrapper);
         } catch (BadSqlGrammarException e) {

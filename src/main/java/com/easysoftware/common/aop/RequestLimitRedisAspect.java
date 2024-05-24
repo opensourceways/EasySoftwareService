@@ -64,7 +64,7 @@ public class RequestLimitRedisAspect {
     /**
      * Advice method that intercepts the method calls annotated with RequestLimitRedis and enforces request limiting.
      *
-     * @param joinPoint The ProceedingJoinPoint representing the intercepted method.
+     * @param joinPoint    The ProceedingJoinPoint representing the intercepted method.
      * @param requestLimit The RequestLimitRedis annotation containing request limiting criteria.
      * @return The result of the intercepted method execution.
      * @throws Throwable if an error occurs during method execution.
@@ -75,8 +75,12 @@ public class RequestLimitRedisAspect {
         long period = rejectPeriod;
         long limitCount = rejectCount;
 
-        HttpServletRequest request = ((ServletRequestAttributes)
-                RequestContextHolder.getRequestAttributes()).getRequest();
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = (attributes != null) ? attributes.getRequest() : null;
+        if (request == null) {
+            LOGGER.error("Failed to obtain HttpServletRequest in the current context.");
+            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0001);
+        }
 
         // 获取url
         String ip = ClientUtil.getClientIpAddress(request);
@@ -98,7 +102,7 @@ public class RequestLimitRedisAspect {
         // 检查访问次数
         Long count = zSetOperations.zCard(key);
 
-        if (count > limitCount) {
+        if (count != null && count > limitCount) {
             // 审计日志
             LOGGER.error("the current uri is{}，the request frequency of uri exceeds the limited frequency: "
                     + "{} times/{}s ,IP：{}", uri, limitCount, period, ip);

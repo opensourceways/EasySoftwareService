@@ -10,6 +10,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -107,8 +108,8 @@ public @interface EnumValue {
                 }
 
                 Boolean result = (Boolean) method.invoke(null, value);
-                return result == null ? false : result;
-            } catch (Exception e) {
+                return result != null && result;
+            } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
                 throw new EnumValidException();
             }
         }
