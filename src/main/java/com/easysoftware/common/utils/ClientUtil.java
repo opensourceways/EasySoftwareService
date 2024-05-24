@@ -64,11 +64,12 @@ public final class ClientUtil {
             // 127.0.0.1 ipv4, 0:0:0:0:0:0:0:1 ipv6
             if ("127.0.0.1".equals(ip) || "0:0:0:0:0:0:0:1".equals(ip)) {
                 // 根据网卡取本机配置的IP
-                InetAddress inet = null;
+                InetAddress inet;
                 try {
                     inet = InetAddress.getLocalHost();
                 } catch (UnknownHostException e) {
                     LOGGER.error("get local host error: " + e.getMessage());
+                    return ip;
                 }
                 ip = inet.getHostAddress();
             }

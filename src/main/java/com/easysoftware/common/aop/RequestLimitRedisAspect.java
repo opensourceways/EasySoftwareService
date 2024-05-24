@@ -1,9 +1,15 @@
 package com.easysoftware.common.aop;
 
+import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.utils.ClientUtil;
+import com.easysoftware.common.utils.ResultUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -12,16 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import com.easysoftware.common.entity.MessageCode;
-
-import com.easysoftware.common.utils.ClientUtil;
-import com.easysoftware.common.utils.ResultUtil;
-
-import jakarta.servlet.http.HttpServletRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
@@ -64,7 +60,7 @@ public class RequestLimitRedisAspect {
     /**
      * Advice method that intercepts the method calls annotated with RequestLimitRedis and enforces request limiting.
      *
-     * @param joinPoint The ProceedingJoinPoint representing the intercepted method.
+     * @param joinPoint    The ProceedingJoinPoint representing the intercepted method.
      * @param requestLimit The RequestLimitRedis annotation containing request limiting criteria.
      * @return The result of the intercepted method execution.
      * @throws Throwable if an error occurs during method execution.
@@ -75,8 +71,12 @@ public class RequestLimitRedisAspect {
         long period = rejectPeriod;
         long limitCount = rejectCount;
 
-        HttpServletRequest request = ((ServletRequestAttributes)
-                RequestContextHolder.getRequestAttributes()).getRequest();
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = (attributes != null) ? attributes.getRequest() : null;
+        if (request == null) {
+            LOGGER.error("Failed to obtain HttpServletRequest in the current context.");
+            return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0001);
+        }
 
         // 获取url
         String ip = ClientUtil.getClientIpAddress(request);
@@ -98,7 +98,7 @@ public class RequestLimitRedisAspect {
         // 检查访问次数
         Long count = zSetOperations.zCard(key);
 
-        if (count > limitCount) {
+        if (count != null && count > limitCount) {
             // 审计日志
             LOGGER.error("the current uri is{}，the request frequency of uri exceeds the limited frequency: "
                     + "{} times/{}s ,IP：{}", uri, limitCount, period, ip);

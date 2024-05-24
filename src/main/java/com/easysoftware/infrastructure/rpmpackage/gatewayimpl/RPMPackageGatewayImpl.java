@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -58,10 +57,10 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         Map<String, Object> map = objectMapper.convertValue(unique, HashMap.class);
 
         Map<String, Object> underlineMap = new HashMap<>();
-        for (String key : map.keySet()) {
+        map.forEach((key, value) -> {
             String underlineKey = StringUtil.camelToUnderline(key);
-            underlineMap.put(underlineKey, map.get(key));
-        }
+            underlineMap.put(underlineKey, value);
+        });
 
         QueryWrapper<RPMPackageDO> wrapper = Wrappers.query();
         wrapper.setEntityClass(RPMPackageDO.class);
@@ -189,7 +188,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
         // 安全地选择列，列名已经通过白名单验证
         wrapper.select("distinct " + column);
-        List<RPMPackageDO> rpmColumn = new ArrayList<>();
+        List<RPMPackageDO> rpmColumn;
         try {
             rpmColumn = rPMPkgMapper.selectList(wrapper);
         } catch (BadSqlGrammarException e) {
