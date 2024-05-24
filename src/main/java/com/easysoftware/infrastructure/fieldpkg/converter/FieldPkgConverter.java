@@ -1,20 +1,19 @@
 package com.easysoftware.infrastructure.fieldpkg.converter;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-
 import com.easysoftware.application.fieldpkg.vo.FieldPkgVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.infrastructure.fieldpkg.dataobject.FieldPkgDO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class FieldPkgConverter {
     // Private constructor to prevent instantiation of the utility class
@@ -52,7 +51,6 @@ public final class FieldPkgConverter {
     public static FieldPkgVo toVo(final FieldPkgDO opDo) {
         FieldPkgVo opVo = new FieldPkgVo();
         BeanUtils.copyProperties(opDo, opVo);
-        opDo.getTags();
         List<String> tags = ObjectMapperUtil.toObjectList(String.class, opDo.getTags());
         Map<String, Object> pkgIds = ObjectMapperUtil.toMap(opDo.getPkgIds());
 
@@ -60,11 +58,7 @@ public final class FieldPkgConverter {
         opVo.setTags(sortedTags);
 
         Map<String, String> pkgIdsMap = new HashMap<>();
-        for (Map.Entry<String, Object> pkgId : pkgIds.entrySet()) {
-            String key = pkgId.getKey();
-            String value = (String) pkgId.getValue();
-            pkgIdsMap.put(key, value);
-        }
+        pkgIds.forEach((key, value) -> pkgIdsMap.put(key, String.valueOf(value)));
         opVo.setPkgIds(pkgIdsMap);
         return opVo;
     }

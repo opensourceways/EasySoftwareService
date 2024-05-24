@@ -66,8 +66,7 @@ public final class LogUtil {
         if (returnObject instanceof ResponseEntity) {
             ResponseEntity<Object> responseEntity = (ResponseEntity<Object>) returnObject;
             log.setStatus(responseEntity.getStatusCode().value());
-            if (responseEntity.getBody() instanceof ResultVo) {
-                ResultVo body = (ResultVo) responseEntity.getBody();
+            if (responseEntity.getBody() instanceof ResultVo body) {
                 Object msg = body.getMsg();
                 log.setMessage((msg == null) ? "" : msg.toString());
             }

@@ -1,12 +1,13 @@
 package com.easysoftware.init;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+
 import java.io.File;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 
 @Component
 public class ApplicationRunnerStart implements ApplicationRunner {
@@ -40,19 +41,22 @@ public class ApplicationRunnerStart implements ApplicationRunner {
         }
 
         File[] listFiles = secretsDir.listFiles();
-        for (File file : listFiles) {
-            if (file.delete()) {
-                LOGGER.info(
-                        "ID:easysoftware " + "Client Ip: localhost " + "Type: Delete " + " Resource:"
-                                + file.getAbsolutePath()
-                                + " Result: success.");
-            } else {
-                LOGGER.error(
-                        "ID:easysoftware " + "Client Ip: localhost " + "Type: Delete " + " Resource:"
-                                + file.getAbsolutePath()
-                                + " Result: failed.");
+        if (listFiles != null) {
+            for (File file : listFiles) {
+                if (file.delete()) {
+                    LOGGER.info(
+                            "ID:easysoftware " + "Client Ip: localhost " + "Type: Delete " + " Resource:"
+                                    + file.getAbsolutePath()
+                                    + " Result: success.");
+                } else {
+                    LOGGER.error(
+                            "ID:easysoftware " + "Client Ip: localhost " + "Type: Delete " + " Resource:"
+                                    + file.getAbsolutePath()
+                                    + " Result: failed.");
+                }
             }
+        } else {
+            LOGGER.warn("No files found in the directory or an error occurred while listing files.");
         }
-        return;
     }
 }
