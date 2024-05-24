@@ -66,7 +66,9 @@ public final class QueryWrapperUtil {
      * @param <T>      the type of array elements
      */
     private static <T> void setColumnOrder(QueryWrapper<T> wrapper, String column, String vStr, String orderName) {
-        if (TimeOrderEnum.DESC.getAlias().equals(vStr)) {
+        if (StringUtils.isBlank(vStr)) {
+            return;
+        } else if (TimeOrderEnum.DESC.getAlias().equals(vStr)) {
             wrapper.orderByDesc(column);
         } else if (TimeOrderEnum.ASC.getAlias().equals(vStr)) {
             wrapper.orderByAsc(column);

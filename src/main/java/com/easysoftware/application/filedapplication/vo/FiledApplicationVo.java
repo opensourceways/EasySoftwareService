@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -42,9 +42,9 @@ public class FiledApplicationVo {
     private String iconUrl;
 
     /**
-     * Set of tags.
+     * List of tags.
      */
-    private Set<String> tags;
+    private List<String> tags;
 
     /**
      * Map of package IDs.
