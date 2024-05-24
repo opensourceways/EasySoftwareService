@@ -1,5 +1,6 @@
 package com.easysoftware.domain.epkgpackage.gateway;
 
+import com.easysoftware.application.epkgpackage.dto.EPKGPackageNameSearchCondition;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
@@ -77,7 +78,7 @@ public interface EPKGPackageGateway {
      * @param condition The search condition for querying EulerVersion
      * @return A map containing tags information
      */
-    Map<String, Object> queryEulerVersionByName(EPKGPackageSearchCondition condition);
+    Map<String, Object> queryEulerVersionByName(EPKGPackageNameSearchCondition condition);
 
     /**
      * Query Euler archs based on the provided search condition.
@@ -85,5 +86,5 @@ public interface EPKGPackageGateway {
      * @param condition The search condition for querying EulerVersion
      * @return A map containing tags information
      */
-    Map<String, Object> queryEulerArchsByName(EPKGPackageSearchCondition condition);
+    Map<String, Object> queryEulerArchsByName(EPKGPackageNameSearchCondition condition);
 }

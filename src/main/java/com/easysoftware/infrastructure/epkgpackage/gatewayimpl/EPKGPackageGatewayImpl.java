@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.easysoftware.application.epkgpackage.dto.EPKGPackageNameSearchCondition;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageEulerArchsVo;
@@ -105,7 +106,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         List<EPKGPackageDetailVo> rPMDetails = EPKGPackageConverter.toDetail(rPMDOs);
         long total = resPage.getTotal();
 
-        if (total == 0) {
+        if (total == 0 || rPMDetails.size() == 0) {
             throw new NoneResException("the epkg package does not exist");
         }
 
@@ -135,7 +136,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         List<EPKGPackageMenuVo> rPMMenus = EPKGPackageConverter.toMenu(rpmDOs);
         long total = resPage.getTotal();
 
-        if (total == 0) {
+        if (total == 0 || rPMMenus.size() == 0) {
             throw new NoneResException("the epkg package does not exist");
         }
 
@@ -262,7 +263,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
      * @return A map containing relevant information
      */
     @Override
-    public Map<String, Object> queryEulerVersionByName(final EPKGPackageSearchCondition condition) {
+    public Map<String, Object> queryEulerVersionByName(final EPKGPackageNameSearchCondition condition) {
         QueryWrapper<EPKGPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new EPKGPackageDO(),
                 condition, "");
         EPKGPackageEulerVersionVo pkgVo = new EPKGPackageEulerVersionVo();
@@ -288,7 +289,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
      * @return A map containing relevant information
      */
     @Override
-    public Map<String, Object> queryEulerArchsByName(final EPKGPackageSearchCondition condition) {
+    public Map<String, Object> queryEulerArchsByName(final EPKGPackageNameSearchCondition condition) {
         QueryWrapper<EPKGPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new EPKGPackageDO(),
                 condition, "");
         EPKGPackageEulerArchsVo pkgVo = new EPKGPackageEulerArchsVo();

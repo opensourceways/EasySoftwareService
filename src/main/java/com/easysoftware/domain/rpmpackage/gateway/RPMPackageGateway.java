@@ -1,5 +1,6 @@
 package com.easysoftware.domain.rpmpackage.gateway;
 
+import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
@@ -87,7 +88,7 @@ public interface RPMPackageGateway {
      * @param condition The search condition for querying EulerVersion
      * @return A map containing tags information
      */
-    Map<String, Object> queryEulerVersionByName(RPMPackageSearchCondition condition);
+    Map<String, Object> queryEulerVersionByName(RPMPackageNameSearchCondition condition);
 
     /**
      * Query Euler archs based on the provided search condition.
@@ -95,6 +96,6 @@ public interface RPMPackageGateway {
      * @param condition The search condition for querying EulerVersion
      * @return A map containing tags information
      */
-    Map<String, Object> queryEulerArchsByName(RPMPackageSearchCondition condition);
+    Map<String, Object> queryEulerArchsByName(RPMPackageNameSearchCondition condition);
 
 }

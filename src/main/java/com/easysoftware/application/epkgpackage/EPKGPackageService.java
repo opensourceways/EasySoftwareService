@@ -1,6 +1,7 @@
 package com.easysoftware.application.epkgpackage;
 
 import com.easysoftware.application.BaseIService;
+import com.easysoftware.application.epkgpackage.dto.EPKGPackageNameSearchCondition;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.dataobject.EPKGPackageDO;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public interface EPKGPackageService extends BaseIService<EPKGPackageDO> {
      * @param condition The search condition.
      * @return Map containing the openEuler versions.
      */
-    ResponseEntity<Object> queryEulerVersionsByName(EPKGPackageSearchCondition condition);
+    ResponseEntity<Object> queryEulerVersionsByName(EPKGPackageNameSearchCondition condition);
 
     /**
      * Queries available openEuler archs of epkg package.
@@ -46,6 +47,6 @@ public interface EPKGPackageService extends BaseIService<EPKGPackageDO> {
      * @param condition The search condition.
      * @return Map containing the openEuler versions.
      */
-    ResponseEntity<Object> queryEulerArchsByName(EPKGPackageSearchCondition condition);
+    ResponseEntity<Object> queryEulerArchsByName(EPKGPackageNameSearchCondition condition);
 
 }

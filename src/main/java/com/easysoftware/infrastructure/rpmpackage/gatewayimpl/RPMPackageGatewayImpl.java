@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
@@ -92,7 +93,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         List<RPMPackageDetailVo> rPMDetails = RPMPackageConverter.toDetail(rPMDOs);
         long total = resPage.getTotal();
 
-        if (total == 0) {
+        if (total == 0 || rPMDetails.size() == 0) {
             throw new NoneResException("the rpm package does not exist");
         }
 
@@ -248,7 +249,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
      * @return A map containing relevant information
      */
     @Override
-    public Map<String, Object> queryEulerVersionByName(final RPMPackageSearchCondition condition) {
+    public Map<String, Object> queryEulerVersionByName(final RPMPackageNameSearchCondition condition) {
         QueryWrapper<RPMPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new RPMPackageDO(),
                 condition, "");
         RPMPackageEulerVersionVo pkgVo = new RPMPackageEulerVersionVo();
@@ -274,7 +275,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
      * @return A map containing relevant information
      */
     @Override
-    public Map<String, Object> queryEulerArchsByName(final RPMPackageSearchCondition condition) {
+    public Map<String, Object> queryEulerArchsByName(final RPMPackageNameSearchCondition condition) {
         QueryWrapper<RPMPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new RPMPackageDO(),
                 condition, "");
         RPMPackageEulerArchsVo pkgVo = new RPMPackageEulerArchsVo();

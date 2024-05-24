@@ -23,7 +23,7 @@ public class MybatisPlusConfig {
         PaginationInnerInterceptor paginationInnerInterceptor = new PaginationInnerInterceptor();
         paginationInnerInterceptor.setOptimizeJoin(true);
         paginationInnerInterceptor.setDbType(DbType.MYSQL);
-        paginationInnerInterceptor.setOverflow(true);
+        paginationInnerInterceptor.setOverflow(false);
         interceptor.addInnerInterceptor(paginationInnerInterceptor);
         OptimisticLockerInnerInterceptor optimisticLockerInnerInterceptor = new OptimisticLockerInnerInterceptor();
         interceptor.addInnerInterceptor(optimisticLockerInnerInterceptor);

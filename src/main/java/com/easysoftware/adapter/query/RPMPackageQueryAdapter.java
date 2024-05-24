@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.easysoftware.application.rpmpackage.RPMPackageService;
+import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.common.aop.RequestLimitRedis;
 
@@ -42,7 +43,7 @@ public class RPMPackageQueryAdapter {
      */
     @GetMapping("/eulerver")
     @RequestLimitRedis()
-    public ResponseEntity<Object> queryEulerVersionsByName(@Valid final RPMPackageSearchCondition condition) {
+    public ResponseEntity<Object> queryEulerVersionsByName(@Valid final RPMPackageNameSearchCondition condition) {
         return rPMPkgService.queryEulerVersionsByName(condition);
     }
 
@@ -55,7 +56,7 @@ public class RPMPackageQueryAdapter {
      */
     @GetMapping("/eulerarch")
     @RequestLimitRedis()
-    public ResponseEntity<Object> queryEulerArchsByName(@Valid final RPMPackageSearchCondition condition) {
+    public ResponseEntity<Object> queryEulerArchsByName(@Valid final RPMPackageNameSearchCondition condition) {
         return rPMPkgService.queryEulerArchsByName(condition);
     }
 }
