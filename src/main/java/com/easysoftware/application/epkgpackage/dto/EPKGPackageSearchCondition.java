@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Range;
 import com.easysoftware.common.constant.PackageConstant;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,18 +19,21 @@ public class EPKGPackageSearchCondition {
      * Name field with a maximum length defined by PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
     private String name;
 
     /**
      * ID field with a maximum length defined by PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
     private String id;
 
     /**
      * Package ID field with a maximum length defined by PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
     private String pkgId;
 
     /**
@@ -50,48 +54,56 @@ public class EPKGPackageSearchCondition {
      * Version field with a maximum length defined by PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
     private String version;
 
     /**
      * Operating system field with a maximum length defined by PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
     private String os;
 
     /**
      * Subpath field with a maximum length defined by PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
     private String subPath;
 
     /**
      * Architecture field with a maximum length defined by PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
     private String arch;
 
     /**
      * Category field with a maximum length defined by PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
     private String category;
 
     /**
      * EPKG update timestamp field with a maximum length defined by PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
     private String epkgUpdateAt;
 
     /**
      * Time order.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
     private String timeOrder;
 
     /**
      * Name order.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
     private String nameOrder;
 
 }
