@@ -46,7 +46,7 @@ public final class QueryWrapperUtil {
         try {
             value = field.get(u);
         } catch (Exception e) {
-            LOGGER.error(MessageCode.EC00011.getMsgEn(), e);
+            LOGGER.error(MessageCode.EC00011.getMsgEn(), e.getMessage());
         }
         if (!(value instanceof String)) {
             return "";
