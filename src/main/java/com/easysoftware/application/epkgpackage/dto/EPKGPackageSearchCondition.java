@@ -1,5 +1,6 @@
 package com.easysoftware.application.epkgpackage.dto;
 
+import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Range;
 
 import com.easysoftware.common.constant.PackageConstant;
@@ -82,13 +83,13 @@ public class EPKGPackageSearchCondition {
     /**
      * Time order.
      */
-    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = "((^asc$|^desc$))")
     private String timeOrder;
 
     /**
      * Name order.
      */
-    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = "((^asc$|^desc$))")
     private String nameOrder;
 
 }
