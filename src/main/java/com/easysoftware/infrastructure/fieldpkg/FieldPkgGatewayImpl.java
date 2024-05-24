@@ -1,15 +1,5 @@
 package com.easysoftware.infrastructure.fieldpkg;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.BadSqlGrammarException;
-import org.springframework.stereotype.Component;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -23,6 +13,14 @@ import com.easysoftware.infrastructure.fieldpkg.converter.FieldPkgConverter;
 import com.easysoftware.infrastructure.fieldpkg.dataobject.FieldPkgDO;
 import com.easysoftware.infrastructure.mapper.FieldPkgDOMapper;
 import com.power.common.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.BadSqlGrammarException;
+import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class FieldPkgGatewayImpl implements FieldPkgGateway {
@@ -110,7 +108,7 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
         QueryWrapper<FieldPkgDO> wrapper = new QueryWrapper<>();
         // 安全地选择列，列名已经通过白名单验证
         wrapper.select("distinct " + column);
-        List<FieldPkgDO> columnList = new ArrayList<>();
+        List<FieldPkgDO> columnList;
         try {
             columnList = mapper.selectList(wrapper);
         } catch (BadSqlGrammarException e) {

@@ -59,12 +59,10 @@ public final class FieldApplicationConverter {
     public static FiledApplicationVo toVo(final FieldApplicationDO opDo) {
         FiledApplicationVo opVo = new FiledApplicationVo();
         BeanUtils.copyProperties(opDo, opVo);
-        opDo.getTags();
         List<String> tags = ObjectMapperUtil.toObjectList(String.class, opDo.getTags());
         Map<String, Object> pkgIds = ObjectMapperUtil.toMap(opDo.getPkgIds());
 
-        Set<String> tagsSet = new HashSet<>();
-        tagsSet.addAll(tags);
+        Set<String> tagsSet = new HashSet<>(tags);
         opVo.setTags(tagsSet);
 
         Map<String, String> pkgIdsMap = new HashMap<>();

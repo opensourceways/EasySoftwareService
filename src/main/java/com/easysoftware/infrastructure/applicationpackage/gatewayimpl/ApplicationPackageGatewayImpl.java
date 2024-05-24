@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -243,7 +242,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
         // 安全地选择列，列名已经通过白名单验证
         wrapper.select("distinct " + column);
-        List<ApplicationPackageDO> rpmColumn = new ArrayList<>();
+        List<ApplicationPackageDO> rpmColumn;
         try {
             rpmColumn = appPkgMapper.selectList(wrapper);
         } catch (BadSqlGrammarException e) {
@@ -275,10 +274,9 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         wrapper.groupBy("os", "arch");
         List<ApplicationPackageDO> appkgList = appPkgMapper.selectList(wrapper);
         List<ApplicationPackageEulerVersionVo> versions = ApplicationPackageConverter.toVersion(appkgList);
-        Map<String, Object> res = Map.ofEntries(
+        return Map.ofEntries(
                 Map.entry("total", versions.size()),
                 Map.entry("list", versions));
-        return res;
     }
 
     /**
@@ -301,9 +299,8 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         wrapper.groupBy("arch");
         List<ApplicationPackageDO> appkgList = appPkgMapper.selectList(wrapper);
         List<ApplicationPackageEulerArchsVo> versions = ApplicationPackageConverter.toArchs(appkgList);
-        Map<String, Object> res = Map.ofEntries(
+        return Map.ofEntries(
                 Map.entry("total", versions.size()),
                 Map.entry("list", versions));
-        return res;
     }
 }

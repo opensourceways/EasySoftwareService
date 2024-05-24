@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -112,7 +111,7 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
         QueryWrapper<FieldApplicationDO> wrapper = new QueryWrapper<>();
         // 安全地选择列，列名已经通过白名单验证
         wrapper.select("distinct " + column);
-        List<FieldApplicationDO> columnList = new ArrayList<>();
+        List<FieldApplicationDO> columnList;
         try {
             columnList = fieldAppMapper.selectList(wrapper);
         } catch (BadSqlGrammarException e) {
