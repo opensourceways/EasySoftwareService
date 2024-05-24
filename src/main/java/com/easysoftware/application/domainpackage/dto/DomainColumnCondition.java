@@ -1,6 +1,9 @@
 package com.easysoftware.application.domainpackage.dto;
 
+import com.easysoftware.common.constant.PackageConstant;
+
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +18,7 @@ public class DomainColumnCondition {
      */
     @Size(max = 50)
     @NotBlank
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
     private String name;
 
     /**
@@ -22,6 +26,7 @@ public class DomainColumnCondition {
      */
     @Size(max = 50)
     @NotBlank
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
     private String column;
 
 }
