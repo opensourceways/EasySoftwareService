@@ -71,7 +71,7 @@ public final class QueryWrapperUtil {
         } else if (TimeOrderEnum.ASC.getAlias().equals(vStr)) {
             wrapper.orderByAsc(column);
         } else {
-            throw new ParamErrorException("the value of " + orderName + ": asc, desc");
+            throw new ParamErrorException("the value of " + orderName + "can be one of: asc, desc");
         }
     }
 
