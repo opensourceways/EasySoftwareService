@@ -78,4 +78,56 @@ public class ApplicationVersionDO {
      * Version of openEuler os: openEuler-22.03.
      */
     private String eulerOsVersion;
+
+    /**
+     * get an ApplicationVersionDO entity createdAt field value.
+     *
+     * @return An Timestamp entity
+     */
+    public Timestamp getCreatedAt() {
+        if (this.createdAt != null) {
+            return (Timestamp) this.createdAt.clone();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * get an ApplicationVersionDO entity updateAt field value.
+     *
+     * @return An Timestamp entity
+     */
+    public Timestamp getUpdateAt() {
+        if (this.updateAt != null) {
+            return (Timestamp) this.updateAt.clone();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * set an ApplicationVersionDO entity createAt field value.
+     *
+     * @param createAt The ApplicationPackageDO entity  createAt field for set
+     */
+    public void setCreatedAt(Timestamp createAt) {
+        if (this.createdAt != null) {
+            this.createdAt = (Timestamp) createAt.clone();
+        } else {
+            this.createdAt = null;
+        }
+    }
+
+    /**
+     * set an ApplicationVersionDO entity createAt field value.
+     *
+     * @param updateAt The ApplicationPackageDO entity  createAt field for set
+     */
+    public void setUpdateAt(Timestamp updateAt) {
+        if (this.updateAt != null) {
+            this.updateAt = (Timestamp) updateAt.clone();
+        } else {
+            this.updateAt = null;
+        }
+    }
 }

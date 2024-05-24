@@ -1,16 +1,13 @@
 package com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
 
 import java.io.Serial;
 import java.sql.Timestamp;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @TableName("application_package")
 public class ApplicationPackageDO {
     /**
@@ -183,4 +180,56 @@ public class ApplicationPackageDO {
      * latestOsSupport.
      */
     private String latestOsSupport;
+
+    /**
+     * get an ApplicationPackageDO entity createAt field value.
+     *
+     * @return An Timestamp entity
+     */
+    public Timestamp getCreateAt() {
+        if (this.createAt != null) {
+            return (Timestamp) this.createAt.clone();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * get an ApplicationPackageDO entity updateAt field value.
+     *
+     * @return An Timestamp entity
+     */
+    public Timestamp getUpdateAt() {
+        if (this.updateAt != null) {
+            return (Timestamp) this.updateAt.clone();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * set an ApplicationPackageDO entity createAt field value.
+     *
+     * @param createAt The ApplicationPackageDO entity  createAt field for set
+     */
+    public void setCreateAt(Timestamp createAt) {
+        if (this.createAt != null) {
+            this.createAt = (Timestamp) createAt.clone();
+        } else {
+            this.createAt = null;
+        }
+    }
+
+    /**
+     * set an ApplicationPackageDO entity updateAt field value.
+     *
+     * @param updateAt The ApplicationPackageDO entity  updateAt field for set
+     */
+    public void setUpdateAt(Timestamp updateAt) {
+        if (this.updateAt != null) {
+            this.updateAt = (Timestamp) updateAt.clone();
+        } else {
+            this.updateAt = null;
+        }
+    }
 }
