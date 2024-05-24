@@ -50,7 +50,7 @@ public class ApplicationVersionSearchCondition {
     /**
      * Name order.
      */
-    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = "((^asc$|^desc$))")
     private String nameOrder;
 }
 

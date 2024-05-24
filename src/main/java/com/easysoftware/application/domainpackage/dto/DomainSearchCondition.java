@@ -1,5 +1,6 @@
 package com.easysoftware.application.domainpackage.dto;
 
+import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Range;
 import com.easysoftware.common.constant.PackageConstant;
 import com.easysoftware.common.exception.enumvalid.DomainNameEnum;
@@ -55,7 +56,7 @@ public class DomainSearchCondition {
     /**
      * Time order.
      */
-    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = "((^asc$|^desc$))")
     private String timeOrder;
 
     /**
@@ -75,7 +76,7 @@ public class DomainSearchCondition {
     /**
      * Name order.
      */
-    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = "((^asc$|^desc$))")
     private String nameOrder;
 
 }
