@@ -3,10 +3,8 @@ package com.easysoftware.infrastructure.fieldpkg.converter;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import com.easysoftware.application.fieldpkg.vo.FieldPkgVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ObjectMapperUtil;
+import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.infrastructure.fieldpkg.dataobject.FieldPkgDO;
 
 public final class FieldPkgConverter {
@@ -57,9 +56,8 @@ public final class FieldPkgConverter {
         List<String> tags = ObjectMapperUtil.toObjectList(String.class, opDo.getTags());
         Map<String, Object> pkgIds = ObjectMapperUtil.toMap(opDo.getPkgIds());
 
-        Set<String> tagsSet = new HashSet<>();
-        tagsSet.addAll(tags);
-        opVo.setTags(tagsSet);
+        List<String> sortedTags = SortUtil.sortTags(tags);
+        opVo.setTags(sortedTags);
 
         Map<String, String> pkgIdsMap = new HashMap<>();
         for (Map.Entry<String, Object> pkgId : pkgIds.entrySet()) {
