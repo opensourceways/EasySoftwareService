@@ -18,6 +18,7 @@ import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
 import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
+import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
 import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
 import com.easysoftware.domain.fieldapplication.gateway.FieldapplicationGateway;
@@ -286,7 +287,7 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
             tags.add("EPKG");
         }
 
-        List<String> sortedTags = sortTags(tags);
+        List<String> sortedTags = SortUtil.sortTags(tags);
         res.put("tags", sortedTags);
         return ResultUtil.success(HttpStatus.OK, res);
     }
