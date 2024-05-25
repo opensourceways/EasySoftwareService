@@ -35,7 +35,7 @@ public class FieldApplicationQueryAdapter {
      * @return ResponseEntity<Object>.
      */
     @GetMapping()
-    // @RequestLimitRedis()
+    @RequestLimitRedis()
     public ResponseEntity<Object> searchField(@Valid final FiledApplicationSerachCondition condition) {
         return service.queryMenuByName(condition);
     }
