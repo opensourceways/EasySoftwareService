@@ -38,14 +38,13 @@ ENV WORKSPACE=/home/easysoftware
 
 WORKDIR ${WORKSPACE}
 
-COPY --chown=easysoftware --from=Builder /EasySoftware/target ${WORKSPACE}/target
+COPY --chown=easysoftware --from=Builder /EasySoftware/target/easysoftware-0.0.1-SNAPSHOT.jar ${WORKSPACE}/target/easysoftware-0.0.1-SNAPSHOT.jar
 
 RUN echo "umask 027" >> /home/easysoftware/.bashrc \
     && echo "umask 027" >> /root/.bashrc \
     && source /home/easysoftware/.bashrc \
-    && chmod 550 -R /home/easysoftware \
-	&& echo "set +o history" >> /etc/bashrc \
-    && echo "set +o history" >> /home/easysoftware/bashrc \
+    && echo "set +o history" >> /etc/bashrc \
+    && echo "set +o history" >> /home/easysoftware/.bashrc \
     && sed -i "s|HISTSIZE=1000|HISTSIZE=0|" /etc/profile \
     && sed -i "s|PASS_MAX_DAYS[ \t]*99999|PASS_MAX_DAYS 30|" /etc/login.defs
 
@@ -59,7 +58,8 @@ RUN passwd -l easysoftware \
 RUN dnf install -y wget \
     && wget https://mirrors.tuna.tsinghua.edu.cn/Adoptium/17/jre/x64/linux/OpenJDK17U-jre_x64_linux_hotspot_17.0.11_9.tar.gz \
     && tar -zxvf OpenJDK17U-jre_x64_linux_hotspot_17.0.11_9.tar.gz \
-    && rm OpenJDK17U-jre_x64_linux_hotspot_17.0.11_9.tar.gz
+    && rm OpenJDK17U-jre_x64_linux_hotspot_17.0.11_9.tar.gz \
+    && chown -R easysoftware:easysoftware jdk-17.0.11+9-jre
 
 RUN rm -rf `find / -iname "*tcpdump*"` \
     && rm -rf `find / -iname "*sniffer*"` \
@@ -80,7 +80,8 @@ RUN rm -rf /usr/bin/gdb* \
     && rm -rf /usr/share/gdb \
     && rm -rf /usr/share/gcc-10.3.1 \
 	&& yum remove gdb-gdbserver findutils passwd shadow -y \
-    && yum clean all
+    && yum clean all \
+    && chmod 550 -R /home/easysoftware
 
 ENV JAVA_HOME=${WORKSPACE}/jdk-17.0.11+9-jre
 ENV PATH=${JAVA_HOME}/bin:$PATH
