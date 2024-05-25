@@ -34,7 +34,6 @@ public class ResponseHeaderFilter implements Filter {
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Cache-Control", "no-store");
         response.setHeader("Pragma", "no-cache");
-        response.setHeader("X-Frame-Options", "SAMEORIGIN");
         filterChain.doFilter(request, response);
     }
 
