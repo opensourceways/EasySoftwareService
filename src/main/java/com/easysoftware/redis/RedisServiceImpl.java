@@ -7,8 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -90,54 +88,5 @@ public class RedisServiceImpl implements RedisService {
                 Map.entry("keyExsit", keyExsit));
 
         return ResultUtil.success(HttpStatus.OK, res);
-    }
-
-    /**
-     * Scan keys in Redis based on a namespace.
-     *
-     * @param namespace The namespace to scan keys for.
-     * @return ResponseEntity with the result of the operation.
-     */
-    @Override
-    public ResponseEntity<Object> scanKeyByNameSpace(final String namespace) {
-
-        List<String> resKeys = redisGateway.scanKey(namespace);
-
-        Map<String, Object> res = Map.ofEntries(
-                Map.entry("total", resKeys.size()),
-                Map.entry("keys", resKeys));
-
-        return ResultUtil.success(HttpStatus.OK, res);
-    }
-
-    /**
-     * Update Redis based on a namespace.
-     *
-     * @param namespace The namespace to update in Redis.
-     * @return ResponseEntity with the result of the operation.
-     */
-    @Override
-    public ResponseEntity<Object> updateRedisByNameSapce(final String namespace) {
-        List<String> resKeys = redisGateway.scanKey(namespace);
-
-        Map<String, String> resMap = new HashMap<>();
-
-        for (String key : resKeys) {
-            // key 检查 key不存在直接返回
-            boolean keyExsit = redisGateway.hasKey(key);
-            if (!keyExsit) {
-                resMap.put(key, "key does't exsit");
-                continue;
-            }
-
-            boolean isSuccess = redisGateway.deleteKey(key);
-            if (!isSuccess) {
-                resMap.put(key, "key delete failed");
-            } else {
-                resMap.put(key, "key delete success");
-            }
-        }
-
-        return ResultUtil.success(HttpStatus.OK, resMap);
     }
 }

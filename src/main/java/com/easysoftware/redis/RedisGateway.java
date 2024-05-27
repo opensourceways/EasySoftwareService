@@ -1,14 +1,8 @@
 package com.easysoftware.redis;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.Cursor;
-import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -60,48 +54,5 @@ public class RedisGateway {
      */
     public boolean hasKey(final String key) {
         return Boolean.TRUE.equals(stringRedisTemplate.hasKey(key));
-    }
-
-    /**
-     * Delete a key from Redis.
-     *
-     * @param key The key to delete.
-     * @return True if the key was deleted successfully, false otherwise.
-     */
-    public boolean deleteKey(final String key) {
-        return Boolean.TRUE.equals(stringRedisTemplate.delete(key));
-    }
-
-
-    /**
-     * Scan keys in Redis based on a namespace.
-     *
-     * @param namespace The namespace to scan keys for.
-     * @return A list of keys that match the namespace.
-     */
-    public List<String> scanKey(final String namespace) {
-
-        String query = wildCard(namespace);
-        List<String> listKeys = new ArrayList<>();
-        ScanOptions options = ScanOptions.scanOptions().match(query).build();
-
-        try (Cursor<String> curosr = stringRedisTemplate.scan(options)) {
-            while (curosr.hasNext()) {
-                String key = curosr.next();
-                listKeys.add(key);
-            }
-        }
-
-        return listKeys;
-    }
-
-    /**
-     * Apply wildcard to a string.
-     *
-     * @param str The string to apply the wildcard to.
-     * @return The string with wildcard applied.
-     */
-    private String wildCard(final String str) {
-        return String.format(Locale.ROOT, "%s*", str);
     }
 }
