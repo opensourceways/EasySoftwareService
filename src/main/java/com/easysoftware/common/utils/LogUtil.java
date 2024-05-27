@@ -30,7 +30,6 @@ import java.util.Locale;
 
 public final class LogUtil {
 
-
     // Private constructor to prevent instantiation of the utility class
     private LogUtil() {
         // private constructor to hide the implicit public one
@@ -56,9 +55,9 @@ public final class LogUtil {
      */
     @SneakyThrows
     public static void managementOperate(final JoinPoint joinPoint,
-                                         final HttpServletRequest request,
-                                         final HttpServletResponse response,
-                                         final Object returnObject) {
+            final HttpServletRequest request,
+            final HttpServletResponse response,
+            final Object returnObject) {
         ManagementLog log = new ManagementLog();
         log.setType("OmOperate");
 
@@ -88,4 +87,23 @@ public final class LogUtil {
         LOGGER.info("operationLog:{}", jsonLog);
     }
 
+    /**
+     * format logging parameter.
+     *
+     * @param input          The input pramater
+     * @param formatedOutput The safe output logging parmeter
+     */
+
+    public static String formatCodeString(String input) {
+        if (input == null) {
+            return input;
+        }
+
+        String formatedOutput = input.replace("\r", "\\r").replace("\n", "\\n").replace("\u0008", "\\u0008")
+                .replace("\u000B", "\\u000B")
+                .replace("\u000C", "\\u000C")
+                .replace("\u007F", "\\u007F");
+
+        return formatedOutput;
+    }
 }
