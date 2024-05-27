@@ -46,14 +46,6 @@ public interface RPMPackageService extends BaseIService<RPMPackageDO> {
     ResponseEntity<Object> queryEulerVersionsByName(RPMPackageNameSearchCondition condition);
 
     /**
-     * Checks if an application exists.
-     *
-     * @param name The name of the application.
-     * @return true if the application exists, false otherwise.
-     */
-    boolean existApp(String name);
-
-    /**
      * Queries part of the application package menu.
      *
      * @param condition The search condition.

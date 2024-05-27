@@ -13,7 +13,6 @@ package com.easysoftware.infrastructure.rpmpackage.gatewayimpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
@@ -25,12 +24,10 @@ import com.easysoftware.common.exception.NoneResException;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
-import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 import com.easysoftware.infrastructure.mapper.RPMPackageDOMapper;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.converter.RPMPackageConverter;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.BadSqlGrammarException;
@@ -49,34 +46,6 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
      */
     @Autowired
     private RPMPackageDOMapper rPMPkgMapper;
-
-    /**
-     * Autowired ObjectMapper for JSON processing.
-     */
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    /**
-     * Check if an RPM package exists based on its unique identifier.
-     *
-     * @param unique The unique identifier of the RPM package
-     * @return true if the RPM package exists, false otherwise
-     */
-    @Override
-    public boolean existRPM(final RPMPackageUnique unique) {
-        Map<String, Object> map = objectMapper.convertValue(unique, HashMap.class);
-
-        Map<String, Object> underlineMap = new HashMap<>();
-        map.forEach((key, value) -> {
-            String underlineKey = StringUtil.camelToUnderline(key);
-            underlineMap.put(underlineKey, value);
-        });
-
-        QueryWrapper<RPMPackageDO> wrapper = Wrappers.query();
-        wrapper.setEntityClass(RPMPackageDO.class);
-        wrapper.allEq(underlineMap, false);
-        return rPMPkgMapper.exists(wrapper);
-    }
 
     /**
      * Query detailed information based on the provided search condition for RPM
@@ -104,21 +73,6 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
                 Map.entry("list", rPMDetails));
 
         return res;
-    }
-
-    /**
-     * Check if an RPM package exists based on its ID.
-     *
-     * @param id The ID of the RPM package
-     * @return true if the RPM package exists, false otherwise
-     */
-    @Override
-    public boolean existRPM(final String id) {
-        QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
-        if (id != null) {
-            wrapper.eq("id", id);
-        }
-        return rPMPkgMapper.exists(wrapper);
     }
 
     /**
