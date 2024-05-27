@@ -4,7 +4,6 @@ import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDeta
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageEulerVersionVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageTagsVo;
-import com.easysoftware.application.domainpackage.vo.DomainPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
@@ -180,36 +179,6 @@ public final class ApplicationPackageConverter {
             res.add(app);
         }
         return res;
-    }
-
-    /**
-     * Convert a list of ApplicationPackageMenuVo objects to a list of
-     * DomainPackageMenuVo objects.
-     *
-     * @param appList The list of ApplicationPackageMenuVo objects to convert
-     * @return A list of DomainPackageMenuVo objects
-     */
-    public static List<DomainPackageMenuVo> toDomainPackageMenuVo(final List<ApplicationPackageMenuVo> appList) {
-        List<DomainPackageMenuVo> menuList = new ArrayList<>();
-        for (ApplicationPackageMenuVo app : appList) {
-            DomainPackageMenuVo menu = toDomainPackageMenuVo(app);
-            menuList.add(menu);
-        }
-        return menuList;
-    }
-
-    /**
-     * Convert an ApplicationPackageMenuVo object to a DomainPackageMenuVo object.
-     *
-     * @param app The ApplicationPackageMenuVo object to convert
-     * @return A DomainPackageMenuVo object
-     */
-    public static DomainPackageMenuVo toDomainPackageMenuVo(final ApplicationPackageMenuVo app) {
-        DomainPackageMenuVo menu = new DomainPackageMenuVo();
-        BeanUtils.copyProperties(app, menu);
-        menu.getPkgIds().put("IMAGE", app.getPkgId());
-        menu.getTags().add("IMAGE");
-        return menu;
     }
 
     /**
