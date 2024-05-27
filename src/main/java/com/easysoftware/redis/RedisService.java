@@ -40,21 +40,4 @@ public interface RedisService {
      * @return ResponseEntity with the result of the operation.
      */
     ResponseEntity<Object> hasKey(String key);
-
-    /**
-     * Scan keys in Redis based on a namespace.
-     *
-     * @param namespace The namespace to scan keys for.
-     * @return ResponseEntity with the result of the operation.
-     */
-    ResponseEntity<Object> scanKeyByNameSpace(String namespace);
-
-    /**
-     * Update Redis based on a namespace.
-     *
-     * @param namespace The namespace to update in Redis.
-     * @return ResponseEntity with the result of the operation.
-     */
-    ResponseEntity<Object> updateRedisByNameSapce(String namespace);
-
 }

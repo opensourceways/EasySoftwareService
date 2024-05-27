@@ -18,11 +18,6 @@ import jakarta.validation.Valid;
 @RequestMapping("/field")
 public class FieldApplicationQueryAdapter {
     /**
-     * Health status.
-     */
-    private static final String HEALTH_STATUS = "health";
-
-    /**
      * Autowired service for handling field application-related operations.
      */
     @Autowired
@@ -73,16 +68,5 @@ public class FieldApplicationQueryAdapter {
     @RequestLimitRedis()
     public ResponseEntity<Object> searchStat() {
         return service.queryStat();
-    }
-
-    /**
-     * Endpoint to health check.
-     *
-     * @return ResponseEntity<Object>.
-     */
-    @GetMapping("/health")
-    @RequestLimitRedis()
-    public String checkHealth() {
-        return HEALTH_STATUS;
     }
 }
