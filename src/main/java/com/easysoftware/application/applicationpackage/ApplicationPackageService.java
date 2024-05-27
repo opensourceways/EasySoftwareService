@@ -41,12 +41,4 @@ public interface ApplicationPackageService {
      * @return Map containing the openEuler versions.
      */
     ResponseEntity<Object> queryEulerVersionsByName(ApplicationPackageNameSearchCondition condition);
-
-    /**
-     * Queries available openEuler archs of application package.
-     *
-     * @param condition The search condition.
-     * @return Map containing the openEuler versions.
-     */
-    ResponseEntity<Object> queryEulerArchsByName(ApplicationPackageNameSearchCondition condition);
 }

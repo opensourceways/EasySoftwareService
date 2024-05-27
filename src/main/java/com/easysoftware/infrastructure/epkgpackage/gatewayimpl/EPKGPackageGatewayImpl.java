@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageNameSearchCondition;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
-import com.easysoftware.application.epkgpackage.vo.EPKGPackageEulerArchsVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageEulerVersionVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
 import com.easysoftware.common.exception.NoneResException;
@@ -267,32 +266,6 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         wrapper.groupBy("os", "arch");
         List<EPKGPackageDO> epkgList = ePKGPkgMapper.selectList(wrapper);
         List<EPKGPackageEulerVersionVo> versions = EPKGPackageConverter.toVersion(epkgList);
-        Map<String, Object> res = Map.ofEntries(
-                Map.entry("total", versions.size()),
-                Map.entry("list", versions));
-        return res;
-    }
-
-    /**
-     * Query the Euler archs based on the provided search condition.
-     *
-     * @param condition The search condition for querying a part of the epkg Euler
-     *                  archs
-     * @return A map containing relevant information
-     */
-    @Override
-    public Map<String, Object> queryEulerArchsByName(final EPKGPackageNameSearchCondition condition) {
-        QueryWrapper<EPKGPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new EPKGPackageDO(),
-                condition, "");
-        EPKGPackageEulerArchsVo pkgVo = new EPKGPackageEulerArchsVo();
-        List<String> columns = ClassField.getFieldNames(pkgVo);
-        if (condition.getName() != null) {
-            wrapper.eq("name", condition.getName());
-        }
-        wrapper.select(columns);
-        wrapper.groupBy("arch");
-        List<EPKGPackageDO> epkgList = ePKGPkgMapper.selectList(wrapper);
-        List<EPKGPackageEulerArchsVo> versions = EPKGPackageConverter.toArchs(epkgList);
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", versions.size()),
                 Map.entry("list", versions));
