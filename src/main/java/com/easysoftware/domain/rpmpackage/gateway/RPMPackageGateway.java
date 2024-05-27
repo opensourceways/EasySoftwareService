@@ -89,13 +89,4 @@ public interface RPMPackageGateway {
      * @return A map containing tags information
      */
     Map<String, Object> queryEulerVersionByName(RPMPackageNameSearchCondition condition);
-
-    /**
-     * Query Euler archs based on the provided search condition.
-     *
-     * @param condition The search condition for querying EulerVersion
-     * @return A map containing tags information
-     */
-    Map<String, Object> queryEulerArchsByName(RPMPackageNameSearchCondition condition);
-
 }

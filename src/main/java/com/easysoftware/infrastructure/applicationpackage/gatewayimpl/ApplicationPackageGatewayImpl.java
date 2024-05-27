@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageNameSearchCondition;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
-import com.easysoftware.application.applicationpackage.vo.ApplicationPackageEulerArchsVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageEulerVersionVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageTagsVo;
@@ -277,31 +276,5 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         return Map.ofEntries(
                 Map.entry("total", versions.size()),
                 Map.entry("list", versions));
-    }
-
-    /**
-     * Query the Euler archs based on the provided search condition.
-     *
-     * @param condition The search condition for querying a part of the appkg Euler
-     *                  archs
-     * @return A map containing relevant information
-     */
-    @Override
-    public Map<String, Object> queryEulerArchsByName(final ApplicationPackageNameSearchCondition condition) {
-        QueryWrapper<ApplicationPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new ApplicationPackageDO(),
-                condition, "");
-        ApplicationPackageEulerArchsVo pkgVo = new ApplicationPackageEulerArchsVo();
-        List<String> columns = ClassField.getFieldNames(pkgVo);
-        if (condition.getName() != null) {
-            wrapper.eq("name", condition.getName());
-        }
-        wrapper.select(columns);
-        wrapper.groupBy("arch");
-        List<ApplicationPackageDO> appkgList = appPkgMapper.selectList(wrapper);
-        List<ApplicationPackageEulerArchsVo> versions = ApplicationPackageConverter.toArchs(appkgList);
-        Map<String, Object> res = Map.ofEntries(
-                Map.entry("total", versions.size()),
-                Map.entry("list", versions));
-        return res;
     }
 }

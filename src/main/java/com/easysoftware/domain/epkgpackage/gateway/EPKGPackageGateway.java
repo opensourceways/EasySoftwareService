@@ -79,12 +79,4 @@ public interface EPKGPackageGateway {
      * @return A map containing tags information
      */
     Map<String, Object> queryEulerVersionByName(EPKGPackageNameSearchCondition condition);
-
-    /**
-     * Query Euler archs based on the provided search condition.
-     *
-     * @param condition The search condition for querying EulerVersion
-     * @return A map containing tags information
-     */
-    Map<String, Object> queryEulerArchsByName(EPKGPackageNameSearchCondition condition);
 }

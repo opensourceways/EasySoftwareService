@@ -46,17 +46,4 @@ public class RPMPackageQueryAdapter {
     public ResponseEntity<Object> queryEulerVersionsByName(@Valid final RPMPackageNameSearchCondition condition) {
         return rPMPkgService.queryEulerVersionsByName(condition);
     }
-
-    /**
-     * Endpoint to query for all avalaible openEuler arch of RPM packages based
-     * on the provided search condition.
-     *
-     * @param condition The search condition for querying RPM packages.
-     * @return ResponseEntity<Object>.
-     */
-    @GetMapping("/eulerarch")
-    @RequestLimitRedis()
-    public ResponseEntity<Object> queryEulerArchsByName(@Valid final RPMPackageNameSearchCondition condition) {
-        return rPMPkgService.queryEulerArchsByName(condition);
-    }
 }

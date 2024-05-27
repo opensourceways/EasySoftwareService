@@ -8,7 +8,6 @@ import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
-import com.easysoftware.application.rpmpackage.vo.RPMPackageEulerArchsVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageEulerVersionVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.exception.NoneResException;
@@ -253,32 +252,6 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         wrapper.groupBy("os", "arch");
         List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
         List<RPMPackageEulerVersionVo> versions = RPMPackageConverter.toVersion(rpmList);
-        Map<String, Object> res = Map.ofEntries(
-                Map.entry("total", versions.size()),
-                Map.entry("list", versions));
-        return res;
-    }
-
-    /**
-     * Query the Euler archs based on the provided search condition.
-     *
-     * @param condition The search condition for querying a part of the RPM Euler
-     *                  archs
-     * @return A map containing relevant information
-     */
-    @Override
-    public Map<String, Object> queryEulerArchsByName(final RPMPackageNameSearchCondition condition) {
-        QueryWrapper<RPMPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new RPMPackageDO(),
-                condition, "");
-        RPMPackageEulerArchsVo pkgVo = new RPMPackageEulerArchsVo();
-        List<String> columns = ClassField.getFieldNames(pkgVo);
-        if (condition.getName() != null) {
-            wrapper.eq("name", condition.getName());
-        }
-        wrapper.select(columns);
-        wrapper.groupBy("arch");
-        List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
-        List<RPMPackageEulerArchsVo> versions = RPMPackageConverter.toArchs(rpmList);
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", versions.size()),
                 Map.entry("list", versions));

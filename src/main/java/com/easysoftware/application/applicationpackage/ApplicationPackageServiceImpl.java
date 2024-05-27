@@ -96,16 +96,4 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
         Map<String, Object> res = appPkgGateway.queryEulerVersionByName(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }
-
-    /**
-     * Queries all available openEuler archs of application package.
-     *
-     * @param condition The search condition.
-     * @return Map containing the epkg package menu.
-     */
-    @Override
-    public ResponseEntity<Object> queryEulerArchsByName(ApplicationPackageNameSearchCondition condition) {
-        Map<String, Object> res = appPkgGateway.queryEulerArchsByName(condition);
-        return ResultUtil.success(HttpStatus.OK, res);
-    }
 }

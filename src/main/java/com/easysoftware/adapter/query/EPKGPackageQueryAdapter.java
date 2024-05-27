@@ -47,17 +47,4 @@ public class EPKGPackageQueryAdapter {
     public ResponseEntity<Object> queryEulerVersionsByName(@Valid final EPKGPackageNameSearchCondition condition) {
         return ePKGPackageService.queryEulerVersionsByName(condition);
     }
-
-    /**
-     * Endpoint to query for all avalaible openEuler arch of epkg packages based
-     * on the provided search condition.
-     *
-     * @param condition The search condition for querying epkg packages.
-     * @return ResponseEntity<Object>.
-     */
-    @GetMapping("/eulerarch")
-    @RequestLimitRedis()
-    public ResponseEntity<Object> queryEulerArchsByName(@Valid final EPKGPackageNameSearchCondition condition) {
-        return ePKGPackageService.queryEulerArchsByName(condition);
-    }
 }

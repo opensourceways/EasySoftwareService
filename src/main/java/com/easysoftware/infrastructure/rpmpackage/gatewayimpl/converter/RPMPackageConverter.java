@@ -2,7 +2,6 @@ package com.easysoftware.infrastructure.rpmpackage.gatewayimpl.converter;
 
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
-import com.easysoftware.application.rpmpackage.vo.RPMPackageEulerArchsVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageEulerVersionVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
@@ -175,24 +174,6 @@ public final class RPMPackageConverter {
             version.setArch(rpm.getArch());
             version.setPkgId(rpm.getPkgId());
             res.add(version);
-        }
-        return res;
-    }
-
-    /**
-     * Converts a list of RPMPackageDO objects to a list of RPMPackageEulerArchsVo
-     * view
-     * objects.
-     *
-     * @param rpmPkgDOs The list of RPMPackageDO objects to convert.
-     * @return A list of RPMPackageEulerArchsVo view objects.
-     */
-    public static List<RPMPackageEulerArchsVo> toArchs(final List<RPMPackageDO> rpmPkgDOs) {
-        List<RPMPackageEulerArchsVo> res = new ArrayList<>();
-        for (RPMPackageDO rpm : rpmPkgDOs) {
-            RPMPackageEulerArchsVo archs = new RPMPackageEulerArchsVo();
-            archs.setArch(rpm.getArch());
-            res.add(archs);
         }
         return res;
     }
