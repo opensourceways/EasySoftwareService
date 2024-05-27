@@ -43,7 +43,7 @@ public class ManagementLogAOP {
      * Defines the pointcut for methods in specific packages.
      */
     @Pointcut("execution(* com.easysoftware.adapter.query.*.*(..)) "
-            + "|| execution(* com.easysoftware.adapter.execute.*.*(..))")
+            + "|| execution(* com.easysoftware.common.exception.GlobalExceptionHandler.*(..))")
     public void pointcut() {
     }
 
