@@ -16,9 +16,7 @@ import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
-import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
-import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 import com.easysoftware.infrastructure.mapper.RPMPackageDOMapper;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
@@ -133,18 +131,6 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
         cSb.append(arch);
         String pkgId = cSb.toString();
         return pkgId;
-    }
-
-    /**
-     * Checks if an application exists.
-     *
-     * @param unique The name of the application.
-     * @return true if the application exists, false otherwise.
-     */
-    @Override
-    public boolean existApp(final String unique) {
-        RPMPackageUnique uniquePkg = ObjectMapperUtil.jsonToObject(unique, RPMPackageUnique.class);
-        return rPMPkgGateway.existRPM(uniquePkg);
     }
 
     /**

@@ -20,13 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface ApplicationPackageGateway {
-    /**
-     * Check if an application exists based on its name.
-     *
-     * @param name The name of the application
-     * @return true if the application exists, false otherwise
-     */
-    boolean existApp(String name);
 
     /**
      * Query menu items based on the provided search condition.

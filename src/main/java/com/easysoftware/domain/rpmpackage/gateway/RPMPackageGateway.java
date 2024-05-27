@@ -15,26 +15,10 @@ import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
-import com.easysoftware.domain.rpmpackage.RPMPackageUnique;
 import java.util.List;
 import java.util.Map;
 
 public interface RPMPackageGateway {
-    /**
-     * Check if an RPM package exists based on its unique identifier.
-     *
-     * @param unique The unique identifier of the RPM package
-     * @return true if the RPM package exists, false otherwise
-     */
-    boolean existRPM(RPMPackageUnique unique);
-
-    /**
-     * Check if an RPM package exists based on its ID.
-     *
-     * @param id The ID of the RPM package
-     * @return true if the RPM package exists, false otherwise
-     */
-    boolean existRPM(String id);
 
     /**
      * Query detailed information based on the provided search condition for RPM
