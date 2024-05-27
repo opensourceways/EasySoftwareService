@@ -97,19 +97,6 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Handles exceptions of type AuthException.
-     *
-     * @param e The AuthException to handle
-     * @return ResponseEntity containing details about the exception
-     */
-    @ExceptionHandler(AuthException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<Object> exception(final AuthException e) {
-        LOGGER.error(e.getMessage());
-        return ResultUtil.fail(HttpStatus.UNAUTHORIZED, MessageCode.EC00012);
-    }
-
-    /**
      * Handles general exceptions.
      *
      * @param e The Exception to handle
