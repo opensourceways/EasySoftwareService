@@ -27,6 +27,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.easysoftware.common.entity.MessageCode;
 
 import com.easysoftware.common.utils.ClientUtil;
+import com.easysoftware.common.utils.LogUtil;
 import com.easysoftware.common.utils.ResultUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -64,7 +65,8 @@ public class RequestLimitRedisAspect {
     private long rejectCount;
 
     /**
-     * Pointcut method to define where the aspect applies based on the RequestLimitRedis annotation.
+     * Pointcut method to define where the aspect applies based on the
+     * RequestLimitRedis annotation.
      *
      * @param requestLimit The RequestLimitRedis annotation.
      */
@@ -73,10 +75,13 @@ public class RequestLimitRedisAspect {
     }
 
     /**
-     * Advice method that intercepts the method calls annotated with RequestLimitRedis and enforces request limiting.
+     * Advice method that intercepts the method calls annotated with
+     * RequestLimitRedis and enforces request limiting.
      *
-     * @param joinPoint    The ProceedingJoinPoint representing the intercepted method.
-     * @param requestLimit The RequestLimitRedis annotation containing request limiting criteria.
+     * @param joinPoint    The ProceedingJoinPoint representing the intercepted
+     *                     method.
+     * @param requestLimit The RequestLimitRedis annotation containing request
+     *                     limiting criteria.
      * @return The result of the intercepted method execution.
      * @throws Throwable if an error occurs during method execution.
      */
@@ -98,12 +103,10 @@ public class RequestLimitRedisAspect {
         String uri = request.getRequestURI();
         String key = "req_limit:".concat(uri).concat(ip);
 
-
         ZSetOperations zSetOperations = redisTemplate.opsForZSet();
 
         long currentMs = System.currentTimeMillis();
         zSetOperations.add(key, currentMs, currentMs);
-
 
         redisTemplate.expire(key, period, TimeUnit.SECONDS);
 
@@ -116,13 +119,11 @@ public class RequestLimitRedisAspect {
         if (count != null && count > limitCount) {
             // 审计日志
             LOGGER.error("the current uri is{}，the request frequency of uri exceeds the limited frequency: "
-                    + "{} times/{}s ,IP：{}", uri, limitCount, period, ip);
+                    + "{} times/{}s ,IP：{},type: GET", LogUtil.formatCodeString(uri), limitCount, period, ip);
             return ResultUtil.fail(HttpStatus.TOO_MANY_REQUESTS, MessageCode.EC00010);
         }
-
 
         return joinPoint.proceed();
     }
 
 }
-
