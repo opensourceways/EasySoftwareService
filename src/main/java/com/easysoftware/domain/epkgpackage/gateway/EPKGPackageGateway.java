@@ -4,27 +4,10 @@ import com.easysoftware.application.epkgpackage.dto.EPKGPackageNameSearchConditi
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
-import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
 import java.util.List;
 import java.util.Map;
 
 public interface EPKGPackageGateway {
-    /**
-     * Check if an EPKG package exists based on its unique identifier.
-     *
-     * @param unique The unique identifier of the EPKG package
-     * @return true if the EPKG package exists, false otherwise
-     */
-    boolean existEPKG(EPKGPackageUnique unique);
-
-    /**
-     * Check if an EPKG package exists based on its ID.
-     *
-     * @param id The ID of the EPKG package
-     * @return true if the EPKG package exists, false otherwise
-     */
-    boolean existEPKG(String id);
-
     /**
      * Query detailed information based on the provided search condition.
      *

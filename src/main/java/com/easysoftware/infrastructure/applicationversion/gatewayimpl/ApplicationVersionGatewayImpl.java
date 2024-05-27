@@ -30,21 +30,6 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
     private ApplicationVersionDOMapper appVersionMapper;
 
     /**
-     * Check if an application exists based on its name.
-     *
-     * @param name The name of the application
-     * @return true if the application exists, false otherwise
-     */
-    @Override
-    public boolean existApp(final String name) {
-        QueryWrapper<ApplicationVersionDO> wrapper = new QueryWrapper<>();
-        if (name != null) {
-            wrapper.eq("name", name);
-        }
-        return appVersionMapper.exists(wrapper);
-    }
-
-    /**
      * Query information based on the provided search condition.
      *
      * @param condition The search condition for querying application versions

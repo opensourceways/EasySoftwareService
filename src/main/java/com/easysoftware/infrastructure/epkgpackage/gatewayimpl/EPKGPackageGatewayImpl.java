@@ -2,7 +2,6 @@ package com.easysoftware.infrastructure.epkgpackage.gatewayimpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageNameSearchCondition;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
@@ -13,12 +12,10 @@ import com.easysoftware.common.exception.NoneResException;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
-import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
 import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
 import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.converter.EPKGPackageConverter;
 import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.dataobject.EPKGPackageDO;
 import com.easysoftware.infrastructure.mapper.EPKGPackageDOMapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.BadSqlGrammarException;
@@ -37,49 +34,6 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
      */
     @Autowired
     private EPKGPackageDOMapper ePKGPkgMapper;
-
-    /**
-     * Autowired ObjectMapper for JSON serialization/deserialization.
-     */
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    /**
-     * Check if an EPKG package exists based on its unique identifier.
-     *
-     * @param unique The unique identifier of the EPKG package
-     * @return true if the EPKG package exists, false otherwise
-     */
-    @Override
-    public boolean existEPKG(final EPKGPackageUnique unique) {
-        Map<String, Object> map = objectMapper.convertValue(unique, HashMap.class);
-
-        Map<String, Object> underlineMap = new HashMap<>();
-        map.forEach((key, value) -> {
-            String underlineKey = StringUtil.camelToUnderline(key);
-            underlineMap.put(underlineKey, value);
-        });
-
-        QueryWrapper<EPKGPackageDO> wrapper = Wrappers.query();
-        wrapper.setEntityClass(EPKGPackageDO.class);
-        wrapper.allEq(underlineMap, false);
-        return ePKGPkgMapper.exists(wrapper);
-    }
-
-    /**
-     * Check if an EPKG package exists based on its ID.
-     *
-     * @param id The ID of the EPKG package
-     * @return true if the EPKG package exists, false otherwise
-     */
-    @Override
-    public boolean existEPKG(final String id) {
-        QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
-        if (id != null) {
-            wrapper.eq("id", id);
-        }
-        return ePKGPkgMapper.exists(wrapper);
-    }
 
     /**
      * Query detailed information based on the provided search condition.

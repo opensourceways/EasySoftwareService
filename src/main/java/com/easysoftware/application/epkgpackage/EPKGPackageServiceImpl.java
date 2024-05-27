@@ -4,9 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageNameSearchCondition;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
-import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
-import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
 import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
 import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.dataobject.EPKGPackageDO;
 import com.easysoftware.infrastructure.mapper.EPKGPackageDOMapper;
@@ -83,18 +81,6 @@ public class EPKGPackageServiceImpl extends
     @Override
     public void saveDataObjectBatch(final ArrayList<String> dataObject) {
         return;
-    }
-
-    /**
-     * Checks if an application with a given name exists.
-     *
-     * @param unique unique of the application.
-     * @return boolean indicating if the application exists.
-     */
-    @Override
-    public boolean existApp(final String unique) {
-        EPKGPackageUnique uniquePkg = ObjectMapperUtil.jsonToObject(unique, EPKGPackageUnique.class);
-        return ePKGPackageGateway.existEPKG(uniquePkg);
     }
 
     /**

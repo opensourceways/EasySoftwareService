@@ -26,14 +26,6 @@ public interface EPKGPackageService extends BaseIService<EPKGPackageDO> {
     Map<String, Object> queryAllEPKGPkgMenu(EPKGPackageSearchCondition condition);
 
     /**
-     * Checks if an application with a given name exists.
-     *
-     * @param name Name of the application.
-     * @return boolean indicating if the application exists.
-     */
-    boolean existApp(String name);
-
-    /**
      * Queries available openEuler version of epkg package.
      *
      * @param condition The search condition.
