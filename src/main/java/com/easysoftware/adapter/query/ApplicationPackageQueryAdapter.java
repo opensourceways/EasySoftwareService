@@ -60,18 +60,4 @@ public class ApplicationPackageQueryAdapter {
             @Valid final ApplicationPackageNameSearchCondition condition) {
         return appPkgService.queryEulerVersionsByName(condition);
     }
-
-    /**
-     * Endpoint to query for all avalaible openEuler arch of application packages
-     * based
-     * on the provided search condition.
-     *
-     * @param condition The search condition for querying application packages.
-     * @return ResponseEntity<Object>.
-     */
-    @GetMapping("/eulerarch")
-    @RequestLimitRedis()
-    public ResponseEntity<Object> queryEulerArchsByName(@Valid final ApplicationPackageNameSearchCondition condition) {
-        return appPkgService.queryEulerArchsByName(condition);
-    }
 }

@@ -40,13 +40,4 @@ public interface EPKGPackageService extends BaseIService<EPKGPackageDO> {
      * @return Map containing the openEuler versions.
      */
     ResponseEntity<Object> queryEulerVersionsByName(EPKGPackageNameSearchCondition condition);
-
-    /**
-     * Queries available openEuler archs of epkg package.
-     *
-     * @param condition The search condition.
-     * @return Map containing the openEuler versions.
-     */
-    ResponseEntity<Object> queryEulerArchsByName(EPKGPackageNameSearchCondition condition);
-
 }

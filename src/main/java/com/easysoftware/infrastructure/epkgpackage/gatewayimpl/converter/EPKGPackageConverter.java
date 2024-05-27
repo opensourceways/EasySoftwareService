@@ -1,7 +1,6 @@
 package com.easysoftware.infrastructure.epkgpackage.gatewayimpl.converter;
 
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
-import com.easysoftware.application.epkgpackage.vo.EPKGPackageEulerArchsVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageEulerVersionVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
@@ -73,24 +72,6 @@ public final class EPKGPackageConverter {
             version.setArch(epkg.getArch());
             version.setPkgId(epkg.getPkgId());
             res.add(version);
-        }
-        return res;
-    }
-
-    /**
-     * Converts a list of EPKGPackageDO objects to a list of EPKGPackageEulerArchsVo
-     * view
-     * objects.
-     *
-     * @param epkgDOs The list of EPKGPackageDO objects to convert.
-     * @return A list of EPKGPackageEulerArchsVo view objects.
-     */
-    public static List<EPKGPackageEulerArchsVo> toArchs(final List<EPKGPackageDO> epkgDOs) {
-        List<EPKGPackageEulerArchsVo> res = new ArrayList<>();
-        for (EPKGPackageDO epkg : epkgDOs) {
-            EPKGPackageEulerArchsVo archs = new EPKGPackageEulerArchsVo();
-            archs.setArch(epkg.getArch());
-            res.add(archs);
         }
         return res;
     }

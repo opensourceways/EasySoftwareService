@@ -80,18 +80,6 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
     }
 
     /**
-     * Queries all available openEuler archs of RPM package.
-     *
-     * @param condition The search condition.
-     * @return Map containing the RPM package menu.
-     */
-    @Override
-    public ResponseEntity<Object> queryEulerArchsByName(RPMPackageNameSearchCondition condition) {
-        Map<String, Object> res = rPMPkgGateway.queryEulerArchsByName(condition);
-        return ResultUtil.success(HttpStatus.OK, res);
-    }
-
-    /**
      * Searches for RPM packages.
      *
      * @param condition The search condition.

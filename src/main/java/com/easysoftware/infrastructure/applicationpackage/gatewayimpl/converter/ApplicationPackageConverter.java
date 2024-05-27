@@ -1,7 +1,6 @@
 package com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter;
 
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
-import com.easysoftware.application.applicationpackage.vo.ApplicationPackageEulerArchsVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageEulerVersionVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageTagsVo;
@@ -62,25 +61,6 @@ public final class ApplicationPackageConverter {
             version.setArch(appkg.getArch());
             version.setPkgId(appkg.getPkgId());
             res.add(version);
-        }
-        return res;
-    }
-
-    /**
-     * Converts a list of ApplicationPackageDO objects to a list of
-     * ApplicationPackageEulerArchsVo
-     * view
-     * objects.
-     *
-     * @param appkgDOs The list of ApplicationPackageDO objects to convert.
-     * @return A list of ApplicationPackageEulerArchsVo view objects.
-     */
-    public static List<ApplicationPackageEulerArchsVo> toArchs(final List<ApplicationPackageDO> appkgDOs) {
-        List<ApplicationPackageEulerArchsVo> res = new ArrayList<>();
-        for (ApplicationPackageDO appkg : appkgDOs) {
-            ApplicationPackageEulerArchsVo archs = new ApplicationPackageEulerArchsVo();
-            archs.setArch(appkg.getArch());
-            res.add(archs);
         }
         return res;
     }
