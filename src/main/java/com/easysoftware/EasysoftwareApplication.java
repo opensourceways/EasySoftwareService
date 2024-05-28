@@ -22,7 +22,7 @@ public class EasysoftwareApplication {
      *
      * @param args Command-line arguments
      */
-    public static void main(final String[] args) {
+    public static void main( String[] args) {
         SpringApplication.run(EasysoftwareApplication.class, args);
     }
 
