@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageNameSearchCondition;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
+import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.epkgpackage.EPKGPackageUnique;
@@ -59,21 +60,11 @@ public class EPKGPackageServiceImpl extends
      */
     @Override
     public ResponseEntity<Object> searchEPKGPkg(final EPKGPackageSearchCondition condition) {
-        String os = StringUtils.trimToEmpty(condition.getOs());
-        String subPath = StringUtils.trimToEmpty(condition.getSubPath());
-        String name = StringUtils.trimToEmpty(condition.getName());
-        String version = StringUtils.trimToEmpty(condition.getVersion());
-        String arch = StringUtils.trimToEmpty(condition.getArch());
+        if (StringUtils.isBlank(condition.getPkgId())) {
+            throw new ParamErrorException("the pkgid is null");
+        }
 
-        StringBuilder cSb = new StringBuilder();
-        cSb.append(os);
-        cSb.append(subPath);
-        cSb.append(name);
-        cSb.append(version);
-        cSb.append(arch);
-        String pkgId = cSb.toString();
-
-        List<EPKGPackageDetailVo> epkgList = ePKGPackageGateway.queryDetailByPkgId(pkgId);
+        List<EPKGPackageDetailVo> epkgList = ePKGPackageGateway.queryDetailByPkgId(condition.getPkgId());
 
         if (!epkgList.isEmpty()) {
             Map<String, Object> res = Map.ofEntries(

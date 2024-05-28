@@ -11,9 +11,11 @@
 
 package com.easysoftware.application.applicationpackage;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageNameSearchCondition;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
+import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
 import jakarta.annotation.Resource;
@@ -79,6 +81,9 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
     @Override
     public ResponseEntity<Object> searchAppPkg(final ApplicationPackageSearchCondition condition) {
         condition.setTimeOrder("");
+        if (StringUtils.isBlank(condition.getPkgId())) {
+            throw new ParamErrorException("the pkgid is null");
+        }
         Map<String, Object> res = appPkgGateway.queryDetailByName(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }

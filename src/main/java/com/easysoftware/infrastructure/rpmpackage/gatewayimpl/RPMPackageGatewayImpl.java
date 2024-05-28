@@ -303,6 +303,11 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
             wrapper.eq("pkg_id", pkgId);
         }
         List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
+
+        if (rpmList.size() == 0) {
+            throw new NoneResException("the rpm package does not exist");
+        }
+
         return RPMPackageConverter.toDetail(rpmList);
     }
 }
