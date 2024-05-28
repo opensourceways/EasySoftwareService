@@ -16,7 +16,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.fieldpkg.dto.FieldPkgSearchCondition;
 import com.easysoftware.application.fieldpkg.vo.FieldPkgVo;
-import com.easysoftware.common.exception.NoneResException;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.domain.fieldpkg.gateway.FieldPkgGateway;
@@ -57,10 +56,6 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
         List<FieldPkgDO> list = resPage.getRecords();
         List<FieldPkgVo> voList = FieldPkgConverter.toVo(list);
         long total = resPage.getTotal();
-
-        if (total == 0 || voList.size() == 0) {
-            throw new NoneResException("the field package does not exist");
-        }
 
         return Map.ofEntries(
                 Map.entry("total", total),

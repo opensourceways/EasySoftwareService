@@ -20,7 +20,6 @@ import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDeta
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageEulerVersionVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageTagsVo;
-import com.easysoftware.common.exception.NoneResException;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
@@ -75,9 +74,6 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         long total = resPage.getTotal();
         List<ApplicationPackageDO> appDOs = resPage.getRecords();
         List<ApplicationPackageMenuVo> menus = ApplicationPackageConverter.toMenu(appDOs);
-        if (total == 0 || menus.size() == 0) {
-            throw new NoneResException("the image package does not exist");
-        }
 
         Map<String, Object> res = new HashMap<>();
         res.put("total", total);
@@ -98,10 +94,6 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         List<ApplicationPackageDO> appDOs = appPkgMapper.selectList(wrapper);
         List<ApplicationPackageTagsVo> aggregatePkgs = ApplicationPackageConverter.aggregateByTags(appDOs);
         long total = aggregatePkgs.size();
-
-        if (total == 0 || aggregatePkgs.size() == 0) {
-            throw new NoneResException("the tag does not exist");
-        }
 
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", total),
@@ -125,10 +117,6 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         List<ApplicationPackageDO> appDOs = resPage.getRecords();
         List<ApplicationPackageDetailVo> appDetails = ApplicationPackageConverter.toDetail(appDOs);
         long total = resPage.getTotal();
-
-        if (total == 0 || appDetails.size() == 0) {
-            throw new NoneResException("the image package does not exist");
-        }
 
         return Map.ofEntries(
                 Map.entry("total", total),

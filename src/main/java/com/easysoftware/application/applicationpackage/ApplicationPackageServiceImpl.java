@@ -13,10 +13,16 @@ package com.easysoftware.application.applicationpackage;
 
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageNameSearchCondition;
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
+import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
+import com.easysoftware.application.applicationpackage.vo.ApplicationPackageTagsVo;
+import com.easysoftware.common.exception.NoneResException;
+import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
 import jakarta.annotation.Resource;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,6 +73,11 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
     @Override
     public ResponseEntity<Object> queryPkgByTags(final ApplicationPackageNameSearchCondition condition) {
         Map<String, Object> res = appPkgGateway.queryTagsByName(condition);
+        Long total = (Long) res.get("total");
+        List<ApplicationPackageTagsVo> list = (List<ApplicationPackageTagsVo>) res.get("list");
+        if (total == 0 || list.size() == 0) {
+            throw new ParamErrorException("the tag does not exist");
+        }
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
@@ -79,7 +90,16 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
     @Override
     public ResponseEntity<Object> searchAppPkg(final ApplicationPackageSearchCondition condition) {
         condition.setTimeOrder("");
+        if (StringUtils.isBlank(condition.getPkgId())) {
+            throw new ParamErrorException("the pkgid can not be null");
+        }
+
         Map<String, Object> res = appPkgGateway.queryDetailByName(condition);
+        Long total = (Long) res.get("total");
+        List<ApplicationPackageDetailVo> list = (List<ApplicationPackageDetailVo>) res.get("list");
+        if (total == 0 || list.size() == 0) {
+            throw new ParamErrorException("the image pkg does not exist");
+        }
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
@@ -93,7 +113,12 @@ public class ApplicationPackageServiceImpl implements ApplicationPackageService 
     @Override
     public List<ApplicationPackageMenuVo> queryPkgMenuList(final ApplicationPackageSearchCondition condition) {
         Map<String, Object> map = appPkgGateway.queryMenuByName(condition);
-        return (List<ApplicationPackageMenuVo>) map.get("list");
+        Long total = (Long) map.get("total");
+        List<ApplicationPackageMenuVo> menus = (List<ApplicationPackageMenuVo>) map.get("list");
+        if (total == 0 || menus.size() == 0) {
+            throw new NoneResException("the image package does not exist");
+        }
+        return menus;
     }
 
     /**
