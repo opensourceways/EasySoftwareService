@@ -16,6 +16,8 @@ import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
+import com.easysoftware.common.exception.NoneResException;
+import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 import com.easysoftware.infrastructure.mapper.RPMPackageDOMapper;
@@ -96,41 +98,18 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
      */
     @Override
     public ResponseEntity<Object> searchRPMPkg(final RPMPackageSearchCondition condition) {
-        String pkgId = assemblePkgId(condition);
-
-        List<RPMPackageDetailVo> rpmList = rPMPkgGateway.queryDetailByPkgId(pkgId);
-        if (!rpmList.isEmpty()) {
-            Map<String, Object> res = Map.ofEntries(
-                    Map.entry("total", rpmList.size()),
-                    Map.entry("list", rpmList));
-            return ResultUtil.success(HttpStatus.OK, res);
+        if (StringUtils.isBlank(condition.getPkgId())) {
+            throw new ParamErrorException("the pkgid can not be null");
         }
 
-        Map<String, Object> res = rPMPkgGateway.queryDetailByName(condition);
+        List<RPMPackageDetailVo> rpmList = rPMPkgGateway.queryDetailByPkgId(condition.getPkgId());
+        if (rpmList.isEmpty()) {
+            throw new NoneResException("the rpm package does not exist");
+        }
+        Map<String, Object> res = Map.ofEntries(
+                Map.entry("total", rpmList.size()),
+                Map.entry("list", rpmList));
         return ResultUtil.success(HttpStatus.OK, res);
-    }
-
-    /**
-     * Assembles the package ID based on the RPM Package search condition.
-     *
-     * @param condition The RPM Package search condition.
-     * @return The assembled package ID as a String.
-     */
-    private String assemblePkgId(final RPMPackageSearchCondition condition) {
-        String os = StringUtils.trimToEmpty(condition.getOs());
-        String subPath = StringUtils.trimToEmpty(condition.getSubPath());
-        String name = StringUtils.trimToEmpty(condition.getName());
-        String version = StringUtils.trimToEmpty(condition.getVersion());
-        String arch = StringUtils.trimToEmpty(condition.getArch());
-
-        StringBuilder cSb = new StringBuilder();
-        cSb.append(os);
-        cSb.append(subPath);
-        cSb.append(name);
-        cSb.append(version);
-        cSb.append(arch);
-        String pkgId = cSb.toString();
-        return pkgId;
     }
 
     /**

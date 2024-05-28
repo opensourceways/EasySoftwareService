@@ -20,7 +20,6 @@ import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageEulerVersionVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
-import com.easysoftware.common.exception.NoneResException;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
@@ -63,10 +62,6 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         List<RPMPackageDO> rPMDOs = resPage.getRecords();
         List<RPMPackageDetailVo> rPMDetails = RPMPackageConverter.toDetail(rPMDOs);
         long total = resPage.getTotal();
-
-        if (total == 0 || rPMDetails.size() == 0) {
-            throw new NoneResException("the rpm package does not exist");
-        }
 
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", total),

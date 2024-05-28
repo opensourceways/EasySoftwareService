@@ -92,10 +92,6 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         List<EPKGPackageMenuVo> rPMMenus = EPKGPackageConverter.toMenu(rpmDOs);
         long total = resPage.getTotal();
 
-        if (total == 0 || rPMMenus.size() == 0) {
-            throw new NoneResException("the epkg package does not exist");
-        }
-
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", total),
                 Map.entry("list", rPMMenus));
