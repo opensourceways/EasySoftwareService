@@ -208,6 +208,9 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         QueryWrapper<EPKGPackageDO> wrapper = new QueryWrapper<>();
         wrapper.eq("pkg_id", pkgId);
         List<EPKGPackageDO> epkgList = ePKGPkgMapper.selectList(wrapper);
+        if (epkgList.size() == 0) {
+            throw new NoneResException("the epkg package does not exist");
+        }
         return EPKGPackageConverter.toDetail(epkgList);
     }
 
