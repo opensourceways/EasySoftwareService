@@ -188,6 +188,7 @@
 				<configuration>
 					<source>17</source>
 					<target>17</target>
+					<release>17</release>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -215,6 +216,14 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>4.2.3</version>
+				<configuration>
+					<effort>Max</effort>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
