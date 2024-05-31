@@ -201,11 +201,24 @@ public final class RPMPackageConverter {
      */
     public static List<RPMPackageNewestVersionVo> toRPMVersion(final List<RPMPackageDO> rpmPkgDOs) {
         List<RPMPackageNewestVersionVo> res = new ArrayList<>();
-        for (RPMPackageDO rpm : rpmPkgDOs) {
-            RPMPackageNewestVersionVo version = new RPMPackageNewestVersionVo();
-            version.setNewestVersion(rpm.getVersion());
-            res.add(version);
+        String newestVersion = "";
+        String os = "";
+
+        if (rpmPkgDOs.size() > 0) {
+            newestVersion = rpmPkgDOs.get(0).getVersion();
         }
+
+        for (RPMPackageDO rpm : rpmPkgDOs) {
+            if (newestVersion.compareTo(rpm.getVersion()) <= 0) {
+                newestVersion = rpm.getVersion();
+                os = rpm.getOs();
+            }
+        }
+
+        RPMPackageNewestVersionVo version = new RPMPackageNewestVersionVo();
+        version.setNewestVersion(newestVersion);
+        version.setOs(os);
+        res.add(version);
         return res;
     }
 }
