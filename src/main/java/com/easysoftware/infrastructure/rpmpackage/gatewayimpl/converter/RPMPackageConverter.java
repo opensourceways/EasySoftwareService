@@ -15,6 +15,7 @@ import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageEulerVersionVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageNewestVersionVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
@@ -184,6 +185,25 @@ public final class RPMPackageConverter {
             version.setOs(rpm.getOs());
             version.setArch(rpm.getArch());
             version.setPkgId(rpm.getPkgId());
+            res.add(version);
+        }
+        return res;
+    }
+
+    /**
+     * Converts a list of RPMPackageDO objects to a list of
+     * RPMPackageNewestVersionVo
+     * view
+     * objects.
+     *
+     * @param rpmPkgDOs The list of RPMPackageDO objects to convert.
+     * @return A list of RPMPackageNewestVersionVo view objects.
+     */
+    public static List<RPMPackageNewestVersionVo> toRPMVersion(final List<RPMPackageDO> rpmPkgDOs) {
+        List<RPMPackageNewestVersionVo> res = new ArrayList<>();
+        for (RPMPackageDO rpm : rpmPkgDOs) {
+            RPMPackageNewestVersionVo version = new RPMPackageNewestVersionVo();
+            version.setNewestVersion(rpm.getVersion());
             res.add(version);
         }
         return res;
