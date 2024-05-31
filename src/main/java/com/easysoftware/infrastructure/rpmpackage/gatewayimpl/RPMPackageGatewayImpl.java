@@ -21,7 +21,7 @@ import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageEulerVersionVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageNewestVersionVo;
-import com.easysoftware.common.constant.PackageConstant;
+import com.easysoftware.application.rpmpackage.vo.RPMPackgeVersionVo;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
@@ -231,11 +231,12 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     public Map<String, Object> queryNewstRpmVersion(final RPMPackageNameSearchCondition condition) {
         QueryWrapper<RPMPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new RPMPackageDO(),
                 condition, "");
+        RPMPackgeVersionVo pkgVo = new RPMPackgeVersionVo();
+        List<String> columns = ClassField.getFieldNames(pkgVo);
         if (condition.getName() != null) {
             wrapper.eq("name", condition.getName());
         }
-        wrapper.select(PackageConstant.MAX_VER_COL);
-        wrapper.groupBy("name");
+        wrapper.select(columns);
         List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
         List<RPMPackageNewestVersionVo> versions = RPMPackageConverter.toRPMVersion(rpmList);
         Map<String, Object> res = Map.ofEntries(

@@ -17,14 +17,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RPMPackageNewestVersionVo {
+public class RPMPackgeVersionVo {
     /**
-     * Newest versions of the rpm package.
+     * versions of the rpm package.
      */
-    private String newestVersion;
+    private String version;
 
     /**
-     * The coresspond euler versions of the rpm package.
+     * OpenEuler versions of the package.
      */
     private String os;
 }
