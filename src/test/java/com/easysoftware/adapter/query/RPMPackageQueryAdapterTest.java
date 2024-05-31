@@ -54,11 +54,25 @@ public class RPMPackageQueryAdapterTest {
     }
 
     @Test
-    void test_rpm_exception() throws Exception {
+    void test_rpm_version() throws Exception {
         MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
         paramMap.add("name", "error");
         paramMap.add("os", "openEuler-20.03-LTS-SP1");
         ResultVo res = CommonUtil.executeGet(mockMvc, "/rpmpkg", paramMap);
+        CommonUtil.assertList(res);
+    }
+
+    @Test
+    void test_rpm_exception() throws Exception {
+        MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
+        // test case1 :
+        paramMap.add("name", "test");
+        ResultVo comres = CommonUtil.executeGet(mockMvc, "/rpmpkg/rpmver", paramMap);
+        CommonUtil.assertList(comres);
+
+        // test case2 :
+        paramMap.add("name", "");
+        ResultVo res = CommonUtil.executeGet(mockMvc, "/rpmpkg/rpmver", paramMap);
         CommonUtil.assertList(res);
     }
 }

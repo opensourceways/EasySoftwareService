@@ -57,4 +57,18 @@ public class RPMPackageQueryAdapter {
     public ResponseEntity<Object> queryEulerVersionsByName(@Valid final RPMPackageNameSearchCondition condition) {
         return rPMPkgService.queryEulerVersionsByName(condition);
     }
+
+    /**
+     * Endpoint to query for all newst version of RPM packages based
+     * on the provided search condition.
+     *
+     * @param condition The search condition for querying versions of RPM packages.
+     * @return ResponseEntity<Object>.
+     */
+    @GetMapping("/rpmver")
+    @RequestLimitRedis()
+    public ResponseEntity<Object> queryNewstRpmVersion(@Valid final RPMPackageNameSearchCondition condition) {
+        return rPMPkgService.queryNewstRpmVersion(condition);
+    }
+
 }

@@ -55,4 +55,9 @@ public final class PackageConstant {
     public static final String VALID_MESSAGE = "Null or string. String includes only letters, digits, and special "
             + "characters(_-+()$.,)";
 
+    /**
+     * MAX_VER_SQL, max ver sql column.
+     */
+    public static final String MAX_VER_COL = "max(version) as version";
+
 }
