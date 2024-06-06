@@ -37,17 +37,25 @@ public class RequestFilterTest {
             String[].class, String.class);
         method.setAccessible(true); // 设置可访问私有方法
 
-
         // 以正常域名结尾
         assertTrue((boolean) method.invoke(filterConfig, domains, "www.test.com/"));
 
         // 以正常域名结尾并且带路径
         assertTrue((boolean) method.invoke(filterConfig, domains, "sub.test.cn/path"));
 
+        assertTrue((boolean) method.invoke(filterConfig, domains, "sub.test.cn"));
+        assertTrue((boolean) method.invoke(filterConfig, domains, "sub.test.cn/xxx?xx=xxx"));
+        assertTrue((boolean) method.invoke(filterConfig, domains, "sub.test.cn/sss"));
+
+        // 伪造域名
+        assertFalse((boolean) method.invoke(filterConfig, domains, "xxxx.xxxx.test.cn@test.cn"));
+        assertFalse((boolean) method.invoke(filterConfig, domains, "xxxxxtest.cn"));
+        assertFalse((boolean) method.invoke(filterConfig, domains, "//sub.test.cn"));
+
         // 以正常域名结尾并且带参数
         assertTrue((boolean) method.invoke(filterConfig, domains, "sub.test.cn/path?test=xx"));
 
-        // 不以 http:// 开头
+        // 不以 http:// 开头的错误域名
         assertFalse((boolean) method.invoke(filterConfig, domains, "www.test_error.com"));
 
         // 未匹配任何域名
