@@ -33,6 +33,9 @@ public class RequestHeaderFilter implements Filter {
      */
     private String allowDomains;
 
+    private static final String HTTP_PREFIX = "http://";
+    private static final String HTTPS_PREFIX = "https://";
+
     /**
      * check header.
      *
@@ -71,23 +74,54 @@ public class RequestHeaderFilter implements Filter {
         if (StringUtils.isBlank(input)) {
             return true;
         }
-        int fromIndex;
-        int endIndex;
-        if (input.startsWith("http://")) {
-            fromIndex = 7;
-            endIndex = input.indexOf(":", fromIndex);
-        } else {
-            fromIndex = 8;
-            endIndex = input.indexOf("/", fromIndex);
-            endIndex = endIndex == -1 ? input.length() : endIndex;
-        }
-        String substring = input.substring(0, endIndex);
+
+        String domainToCheck = extractDomainFromUrl(input);
+
         for (String domain : domains) {
-            if (substring.endsWith(domain)) {
+            if (domainToCheck.equals(domain)) {
                 return true;
             }
         }
+
         return false;
+    }
+
+    /**
+     * check url.
+     *
+     * @param url   url.
+     * @return String.
+     */
+    private String extractDomainFromUrl(String url) {
+        String domain = url;
+
+        if (url.startsWith(HTTP_PREFIX)) {
+            domain = url.substring(HTTP_PREFIX.length());
+        } else if (url.startsWith(HTTPS_PREFIX)) {
+            domain = url.substring(HTTPS_PREFIX.length());
+        }
+
+        int endIndex = domain.indexOf("/");
+        if (endIndex != -1) {
+            domain = domain.substring(0, endIndex);
+        }
+
+        // Remove port number if present
+        int indexColon = domain.lastIndexOf(":");
+        if (indexColon != -1) {
+            domain = domain.substring(0, indexColon);
+        }
+
+        // Extract main domain by finding last two dots and getting substring in between
+        int lastDotIndex = domain.lastIndexOf(".");
+        if (lastDotIndex != -1) {
+            int secondLastDotIndex = domain.substring(0, lastDotIndex).lastIndexOf(".");
+            if (secondLastDotIndex != -1) {
+                domain = domain.substring(secondLastDotIndex + 1);
+            }
+        }
+
+        return domain;
     }
 
     /**
