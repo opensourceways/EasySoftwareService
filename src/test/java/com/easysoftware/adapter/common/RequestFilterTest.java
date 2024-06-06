@@ -27,20 +27,73 @@ import java.lang.reflect.Method;
 public class RequestFilterTest {
 
     @Test
-    public void testCheckDomain() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void testCheckDomain_NormalCase() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         String allDomains = "test.com;test.cn";
         String[] domains = {"test.com", "test.cn"};
         RequestHeaderFilter filterConfig = new RequestHeaderFilter(allDomains);
 
         // 获取私有方法
-        Method method = RequestHeaderFilter.class.getDeclaredMethod("checkDomain", String[].class, String.class);
+        Method method = RequestHeaderFilter.class.getDeclaredMethod("checkDomain",
+            String[].class, String.class);
         method.setAccessible(true); // 设置可访问私有方法
 
-        // 调用私有方法，并传入参数
+
+        // 以正常域名结尾
+        assertTrue((boolean) method.invoke(filterConfig, domains, "www.test.com/"));
+
+        // 以正常域名结尾并且带路径
+        assertTrue((boolean) method.invoke(filterConfig, domains, "sub.test.cn/path"));
+
+        // 以正常域名结尾并且带参数
+        assertTrue((boolean) method.invoke(filterConfig, domains, "sub.test.cn/path?test=xx"));
+
+        // 不以 http:// 开头
+        assertFalse((boolean) method.invoke(filterConfig, domains, "www.test_error.com"));
+
+        // 未匹配任何域名
+        assertFalse((boolean) method.invoke(filterConfig, domains, "www.invalid.com"));
+
+        // 空输入应返回 true
+        assertTrue((boolean) method.invoke(filterConfig, domains, ""));
+    }
+
+    @Test
+    public void testCheckDomain_NullDomains()  throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        RequestHeaderFilter filterConfig = new RequestHeaderFilter(null);
+
+        // 获取私有方法
+        Method method = RequestHeaderFilter.class.getDeclaredMethod("checkDomain",
+            String[].class, String.class);
+        method.setAccessible(true); // 设置可访问私有方法
+
+        assertFalse((boolean) method.invoke(filterConfig, new String[]{}, "www.test.com"));
+    }
+
+    @Test
+    public void testCheckDomain_EmptyDomains() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        String allDomains = "";
+        RequestHeaderFilter filterConfig = new RequestHeaderFilter(allDomains);
+
+        // 获取私有方法
+        Method method = RequestHeaderFilter.class.getDeclaredMethod("checkDomain",
+            String[].class, String.class);
+        method.setAccessible(true); // 设置可访问私有方法
+
+        assertFalse((boolean) method.invoke(filterConfig, new String[]{}, "www.example.com"));
+    }
+
+    @Test
+    public void testCheckDomain_ExceptionCase() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        String allDomains = "test.com;test.cn";
+        String[] domains = {"test.com", "test.cn"};
+        RequestHeaderFilter filterConfig = new RequestHeaderFilter(allDomains);
+
+        Method method = RequestHeaderFilter.class.getDeclaredMethod("checkDomain", String[].class, String.class);
+        method.setAccessible(true);
+
         boolean result1 = (boolean) method.invoke(filterConfig, domains, "test.com");
         boolean result2 = (boolean) method.invoke(filterConfig, domains, "example.com");
 
-        // 断言
         assertTrue(result1); // 应该返回true
         assertFalse(result2); // 应该返回false
     }
