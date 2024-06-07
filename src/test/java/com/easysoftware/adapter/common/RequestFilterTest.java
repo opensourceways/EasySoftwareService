@@ -51,6 +51,8 @@ public class RequestFilterTest {
         assertFalse((boolean) method.invoke(filterConfig, domains, "xxxx.xxxx.test.cn@test.cn"));
         assertFalse((boolean) method.invoke(filterConfig, domains, "xxxxxtest.cn"));
         assertFalse((boolean) method.invoke(filterConfig, domains, "//sub.test.cn"));
+        assertFalse((boolean) method.invoke(filterConfig, domains, "http://"));
+        assertFalse((boolean) method.invoke(filterConfig, domains, "https://"));
 
         // 以正常域名结尾并且带参数
         assertTrue((boolean) method.invoke(filterConfig, domains, "sub.test.cn/path?test=xx"));
