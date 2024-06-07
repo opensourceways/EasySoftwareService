@@ -407,13 +407,12 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
      */
     @Override
     public ResponseEntity<Object> queryStat() {
-        long rpmNum = rpmGateway.queryTableLength();
         Long appNum = appGateway.queryTableLength();
-        long epkgNum = epkgGateway.queryTableLength();
+        long rpmNum = rpmGateway.queryTableLength();
 
         Map<String, Long> res = new HashMap<>();
         res.put("apppkg", appNum);
-        res.put("total", Math.addExact(rpmNum, epkgNum));
+        res.put("total", rpmNum);
         return ResultUtil.success(HttpStatus.OK, res);
     }
 

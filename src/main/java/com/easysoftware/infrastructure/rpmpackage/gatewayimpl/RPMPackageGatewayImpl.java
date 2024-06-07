@@ -168,7 +168,9 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
      */
     @Override
     public long queryTableLength() {
-        return rPMPkgMapper.selectCount(null);
+        QueryWrapper<RPMPackageDO> wrapper = new QueryWrapper<>();
+        wrapper.select("distinct name");
+        return rPMPkgMapper.selectCount(wrapper);
     }
 
     /**
