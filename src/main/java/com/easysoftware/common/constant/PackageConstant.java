@@ -55,4 +55,14 @@ public final class PackageConstant {
     public static final String VALID_MESSAGE = "Null or string. String includes only letters, digits, and special "
             + "characters(_-+()$.,)";
 
+    /**
+     * HTTP_PREFIX, Referer pass prefix.
+     */
+    public static final String HTTP_PREFIX = "http://";
+
+    /**
+     * HTTPS_PREFIX, Referer pass prefix.
+     */
+    public static final String HTTPS_PREFIX = "https://";
+
 }
