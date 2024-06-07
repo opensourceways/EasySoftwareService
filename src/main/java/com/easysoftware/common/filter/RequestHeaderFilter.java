@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import com.easysoftware.common.constant.PackageConstant;
 import java.io.IOException;
 
 /**
@@ -33,15 +34,6 @@ public class RequestHeaderFilter implements Filter {
      */
     private String allowDomains;
 
-    /**
-     * Referer pass prefix.
-     */
-    private static final String HTTP_PREFIX = "http://";
-
-    /**
-     * Referer pass prefix.
-     */
-    private static final String HTTPS_PREFIX = "https://";
 
     /**
      * check header.
@@ -102,10 +94,10 @@ public class RequestHeaderFilter implements Filter {
     private String extractDomainFromUrl(String url) {
         String domain = url;
 
-        if (url.startsWith(HTTP_PREFIX)) {
-            domain = url.substring(HTTP_PREFIX.length());
-        } else if (url.startsWith(HTTPS_PREFIX)) {
-            domain = url.substring(HTTPS_PREFIX.length());
+        if (url.startsWith(PackageConstant.HTTP_PREFIX)) {
+            domain = url.substring(PackageConstant.HTTP_PREFIX.length());
+        } else if (url.startsWith(PackageConstant.HTTPS_PREFIX)) {
+            domain = url.substring(PackageConstant.HTTPS_PREFIX.length());
         }
 
         int endIndex = domain.indexOf("/");
