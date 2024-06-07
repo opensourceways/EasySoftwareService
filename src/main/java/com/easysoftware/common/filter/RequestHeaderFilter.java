@@ -33,7 +33,14 @@ public class RequestHeaderFilter implements Filter {
      */
     private String allowDomains;
 
+    /**
+     * Referer pass prefix.
+     */
     private static final String HTTP_PREFIX = "http://";
+
+    /**
+     * Referer pass prefix.
+     */
     private static final String HTTPS_PREFIX = "https://";
 
     /**
