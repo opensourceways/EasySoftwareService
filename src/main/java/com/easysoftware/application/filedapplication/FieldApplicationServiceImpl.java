@@ -23,6 +23,7 @@ import com.easysoftware.application.fieldpkg.vo.FieldPkgVo;
 import com.easysoftware.application.filedapplication.dto.FieldColumnSearchCondition;
 import com.easysoftware.application.filedapplication.dto.FieldDetailSearchCondition;
 import com.easysoftware.application.filedapplication.dto.FiledApplicationSerachCondition;
+import com.easysoftware.application.filedapplication.vo.EulerLifeCycleVo;
 import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
 import com.easysoftware.application.rpmpackage.RPMPackageService;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
@@ -37,6 +38,7 @@ import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
 import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
+import com.easysoftware.domain.eulerlifecycle.gateway.EulerLifeCycleGateway;
 import com.easysoftware.domain.fieldapplication.gateway.FieldapplicationGateway;
 import com.easysoftware.domain.fieldpkg.gateway.FieldPkgGateway;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
@@ -110,6 +112,12 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
     private FieldPkgGateway fieldPkgGateway;
 
     /**
+     * eulerLifecycleGateway Package Gateway.
+     */
+    @Resource
+    private EulerLifeCycleGateway eulerLifecycleGateway;
+
+    /**
      * Resource injection for the Ranker.
      */
     @Resource
@@ -139,9 +147,26 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         } else if ("mainPage".equals(name)) {
             List<Map<String, Object>> cateMap = searchMainPage();
             return ResultUtil.success(HttpStatus.OK, cateMap);
+        } else if ("eulerLifecycle".equals(name)) {
+            Map<String, Object> lifeCycles = searchLifeCycle();
+            return ResultUtil.success(HttpStatus.OK, lifeCycles);
         } else {
             throw new ParamErrorException("the value of parameter name: apppkg, rpmpkg, epkgpkg, all");
         }
+    }
+
+    /**
+     * Search the euler lifecycle and return a list of maps containing key-value
+     * pairs.
+     *
+     * @return A list of maps with key-value pairs from the euler lifecycle.
+     */
+    private Map<String, Object> searchLifeCycle() {
+        List<EulerLifeCycleVo> elVos = eulerLifecycleGateway.selectAll();
+        Map<String, Object> res = Map.ofEntries(
+                Map.entry("total", elVos.size()),
+                Map.entry("list", elVos));
+        return res;
     }
 
     /**
