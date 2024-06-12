@@ -40,7 +40,7 @@ public class RPMPackageQueryAdapter {
      * @return ResponseEntity<Object>.
      */
     @GetMapping()
-    @RequestLimitRedis() // dos-global设置 2s内 单一ip调用超5次触发
+    @RequestLimitRedis()
     public ResponseEntity<Object> searchRPMPkg(@Valid final RPMPackageSearchCondition condition) {
         return rPMPkgService.searchRPMPkg(condition);
     }
@@ -56,19 +56,6 @@ public class RPMPackageQueryAdapter {
     @RequestLimitRedis()
     public ResponseEntity<Object> queryEulerVersionsByName(@Valid final RPMPackageNameSearchCondition condition) {
         return rPMPkgService.queryEulerVersionsByName(condition);
-    }
-
-    /**
-     * Endpoint to query for all newst version of RPM packages based
-     * on the provided search condition.
-     *
-     * @param condition The search condition for querying versions of RPM packages.
-     * @return ResponseEntity<Object>.
-     */
-    @GetMapping("/rpmver")
-    @RequestLimitRedis()
-    public ResponseEntity<Object> queryNewstRpmVersion(@Valid final RPMPackageNameSearchCondition condition) {
-        return rPMPkgService.queryNewstRpmVersion(condition);
     }
 
 }
