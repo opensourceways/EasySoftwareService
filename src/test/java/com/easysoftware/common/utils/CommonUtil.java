@@ -32,7 +32,7 @@ import com.easysoftware.common.entity.ResultVo;
 public class CommonUtil {
     public static ResultVo executeGet(MockMvc mockMvc, String url, MultiValueMap<String, String> paramMap) throws Exception {
         String content = "";
-        if (null == paramMap) {
+        if (paramMap == null) {
             content = mockMvc.perform(MockMvcRequestBuilders.get(url)
                     .accept(MediaType.APPLICATION_JSON))
                     .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
