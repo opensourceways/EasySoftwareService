@@ -70,7 +70,6 @@ public final class ClientUtil {
             ip = request.getHeader(headerName);
         }
         if (checkIp(ip)) {
-            headerName = "remote addr";
             ip = request.getRemoteAddr();
             // 127.0.0.1 ipv4, 0:0:0:0:0:0:0:1 ipv6
             if ("127.0.0.1".equals(ip) || "0:0:0:0:0:0:0:1".equals(ip)) {
