@@ -84,12 +84,4 @@ public interface RPMPackageGateway {
      * @return A map containing tags information
      */
     Map<String, Object> queryEulerVersionByName(RPMPackageNameSearchCondition condition);
-
-    /**
-     * Query the RPM newest version based on the provided search condition.
-     *
-     * @param condition The search condition for querying RPM newest version
-     * @return A map containing RPM newest version
-     */
-    Map<String, Object> queryNewstRpmVersion(RPMPackageNameSearchCondition condition);
 }

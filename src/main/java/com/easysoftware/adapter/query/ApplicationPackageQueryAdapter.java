@@ -40,7 +40,7 @@ public class ApplicationPackageQueryAdapter {
      * @return ResponseEntity<Object>.
      */
     @GetMapping("")
-    @RequestLimitRedis(period = 10, count = 5) // 10s内同一ip连续访问5次，拒绝访问
+    @RequestLimitRedis()
     public ResponseEntity<Object> queryByName(@Valid final ApplicationPackageSearchCondition condition) {
         return appPkgService.searchAppPkg(condition);
     }
