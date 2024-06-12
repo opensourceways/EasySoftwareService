@@ -9,7 +9,6 @@
  See the Mulan PSL v2 for more details.
 */
 
-
 package com.easysoftware.redis;
 
 import com.easysoftware.common.utils.ResultUtil;
@@ -29,23 +28,6 @@ public class RedisServiceImpl implements RedisService {
      */
     @Resource
     private RedisGateway redisGateway;
-
-    /**
-     * Set a key-value pair in Redis.
-     *
-     * @param key   The key to set.
-     * @param value The value to set.
-     * @return ResponseEntity with the result of the operation.
-     */
-    @Override
-    public ResponseEntity<Object> setKey(final String key, final String value) {
-        redisGateway.set(key, value);
-
-        Map<String, Object> res = Map.ofEntries(
-                Map.entry("key", key),
-                Map.entry("msg", "Successfully set the key"));
-        return ResultUtil.success(HttpStatus.OK, res);
-    }
 
     /**
      * Get the value associated with a key in Redis.
