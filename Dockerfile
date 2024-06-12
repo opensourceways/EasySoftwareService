@@ -92,3 +92,4 @@ EXPOSE 8080
 USER easysoftware
 
 CMD java -jar ${WORKSPACE}/target/easysoftware-0.0.1-SNAPSHOT.jar --spring.config.location=${APPLICATION_PATH}
+#
