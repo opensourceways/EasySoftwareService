@@ -46,14 +46,6 @@ public interface RPMPackageService extends BaseIService<RPMPackageDO> {
     ResponseEntity<Object> queryEulerVersionsByName(RPMPackageNameSearchCondition condition);
 
     /**
-     * Query the RPM newest version based on the provided search condition.
-     *
-     * @param condition The search condition for querying RPM newest version
-     * @return A map containing RPM newest version
-     */
-    ResponseEntity<Object> queryNewstRpmVersion(RPMPackageNameSearchCondition condition);
-
-    /**
      * Queries part of the application package menu.
      *
      * @param condition The search condition.

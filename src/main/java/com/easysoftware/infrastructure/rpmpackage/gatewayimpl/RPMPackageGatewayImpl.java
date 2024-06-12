@@ -20,8 +20,6 @@ import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageEulerVersionVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
-import com.easysoftware.application.rpmpackage.vo.RPMPackageNewestVersionVo;
-import com.easysoftware.application.rpmpackage.vo.RPMPackgeVersionVo;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
@@ -216,31 +214,6 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         wrapper.groupBy("os", "arch");
         List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
         List<RPMPackageEulerVersionVo> versions = RPMPackageConverter.toVersion(rpmList);
-        Map<String, Object> res = Map.ofEntries(
-                Map.entry("total", versions.size()),
-                Map.entry("list", versions));
-        return res;
-    }
-
-    /**
-     * Query the RPM newest version based on the provided search condition.
-     *
-     * @param condition The search condition for querying a part of the RPM
-     *                  newest version
-     * @return A map containing relevant information
-     */
-    @Override
-    public Map<String, Object> queryNewstRpmVersion(final RPMPackageNameSearchCondition condition) {
-        QueryWrapper<RPMPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new RPMPackageDO(),
-                condition, "");
-        RPMPackgeVersionVo pkgVo = new RPMPackgeVersionVo();
-        List<String> columns = ClassField.getFieldNames(pkgVo);
-        if (condition.getName() != null) {
-            wrapper.eq("name", condition.getName());
-        }
-        wrapper.select(columns);
-        List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
-        List<RPMPackageNewestVersionVo> versions = RPMPackageConverter.toRPMVersion(rpmList);
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", versions.size()),
                 Map.entry("list", versions));
