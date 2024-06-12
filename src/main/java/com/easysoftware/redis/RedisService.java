@@ -16,14 +16,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.concurrent.TimeUnit;
 
 public interface RedisService {
-    /**
-     * Set a key-value pair in Redis.
-     *
-     * @param key   The key to set.
-     * @param value The value to set.
-     * @return ResponseEntity with the result of the operation.
-     */
-    ResponseEntity<Object> setKey(String key, String value);
 
     /**
      * Get the value associated with a key in Redis.
