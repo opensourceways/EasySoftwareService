@@ -118,8 +118,9 @@ public class RequestLimitRedisAspect {
 
         if (count != null && count > limitCount) {
             // 审计日志
-            LOGGER.error("the current uri is{}，the request frequency of uri exceeds the limited frequency: "
-                    + "{} times/{}s ,IP：{},type: GET", LogUtil.formatCodeString(uri), limitCount, period, ip);
+            LOGGER.error("Resource uri: {}，the request frequency of uri exceeds the limited frequency: "
+                    + "{} times/{}s ,Client IP：{},type: GET, Result: query failed.", LogUtil.formatCodeString(uri),
+                    limitCount, period, ip);
             return ResultUtil.fail(HttpStatus.TOO_MANY_REQUESTS, MessageCode.EC00010);
         }
 
