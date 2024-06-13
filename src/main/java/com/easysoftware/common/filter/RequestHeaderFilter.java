@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import com.easysoftware.common.constant.PackageConstant;
+
 import java.io.IOException;
 
 /**
@@ -49,6 +50,18 @@ public class RequestHeaderFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String referer = request.getHeader("Referer");
         String[] domains = allowDomains.split(";");
+        if (domains != null) {
+            for (int i = 0; i < domains.length; i++) {
+                String domain = domains[i];
+                if (domain.contains(PackageConstant.HTTP_PREFIX)) {
+                    domains[i] = domain.replace(PackageConstant.HTTP_PREFIX, "");
+                }
+
+                if (domain.contains(PackageConstant.HTTPS_PREFIX)) {
+                    domains[i] = domain.replace(PackageConstant.HTTPS_PREFIX, "");
+                }
+            }
+        }
         boolean checkReferer = checkDomain(domains, referer);
         if (!checkReferer) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -77,7 +90,7 @@ public class RequestHeaderFilter implements Filter {
         String domainToCheck = extractDomainFromUrl(input);
 
         for (String domain : domains) {
-            if (domain.equals(input) || domainToCheck.equals(domain)) {
+            if (domainToCheck.equals(domain)) {
                 return true;
             }
         }
@@ -88,9 +101,10 @@ public class RequestHeaderFilter implements Filter {
     /**
      * check url.
      *
-     * @param url   url.
+     * @param url url.
      * @return String.
      */
+
     private String extractDomainFromUrl(String url) {
         String domain = url;
 
@@ -99,7 +113,7 @@ public class RequestHeaderFilter implements Filter {
         } else if (url.startsWith(PackageConstant.HTTPS_PREFIX)) {
             domain = url.substring(PackageConstant.HTTPS_PREFIX.length());
         } else {
-            return url;
+            return "";
         }
 
         int endIndex = domain.indexOf("/");
@@ -111,15 +125,6 @@ public class RequestHeaderFilter implements Filter {
         int indexColon = domain.lastIndexOf(":");
         if (indexColon != -1) {
             domain = domain.substring(0, indexColon);
-        }
-
-        // Extract main domain by finding last two dots and getting substring in between
-        int lastDotIndex = domain.lastIndexOf(".");
-        if (lastDotIndex != -1) {
-            int secondLastDotIndex = domain.substring(0, lastDotIndex).lastIndexOf(".");
-            if (secondLastDotIndex != -1) {
-                domain = domain.substring(secondLastDotIndex + 1);
-            }
         }
 
         return domain;
