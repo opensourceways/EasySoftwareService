@@ -77,7 +77,7 @@ public class RequestHeaderFilter implements Filter {
         String domainToCheck = extractDomainFromUrl(input);
 
         for (String domain : domains) {
-            if (domainToCheck.equals(domain)) {
+            if (domain.equals(input) || domainToCheck.equals(domain)) {
                 return true;
             }
         }
@@ -98,6 +98,8 @@ public class RequestHeaderFilter implements Filter {
             domain = url.substring(PackageConstant.HTTP_PREFIX.length());
         } else if (url.startsWith(PackageConstant.HTTPS_PREFIX)) {
             domain = url.substring(PackageConstant.HTTPS_PREFIX.length());
+        } else {
+            return url;
         }
 
         int endIndex = domain.indexOf("/");
