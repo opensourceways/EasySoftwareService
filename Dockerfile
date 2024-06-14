@@ -46,7 +46,8 @@ RUN echo "umask 027" >> /home/easysoftware/.bashrc \
     && echo "set +o history" >> /etc/bashrc \
     && echo "set +o history" >> /home/easysoftware/.bashrc \
     && sed -i "s|HISTSIZE=1000|HISTSIZE=0|" /etc/profile \
-    && sed -i "s|PASS_MAX_DAYS[ \t]*99999|PASS_MAX_DAYS 30|" /etc/login.defs
+    && sed -i "s|PASS_MAX_DAYS[ \t]*99999|PASS_MAX_DAYS 30|" /etc/login.defs \
+    && sed -i '4,6d' /home/easysoftware/.bashrc
 
 RUN passwd -l easysoftware \
     && usermod -s /sbin/nologin sync \
