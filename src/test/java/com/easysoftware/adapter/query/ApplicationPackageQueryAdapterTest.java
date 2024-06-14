@@ -25,11 +25,9 @@ import org.springframework.web.context.WebApplicationContext;
 import com.easysoftware.common.entity.ResultVo;
 import com.easysoftware.common.utils.CommonUtil;
 
-import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Slf4j
 public class ApplicationPackageQueryAdapterTest {
     private static final String REQUEST_MAPPING = "/apppkg";
     @Autowired
