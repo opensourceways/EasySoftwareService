@@ -96,9 +96,7 @@ public class RequestHeaderFilter implements Filter {
     private String extractDomainFromUrl(String url) {
         String domain = url;
 
-        if (url.startsWith(PackageConstant.HTTP_PREFIX)) {
-            domain = url.substring(PackageConstant.HTTP_PREFIX.length());
-        } else if (url.startsWith(PackageConstant.HTTPS_PREFIX)) {
+        if (url.startsWith(PackageConstant.HTTPS_PREFIX)) {
             domain = url.substring(PackageConstant.HTTPS_PREFIX.length());
         } else {
             return "";
@@ -107,12 +105,6 @@ public class RequestHeaderFilter implements Filter {
         int endIndex = domain.indexOf("/");
         if (endIndex != -1) {
             domain = domain.substring(0, endIndex);
-        }
-
-        // Remove port number if present
-        int indexColon = domain.lastIndexOf(":");
-        if (indexColon != -1) {
-            domain = domain.substring(0, indexColon);
         }
 
         return domain;
