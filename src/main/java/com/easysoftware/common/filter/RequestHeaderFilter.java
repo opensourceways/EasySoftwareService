@@ -50,18 +50,6 @@ public class RequestHeaderFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String referer = request.getHeader("Referer");
         String[] domains = allowDomains.split(";");
-        if (domains != null) {
-            for (int i = 0; i < domains.length; i++) {
-                String domain = domains[i];
-                if (domain.contains(PackageConstant.HTTP_PREFIX)) {
-                    domains[i] = domain.replace(PackageConstant.HTTP_PREFIX, "");
-                }
-
-                if (domain.contains(PackageConstant.HTTPS_PREFIX)) {
-                    domains[i] = domain.replace(PackageConstant.HTTPS_PREFIX, "");
-                }
-            }
-        }
         boolean checkReferer = checkDomain(domains, referer);
         if (!checkReferer) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
