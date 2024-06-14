@@ -56,11 +56,6 @@ public final class PackageConstant {
             + "characters(_-+()$.,)";
 
     /**
-     * HTTP_PREFIX, Referer pass prefix.
-     */
-    public static final String HTTP_PREFIX = "http://";
-
-    /**
      * HTTPS_PREFIX, Referer pass prefix.
      */
     public static final String HTTPS_PREFIX = "https://";
