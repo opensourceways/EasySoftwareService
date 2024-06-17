@@ -236,7 +236,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         RPMPackgeVersionVo pkgVo = new RPMPackgeVersionVo();
         List<String> columns = ClassField.getFieldNames(pkgVo);
         if (condition.getName() != null) {
-            wrapper.eq("name", condition.getName());
+            wrapper.eq("name", condition.getName().toLowerCase());
         }
         wrapper.select(columns);
         List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
