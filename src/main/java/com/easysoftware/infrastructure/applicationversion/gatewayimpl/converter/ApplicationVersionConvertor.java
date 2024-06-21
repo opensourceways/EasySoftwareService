@@ -1,5 +1,6 @@
 package com.easysoftware.infrastructure.applicationversion.gatewayimpl.converter;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.UuidUtil;
 import com.easysoftware.domain.applicationversion.ApplicationVersion;
@@ -13,6 +14,7 @@ import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class ApplicationVersionConvertor {
     /**
@@ -124,7 +126,7 @@ public final class ApplicationVersionConvertor {
         } catch (Exception e) {
             LOGGER.error(MessageCode.EC00011.getMsgEn(), e);
         }
-        return res;
+        return res.stream().filter(s -> !StringUtils.isBlank(s)).collect(Collectors.toList());
     }
 }
 
