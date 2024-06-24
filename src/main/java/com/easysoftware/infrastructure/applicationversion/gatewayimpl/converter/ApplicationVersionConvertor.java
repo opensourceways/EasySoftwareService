@@ -15,6 +15,7 @@ import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.domain.applicationversion.ApplicationVersion;
 import com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobject.ApplicationVersionDO;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -22,6 +23,7 @@ import org.springframework.beans.BeanUtils;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class ApplicationVersionConvertor {
     /**
@@ -96,6 +98,6 @@ public final class ApplicationVersionConvertor {
         } catch (Exception e) {
             LOGGER.error(MessageCode.EC00011.getMsgEn(), e.getMessage());
         }
-        return res;
+        return res.stream().filter(s -> !StringUtils.isBlank(s)).collect(Collectors.toList());
     }
 }
