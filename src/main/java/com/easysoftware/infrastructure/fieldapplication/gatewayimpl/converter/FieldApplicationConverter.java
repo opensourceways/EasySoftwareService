@@ -16,6 +16,7 @@ import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.fieldpkg.dto.FieldPkgSearchCondition;
 import com.easysoftware.application.filedapplication.dto.FiledApplicationSerachCondition;
 import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
+import com.easysoftware.application.oepackage.dto.OEPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ObjectMapperUtil;
@@ -148,6 +149,20 @@ public final class FieldApplicationConverter {
         BeanUtils.copyProperties(con, rPMCon);
         rPMCon.setName("");
         return rPMCon;
+    }
+
+    /**
+     * Converts a FieldApplicationSearchCondition object to an
+     * OEPackageSearchCondition object.
+     *
+     * @param con The FieldApplicationSearchCondition object to convert.
+     * @return The converted OEPackageSearchCondition object.
+     */
+    public static OEPackageSearchCondition toOep(final FiledApplicationSerachCondition con) {
+        OEPackageSearchCondition oepCon = new OEPackageSearchCondition();
+        BeanUtils.copyProperties(con, oepCon);
+        oepCon.setName("");
+        return oepCon;
     }
 
     /**
