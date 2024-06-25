@@ -25,6 +25,7 @@ import com.easysoftware.application.filedapplication.dto.FieldDetailSearchCondit
 import com.easysoftware.application.filedapplication.dto.FiledApplicationSerachCondition;
 import com.easysoftware.application.filedapplication.vo.EulerLifeCycleVo;
 import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
+import com.easysoftware.application.oepackage.dto.OEPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.RPMPackageService;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
@@ -41,6 +42,7 @@ import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
 import com.easysoftware.domain.eulerlifecycle.gateway.EulerLifeCycleGateway;
 import com.easysoftware.domain.fieldapplication.gateway.FieldapplicationGateway;
 import com.easysoftware.domain.fieldpkg.gateway.FieldPkgGateway;
+import com.easysoftware.domain.oepackage.gateway.OEPackageGateway;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 import com.easysoftware.infrastructure.fieldapplication.gatewayimpl.converter.FieldApplicationConverter;
 import com.easysoftware.ranking.Ranker;
@@ -112,6 +114,11 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
     private FieldPkgGateway fieldPkgGateway;
 
     /**
+     * OEPkgGateway Package Gateway.
+     */
+    @Resource
+    private OEPackageGateway oePkgGateway;
+    /**
      * eulerLifecycleGateway Package Gateway.
      */
     @Resource
@@ -140,6 +147,9 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
             return ResultUtil.success(HttpStatus.OK, res);
         } else if ("epkgpkg".equals(name)) {
             Map<String, Object> res = searchEpkgMenu(condition);
+            return ResultUtil.success(HttpStatus.OK, res);
+        } else if ("oepkg".equals(name)) {
+            Map<String, Object> res = searchOEPkgMenu(condition);
             return ResultUtil.success(HttpStatus.OK, res);
         } else if ("domain".equals(name)) {
             Map<String, Object> res = searchDomainMenu(condition);
@@ -281,6 +291,27 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
     }
 
     /**
+     * Search OEPkg menu based on the specified search condition.
+     *
+     * @param condition The search condition for OEPkg menu search.
+     * @return A map containing the search results with string keys and object
+     *         values.
+     */
+    private Map<String, Object> searchOEPkgMenu(final FiledApplicationSerachCondition condition) {
+
+        OEPackageSearchCondition oep = FieldApplicationConverter.toOep(condition);
+        Map<String, Object> map = oePkgGateway.queryMenuByName(oep);
+
+        Long total = (Long) map.get("total");
+        List<RPMPackageMenuVo> list = (List<RPMPackageMenuVo>) map.get("list");
+
+        if (total == 0 || list.size() == 0) {
+            throw new NoneResException("the rpm package does not exist");
+        }
+        return map;
+    }
+
+    /**
      * Search Application menu based on the specified search condition.
      *
      * @param condition The search condition for Application menu search.
@@ -321,6 +352,9 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
             return ResultUtil.success(HttpStatus.OK, res);
         } else if ("domain".equals(name)) {
             Map<String, List<String>> res = fieldPkgGateway.queryColumn(columns);
+            return ResultUtil.success(HttpStatus.OK, res);
+        } else if ("oepkg".equals(name)) {
+            Map<String, List<String>> res = oePkgGateway.queryColumn(columns);
             return ResultUtil.success(HttpStatus.OK, res);
         } else {
             throw new ParamErrorException("the value of parameter name: apppkg, rpmpkg, epkgpkg, all");
