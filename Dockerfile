@@ -77,7 +77,9 @@ RUN rm -rf `find / -iname "*tcpdump*"` \
     && rm -rf /root/.m2/repository/* \
     && rm -rf /tmp/* \
     && rm -rf ${WORKSPACE}/jdk-17.0.11+9-jre/bin/jfr \
-    && rm -rf ${WORKSPACE}/jdk-17.0.11+9-jre/bin/jrunscript
+    && rm -rf ${WORKSPACE}/jdk-17.0.11+9-jre/bin/jrunscript \
+    && rm -rf ${WORKSPACE}/jdk-17.0.11+9-jre/bin/keytool \
+    && rm -rf ${WORKSPACE}/jdk-17.0.11+9-jre/bin/rmiregistry
 
 RUN rm -rf /usr/bin/gdb* \
     && rm -rf /usr/share/gdb \
