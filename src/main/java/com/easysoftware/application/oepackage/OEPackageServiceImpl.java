@@ -23,9 +23,11 @@ import com.easysoftware.common.exception.NoneResException;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.oepackage.gateway.OEPackageGateway;
+import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Resource;
 
+@Service
 public class OEPackageServiceImpl implements OEPackageService {
 
     /**
@@ -46,13 +48,13 @@ public class OEPackageServiceImpl implements OEPackageService {
             throw new ParamErrorException("the pkgid can not be null");
         }
 
-        List<OEPackageDetailVo> rpmList = oEPkgGateway.queryDetailByPkgId(condition.getPkgId());
-        if (rpmList.isEmpty()) {
+        List<OEPackageDetailVo> oepList = oEPkgGateway.queryDetailByPkgId(condition.getPkgId());
+        if (oepList.isEmpty()) {
             throw new NoneResException("the oe package does not exist");
         }
         Map<String, Object> res = Map.ofEntries(
-                Map.entry("total", rpmList.size()),
-                Map.entry("list", rpmList));
+                Map.entry("total", oepList.size()),
+                Map.entry("list", oepList));
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
