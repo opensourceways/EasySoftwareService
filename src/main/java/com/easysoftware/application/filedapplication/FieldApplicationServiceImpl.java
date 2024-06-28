@@ -26,6 +26,7 @@ import com.easysoftware.application.filedapplication.dto.FiledApplicationSerachC
 import com.easysoftware.application.filedapplication.vo.EulerLifeCycleVo;
 import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
 import com.easysoftware.application.oepackage.dto.OEPackageSearchCondition;
+import com.easysoftware.application.oepackage.vo.OEPackageMenuVo;
 import com.easysoftware.application.rpmpackage.RPMPackageService;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
@@ -303,7 +304,7 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         Map<String, Object> map = oePkgGateway.queryMenuByName(oep);
 
         Long total = (Long) map.get("total");
-        List<RPMPackageMenuVo> list = (List<RPMPackageMenuVo>) map.get("list");
+        List<OEPackageMenuVo> list = (List<OEPackageMenuVo>) map.get("list");
 
         if (total == 0 || list.size() == 0) {
             throw new NoneResException("the rpm package does not exist");
