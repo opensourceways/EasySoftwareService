@@ -16,6 +16,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import com.easysoftware.application.applicationpackage.vo.EulerVer;
 
 public final class SortUtil {
     // Private constructor to prevent instantiation of the utility class
@@ -45,5 +49,26 @@ public final class SortUtil {
 
         Collections.sort(list, listCompare);
         return list;
+    }
+
+    /**
+     * sort the eulerver by os.
+     * @param <T> object which implements eulerver.
+     * @param list lsit of eulerver.
+     * @return lsit of eulerver.
+     */
+    public static <T extends EulerVer> List<T> sortEulerVer(List<T> list) {
+        List<T> sorted = list.stream().sorted(
+            Comparator.comparing(T::getOs, Comparator.reverseOrder())
+        ).collect(Collectors.toList());
+
+        Map<Boolean, List<T>> map = sorted.stream().collect(
+            Collectors.partitioningBy(e -> e.getOs().contains("preview"))
+        );
+
+        List<T> noPreview = map.get(false);
+        List<T> preview = map.get(true);
+        noPreview.addAll(preview);
+        return noPreview;
     }
 }
