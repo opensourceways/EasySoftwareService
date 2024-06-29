@@ -11,6 +11,8 @@
 
 package com.easysoftware.application.epkgpackage.vo;
 
+import com.easysoftware.application.applicationpackage.vo.EulerVer;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EPKGPackageEulerVersionVo {
+public class EPKGPackageEulerVersionVo implements EulerVer {
     /**
      * OpenEuler version of the package.
      */

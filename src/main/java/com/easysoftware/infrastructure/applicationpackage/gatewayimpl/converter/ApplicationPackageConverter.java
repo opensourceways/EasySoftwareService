@@ -16,6 +16,7 @@ import com.easysoftware.application.applicationpackage.vo.ApplicationPackageEule
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageTagsVo;
 import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.domain.applicationpackage.ApplicationPackage;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
 import org.apache.commons.lang3.StringUtils;
@@ -72,7 +73,8 @@ public final class ApplicationPackageConverter {
             version.setPkgId(appkg.getPkgId());
             res.add(version);
         }
-        return res;
+
+        return SortUtil.sortEulerVer(res);
     }
 
     /**

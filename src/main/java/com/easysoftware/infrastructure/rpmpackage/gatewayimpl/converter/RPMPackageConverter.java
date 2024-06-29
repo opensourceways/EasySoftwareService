@@ -17,6 +17,7 @@ import com.easysoftware.application.rpmpackage.vo.RPMPackageEulerVersionVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageNewestVersionVo;
 import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
 import org.slf4j.Logger;
@@ -187,8 +188,9 @@ public final class RPMPackageConverter {
             version.setPkgId(rpm.getPkgId());
             res.add(version);
         }
-        return res;
+        return SortUtil.sortEulerVer(res);
     }
+
 
     /**
      * Converts a list of RPMPackageDO objects to a list of
