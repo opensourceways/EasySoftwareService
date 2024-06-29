@@ -15,6 +15,7 @@ import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageEulerVersionVo;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.domain.epkgpackage.EPKGPackage;
 import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.dataobject.EPKGPackageDO;
 import org.slf4j.Logger;
@@ -84,7 +85,7 @@ public final class EPKGPackageConverter {
             version.setPkgId(epkg.getPkgId());
             res.add(version);
         }
-        return res;
+        return SortUtil.sortEulerVer(res);
     }
 
     /**

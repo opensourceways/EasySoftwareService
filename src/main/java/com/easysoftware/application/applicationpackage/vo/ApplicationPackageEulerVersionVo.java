@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApplicationPackageEulerVersionVo {
+public class ApplicationPackageEulerVersionVo implements EulerVer {
     /**
      * OpenEuler version of the package.
      */

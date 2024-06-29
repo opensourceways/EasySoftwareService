@@ -9,30 +9,12 @@
  See the Mulan PSL v2 for more details.
 */
 
-package com.easysoftware.application.rpmpackage.vo;
+package com.easysoftware.application.applicationpackage.vo;
 
-import com.easysoftware.application.applicationpackage.vo.EulerVer;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class RPMPackageEulerVersionVo implements EulerVer {
+public interface EulerVer {
     /**
-     * OpenEuler versions of the package.
+     * get os.
+     * @return os.
      */
-    private String os;
-
-    /**
-     * OpenEuler arch of the package.
-     */
-    private String arch;
-
-    /**
-     * pkgId of the package.
-     */
-    private String pkgId;
+    String getOs();
 }
