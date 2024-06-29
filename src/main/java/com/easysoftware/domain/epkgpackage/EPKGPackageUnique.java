@@ -47,7 +47,7 @@ public class EPKGPackageUnique {
     /**
      * Timestamp indicating when the entity was last updated in the EPKG system.
      */
-    private String epkgUpdateAt;
+    private String rpmUpdateAt;
 
 
 }

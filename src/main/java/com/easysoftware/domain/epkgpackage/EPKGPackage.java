@@ -55,7 +55,7 @@ public class EPKGPackage {
     /**
      * Timestamp indicating when the package was last updated in the EPKG system.
      */
-    private String epkgUpdateAt;
+    private String rpmUpdateAt;
 
     /**
      * Source repository information for the package.
@@ -65,7 +65,7 @@ public class EPKGPackage {
     /**
      * Size of the EPKG package.
      */
-    private String epkgSize;
+    private String rpmSize;
 
     /**
      * Binary download URL for the package.

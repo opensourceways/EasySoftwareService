@@ -56,7 +56,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
     public Map<String, Object> queryDetailByName(final EPKGPackageSearchCondition condition) {
         Page<EPKGPackageDO> page = createPage(condition);
         QueryWrapper<EPKGPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new EPKGPackageDO(),
-                condition, "epkg_update_at");
+                condition, "rpm_update_at");
         IPage<EPKGPackageDO> resPage = ePKGPkgMapper.selectPage(page, wrapper);
         List<EPKGPackageDO> rPMDOs = resPage.getRecords();
         List<EPKGPackageDetailVo> rPMDetails = EPKGPackageConverter.toDetail(rPMDOs);
@@ -83,7 +83,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
     public Map<String, Object> queryMenuByName(final EPKGPackageSearchCondition condition) {
         Page<EPKGPackageDO> page = createPage(condition);
         QueryWrapper<EPKGPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new EPKGPackageDO(),
-                condition, "epkg_update_at");
+                condition, "rpm_update_at");
         EPKGPackageMenuVo pkgVo = new EPKGPackageMenuVo();
         List<String> columns = ClassField.getFieldNames(pkgVo);
         wrapper.select(columns);
@@ -185,7 +185,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         if (name != null) {
             wrapper.eq("name", name);
         }
-        wrapper.last("order by epkg_update_at desc limit 1");
+        wrapper.last("order by rpm_update_at desc limit 1");
         List<EPKGPackageDO> epkgList = ePKGPkgMapper.selectList(wrapper);
         if (epkgList.size() == 0) {
             return new EPKGPackageMenuVo();
