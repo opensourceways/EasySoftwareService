@@ -14,6 +14,8 @@ package com.easysoftware.infrastructure.oepkg.gatewalmpl.dataobject;
 import java.io.Serial;
 import java.sql.Timestamp;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -200,6 +202,12 @@ public class OepkgDO {
      * License.
      */
     private String license;
+
+    /**
+     * number of selected pkgs.
+     */
+    @TableField(value = "count(*)", insertStrategy = FieldStrategy.NEVER, updateStrategy = FieldStrategy.NEVER)
+    private Integer count;
 
     /**
      * get an OepkgDO entity createAt field value.

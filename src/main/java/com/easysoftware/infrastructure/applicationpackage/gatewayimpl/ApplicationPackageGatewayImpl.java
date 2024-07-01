@@ -11,6 +11,7 @@
 
 package com.easysoftware.infrastructure.applicationpackage.gatewayimpl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -37,6 +38,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway {
@@ -260,5 +262,23 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         return Map.ofEntries(
                 Map.entry("total", versions.size()),
                 Map.entry("list", versions));
+    }
+
+    /**
+     * query pkg num of arch by os.
+     * @param os os.
+     * @return pkg nums of arch.
+     */
+    @Override
+    public Map<String, Object> queryArchNum(String os) {
+        LambdaQueryWrapper<ApplicationPackageDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(ApplicationPackageDO::getArch, ApplicationPackageDO::getCount);
+        wrapper.groupBy(ApplicationPackageDO::getArch);
+        List<ApplicationPackageDO> list = appPkgMapper.selectList(wrapper);
+
+        Map<String, Object> res = list.stream()
+                .collect(Collectors.toMap(ApplicationPackageDO::getArch, ApplicationPackageDO::getCount));
+        res.put("type", "image");
+        return res;
     }
 }

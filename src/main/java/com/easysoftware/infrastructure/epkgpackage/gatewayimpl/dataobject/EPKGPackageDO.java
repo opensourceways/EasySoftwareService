@@ -11,6 +11,8 @@
 
 package com.easysoftware.infrastructure.epkgpackage.gatewayimpl.dataobject;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -208,6 +210,12 @@ public class EPKGPackageDO {
      * License.
      */
     private String license;
+
+    /**
+     * number of selected pkgs.
+     */
+    @TableField(value = "count(*)", insertStrategy = FieldStrategy.NEVER, updateStrategy = FieldStrategy.NEVER)
+    private Integer count;
 
     /**
      * get an EPKGPackageDO entity updateAt field value.
