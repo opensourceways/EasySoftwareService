@@ -80,4 +80,15 @@ public class FieldApplicationQueryAdapter {
     public ResponseEntity<Object> searchStat() {
         return service.queryStat();
     }
+
+    /**
+     * Endpoint to search arch num by os.
+     * @param os os.
+     * @return ResponseEntity<Object>.
+     */
+    @GetMapping("/archnum")
+    @RequestLimitRedis()
+    public ResponseEntity<Object> searchArchNumByOs(String os) {
+        return service.searchArchNumByOs(os);
+    }
 }

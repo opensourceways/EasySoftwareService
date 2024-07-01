@@ -11,6 +11,7 @@
 
 package com.easysoftware.infrastructure.rpmpackage.gatewayimpl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -30,17 +31,23 @@ import com.easysoftware.infrastructure.mapper.RPMPackageDOMapper;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.converter.RPMPackageConverter;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
 import com.power.common.util.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Component;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class RPMPackageGatewayImpl implements RPMPackageGateway {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(RPMPackageGatewayImpl.class);
 
     /**
      * Autowired RPMPackageDOMapper for database operations.
@@ -282,5 +289,23 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         }
         List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
         return RPMPackageConverter.toDetail(rpmList);
+    }
+
+    /**
+     * query pkg num of arch by os.
+     * @param os os.
+     * @return pkg nums of arch.
+     */
+    @Override
+    public Map<String, Object> queryArchNum(String os) {
+        LambdaQueryWrapper<RPMPackageDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(RPMPackageDO::getArch, RPMPackageDO::getCount);
+        wrapper.groupBy(RPMPackageDO::getArch);
+        List<RPMPackageDO> list = rPMPkgMapper.selectList(wrapper);
+
+        Map<String, Object> res = list.stream()
+                .collect(Collectors.toMap(RPMPackageDO::getArch, RPMPackageDO::getCount));
+        res.put("type", "rpm");
+        return res;
     }
 }

@@ -11,6 +11,7 @@
 
 package com.easysoftware.infrastructure.epkgpackage.gatewayimpl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -36,6 +37,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
@@ -233,4 +235,21 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         return res;
     }
 
+    /**
+     * query pkg num of arch by os.
+     * @param os os.
+     * @return pkg nums of arch.
+     */
+    @Override
+    public Map<String, Object> queryArchNum(String os) {
+        LambdaQueryWrapper<EPKGPackageDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(EPKGPackageDO::getArch, EPKGPackageDO::getCount);
+        wrapper.groupBy(EPKGPackageDO::getArch);
+        List<EPKGPackageDO> list = ePKGPkgMapper.selectList(wrapper);
+
+        Map<String, Object> res = list.stream()
+                .collect(Collectors.toMap(EPKGPackageDO::getArch, EPKGPackageDO::getCount));
+        res.put("type", "epkg");
+        return res;
+    }
 }
