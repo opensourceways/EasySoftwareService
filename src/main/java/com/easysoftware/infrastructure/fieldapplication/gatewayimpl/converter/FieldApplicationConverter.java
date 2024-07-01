@@ -16,21 +16,26 @@ import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.fieldpkg.dto.FieldPkgSearchCondition;
 import com.easysoftware.application.filedapplication.dto.FiledApplicationSerachCondition;
 import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
+import com.easysoftware.application.filedapplication.vo.OsArchNumVO;
 import com.easysoftware.application.oepackage.dto.OEPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.infrastructure.fieldapplication.gatewayimpl.dataobject.FieldApplicationDO;
+
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public final class FieldApplicationConverter {
 
@@ -191,5 +196,38 @@ public final class FieldApplicationConverter {
         BeanUtils.copyProperties(con, fCon);
         fCon.setName("");
         return fCon;
+    }
+
+    /**
+     * convert map to OsArchNumVO.
+     * @param mapList list of maps.
+     * @return list of OsArchNumVO.
+     */
+    public static List<OsArchNumVO> toOsArchNumVO(List<Map<String, Object>> mapList) {
+        if (mapList == null || mapList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Field> fList = FieldUtils.getAllFieldsList(OsArchNumVO.class);
+        List<OsArchNumVO> vList = new ArrayList<>();
+        for (Map<String, Object> map : mapList) {
+            vList.add(toOsArchNumVO(fList, map));
+        }
+        return vList.stream().filter(p -> p != null).collect(Collectors.toList());
+    }
+
+    /**
+     * convert map to OsArchNumVO.
+     * @param fList fields of OsArchNumVO.
+     * @param map map.
+     * @return OsArchNumVO.
+     */
+    public static OsArchNumVO toOsArchNumVO(List<Field> fList, Map<String, Object> map) {
+        if (map == null || map.isEmpty()) {
+            return null;
+        }
+
+        String j = ObjectMapperUtil.writeValueAsString(map);
+        return ObjectMapperUtil.jsonToObject(j, OsArchNumVO.class);
     }
 }

@@ -33,4 +33,10 @@ public interface FieldPkgGateway {
      */
     Map<String, List<String>> queryColumn(List<String> columns);
 
+    /**
+     * query pkg num of arch by os.
+     * @param os os.
+     * @return pkg nums of arch.
+     */
+    Map<String, Object> queryArchNum(String os);
 }

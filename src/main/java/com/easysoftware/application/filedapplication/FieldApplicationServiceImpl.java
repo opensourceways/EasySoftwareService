@@ -25,6 +25,7 @@ import com.easysoftware.application.filedapplication.dto.FieldDetailSearchCondit
 import com.easysoftware.application.filedapplication.dto.FiledApplicationSerachCondition;
 import com.easysoftware.application.filedapplication.vo.EulerLifeCycleVo;
 import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
+import com.easysoftware.application.filedapplication.vo.OsArchNumVO;
 import com.easysoftware.application.oepackage.dto.OEPackageSearchCondition;
 import com.easysoftware.application.oepackage.vo.OEPackageMenuVo;
 import com.easysoftware.application.rpmpackage.RPMPackageService;
@@ -474,6 +475,24 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         res.put("apppkg", appNum);
         res.put("total", rpmNum);
         return ResultUtil.success(HttpStatus.OK, res);
+    }
+
+    /**
+     * query pkg num of arch by os.
+     *
+     * @param os os.
+     * @return pkg nums of arch.
+     */
+    @Override
+    public ResponseEntity<Object> searchArchNumByOs(String os) {
+        Map<String, Object> rpm = rpmGateway.queryArchNum(os);
+        Map<String, Object> epkg = epkgGateway.queryArchNum(os);
+        Map<String, Object> oepkg = oePkgGateway.queryArchNum(os);
+        Map<String, Object> field = fieldPkgGateway.queryArchNum(os);
+        Map<String, Object> image = appGateway.queryArchNum(os);
+
+        List<OsArchNumVO> vList = FieldApplicationConverter.toOsArchNumVO(List.of(rpm, epkg, oepkg, field, image));
+        return ResultUtil.success(HttpStatus.OK, vList);
     }
 
 }

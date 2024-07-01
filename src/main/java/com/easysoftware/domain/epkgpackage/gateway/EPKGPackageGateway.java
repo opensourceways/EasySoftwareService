@@ -73,4 +73,11 @@ public interface EPKGPackageGateway {
      * @return A map containing tags information
      */
     Map<String, Object> queryEulerVersionByName(EPKGPackageNameSearchCondition condition);
+
+    /**
+     * query pkg num of arch by os.
+     * @param os os.
+     * @return pkg nums of arch.
+     */
+    Map<String, Object> queryArchNum(String os);
 }

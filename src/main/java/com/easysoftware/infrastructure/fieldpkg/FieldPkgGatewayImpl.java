@@ -11,6 +11,7 @@
 
 package com.easysoftware.infrastructure.fieldpkg;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -31,6 +32,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class FieldPkgGatewayImpl implements FieldPkgGateway {
@@ -123,6 +125,24 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
 
         String underlineToCamelColumn = StringUtil.underlineToCamel(column);
         return FieldPkgConverter.toColumn(columnList, underlineToCamelColumn);
+    }
+
+    /**
+     * query pkg num of arch by os.
+     * @param os os.
+     * @return pkg nums of arch.
+     */
+    @Override
+    public Map<String, Object> queryArchNum(String os) {
+        LambdaQueryWrapper<FieldPkgDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(FieldPkgDO::getArch, FieldPkgDO::getCount);
+        wrapper.groupBy(FieldPkgDO::getArch);
+        List<FieldPkgDO> list = mapper.selectList(wrapper);
+
+        Map<String, Object> res = list.stream()
+                .collect(Collectors.toMap(FieldPkgDO::getArch, FieldPkgDO::getCount));
+        res.put("type", "field");
+        return res;
     }
 
 }

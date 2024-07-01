@@ -11,6 +11,7 @@
 
 package com.easysoftware.infrastructure.oepkg.gatewalmpl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -33,6 +34,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class OEPackageGatewayImpl implements OEPackageGateway {
@@ -185,5 +187,23 @@ public class OEPackageGatewayImpl implements OEPackageGateway {
         List<OepkgDO> rpmList = oEPkgMapper.selectList(wrapper);
 
         return OEPackageConverter.toDetail(rpmList);
+    }
+
+    /**
+     * query pkg num of arch by os.
+     * @param os os.
+     * @return pkg nums of arch.
+     */
+    @Override
+    public Map<String, Object> queryArchNum(String os) {
+        LambdaQueryWrapper<OepkgDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(OepkgDO::getArch, OepkgDO::getCount);
+        wrapper.groupBy(OepkgDO::getArch);
+        List<OepkgDO> list = oEPkgMapper.selectList(wrapper);
+
+        Map<String, Object> res = list.stream()
+                .collect(Collectors.toMap(OepkgDO::getArch, OepkgDO::getCount));
+        res.put("type", "oepkg");
+        return res;
     }
 }

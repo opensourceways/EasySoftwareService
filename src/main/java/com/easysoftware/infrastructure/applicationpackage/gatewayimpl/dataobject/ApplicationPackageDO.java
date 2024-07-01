@@ -11,6 +11,8 @@
 
 package com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -191,6 +193,12 @@ public class ApplicationPackageDO {
      * latestOsSupport.
      */
     private String latestOsSupport;
+
+    /**
+     * number of selected pkgs.
+     */
+    @TableField(value = "count(*)", insertStrategy = FieldStrategy.NEVER, updateStrategy = FieldStrategy.NEVER)
+    private Integer count;
 
     /**
      * get an ApplicationPackageDO entity createAt field value.

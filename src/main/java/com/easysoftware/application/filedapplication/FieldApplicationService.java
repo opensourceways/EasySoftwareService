@@ -49,5 +49,10 @@ public interface FieldApplicationService {
      */
     ResponseEntity<Object> queryStat();
 
-
+     /**
+      * Query statistics.
+      * @param os os.
+      * @return ResponseEntity object containing the statistical information.
+      */
+    ResponseEntity<Object> searchArchNumByOs(String os);
 }

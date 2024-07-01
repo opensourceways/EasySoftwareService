@@ -11,6 +11,8 @@
 
 package com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -198,6 +200,12 @@ public class RPMPackageDO {
      * License.
      */
     private String license;
+
+    /**
+     * number of selected pkgs.
+     */
+    @TableField(value = "count(*)", insertStrategy = FieldStrategy.NEVER, updateStrategy = FieldStrategy.NEVER)
+    private Integer count;
 
     /**
      * get an RPMPackageDO entity createAt field value.
