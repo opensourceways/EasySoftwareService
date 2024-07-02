@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.easysoftware.application.oepackage.dto.OEPackageSearchCondition;
+import com.easysoftware.application.oepackage.dto.OepkgNameSearchCondition;
 import com.easysoftware.application.oepackage.vo.OEPackageDetailVo;
 
 public interface OEPackageGateway {
@@ -59,9 +60,17 @@ public interface OEPackageGateway {
     long queryTableLength();
 
     /**
-     * query pkg num of arch by os.
-     * @param os os.
-     * @return pkg nums of arch.
+     * Query Euler Version based on the provided search condition.
+     *
+     * @param condition The search condition for querying EulerVersion
+     * @return A map containing tags information
      */
-    Map<String, Object> queryArchNum(String os);
+    Map<String, Object> queryEulerVersionByName(OepkgNameSearchCondition condition);
+
+    /**
+    * query pkg num of arch by os.
+    * @param os os.
+    * @return pkg nums of arch.
+    */
+   Map<String, Object> queryArchNum(String os);
 }

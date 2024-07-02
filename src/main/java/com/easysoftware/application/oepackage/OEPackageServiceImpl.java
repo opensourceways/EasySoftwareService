@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.easysoftware.application.oepackage.dto.OEPackageSearchCondition;
+import com.easysoftware.application.oepackage.dto.OepkgNameSearchCondition;
 import com.easysoftware.application.oepackage.vo.OEPackageDetailVo;
 import com.easysoftware.common.exception.NoneResException;
 import com.easysoftware.common.exception.ParamErrorException;
@@ -67,5 +68,17 @@ public class OEPackageServiceImpl implements OEPackageService {
     @Override
     public Map<String, Object> queryAllOEPkgMenu(final OEPackageSearchCondition condition) {
         return oEPkgGateway.queryMenuByName(condition);
+    }
+
+    /**
+     * Queries all available openEuler version of oepkg package.
+     *
+     * @param condition The search condition.
+     * @return Map containing the epkg package menu.
+     */
+    @Override
+    public ResponseEntity<Object> queryEulerVersionsByName(OepkgNameSearchCondition condition) {
+        Map<String, Object> res = oEPkgGateway.queryEulerVersionByName(condition);
+        return ResultUtil.success(HttpStatus.OK, res);
     }
 }
