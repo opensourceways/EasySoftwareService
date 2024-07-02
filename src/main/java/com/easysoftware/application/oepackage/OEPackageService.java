@@ -15,6 +15,7 @@ import java.util.Map;
 import org.springframework.http.ResponseEntity;
 
 import com.easysoftware.application.oepackage.dto.OEPackageSearchCondition;
+import com.easysoftware.application.oepackage.dto.OepkgNameSearchCondition;
 
 public interface OEPackageService {
     /**
@@ -33,4 +34,11 @@ public interface OEPackageService {
      */
     Map<String, Object> queryAllOEPkgMenu(OEPackageSearchCondition condition);
 
+    /**
+     * Queries available openEuler version of oepkg package.
+     *
+     * @param condition The search condition.
+     * @return Map containing the openEuler versions.
+     */
+    ResponseEntity<Object> queryEulerVersionsByName(OepkgNameSearchCondition condition);
 }

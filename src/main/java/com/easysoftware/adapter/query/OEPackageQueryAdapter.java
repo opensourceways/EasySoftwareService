@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.easysoftware.application.oepackage.dto.OEPackageSearchCondition;
+import com.easysoftware.application.oepackage.dto.OepkgNameSearchCondition;
 import com.easysoftware.application.oepackage.OEPackageService;
 import com.easysoftware.common.aop.RequestLimitRedis;
 
@@ -41,5 +42,18 @@ public class OEPackageQueryAdapter {
     @RequestLimitRedis()
     public ResponseEntity<Object> searchOEpkg(@Valid final OEPackageSearchCondition condition) {
         return oEPackageService.searchOEPkg(condition);
+    }
+
+    /**
+     * Endpoint to query for all avalaible openEuler version of epkg packages based
+     * on the provided search condition.
+     *
+     * @param condition The search condition for querying epkg packages.
+     * @return ResponseEntity<Object>.
+     */
+    @GetMapping("/eulerver")
+    @RequestLimitRedis()
+    public ResponseEntity<Object> queryEulerVersionsByName(@Valid final OepkgNameSearchCondition condition) {
+        return oEPackageService.queryEulerVersionsByName(condition);
     }
 }
