@@ -20,7 +20,9 @@ import org.springframework.beans.BeanUtils;
 
 import com.easysoftware.application.oepackage.vo.OEPackageDetailVo;
 import com.easysoftware.application.oepackage.vo.OEPackageMenuVo;
+import com.easysoftware.application.oepackage.vo.OepkgEulerVersionVo;
 import com.easysoftware.common.entity.MessageCode;
+import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.infrastructure.oepkg.gatewalmpl.dataobject.OepkgDO;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.converter.RPMPackageConverter;
 
@@ -105,5 +107,25 @@ public final class OEPackageConverter {
             res.add(menu);
         }
         return res;
+    }
+
+    /**
+     * Converts a list of RPMPackageDO objects to a list of OepkgEulerVersionVo
+     * view
+     * objects.
+     *
+     * @param rpmPkgDOs The list of OepkgDO objects to convert.
+     * @return A list of OepkgEulerVersionVo view objects.
+     */
+    public static List<OepkgEulerVersionVo> toVersion(final List<OepkgDO> rpmPkgDOs) {
+        List<OepkgEulerVersionVo> res = new ArrayList<>();
+        for (OepkgDO rpm : rpmPkgDOs) {
+            OepkgEulerVersionVo version = new OepkgEulerVersionVo();
+            version.setOs(rpm.getOs());
+            version.setArch(rpm.getArch());
+            version.setPkgId(rpm.getPkgId());
+            res.add(version);
+        }
+        return SortUtil.sortEulerVer(res);
     }
 }
