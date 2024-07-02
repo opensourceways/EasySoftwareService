@@ -72,7 +72,7 @@ public class EPKGPackageDO {
     /**
      * Timestamp for EPKG updates.
      */
-    private String epkgUpdateAt;
+    private String rpmUpdateAt;
 
 
     /**
@@ -83,7 +83,7 @@ public class EPKGPackageDO {
     /**
      * Size of the EPKG package.
      */
-    private String epkgSize;
+    private String rpmSize;
 
     /**
      * Binary download URL.

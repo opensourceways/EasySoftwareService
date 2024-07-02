@@ -52,7 +52,7 @@ public class EPKGPackageMenuVo {
     /**
      * Update timestamp for the package.
      */
-    private String epkgUpdateAt;
+    private String rpmUpdateAt;
 
     /**
      * Source repository URL.
@@ -62,7 +62,7 @@ public class EPKGPackageMenuVo {
     /**
      * Size of the package.
      */
-    private String epkgSize;
+    private String rpmSize;
 
     /**
      * Binary download URL.

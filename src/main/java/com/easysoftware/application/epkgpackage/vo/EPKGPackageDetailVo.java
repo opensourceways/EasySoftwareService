@@ -47,7 +47,7 @@ public class EPKGPackageDetailVo {
     /**
      * Update timestamp for the package.
      */
-    private String epkgUpdateAt;
+    private String rpmUpdateAt;
 
     /**
      * Source repository URL.
@@ -57,7 +57,7 @@ public class EPKGPackageDetailVo {
     /**
      * Size of the package.
      */
-    private String epkgSize;
+    private String rpmSize;
 
     /**
      * Binary download URL.

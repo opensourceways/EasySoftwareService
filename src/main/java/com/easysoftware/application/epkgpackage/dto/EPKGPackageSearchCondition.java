@@ -101,7 +101,7 @@ public class EPKGPackageSearchCondition {
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
-    private String epkgUpdateAt;
+    private String rpmUpdateAt;
 
     /**
      * Time order.
