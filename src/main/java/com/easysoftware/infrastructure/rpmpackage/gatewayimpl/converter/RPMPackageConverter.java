@@ -19,6 +19,7 @@ import com.easysoftware.application.rpmpackage.vo.RPMPackageNewestVersionVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
+import com.easysoftware.infrastructure.oepkg.gatewalmpl.dataobject.OepkgDO;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ import org.springframework.beans.BeanUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public final class RPMPackageConverter {
@@ -202,6 +204,10 @@ public final class RPMPackageConverter {
      * @return A list of RPMPackageNewestVersionVo view objects.
      */
     public static List<RPMPackageNewestVersionVo> toRPMVersion(final List<RPMPackageDO> rpmPkgDOs) {
+        if (rpmPkgDOs == null || rpmPkgDOs.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         List<RPMPackageNewestVersionVo> res = new ArrayList<>();
         String newestVersion = "";
         String os = "";
@@ -222,5 +228,29 @@ public final class RPMPackageConverter {
         version.setOs(os);
         res.add(version);
         return res;
+    }
+
+    /**
+     * Converts a list of OepkgDO objects to a list of
+     * RPMPackageNewestVersionVo
+     * view
+     * objects.
+     *
+     * @param oList The list of OepkgDO objects to convert.
+     * @return A list of RPMPackageNewestVersionVo view objects.
+     */
+    public static List<RPMPackageNewestVersionVo> toRPMVersionFromOepkg(final List<OepkgDO> oList) {
+        if (oList == null || oList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<RPMPackageDO> rList = new ArrayList<>();
+        for (OepkgDO o : oList) {
+            RPMPackageDO r = new RPMPackageDO();
+            BeanUtils.copyProperties(o, r);
+            rList.add(r);
+        }
+
+        return toRPMVersion(rList);
     }
 }

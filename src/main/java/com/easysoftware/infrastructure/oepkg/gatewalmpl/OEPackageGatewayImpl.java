@@ -16,8 +16,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.oepackage.dto.OEPackageSearchCondition;
+import com.easysoftware.application.oepackage.dto.OepkgNameSearchCondition;
 import com.easysoftware.application.oepackage.vo.OEPackageDetailVo;
 import com.easysoftware.application.oepackage.vo.OEPackageMenuVo;
+import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageNewestVersionVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackgeVersionVo;
+import com.easysoftware.application.oepackage.vo.OepkgEulerVersionVo;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
@@ -25,6 +30,7 @@ import com.easysoftware.domain.oepackage.gateway.OEPackageGateway;
 import com.easysoftware.infrastructure.mapper.OEPackageDOMapper;
 import com.easysoftware.infrastructure.oepkg.gatewalmpl.coverter.OEPackageConverter;
 import com.easysoftware.infrastructure.oepkg.gatewalmpl.dataobject.OepkgDO;
+import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.converter.RPMPackageConverter;
 import com.power.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.BadSqlGrammarException;
@@ -190,6 +196,31 @@ public class OEPackageGatewayImpl implements OEPackageGateway {
     }
 
     /**
+     * Query the Euler Version based on the provided search condition.
+     *
+     * @param condition The search condition for querying a part of the RPM Euler Version
+     * @return A map containing relevant information
+     */
+    @Override
+    public Map<String, Object> queryEulerVersionByName(OepkgNameSearchCondition condition) {
+        QueryWrapper<OepkgDO> wrapper = QueryWrapperUtil.createQueryWrapper(new OepkgDO(),
+                condition, "");
+        OepkgEulerVersionVo pkgVo = new OepkgEulerVersionVo();
+        List<String> columns = ClassField.getFieldNames(pkgVo);
+        if (condition.getName() != null) {
+            wrapper.eq("name", condition.getName());
+        }
+        wrapper.select(columns);
+        wrapper.groupBy("os", "arch");
+        List<OepkgDO> rpmList = oEPkgMapper.selectList(wrapper);
+        List<OepkgEulerVersionVo> versions = OEPackageConverter.toVersion(rpmList);
+        Map<String, Object> res = Map.ofEntries(
+                Map.entry("total", versions.size()),
+                Map.entry("list", versions));
+        return res;
+    }
+
+    /**
      * query pkg num of arch by os.
      * @param os os.
      * @return pkg nums of arch.
@@ -204,6 +235,31 @@ public class OEPackageGatewayImpl implements OEPackageGateway {
         Map<String, Object> res = list.stream()
                 .collect(Collectors.toMap(OepkgDO::getArch, OepkgDO::getCount));
         res.put("type", "oepkg");
+        return res;
+    }
+
+    /**
+     * Query the RPM newest version based on the provided search condition.
+     *
+     * @param condition The search condition for querying a part of the RPM
+     *                  newest version
+     * @return A map containing relevant information
+     */
+    @Override
+    public Map<String, Object> queryNewstRpmVersion(final RPMPackageNameSearchCondition condition) {
+        QueryWrapper<OepkgDO> wrapper = QueryWrapperUtil.createQueryWrapper(new OepkgDO(),
+                condition, "");
+        RPMPackgeVersionVo pkgVo = new RPMPackgeVersionVo();
+        List<String> columns = ClassField.getFieldNames(pkgVo);
+        if (condition.getName() != null) {
+            wrapper.eq("name", condition.getName().toLowerCase());
+        }
+        wrapper.select(columns);
+        List<OepkgDO> rpmList = oEPkgMapper.selectList(wrapper);
+        List<RPMPackageNewestVersionVo> versions = RPMPackageConverter.toRPMVersionFromOepkg(rpmList);
+        Map<String, Object> res = Map.ofEntries(
+                Map.entry("total", versions.size()),
+                Map.entry("list", versions));
         return res;
     }
 }
