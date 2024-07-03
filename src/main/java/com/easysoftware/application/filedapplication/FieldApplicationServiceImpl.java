@@ -25,7 +25,6 @@ import com.easysoftware.application.filedapplication.dto.FieldDetailSearchCondit
 import com.easysoftware.application.filedapplication.dto.FiledApplicationSerachCondition;
 import com.easysoftware.application.filedapplication.vo.EulerLifeCycleVo;
 import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
-import com.easysoftware.application.filedapplication.vo.OsArchNumVO;
 import com.easysoftware.application.oepackage.dto.OEPackageSearchCondition;
 import com.easysoftware.application.oepackage.vo.OEPackageMenuVo;
 import com.easysoftware.application.rpmpackage.RPMPackageService;
@@ -40,6 +39,7 @@ import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
+import com.easysoftware.domain.archnum.ArchNumGateway;
 import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
 import com.easysoftware.domain.eulerlifecycle.gateway.EulerLifeCycleGateway;
 import com.easysoftware.domain.fieldapplication.gateway.FieldapplicationGateway;
@@ -131,6 +131,12 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
      */
     @Resource
     private Ranker ranker;
+
+    /**
+     * gateway.
+     */
+    @Resource
+    private ArchNumGateway archNumGateway;
 
     /**
      * Query menu by name.
@@ -479,20 +485,11 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
 
     /**
      * query pkg num of arch by os.
-     *
-     * @param os os.
      * @return pkg nums of arch.
      */
     @Override
-    public ResponseEntity<Object> searchArchNumByOs(String os) {
-        Map<String, Object> rpm = rpmGateway.queryArchNum(os);
-        Map<String, Object> epkg = epkgGateway.queryArchNum(os);
-        Map<String, Object> oepkg = oePkgGateway.queryArchNum(os);
-        Map<String, Object> field = fieldPkgGateway.queryArchNum(os);
-        Map<String, Object> image = appGateway.queryArchNum(os);
-
-        List<OsArchNumVO> vList = FieldApplicationConverter.toOsArchNumVO(List.of(rpm, epkg, oepkg, field, image));
-        return ResultUtil.success(HttpStatus.OK, vList);
+    public ResponseEntity<Object> searchArchNumByOs() {
+        return ResultUtil.success(HttpStatus.OK, archNumGateway.getAll());
     }
 
 }
