@@ -16,11 +16,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.oepackage.dto.OEPackageSearchCondition;
+import com.easysoftware.application.oepackage.dto.OepkgNameSearchCondition;
 import com.easysoftware.application.oepackage.vo.OEPackageDetailVo;
 import com.easysoftware.application.oepackage.vo.OEPackageMenuVo;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageNewestVersionVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackgeVersionVo;
+import com.easysoftware.application.oepackage.vo.OepkgEulerVersionVo;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
@@ -191,6 +193,31 @@ public class OEPackageGatewayImpl implements OEPackageGateway {
         List<OepkgDO> rpmList = oEPkgMapper.selectList(wrapper);
 
         return OEPackageConverter.toDetail(rpmList);
+    }
+
+    /**
+     * Query the Euler Version based on the provided search condition.
+     *
+     * @param condition The search condition for querying a part of the RPM Euler Version
+     * @return A map containing relevant information
+     */
+    @Override
+    public Map<String, Object> queryEulerVersionByName(OepkgNameSearchCondition condition) {
+        QueryWrapper<OepkgDO> wrapper = QueryWrapperUtil.createQueryWrapper(new OepkgDO(),
+                condition, "");
+        OepkgEulerVersionVo pkgVo = new OepkgEulerVersionVo();
+        List<String> columns = ClassField.getFieldNames(pkgVo);
+        if (condition.getName() != null) {
+            wrapper.eq("name", condition.getName());
+        }
+        wrapper.select(columns);
+        wrapper.groupBy("os", "arch");
+        List<OepkgDO> rpmList = oEPkgMapper.selectList(wrapper);
+        List<OepkgEulerVersionVo> versions = OEPackageConverter.toVersion(rpmList);
+        Map<String, Object> res = Map.ofEntries(
+                Map.entry("total", versions.size()),
+                Map.entry("list", versions));
+        return res;
     }
 
     /**
