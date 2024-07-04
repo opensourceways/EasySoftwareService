@@ -18,13 +18,14 @@ import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.easysoftware.common.constant.PackageConstant;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@TableName("oepkg")
+@TableName(PackageConstant.OEPKG_TABLE)
 public class OepkgDO {
     /**
      * Serializable class with a defined serial version UID.

@@ -15,13 +15,15 @@ import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.easysoftware.common.constant.PackageConstant;
+
 import lombok.Data;
 
 import java.io.Serial;
 import java.sql.Timestamp;
 
 @Data
-@TableName("rpm_pkg_base")
+@TableName(PackageConstant.RPM_PKG_TABLE)
 public class RPMPackageDO {
     /**
      * Serializable class with a defined serial version UID.

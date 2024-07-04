@@ -14,6 +14,7 @@ package com.easysoftware.infrastructure.eulerlifecycle.gatewayimpl.dataobject;
 import java.io.Serial;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.easysoftware.common.constant.PackageConstant;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("openeuler_lifecycle")
+@TableName(PackageConstant.EULER_LIFE_TABLE)
 public class EulerLifeCycleDO {
     /**
      * Serializable class with a defined serial version UID.

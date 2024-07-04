@@ -13,6 +13,8 @@ package com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobjec
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.easysoftware.common.constant.PackageConstant;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +23,7 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
-@TableName("application_version")
+@TableName(PackageConstant.APP_VER_TABLE)
 public class ApplicationVersionDO {
     /**
      * Serializable class with a defined serial version UID.

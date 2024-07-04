@@ -12,6 +12,8 @@
 package com.easysoftware.infrastructure.operationconfig.gatewayimpl.dataobject;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.easysoftware.common.constant.PackageConstant;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +23,7 @@ import java.io.Serial;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("operation_config")
+@TableName(PackageConstant.OPER_CONF_TABLE)
 public class OperationConfigDO {
     /**
      * Serializable class with a defined serial version UID.
