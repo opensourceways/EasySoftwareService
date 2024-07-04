@@ -54,7 +54,8 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
         Page<FieldPkgDO> page = createPage(condition);
         QueryWrapper<FieldPkgDO> wrapper = QueryWrapperUtil.createQueryWrapper(new FieldPkgDO(),
                 condition, null);
-        List<String> columns = ClassField.getFieldNames(new FieldPkgVo());
+        List<String> columns = ClassField.getFieldNames(new FieldPkgDO());
+        columns.remove("count");
         wrapper.select(columns);
         wrapper.orderByDesc("length(tags)");
         IPage<FieldPkgDO> resPage = mapper.selectPage(page, wrapper);
