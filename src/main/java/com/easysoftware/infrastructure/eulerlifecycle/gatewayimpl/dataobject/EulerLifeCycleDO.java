@@ -63,4 +63,6 @@ public class EulerLifeCycleDO {
      * remarks of current os.
      */
     private String remarks;
+
+    private String osAlias;
 }
