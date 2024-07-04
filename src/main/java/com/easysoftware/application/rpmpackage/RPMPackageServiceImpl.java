@@ -19,6 +19,7 @@ import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.common.exception.NoneResException;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ResultUtil;
+import com.easysoftware.domain.oepackage.gateway.OEPackageGateway;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 import com.easysoftware.infrastructure.mapper.RPMPackageDOMapper;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
@@ -43,6 +44,13 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
      */
     @Resource
     private RPMPackageGateway rPMPkgGateway;
+
+    /**
+     * gateway.
+     */
+    @Resource
+    private OEPackageGateway oepkgGateway;
+
     /**
      * Value for Repository Maintainer API.
      */
@@ -99,6 +107,12 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
     @Override
     public ResponseEntity<Object> queryNewstRpmVersion(RPMPackageNameSearchCondition condition) {
         Map<String, Object> res = rPMPkgGateway.queryNewstRpmVersion(condition);
+
+        if (res.get("total") != null && !res.get("total").equals(Integer.valueOf(0))) {
+            return ResultUtil.success(HttpStatus.OK, res);
+        }
+
+        res = oepkgGateway.queryNewstRpmVersion(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
