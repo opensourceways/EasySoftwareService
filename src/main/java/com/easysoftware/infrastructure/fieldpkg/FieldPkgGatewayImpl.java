@@ -18,6 +18,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.fieldpkg.dto.FieldPkgSearchCondition;
 import com.easysoftware.application.fieldpkg.vo.FieldPkgVo;
 import com.easysoftware.common.exception.ParamErrorException;
+import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.domain.fieldpkg.gateway.FieldPkgGateway;
 import com.easysoftware.infrastructure.fieldpkg.converter.FieldPkgConverter;
@@ -53,6 +54,8 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
         Page<FieldPkgDO> page = createPage(condition);
         QueryWrapper<FieldPkgDO> wrapper = QueryWrapperUtil.createQueryWrapper(new FieldPkgDO(),
                 condition, null);
+        List<String> columns = ClassField.getFieldNames(new FieldPkgVo());
+        wrapper.select(columns);
         wrapper.orderByDesc("length(tags)");
         IPage<FieldPkgDO> resPage = mapper.selectPage(page, wrapper);
         List<FieldPkgDO> list = resPage.getRecords();
