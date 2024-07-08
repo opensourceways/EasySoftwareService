@@ -11,12 +11,15 @@
 
 package com.easysoftware.infrastructure.archnum.converter;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
+import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.infrastructure.archnum.dataobject.ArchNumDO;
 
 @Component
@@ -27,13 +30,39 @@ public class ArchNumConverter {
      * @return map.
      */
     public Map<String, Map<String, Map<String, Integer>>> toMap(List<ArchNumDO> list) {
-        return list.stream().collect(
-            Collectors.groupingBy(
-                ArchNumDO::getOs, Collectors.groupingBy(
-                    ArchNumDO::getType, Collectors.toMap(
-                        ArchNumDO::getArchName, ArchNumDO::getCount)
-                )
-            )
-        );
+        if (list == null || list.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        Map<String, List<ArchNumDO>> osMap = list.stream().collect(Collectors.groupingBy(ArchNumDO::getOs));
+        Map<String, Map<String, Map<String, Integer>>> res = new HashMap<>();
+        for (Map.Entry<String, List<ArchNumDO>> entry : osMap.entrySet()) {
+            Map<String, Map<String, Integer>> typeMap = toMapPerOs(entry.getValue());
+            res.put(entry.getKey(), typeMap);
+        }
+        return res;
+    }
+
+    /**
+     * convert list of ArchNumDO to map for each os.
+     * @param list list of ArchNumDO.
+     * @return map.
+     */
+    public Map<String, Map<String, Integer>> toMapPerOs(List<ArchNumDO> list) {
+        if (list == null || list.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        Map<String, List<ArchNumDO>> typeMap = list.stream().collect(Collectors.groupingBy(ArchNumDO::getType));
+        List<String> orderedTypes = SortUtil.sortTags(typeMap.keySet());
+        Map<String, Map<String, Integer>> res = new HashMap<>();
+        for (String orderedType : orderedTypes) {
+            List<ArchNumDO> aList = typeMap.get(orderedType);
+            Map<String, Integer> aMap = aList.stream().collect(
+                Collectors.toMap(ArchNumDO::getArchName, ArchNumDO::getCount)
+            );
+            res.put(orderedType, aMap);
+        }
+        return res;
     }
 }
