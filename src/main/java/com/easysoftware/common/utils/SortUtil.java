@@ -31,7 +31,7 @@ public final class SortUtil {
     /**
      * The order of tags.
      */
-    private static final List<String> ORDERS = List.of("RPM", "IMAGE", "EPKG");
+    private static final List<String> ORDERS = List.of("FIELD", "RPM", "IMAGE", "EPKG", "OEPKG");
 
     /**
      * sort the tags.
