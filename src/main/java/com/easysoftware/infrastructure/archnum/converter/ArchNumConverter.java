@@ -12,13 +12,14 @@
 package com.easysoftware.infrastructure.archnum.converter;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
+import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.infrastructure.archnum.dataobject.ArchNumDO;
 
@@ -35,10 +36,12 @@ public class ArchNumConverter {
         }
 
         Map<String, List<ArchNumDO>> osMap = list.stream().collect(Collectors.groupingBy(ArchNumDO::getOs));
-        Map<String, Map<String, Map<String, Integer>>> res = new HashMap<>();
-        for (Map.Entry<String, List<ArchNumDO>> entry : osMap.entrySet()) {
-            Map<String, Map<String, Integer>> typeMap = toMapPerOs(entry.getValue());
-            res.put(entry.getKey(), typeMap);
+        List<String> orderedOses = QueryWrapperUtil.sortOsColumn(osMap.keySet());
+        Map<String, Map<String, Map<String, Integer>>> res = new LinkedHashMap<>();
+        for (String orderedOs: orderedOses) {
+            List<ArchNumDO> aList = osMap.get(orderedOs);
+            Map<String, Map<String, Integer>> typeMap = toMapPerOs(aList);
+            res.put(orderedOs, typeMap);
         }
         return res;
     }
@@ -55,7 +58,7 @@ public class ArchNumConverter {
 
         Map<String, List<ArchNumDO>> typeMap = list.stream().collect(Collectors.groupingBy(ArchNumDO::getType));
         List<String> orderedTypes = SortUtil.sortTags(typeMap.keySet());
-        Map<String, Map<String, Integer>> res = new HashMap<>();
+        Map<String, Map<String, Integer>> res = new LinkedHashMap<>();
         for (String orderedType : orderedTypes) {
             List<ArchNumDO> aList = typeMap.get(orderedType);
             Map<String, Integer> aMap = aList.stream().collect(

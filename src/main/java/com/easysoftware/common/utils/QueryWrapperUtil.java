@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -157,7 +158,7 @@ public final class QueryWrapperUtil {
      * @param colList The list of strings representing operating systems to be sorted
      * @return A sorted list of strings representing operating systems in ascending order
      */
-    public static List<String> sortOsColumn(List<String> colList) {
+    public static List<String> sortOsColumn(Collection<String> colList) {
         Map<Boolean, List<String>> partMap = colList.stream()
                 .collect(Collectors.partitioningBy(e -> !e.contains("preview")));
         List<String> con = partMap.get(true);
