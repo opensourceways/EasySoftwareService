@@ -12,6 +12,8 @@
 package com.easysoftware.infrastructure.fieldapplication.gatewayimpl.dataobject;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.easysoftware.common.constant.PackageConstant;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +24,7 @@ import java.io.Serial;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("domain_package")
+@TableName(PackageConstant.DOMAIN_PKG_TABLE)
 public class FieldApplicationDO {
     /**
      * Serializable class with a defined serial version UID.

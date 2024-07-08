@@ -14,13 +14,14 @@ package com.easysoftware.infrastructure.archnum.dataobject;
 import java.sql.Timestamp;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.easysoftware.common.constant.PackageConstant;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@TableName("arch_num")
+@TableName(PackageConstant.ARCH_NUM_TABLE)
 public class ArchNumDO {
     /**
      * os.

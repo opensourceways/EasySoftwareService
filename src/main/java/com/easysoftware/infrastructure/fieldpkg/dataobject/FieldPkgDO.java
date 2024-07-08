@@ -16,6 +16,8 @@ import java.io.Serial;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.easysoftware.common.constant.PackageConstant;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("field_package")
+@TableName(PackageConstant.FIELD_PKG_TABLE)
 public class FieldPkgDO {
         /**
      * Serializable class with a defined serial version UID.

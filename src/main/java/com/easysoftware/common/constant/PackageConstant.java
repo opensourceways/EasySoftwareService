@@ -65,4 +65,53 @@ public final class PackageConstant {
      */
     public static final String HTTPS_PREFIX = "https://";
 
+    /**
+     * table name of ApplicationPackageDO.
+     */
+    public static final String APP_PKG_TABLE = "application_package";
+
+    /**
+     * table name of ApplicationVersionDO.
+     */
+    public static final String APP_VER_TABLE = "application_version";
+
+    /**
+     * table name of ArchNumDO.
+     */
+    public static final String ARCH_NUM_TABLE = "arch_num";
+
+    /**
+     * table name of EPKGPackageDO.
+     */
+    public static final String EPKG_PKG_TABLE = "epkg_pkg";
+
+    /**
+     * table name of EulerLifeCycleDO.
+     */
+    public static final String EULER_LIFE_TABLE = "openeuler_lifecycle";
+
+    /**
+     * table name of FieldApplicationDO.
+     */
+    public static final String DOMAIN_PKG_TABLE = "domain_package";
+
+    /**
+     * table name of FieldPkgDO.
+     */
+    public static final String FIELD_PKG_TABLE = "field_package";
+
+    /**
+     * table name of OepkgDO.
+     */
+    public static final String OEPKG_TABLE = "oepkg";
+
+    /**
+     * table name of OperationCOnfigDO.
+     */
+    public static final String OPER_CONF_TABLE = "operation_config";
+
+    /**
+     * table name of RPMPackageDO.
+     */
+    public static final String RPM_PKG_TABLE = "rpm_pkg_base";
 }

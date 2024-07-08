@@ -14,6 +14,8 @@ package com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobjec
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.easysoftware.common.constant.PackageConstant;
+
 import lombok.Data;
 
 
@@ -21,7 +23,7 @@ import java.io.Serial;
 import java.sql.Timestamp;
 
 @Data
-@TableName("application_package")
+@TableName(PackageConstant.APP_PKG_TABLE)
 public class ApplicationPackageDO {
     /**
      * Serializable class with a defined serial version UID.
