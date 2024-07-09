@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.easysoftware.application.applicationpackage.vo.EulerVer;
+import com.easysoftware.application.filedapplication.vo.EulerLifeCycleVo;
 
 public final class SortUtil {
     // Private constructor to prevent instantiation of the utility class
@@ -52,19 +53,32 @@ public final class SortUtil {
     }
 
     /**
+     * sort the EulerLifeCycleVo.
+     *
+     * @param eulerLifeCycleVo The origin eulerLifeCycleVo
+     * @return A list sorted
+     */
+    public static List<EulerLifeCycleVo> sortEulerLifeCycleVo(List<EulerLifeCycleVo> eulerLifeCycleVo) {
+        List<EulerLifeCycleVo> sortedElVos = eulerLifeCycleVo.stream()
+                .sorted(Comparator.comparing(EulerLifeCycleVo::getStatus, Comparator.reverseOrder())
+                        .thenComparing(EulerLifeCycleVo::getOs))
+                .collect(Collectors.toList());
+        return sortedElVos;
+    }
+
+    /**
      * sort the eulerver by os.
-     * @param <T> object which implements eulerver.
+     *
+     * @param <T>  object which implements eulerver.
      * @param list lsit of eulerver.
      * @return lsit of eulerver.
      */
     public static <T extends EulerVer> List<T> sortEulerVer(List<T> list) {
         List<T> sorted = list.stream().sorted(
-            Comparator.comparing(T::getOs, Comparator.reverseOrder())
-        ).collect(Collectors.toList());
+                Comparator.comparing(T::getOs, Comparator.reverseOrder())).collect(Collectors.toList());
 
         Map<Boolean, List<T>> map = sorted.stream().collect(
-            Collectors.partitioningBy(e -> e.getOs().contains("preview"))
-        );
+                Collectors.partitioningBy(e -> e.getOs().contains("preview")));
 
         List<T> noPreview = map.get(false);
         List<T> preview = map.get(true);
