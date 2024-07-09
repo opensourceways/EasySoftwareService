@@ -181,9 +181,10 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
      */
     private Map<String, Object> searchLifeCycle() {
         List<EulerLifeCycleVo> elVos = eulerLifecycleGateway.selectAll();
+        List<EulerLifeCycleVo> sortVos = SortUtil.sortEulerLifeCycleVo(elVos);
         Map<String, Object> res = Map.ofEntries(
-                Map.entry("total", elVos.size()),
-                Map.entry("list", elVos));
+                Map.entry("total", sortVos.size()),
+                Map.entry("list", sortVos));
         return res;
     }
 
@@ -485,6 +486,7 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
 
     /**
      * query pkg num of arch by os.
+     *
      * @return pkg nums of arch.
      */
     @Override
