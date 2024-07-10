@@ -72,4 +72,9 @@ public class FieldApplicationDO {
      */
     private String description;
 
+    /**
+     * maintainers.
+     */
+    private String maintainers;
+
 }

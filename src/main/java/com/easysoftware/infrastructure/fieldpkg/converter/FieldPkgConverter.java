@@ -16,6 +16,8 @@ import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.infrastructure.fieldpkg.dataobject.FieldPkgDO;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public final class FieldPkgConverter {
     // Private constructor to prevent instantiation of the utility class
@@ -107,6 +110,6 @@ public final class FieldPkgConverter {
         } catch (Exception e) {
             LOGGER.error(MessageCode.EC00011.getMsgEn(), e.getMessage());
         }
-        return res;
+        return res.stream().filter(StringUtils::isNotBlank).collect(Collectors.toList());
     }
 }
