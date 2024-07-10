@@ -85,4 +85,76 @@ public final class SortUtil {
         noPreview.addAll(preview);
         return noPreview;
     }
+
+    /**
+     * sort the list.
+     * @param column column.
+     * @param coll list.
+     * @return sorted list.
+     */
+    public static List<String> sortColumn(String column, Collection<String> coll) {
+        if (column == null || coll == null || coll.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        if ("os".equals(column)) {
+            return SortUtil.sortOsColumn(coll);
+        } else if ("category".equals(column)) {
+            return SortUtil.sortCategoryColumn(coll);
+        } else if ("arch".equals(column)) {
+            return SortUtil.sortArch(coll);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    /**
+     * Sorts the list of strings representing operating systems in ascending order.
+     *
+     * @param colList The list of strings representing operating systems to be sorted
+     * @return A sorted list of strings representing operating systems in ascending order
+     */
+    public static List<String> sortOsColumn(Collection<String> colList) {
+        if (colList == null || colList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        Map<Boolean, List<String>> partMap = colList.stream()
+                .collect(Collectors.partitioningBy(e -> !e.contains("preview")));
+        List<String> con = partMap.get(true);
+        List<String> don = partMap.get(false);
+        Collections.sort(con, Collections.reverseOrder());
+        con.addAll(don);
+        return con;
+    }
+
+    /**
+     * Sorts the list of strings representing category in ascending order.
+     *
+     * @param colList The list of strings representing category to be sorted
+     * @return A sorted list of strings representing category in ascending order
+     */
+    public static List<String> sortCategoryColumn(Collection<String> colList) {
+        if (colList == null || colList.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<String> list = colList.stream().sorted().collect(Collectors.toList());
+        if (list.contains("其他")) {
+            list.remove("其他");
+            list.add("其他");
+        }
+        return list;
+    }
+
+    /**
+     * sort arch.
+     * @param list origin list.
+     * @return sorted list.
+     */
+    public static List<String> sortArch(Collection<String> list) {
+        if (list == null || list.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return list.stream().sorted().collect(Collectors.toList());
+    }
 }

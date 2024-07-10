@@ -24,6 +24,7 @@ import com.easysoftware.common.exception.NoneResException;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
+import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.domain.epkgpackage.gateway.EPKGPackageGateway;
 import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.converter.EPKGPackageConverter;
 import com.easysoftware.infrastructure.epkgpackage.gatewayimpl.dataobject.EPKGPackageDO;
@@ -125,12 +126,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         Map<String, List<String>> res = new HashMap<>();
         for (String column : columns) {
             List<String> colList = queryColumn(column);
-            if ("os".equals(column)) {
-                colList = QueryWrapperUtil.sortOsColumn(colList);
-            }
-            if ("category".equals(column)) {
-                colList = QueryWrapperUtil.sortCategoryColumn(colList);
-            }
+            colList = SortUtil.sortColumn(column, colList);
             res.put(column, colList);
         }
         return res;
