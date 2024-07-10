@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.QueryWrapperUtil;
+import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.domain.applicationversion.ApplicationVersion;
 import com.easysoftware.domain.applicationversion.gateway.ApplicationVersionGateway;
 import com.easysoftware.infrastructure.applicationversion.gatewayimpl.converter.ApplicationVersionConvertor;
@@ -108,7 +109,7 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
         for (String column : columns) {
             List<String> colList = queryColumn(column);
             if ("eulerOsVersion".equals(column)) {
-                colList = QueryWrapperUtil.sortOsColumn(colList);
+                colList = SortUtil.sortOsColumn(colList);
             }
             res.put(column, colList);
         }

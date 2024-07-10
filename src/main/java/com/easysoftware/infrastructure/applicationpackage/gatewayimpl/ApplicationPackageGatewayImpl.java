@@ -24,6 +24,7 @@ import com.easysoftware.application.applicationpackage.vo.ApplicationPackageTags
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
+import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.domain.applicationpackage.gateway.ApplicationPackageGateway;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.converter.ApplicationPackageConverter;
 import com.easysoftware.infrastructure.applicationpackage.gatewayimpl.dataobject.ApplicationPackageDO;
@@ -198,12 +199,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         Map<String, List<String>> res = new HashMap<>();
         for (String column : columns) {
             List<String> colList = queryColumn(column);
-            if ("os".equals(column)) {
-                colList = QueryWrapperUtil.sortOsColumn(colList);
-            }
-            if ("category".equals(column)) {
-                colList = QueryWrapperUtil.sortCategoryColumn(colList);
-            }
+            colList = SortUtil.sortColumn(column, colList);
             res.put(column, colList);
         }
         return res;

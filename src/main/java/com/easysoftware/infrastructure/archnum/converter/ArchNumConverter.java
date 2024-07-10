@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.infrastructure.archnum.dataobject.ArchNumDO;
 
@@ -36,7 +35,7 @@ public class ArchNumConverter {
         }
 
         Map<String, List<ArchNumDO>> osMap = list.stream().collect(Collectors.groupingBy(ArchNumDO::getOs));
-        List<String> orderedOses = QueryWrapperUtil.sortOsColumn(osMap.keySet());
+        List<String> orderedOses = SortUtil.sortOsColumn(osMap.keySet());
         Map<String, Map<String, Map<String, Integer>>> res = new LinkedHashMap<>();
         for (String orderedOs: orderedOses) {
             List<ArchNumDO> aList = osMap.get(orderedOs);
