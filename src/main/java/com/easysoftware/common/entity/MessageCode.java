@@ -119,13 +119,25 @@ public enum MessageCode {
      * Chinese: key删除错误.
      */
     EC00017("EC00017", "Redis key delete failed", "key删除错误"),
+
+    /**
+     * Error code EC00018: The user is not logged on.
+     * Chinese: 用户未登录.
+     */
+    EC00018("EC00018", "The user is not logged on", "用户未登录"),
+
+    /**
+     * Error code EC00019: Unauyhorized.
+     * Chinese: 权限不足.
+     */
+    EC00019("EC00019", "Unauthorized ", "权限不足"),
+
     /**
      * Error code ES0001: Internal Server Error.
      * Chinese: 服务异常.
      */
     // self service exception
     ES0001("ES0001", "Internal Server Error", "服务异常");
-
 
     /**
      * Error code.
@@ -141,7 +153,6 @@ public enum MessageCode {
      * Error message in Chinese.
      */
     private final String msgZh;
-
 
     /**
      * Constructor for MessageCode enum.

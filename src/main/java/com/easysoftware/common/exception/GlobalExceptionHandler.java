@@ -23,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import cn.dev33.satoken.exception.NotPermissionException;
+import cn.dev33.satoken.exception.NotLoginException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -81,6 +83,45 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> exception(final NoneResException e) {
         LOGGER.error(MessageCode.EC0002.getMsgEn());
         return ResultUtil.fail(HttpStatus.NOT_FOUND, MessageCode.EC0009.getMsgEn());
+    }
+
+    /**
+     * Handles exceptions of type HttpRequestException.
+     *
+     * @param e The HttpRequestException to handle
+     * @return ResponseEntity containing details about the exception
+     */
+    @ExceptionHandler(HttpRequestException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Object> exception(final HttpRequestException e) {
+        LOGGER.error(e.getMessage());
+        return ResultUtil.fail(HttpStatus.NOT_FOUND, MessageCode.EC0001);
+    }
+
+    /**
+     * Handles exceptions of type NotPermissionException.
+     *
+     * @param e The NotPermissionException to handle
+     * @return ResponseEntity containing details about the exception
+     */
+    @ExceptionHandler(NotPermissionException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<Object> exception(final NotPermissionException e) {
+        LOGGER.error(e.getMessage());
+        return ResultUtil.fail(HttpStatus.FORBIDDEN, MessageCode.EC00019);
+    }
+
+    /**
+     * Handles exceptions of type NotLoginException.
+     *
+     * @param e The NotLoginException to handle
+     * @return ResponseEntity containing details about the exception
+     */
+    @ExceptionHandler(NotLoginException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<Object> exception(final NotLoginException e) {
+        LOGGER.error(e.getMessage());
+        return ResultUtil.fail(HttpStatus.FORBIDDEN, MessageCode.EC00018);
     }
 
     /**
