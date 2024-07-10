@@ -66,4 +66,9 @@ public class FieldPkgVo {
      * Description.
      */
     private String description;
+
+    /**
+     * maintainers.
+     */
+    private String maintainers;
 }
