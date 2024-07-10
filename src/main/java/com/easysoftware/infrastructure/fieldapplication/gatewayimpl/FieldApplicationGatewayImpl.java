@@ -18,6 +18,7 @@ import com.easysoftware.application.filedapplication.dto.FiledApplicationSerachC
 import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.QueryWrapperUtil;
+import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.domain.fieldapplication.gateway.FieldapplicationGateway;
 import com.easysoftware.infrastructure.fieldapplication.gatewayimpl.converter.FieldApplicationConverter;
 import com.easysoftware.infrastructure.fieldapplication.gatewayimpl.dataobject.FieldApplicationDO;
@@ -89,12 +90,7 @@ public class FieldApplicationGatewayImpl implements FieldapplicationGateway {
         Map<String, List<String>> res = new HashMap<>();
         for (String column : columns) {
             List<String> colList = queryColumn(column);
-            if ("os".equals(column)) {
-                colList = QueryWrapperUtil.sortOsColumn(colList);
-            }
-            if ("category".equals(column)) {
-                colList = QueryWrapperUtil.sortCategoryColumn(colList);
-            }
+            colList = SortUtil.sortColumn(column, colList);
             res.put(column, colList);
         }
         return res;

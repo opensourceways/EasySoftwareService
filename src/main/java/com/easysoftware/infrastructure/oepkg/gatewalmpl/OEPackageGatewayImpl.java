@@ -26,6 +26,7 @@ import com.easysoftware.application.rpmpackage.vo.RPMPackgeVersionVo;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
+import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.domain.oepackage.gateway.OEPackageGateway;
 import com.easysoftware.infrastructure.mapper.OEPackageDOMapper;
 import com.easysoftware.infrastructure.oepkg.gatewalmpl.coverter.OEPackageConverter;
@@ -126,12 +127,7 @@ public class OEPackageGatewayImpl implements OEPackageGateway {
         Map<String, List<String>> res = new HashMap<>();
         for (String column : columns) {
             List<String> colList = queryColumn(column);
-            if ("os".equals(column)) {
-                colList = QueryWrapperUtil.sortOsColumn(colList);
-            }
-            if ("category".equals(column)) {
-                colList = QueryWrapperUtil.sortCategoryColumn(colList);
-            }
+            colList = SortUtil.sortColumn(column, colList);
             res.put(column, colList);
         }
         return res;

@@ -20,6 +20,7 @@ import com.easysoftware.application.fieldpkg.vo.FieldPkgVo;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
+import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.domain.fieldpkg.gateway.FieldPkgGateway;
 import com.easysoftware.infrastructure.fieldpkg.converter.FieldPkgConverter;
 import com.easysoftware.infrastructure.fieldpkg.dataobject.FieldPkgDO;
@@ -92,12 +93,7 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
         Map<String, List<String>> res = new HashMap<>();
         for (String column : columns) {
             List<String> colList = queryColumn(column);
-            if ("os".equals(column)) {
-                colList = QueryWrapperUtil.sortOsColumn(colList);
-            }
-            if ("category".equals(column)) {
-                colList = QueryWrapperUtil.sortCategoryColumn(colList);
-            }
+            colList = SortUtil.sortColumn(column, colList);
             res.put(column, colList);
         }
         return res;
