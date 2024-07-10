@@ -21,6 +21,7 @@ import com.easysoftware.application.applicationversion.dto.ApplicationColumnSear
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
 import com.easysoftware.common.aop.RequestLimitRedis;
 
+import cn.dev33.satoken.stp.StpUtil;
 import jakarta.validation.Valid;
 
 @RestController
@@ -42,6 +43,8 @@ public class ApplicationVersionQueryAdapter {
     @GetMapping()
     @RequestLimitRedis()
     public ResponseEntity<Object> searchAppVersion(@Valid final ApplicationVersionSearchCondition condition) {
+        // 检查会话权限
+        StpUtil.checkPermission("easysoftwareread");
         return appVersionService.searchAppVersion(condition);
     }
 
@@ -55,6 +58,8 @@ public class ApplicationVersionQueryAdapter {
     @GetMapping("/column")
     @RequestLimitRedis()
     public ResponseEntity<Object> searchAppVerColumn(@Valid final ApplicationColumnSearchCondition condition) {
+        // 检查会话权限
+        StpUtil.checkPermission("easysoftwareread");
         return appVersionService.searchAppVerColumn(condition);
     }
 }

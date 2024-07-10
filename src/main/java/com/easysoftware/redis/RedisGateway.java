@@ -36,6 +36,16 @@ public class RedisGateway {
     }
 
     /**
+     * delete a key from Redis.
+     *
+     * @param key The key to set.
+     *
+     */
+    public void detele(final String key) {
+        stringRedisTemplate.delete(key);
+    }
+
+    /**
      * Get the value associated with a key in Redis.
      *
      * @param key The key to retrieve the value for.
