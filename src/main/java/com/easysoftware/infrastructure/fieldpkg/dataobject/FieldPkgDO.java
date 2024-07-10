@@ -78,4 +78,9 @@ public class FieldPkgDO {
      */
     @TableField(value = "count(*)", insertStrategy = FieldStrategy.NEVER, updateStrategy = FieldStrategy.NEVER)
     private Integer count;
+
+    /**
+     * maintainers.
+     */
+    private String maintainers;
 }

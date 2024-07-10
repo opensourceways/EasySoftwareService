@@ -67,4 +67,9 @@ public class FiledApplicationVo {
      */
     private String description;
 
+    /**
+     * maintainers.
+     */
+    private String maintainers;
+
 }
