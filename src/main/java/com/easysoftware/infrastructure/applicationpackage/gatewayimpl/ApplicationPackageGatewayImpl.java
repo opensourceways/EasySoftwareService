@@ -92,8 +92,9 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
      */
     @Override
     public Map<String, Object> queryTagsByName(final ApplicationPackageNameSearchCondition condition) {
-        QueryWrapper<ApplicationPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new ApplicationPackageDO(),
-                condition, null);
+        QueryWrapper<ApplicationPackageDO> wrapper = new QueryWrapper<>();
+        wrapper.select("app_ver", "arch", "name");
+        wrapper.eq("name", condition.getName());
         List<ApplicationPackageDO> appDOs = appPkgMapper.selectList(wrapper);
         List<ApplicationPackageTagsVo> aggregatePkgs = ApplicationPackageConverter.aggregateByTags(appDOs);
         long total = aggregatePkgs.size();
@@ -262,6 +263,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
 
     /**
      * query pkg num of arch by os.
+     *
      * @param os os.
      * @return pkg nums of arch.
      */
