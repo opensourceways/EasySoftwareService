@@ -67,6 +67,7 @@ public final class FieldPkgConverter {
         BeanUtils.copyProperties(opDo, opVo);
         List<String> tags = ObjectMapperUtil.toObjectList(String.class, opDo.getTags());
         Map<String, Object> pkgIds = ObjectMapperUtil.toMap(opDo.getPkgIds());
+        Map<String, Object> maintainers = ObjectMapperUtil.toMap(opDo.getMaintainers());
 
         List<String> sortedTags = SortUtil.sortTags(tags);
         opVo.setTags(sortedTags);
@@ -74,6 +75,11 @@ public final class FieldPkgConverter {
         Map<String, String> pkgIdsMap = new HashMap<>();
         pkgIds.forEach((key, value) -> pkgIdsMap.put(key, String.valueOf(value)));
         opVo.setPkgIds(pkgIdsMap);
+
+        Map<String, String> maintainersMap = maintainers.entrySet().stream().collect(Collectors.toMap(
+            Map.Entry::getKey, e -> String.valueOf(e.getValue())
+        ));
+        opVo.setMaintainers(maintainersMap);
         return opVo;
     }
 
