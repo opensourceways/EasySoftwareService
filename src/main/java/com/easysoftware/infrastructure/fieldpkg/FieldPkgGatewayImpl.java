@@ -85,8 +85,7 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
             }
         }
 
-        long total = resPage.getTotal();
-
+        long total = voList == null ? 0L : voList.size();
         return Map.ofEntries(
                 Map.entry("total", total),
                 Map.entry("list", voList));
