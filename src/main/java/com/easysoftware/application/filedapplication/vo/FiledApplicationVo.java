@@ -70,6 +70,6 @@ public class FiledApplicationVo {
     /**
      * maintainers.
      */
-    private String maintainers;
+    private Map<String, String> maintainers;
 
 }
