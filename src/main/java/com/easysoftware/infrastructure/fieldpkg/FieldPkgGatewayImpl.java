@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.fieldpkg.dto.FieldPkgSearchCondition;
 import com.easysoftware.application.fieldpkg.vo.FieldPkgVo;
+import com.easysoftware.common.constant.PackageConstant;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
@@ -62,6 +63,28 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
         IPage<FieldPkgDO> resPage = mapper.selectPage(page, wrapper);
         List<FieldPkgDO> list = resPage.getRecords();
         List<FieldPkgVo> voList = FieldPkgConverter.toVo(list);
+
+        if (condition.getOs() == null && condition.getArch() == null) {
+            voList = FieldPkgConverter.aggregateVoByName(voList);
+        }
+
+        // 聚合后个数少于约定数目 查询下一页填充后聚合返回
+        if (voList.size() < condition.getPageSize()) {
+            Page<FieldPkgDO> nextPage = new Page<>(condition.getPageNum() + 1, condition.getPageSize());
+            IPage<FieldPkgDO> nextResPage = mapper.selectPage(nextPage, wrapper);
+            List<FieldPkgDO> nextPlist = nextResPage.getRecords();
+            List<FieldPkgVo> nextVoList = FieldPkgConverter.toVo(nextPlist);
+            List<FieldPkgVo> candidateVo = FieldPkgConverter.aggregateVoByName(nextVoList);
+            int missNum = condition.getPageSize() - voList.size();
+            for (FieldPkgVo vo : candidateVo) {
+                if (missNum <= PackageConstant.ZERO) {
+                    break;
+                }
+                voList.add(vo);
+                missNum--;
+            }
+        }
+
         long total = resPage.getTotal();
 
         return Map.ofEntries(
@@ -129,6 +152,7 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
 
     /**
      * query pkg num of arch by os.
+     *
      * @param os os.
      * @return pkg nums of arch.
      */
