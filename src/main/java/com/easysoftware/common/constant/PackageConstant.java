@@ -30,6 +30,11 @@ public final class PackageConstant {
     public static final int MIN_PAGE_NUM = 1;
 
     /**
+     * zero constant.
+     */
+    public static final int ZERO = 0;
+
+    /**
      * Maximum page size allowed.
      */
     public static final int MAX_PAGE_SIZE = 100;
