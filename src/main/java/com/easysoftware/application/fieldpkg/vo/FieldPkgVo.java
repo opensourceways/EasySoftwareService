@@ -70,5 +70,5 @@ public class FieldPkgVo {
     /**
      * maintainers.
      */
-    private String maintainers;
+    private Map<String, String> maintainers;
 }
