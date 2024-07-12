@@ -15,10 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
 import com.easysoftware.application.operationconfig.vo.OperationConfigVo;
+import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.domain.operationconfig.gateway.OperationConfigGateway;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -72,11 +74,30 @@ public class RankerImpl implements Ranker {
             }
         }
 
-        for (int i = rankingList.size() - 1; i >= 0; i--) {
-            domainPage.add(0, rankingList.get(i));
+        return mergeList(rankingList, domainPage);
+    }
+
+    /**
+     * merge rankedlist in OperationConfig and unRankedList.
+     * @param rankedList rankedList.
+     * @param unRandedList unRandedList.
+     * @return list of entity.
+     */
+    public List<Map<String, Object>> mergeList(List<Map<String, Object>> rankedList,
+            List<Map<String, Object>> unRandedList) {
+        List<Map<String, Object>> res = new ArrayList<>();
+        res.addAll(rankedList);
+
+        Map<String, List<Map<String, Object>>> map = unRandedList.stream().collect(
+            Collectors.groupingBy(e -> String.valueOf(e.get("name")))
+        );
+        List<String> sortedCategories = SortUtil.sortCategoryColumn(map.keySet());
+        for (String sortedCategory : sortedCategories) {
+            List<Map<String, Object>> list = map.get(sortedCategory);
+            res.add(list.get(0));
         }
 
-        return domainPage;
+        return res;
     }
 
     /**
