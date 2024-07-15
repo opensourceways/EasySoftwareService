@@ -64,9 +64,26 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
         List<FieldPkgDO> list = resPage.getRecords();
         List<FieldPkgVo> voList = FieldPkgConverter.toVo(list);
 
-        if (condition.getOs() == null && condition.getArch() == null) {
-            voList = FieldPkgConverter.aggregateVoByName(voList);
+        if (condition.getOs() == null && condition.getArch() == null && condition.getCategory() == null) {
+            voList = aggregateList(voList, condition, wrapper);
         }
+
+        long total = voList.size();
+        return Map.ofEntries(
+                Map.entry("total", total),
+                Map.entry("list", voList));
+    }
+
+    /**
+     * aggreate the list.
+     * @param voList list.
+     * @param condition condition.
+     * @param wrapper wrapper.
+     * @return list.
+     */
+    public List<FieldPkgVo> aggregateList(List<FieldPkgVo> voList, FieldPkgSearchCondition condition,
+            QueryWrapper<FieldPkgDO> wrapper) {
+        voList = FieldPkgConverter.aggregateVoByName(voList);
 
         // 聚合后个数少于约定数目 查询下一页填充后聚合返回
         if (voList.size() < condition.getPageSize()) {
@@ -84,11 +101,7 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
                 missNum--;
             }
         }
-
-        long total = voList.size();
-        return Map.ofEntries(
-                Map.entry("total", total),
-                Map.entry("list", voList));
+        return voList;
     }
 
     /**
