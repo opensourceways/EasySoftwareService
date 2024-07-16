@@ -1,0 +1,115 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://1.94.147.171:3306/easysoftware_test?characterEncoding=utf8&useSSL=false&autoReconnect=true&serverTimezone=UTC
+    username: gouzhonglin
+    password: XWj*6XTqxSDk!Gbr
+  jackson:
+    dataformat: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  data:
+    redis:  
+      host: 192.168.1.236
+      port: 6379  
+      password: Apf!88QvjRQLpa9kCwUY
+      connect-timeout: 3000
+      timeout: 2000
+      poolmin-idel: 50
+      poolmax-idel: 200
+      poolmax: 200
+
+redis-global:
+  expiration: 12
+  caPath: C:\ca.crt
+
+dos-global:
+  rejectPeriod: 10
+  rejectCount: 5
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+server:
+  error:
+    path: /error
+    whitelabel:
+      enabled: false
+  port: 8080
+  tomcat: 
+    max-threads: 200 
+    connection-timeout: 20000
+bootstrap: 
+  servers: 123.60.153.128:9094
+
+producer: 
+  acks: 1
+  retries: 3
+  retryBackoffMs: 1000
+  batchSize: 16384
+  lingerMs: 0
+  topic: software_test
+
+consumer:
+  groupId: software_test
+  enableAutoCommit: false
+  autoCommitIntervalMs: 1000
+  sessionTimeoutMs: 30000
+  topic:
+    name: software_test
+    offset: 0:0
+
+apppkg:
+  icon:
+    path: aa
+
+api:
+  repoMaintainer: test
+  repoInfo: test
+  repoDownload: test
+  repoSig: test
+
+obs:
+  endpoint: test
+  bucket: test
+  ak: test
+  sk: test
+
+logging:
+  file:
+    path: D:\easesoftware\localtest\log
+  level:
+    com:
+      easysoftware:
+        adapter:
+          query: debug
+
+        
+cookie:
+  token:
+    name: _Y_G_
+    domains: easysoftware.test.osinfra.cn
+
+oneid:
+  manage:
+    tokenApi: https://omapi.osinfra.cn/oneid/manager/token
+    app_id: 623c3c2f1eca5ad5fca6c58a
+    app_secret: 5d07c65f44fa1beb08b36f90af314aef
+    apiBody: "{\"grant_type\":\"token\",\"app_id\":\"623c3c2f1eca5ad5fca6c58a\",\"app_secret\":\"5d07c65f44fa1beb08b36f90af314aef\"}"
+  permissionApi: https://omapi.osinfra.cn/oneid/manager/u/permissions?community=openeuler
+
+
+sa-token: 
+    # token 名称（同时也是 cookie 名称）
+    token-name: satoken
+    # token 有效期（单位：秒） 默认30天，-1 代表永久有效
+    timeout: 1440
+    # token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
+    active-timeout: 300
+    # 是否允许同一账号多地同时登录 （为 true 时允许一起登录, 为 false 时新登录挤掉旧登录）
+    is-concurrent: true
+    # 在多人登录同一账号时，是否共用一个 token （为 true 时所有登录共用一个 token, 为 false 时每次登录新建一个 token）
+    is-share: true
+    # token 风格（默认可取值：uuid、simple-uuid、random-32、random-64、random-128、tik）
+    token-style: random-128
+    # 是否输出操作日志 
+    is-log: true
