@@ -18,9 +18,18 @@ import java.util.Objects;
 @Component
 public class PreUserPermissionAspect {
 
+    /**
+     * Autowired UserPermission for get user permission.
+     */
     @Autowired
     private UserPermission userPermission;
 
+    /**
+     * Advice method called before a method with PreUserPermission, and authentication.
+     * @param joinPoint    The JoinPoint representing the intercepted method.
+     * @return void        No return value.
+     * @throws Throwable   if an error occurs during method execution, or authentication fail.
+     */
     @Before("@annotation(com.easysoftware.common.annotation.PreUserPermission)")
     public void before(final JoinPoint joinPoint) throws Throwable {
         /* 获取PreUserPermission注解参数 */
