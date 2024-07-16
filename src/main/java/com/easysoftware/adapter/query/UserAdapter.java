@@ -1,26 +1,19 @@
 package com.easysoftware.adapter.query;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.stp.StpUtil;
 import com.easysoftware.common.constant.HttpConstant;
 import com.easysoftware.common.utils.ResultUtil;
-
 import jakarta.servlet.http.Cookie;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import cn.dev33.satoken.exception.NotLoginException;
-
-import cn.dev33.satoken.stp.StpUtil;
-import com.easysoftware.redis.RedisGateway;
-import jakarta.servlet.http.HttpServletRequest;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import java.util.Arrays;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user/")
