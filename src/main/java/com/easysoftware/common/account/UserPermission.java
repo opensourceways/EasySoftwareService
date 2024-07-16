@@ -36,8 +36,8 @@ public class UserPermission {
     private String permissionApi;
 
     /**
-     * Get user permission by user token and manage token
-     * @return
+     * Get user permission by user token and manage token.
+     * @return Collection of user permissions.
      */
     public HashSet<String> getPermissionList() {
         // 使用获取userToken
@@ -62,7 +62,6 @@ public class UserPermission {
         }
 
         // 设置权限
-        //TODO 这个地方用Set可以吗？（方便外面的权限匹配）
         JsonNode permissions = resJson.get("data").get("permissions");
         HashSet<String> permissionSet = new HashSet<>();
         for (JsonNode per : permissions) {
@@ -73,8 +72,8 @@ public class UserPermission {
     }
 
     /**
-     * Get manage token
-     * @return manage token
+     * Get manage token.
+     * @return manage token.
      */
     private String getManageToken() {
         String response = HttpClientUtil.postHttpClient(manageTokenApi, manageApiBody);
@@ -83,8 +82,8 @@ public class UserPermission {
     }
 
     /**
-     * Get user token
-     * @return user token
+     * Get user token.
+     * @return user token.
      */
     private String getUserToken() {
         ServletRequestAttributes servletRequestAttributes =

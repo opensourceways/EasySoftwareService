@@ -27,7 +27,6 @@ public class PreUserPermissionAspect {
     /**
      * Advice method called before a method with PreUserPermission, and authentication.
      * @param joinPoint    The JoinPoint representing the intercepted method.
-     * @return void        No return value.
      * @throws Throwable   if an error occurs during method execution, or authentication fail.
      */
     @Before("@annotation(com.easysoftware.common.annotation.PreUserPermission)")
@@ -40,7 +39,7 @@ public class PreUserPermissionAspect {
 
         /* 方法使用注解，但未指定参数，默认无权限控制 */
         if (Objects.isNull(paramValues) || 0 == paramValues.length) {
-            return ;
+            return;
         }
 
         /* 获取客户权限 */
@@ -49,7 +48,7 @@ public class PreUserPermissionAspect {
         /* 检查客户权限是否满足访问权限 */
         for (String item:paramValues) {
             if (permissionSet.contains(item)) {
-                return ;
+                return;
             }
         }
 
