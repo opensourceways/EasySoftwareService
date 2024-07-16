@@ -2,6 +2,7 @@ package com.easysoftware.common.aop;
 
 import com.easysoftware.common.account.UserPermission;
 import com.easysoftware.common.annotation.PreUserPermission;
+import com.easysoftware.common.exception.HttpRequestException;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -40,14 +41,16 @@ public class PreUserPermissionAspect {
             return ;
         }
 
-        /* 获取客户权限，检查 */
+        /* 获取客户权限 */
         HashSet<String> permissionSet = userPermission.getPermissionList();
+
+        /* 检查客户权限是否满足访问权限 */
         for (String item:paramValues) {
             if (permissionSet.contains(item)) {
                 return ;
             }
         }
 
-        throw  new Exception("您无权限访问");
+        throw  new HttpRequestException("you do not have unauthorized access");
     }
 }
