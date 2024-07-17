@@ -1,6 +1,6 @@
 package com.easysoftware.common.account;
 
-public class UerPermissionDef {
+public final class UerPermissionDef {
     /**
      * user permission - easysoftwareread.
      */
