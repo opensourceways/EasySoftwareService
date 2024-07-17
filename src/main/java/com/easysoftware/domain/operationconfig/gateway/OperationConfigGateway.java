@@ -17,10 +17,33 @@ import java.util.List;
 
 public interface OperationConfigGateway {
     /**
-     * Select all operation configurations and return them as a list of OperationConfigVo objects.
+     * Select all operation configurations and return them as a list of
+     * OperationConfigVo objects.
      *
-     * @return A list of OperationConfigVo objects containing all operation configurations
+     * @return A list of OperationConfigVo objects containing all operation
+     *         configurations
      */
     List<OperationConfigVo> selectAll();
+
+    /**
+     * Select all operation configurations with type = domainpage and return them as
+     * a list of
+     * OperationConfigVo objects.
+     *
+     * @return A list of OperationConfigVo objects containing all operation
+     *         configurations
+     */
+    List<OperationConfigVo> selectRankingConfig();
+
+    /**
+     * Select all operation configurations with type = category_changes and return
+     * them as
+     * a list of
+     * OperationConfigVo objects.
+     *
+     * @return A list of OperationConfigVo objects containing all operation
+     *         configurations
+     */
+    List<OperationConfigVo> selectCategoryChanges();
 
 }

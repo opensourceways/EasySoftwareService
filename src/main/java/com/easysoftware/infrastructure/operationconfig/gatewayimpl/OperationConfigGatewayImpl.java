@@ -11,6 +11,7 @@
 
 package com.easysoftware.infrastructure.operationconfig.gatewayimpl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.easysoftware.application.operationconfig.vo.OperationConfigVo;
 import com.easysoftware.domain.operationconfig.gateway.OperationConfigGateway;
 import com.easysoftware.infrastructure.mapper.OperationConfigDOMapper;
@@ -39,6 +40,40 @@ public class OperationConfigGatewayImpl implements OperationConfigGateway {
     @Override
     public List<OperationConfigVo> selectAll() {
         List<OperationConfigDO> doList = mapper.selectList(null);
+        return OperationConfigConverter.toVo(doList);
+    }
+
+    /**
+     * Select all operation configurations withe type = domainPage and return them
+     * as a list of
+     * OperationConfigVo objects.
+     *
+     * @return A list of OperationConfigVo objects containing all operation
+     *         configurations
+     */
+    @Override
+    public List<OperationConfigVo> selectRankingConfig() {
+        QueryWrapper<OperationConfigDO> wrapper = new QueryWrapper<>();
+        wrapper.eq("type", "domainPage");
+        List<OperationConfigDO> doList = mapper.selectList(wrapper);
+
+        return OperationConfigConverter.toVo(doList);
+    }
+
+    /**
+     * Select all operation configurations with type = category_changes and return
+     * them as
+     * a list of
+     * OperationConfigVo objects.
+     *
+     * @return A list of OperationConfigVo objects containing all operation
+     *         configurations
+     */
+    public List<OperationConfigVo> selectCategoryChanges() {
+        QueryWrapper<OperationConfigDO> wrapper = new QueryWrapper<>();
+        wrapper.eq("type", "category_change");
+        List<OperationConfigDO> doList = mapper.selectList(wrapper);
+
         return OperationConfigConverter.toVo(doList);
     }
 }
