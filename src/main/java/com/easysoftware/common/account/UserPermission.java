@@ -1,5 +1,6 @@
 package com.easysoftware.common.account;
 
+import cn.dev33.satoken.exception.NotLoginException;
 import com.easysoftware.common.constant.HttpConstant;
 import com.easysoftware.common.exception.HttpRequestException;
 import com.easysoftware.common.utils.HttpClientUtil;
@@ -89,13 +90,13 @@ public class UserPermission {
         ServletRequestAttributes servletRequestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (Objects.isNull(servletRequestAttributes)) {
-            throw new HttpRequestException("unauthorized, missing token");
+            throw new HttpRequestException("http request content error");
         }
         HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
 
         String userToken = httpServletRequest.getHeader(HttpConstant.TOKEN);
         if (null == userToken) {
-            throw new HttpRequestException("unauthorized, missing token");
+            throw new NotLoginException("user token expired or no login", "", "");
         }
 
         return userToken;

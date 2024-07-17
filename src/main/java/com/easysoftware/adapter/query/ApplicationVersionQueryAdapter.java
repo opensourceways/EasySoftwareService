@@ -11,6 +11,7 @@
 
 package com.easysoftware.adapter.query;
 
+import com.easysoftware.common.account.UerPermissionDef;
 import com.easysoftware.common.annotation.PreUserPermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class ApplicationVersionQueryAdapter {
      */
     @GetMapping()
     @RequestLimitRedis()
-    @PreUserPermission("easysoftwareread")
+    @PreUserPermission(UerPermissionDef.USER_PERMISSION_READ)
     public ResponseEntity<Object> searchAppVersion(@Valid final ApplicationVersionSearchCondition condition) {
         // 检查会话权限
         return appVersionService.searchAppVersion(condition);
@@ -57,7 +58,7 @@ public class ApplicationVersionQueryAdapter {
      */
     @GetMapping("/column")
     @RequestLimitRedis()
-    @PreUserPermission("easysoftwareread")
+    @PreUserPermission(UerPermissionDef.USER_PERMISSION_READ)
     public ResponseEntity<Object> searchAppVerColumn(@Valid final ApplicationColumnSearchCondition condition) {
         // 检查会话权限
         return appVersionService.searchAppVerColumn(condition);
