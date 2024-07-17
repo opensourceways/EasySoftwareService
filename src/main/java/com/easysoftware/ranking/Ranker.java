@@ -14,7 +14,6 @@ package com.easysoftware.ranking;
 import java.util.Map;
 import java.util.List;
 
-
 public interface Ranker {
     /**
      * Rank domain pages based on operation configuration.
@@ -31,5 +30,12 @@ public interface Ranker {
      * @return Ranked list of domain pages.
      */
     List<Map<String, Object>> rankingDomainPageByAlgorithm(List<Map<String, Object>> domainPage);
+
+    /**
+     * change the category by operation config.
+     *
+     * @return wheter change is sucessce.
+     */
+    boolean changeCategoryByConfig();
 
 }
