@@ -10,6 +10,10 @@
 */
 package com.easysoftware.application.rpmpackage.vo;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,4 +31,23 @@ public class RPMPackageNewestVersionVo {
      * The coresspond euler versions of the rpm package.
      */
     private String os;
+
+    /**
+     * pick one from list.
+     * @param list list.
+     * @return RPMPackageNewestVersionVo containg latest newestVersion.
+     */
+    public static RPMPackageNewestVersionVo pickNewestOne(List<RPMPackageNewestVersionVo> list) {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        List<RPMPackageNewestVersionVo> sortedList =  list.stream()
+                .sorted(
+                    Comparator.comparing(RPMPackageNewestVersionVo::getOs)
+                    .thenComparing(RPMPackageNewestVersionVo::getNewestVersion)
+                )
+                .collect(Collectors.toList());
+
+        return sortedList.get(sortedList.size() - 1);
+    }
 }
