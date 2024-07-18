@@ -69,4 +69,9 @@ public class EulerLifeCycleDO {
      * alis for os.
      */
     private String osAlias;
+
+    /**
+     * os download url.
+     */
+    private String osUrl;
 }

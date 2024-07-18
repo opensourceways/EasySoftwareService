@@ -58,4 +58,9 @@ public class EulerLifeCycleVo {
      * alis for os.
      */
     private String osAlias;
+
+    /**
+     * os download ur.
+     */
+    private String osUrl;
 }
