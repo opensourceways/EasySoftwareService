@@ -63,12 +63,13 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
         IPage<FieldPkgDO> resPage = mapper.selectPage(page, wrapper);
         List<FieldPkgDO> list = resPage.getRecords();
         List<FieldPkgVo> voList = FieldPkgConverter.toVo(list);
+        long total = voList.size();
 
         if (condition.getOs() == null && condition.getArch() == null && condition.getCategory() == null) {
             voList = aggregateList(voList, condition, wrapper);
+            total = voList.size();
         }
 
-        long total = voList.size();
         return Map.ofEntries(
                 Map.entry("total", total),
                 Map.entry("list", voList));
@@ -76,9 +77,10 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
 
     /**
      * aggreate the list.
-     * @param voList list.
+     *
+     * @param voList    list.
      * @param condition condition.
-     * @param wrapper wrapper.
+     * @param wrapper   wrapper.
      * @return list.
      */
     public List<FieldPkgVo> aggregateList(List<FieldPkgVo> voList, FieldPkgSearchCondition condition,
