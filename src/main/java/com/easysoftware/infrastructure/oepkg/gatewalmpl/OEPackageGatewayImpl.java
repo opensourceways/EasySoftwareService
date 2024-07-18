@@ -95,7 +95,7 @@ public class OEPackageGatewayImpl implements OEPackageGateway {
         List<OepkgDO> oepkgDOs = resPage.getRecords();
 
         List<OEPackageMenuVo> oeMenus = OEPackageConverter.toMenu(oepkgDOs);
-        long total = resPage.getTotal();
+        long total = resPage.getTotal() / condition.getPageSize();
 
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", total),
@@ -194,7 +194,8 @@ public class OEPackageGatewayImpl implements OEPackageGateway {
     /**
      * Query the Euler Version based on the provided search condition.
      *
-     * @param condition The search condition for querying a part of the RPM Euler Version
+     * @param condition The search condition for querying a part of the RPM Euler
+     *                  Version
      * @return A map containing relevant information
      */
     @Override
@@ -218,6 +219,7 @@ public class OEPackageGatewayImpl implements OEPackageGateway {
 
     /**
      * query pkg num of arch by os.
+     *
      * @param os os.
      * @return pkg nums of arch.
      */

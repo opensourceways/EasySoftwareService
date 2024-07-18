@@ -97,7 +97,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         IPage<RPMPackageDO> resPage = rPMPkgMapper.selectPage(page, wrapper);
         List<RPMPackageDO> rpmDOs = resPage.getRecords();
         List<RPMPackageMenuVo> rPMMenus = RPMPackageConverter.toMenu(rpmDOs);
-        long total = resPage.getTotal();
+        long total = resPage.getTotal() / condition.getPageSize();
 
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", total),
@@ -289,6 +289,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
 
     /**
      * query pkg num of arch by os.
+     *
      * @param os os.
      * @return pkg nums of arch.
      */
