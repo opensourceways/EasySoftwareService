@@ -16,6 +16,7 @@ import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageNewestVersionVo;
 import com.easysoftware.common.exception.NoneResException;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ResultUtil;
@@ -106,14 +107,19 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
      */
     @Override
     public ResponseEntity<Object> queryNewstRpmVersion(RPMPackageNameSearchCondition condition) {
-        Map<String, Object> res = rPMPkgGateway.queryNewstRpmVersion(condition);
+        List<RPMPackageNewestVersionVo> rpmRes = rPMPkgGateway.queryNewstRpmVersion(condition);
+        List<RPMPackageNewestVersionVo> oepkgRes = oepkgGateway.queryNewstRpmVersion(condition);
 
-        if (res.get("total") != null && !res.get("total").equals(Integer.valueOf(0))) {
-            return ResultUtil.success(HttpStatus.OK, res);
-        }
+        List<RPMPackageNewestVersionVo> list = new ArrayList<>();
+        list.addAll(rpmRes);
+        list.addAll(oepkgRes);
+        RPMPackageNewestVersionVo res = RPMPackageNewestVersionVo.pickNewestOne(list);
 
-        res = oepkgGateway.queryNewstRpmVersion(condition);
-        return ResultUtil.success(HttpStatus.OK, res);
+        long total = res == null ? 0 : 1;
+        return ResultUtil.success(HttpStatus.OK, Map.of(
+            "total", total,
+            "list", List.of(res)
+        ));
     }
 
     /**

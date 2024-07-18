@@ -18,6 +18,7 @@ import com.easysoftware.application.oepackage.dto.OEPackageSearchCondition;
 import com.easysoftware.application.oepackage.dto.OepkgNameSearchCondition;
 import com.easysoftware.application.oepackage.vo.OEPackageDetailVo;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition;
+import com.easysoftware.application.rpmpackage.vo.RPMPackageNewestVersionVo;
 
 public interface OEPackageGateway {
     /**
@@ -79,7 +80,7 @@ public interface OEPackageGateway {
      * Query the RPM newest version based on the provided search condition.
      *
      * @param condition The search condition for querying RPM newest version
-     * @return A map containing RPM newest version
+     * @return List of RPM newest version
      */
-    Map<String, Object> queryNewstRpmVersion(RPMPackageNameSearchCondition condition);
+    List<RPMPackageNewestVersionVo> queryNewstRpmVersion(RPMPackageNameSearchCondition condition);
 }

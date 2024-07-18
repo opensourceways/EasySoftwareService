@@ -33,6 +33,8 @@ import com.easysoftware.infrastructure.oepkg.gatewalmpl.coverter.OEPackageConver
 import com.easysoftware.infrastructure.oepkg.gatewalmpl.dataobject.OepkgDO;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.converter.RPMPackageConverter;
 import com.power.common.util.StringUtil;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Component;
@@ -244,20 +246,15 @@ public class OEPackageGatewayImpl implements OEPackageGateway {
      * @return A map containing relevant information
      */
     @Override
-    public Map<String, Object> queryNewstRpmVersion(RPMPackageNameSearchCondition condition) {
-        QueryWrapper<OepkgDO> wrapper = QueryWrapperUtil.createQueryWrapper(new OepkgDO(),
-                condition, "");
-        RPMPackgeVersionVo pkgVo = new RPMPackgeVersionVo();
-        List<String> columns = ClassField.getFieldNames(pkgVo);
-        if (condition.getName() != null) {
-            wrapper.eq("name", condition.getName().toLowerCase());
+    public List<RPMPackageNewestVersionVo> queryNewstRpmVersion(RPMPackageNameSearchCondition condition) {
+        QueryWrapper<OepkgDO> wrapper = new QueryWrapper<>();
+        String name = condition.getName();
+        List<String> columns = ClassField.getFieldNames(new RPMPackgeVersionVo());
+        if (!StringUtils.isBlank(name)) {
+            wrapper.eq("lower(name)", name.toLowerCase());
         }
         wrapper.select(columns);
         List<OepkgDO> rpmList = oEPkgMapper.selectList(wrapper);
-        List<RPMPackageNewestVersionVo> versions = RPMPackageConverter.toRPMVersionFromOepkg(rpmList);
-        Map<String, Object> res = Map.ofEntries(
-                Map.entry("total", versions.size()),
-                Map.entry("list", versions));
-        return res;
+        return RPMPackageConverter.toRPMVersionFromOepkg(rpmList);
     }
 }
