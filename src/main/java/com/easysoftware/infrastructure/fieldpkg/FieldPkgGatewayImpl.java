@@ -63,11 +63,10 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
         IPage<FieldPkgDO> resPage = mapper.selectPage(page, wrapper);
         List<FieldPkgDO> list = resPage.getRecords();
         List<FieldPkgVo> voList = FieldPkgConverter.toVo(list);
-        long total = voList.size();
+        long total = resPage.getTotal();
 
         if (condition.getOs() == null && condition.getArch() == null && condition.getCategory() == null) {
             voList = aggregateList(voList, condition, wrapper);
-            total = voList.size();
         }
 
         return Map.ofEntries(

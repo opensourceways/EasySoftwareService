@@ -74,7 +74,7 @@ public class ApplicationPackageGatewayImpl implements ApplicationPackageGateway 
         wrapper.select(columns);
 
         IPage<ApplicationPackageDO> resPage = appPkgMapper.selectPage(page, wrapper);
-        long total = resPage.getTotal() / condition.getPageSize();
+        long total = resPage.getTotal();
         List<ApplicationPackageDO> appDOs = resPage.getRecords();
         List<ApplicationPackageMenuVo> menus = ApplicationPackageConverter.toMenu(appDOs);
 

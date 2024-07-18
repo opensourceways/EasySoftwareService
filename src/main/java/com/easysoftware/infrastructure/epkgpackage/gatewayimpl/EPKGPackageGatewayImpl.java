@@ -93,7 +93,7 @@ public class EPKGPackageGatewayImpl implements EPKGPackageGateway {
         IPage<EPKGPackageDO> resPage = ePKGPkgMapper.selectPage(page, wrapper);
         List<EPKGPackageDO> rpmDOs = resPage.getRecords();
         List<EPKGPackageMenuVo> rPMMenus = EPKGPackageConverter.toMenu(rpmDOs);
-        long total = resPage.getTotal() / condition.getPageSize();
+        long total = resPage.getTotal();
 
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", total),
