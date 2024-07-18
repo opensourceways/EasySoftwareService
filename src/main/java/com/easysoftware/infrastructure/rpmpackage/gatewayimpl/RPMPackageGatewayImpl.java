@@ -233,7 +233,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
      * @return A map containing relevant information
      */
     @Override
-    public Map<String, Object> queryNewstRpmVersion(final RPMPackageNameSearchCondition condition) {
+    public List<RPMPackageNewestVersionVo> queryNewstRpmVersion(final RPMPackageNameSearchCondition condition) {
         QueryWrapper<RPMPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new RPMPackageDO(),
                 condition, "");
         RPMPackgeVersionVo pkgVo = new RPMPackgeVersionVo();
@@ -243,11 +243,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         }
         wrapper.select(columns);
         List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
-        List<RPMPackageNewestVersionVo> versions = RPMPackageConverter.toRPMVersion(rpmList);
-        Map<String, Object> res = Map.ofEntries(
-                Map.entry("total", versions.size()),
-                Map.entry("list", versions));
-        return res;
+        return RPMPackageConverter.toRPMVersion(rpmList);
     }
 
     /**
