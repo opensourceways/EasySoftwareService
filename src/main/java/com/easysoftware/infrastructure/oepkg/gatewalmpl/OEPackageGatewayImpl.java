@@ -97,7 +97,7 @@ public class OEPackageGatewayImpl implements OEPackageGateway {
         List<OepkgDO> oepkgDOs = resPage.getRecords();
 
         List<OEPackageMenuVo> oeMenus = OEPackageConverter.toMenu(oepkgDOs);
-        long total = resPage.getTotal() / condition.getPageSize();
+        long total = resPage.getTotal();
 
         Map<String, Object> res = Map.ofEntries(
                 Map.entry("total", total),
