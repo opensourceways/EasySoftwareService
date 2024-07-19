@@ -1,19 +1,26 @@
 package com.easysoftware.adapter.query;
 
-import cn.dev33.satoken.exception.NotLoginException;
-import cn.dev33.satoken.stp.StpUtil;
-import com.easysoftware.common.constant.HttpConstant;
-import com.easysoftware.common.utils.ResultUtil;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
+import com.easysoftware.common.constant.HttpConstant;
+import com.easysoftware.common.utils.ResultUtil;
+
+import jakarta.servlet.http.Cookie;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import cn.dev33.satoken.exception.NotLoginException;
+
+import cn.dev33.satoken.stp.StpUtil;
+import com.easysoftware.redis.RedisGateway;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.Arrays;
 
 @RestController
 @RequestMapping("/user/")
@@ -23,6 +30,12 @@ public class UserAdapter {
      */
     @Value("${cookie.token.name}")
     private String cookieTokenName;
+
+    /**
+     * Autowired redisGateway.
+     */
+    @Autowired
+    private RedisGateway redisGateway;
 
     /**
      * Verify login status from oneid, and maintain session.
@@ -45,6 +58,11 @@ public class UserAdapter {
             throw new NotLoginException("oneid unloggin, missing token", "", "");
         }
 
+        // 用户已经真正登录oneid 以usertoken登录 并维持会话
+        // 设置用户会话token
+        StpUtil.login(userToken);
+        redisGateway.setWithExpire(userToken, userToken, 300, TimeUnit.SECONDS);
+
         return ResultUtil.success(HttpStatus.OK);
     }
 
@@ -58,6 +76,10 @@ public class UserAdapter {
     public ResponseEntity<Object> logout(final HttpServletRequest httpServletRequest) {
         // 用户退出 删除token信息
         String userToken = httpServletRequest.getHeader(HttpConstant.TOKEN);
+
+        if (redisGateway.hasKey(userToken)) {
+            redisGateway.detele(userToken);
+        }
 
         StpUtil.logout();
 
