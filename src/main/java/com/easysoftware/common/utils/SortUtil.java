@@ -61,7 +61,7 @@ public final class SortUtil {
     public static List<EulerLifeCycleVo> sortEulerLifeCycleVo(List<EulerLifeCycleVo> eulerLifeCycleVo) {
         List<EulerLifeCycleVo> sortedElVos = eulerLifeCycleVo.stream()
                 .sorted(Comparator.comparing(EulerLifeCycleVo::getStatus, Comparator.reverseOrder())
-                        .thenComparing(EulerLifeCycleVo::getOs))
+                        .thenComparing(EulerLifeCycleVo::getOs, Comparator.reverseOrder()))
                 .collect(Collectors.toList());
         return sortedElVos;
     }
@@ -88,8 +88,9 @@ public final class SortUtil {
 
     /**
      * sort the list.
+     *
      * @param column column.
-     * @param coll list.
+     * @param coll   list.
      * @return sorted list.
      */
     public static List<String> sortColumn(String column, Collection<String> coll) {
@@ -111,8 +112,10 @@ public final class SortUtil {
     /**
      * Sorts the list of strings representing operating systems in ascending order.
      *
-     * @param colList The list of strings representing operating systems to be sorted
-     * @return A sorted list of strings representing operating systems in ascending order
+     * @param colList The list of strings representing operating systems to be
+     *                sorted
+     * @return A sorted list of strings representing operating systems in ascending
+     *         order
      */
     public static List<String> sortOsColumn(Collection<String> colList) {
         if (colList == null || colList.isEmpty()) {
@@ -148,6 +151,7 @@ public final class SortUtil {
 
     /**
      * sort arch.
+     *
      * @param list origin list.
      * @return sorted list.
      */
