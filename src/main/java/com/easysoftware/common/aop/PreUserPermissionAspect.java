@@ -2,10 +2,10 @@ package com.easysoftware.common.aop;
 
 import com.easysoftware.common.account.UserPermission;
 import com.easysoftware.common.annotation.PreUserPermission;
+import com.easysoftware.common.exception.HttpRequestException;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,16 +18,18 @@ import java.util.Objects;
 @Component
 public class PreUserPermissionAspect {
 
+    /**
+     * Autowired UserPermission for get user permission.
+     */
     @Autowired
-    UserPermission userPermission;
+    private UserPermission userPermission;
 
     /**
-     * Defines the pointcut for methods in specific packages.
+     * Advice method called before a method with PreUserPermission, and authentication.
+     * @param joinPoint    The JoinPoint representing the intercepted method.
+     * @throws Throwable   if an error occurs during method execution, or authentication fail.
      */
-    @Pointcut("@annotation(com.easysoftware.common.annotation.PreUserPermission)")
-    public void pointcut() {}
-
-    @Before("pointcut()")
+    @Before("@annotation(com.easysoftware.common.annotation.PreUserPermission)")
     public void before(final JoinPoint joinPoint) throws Throwable {
         /* 获取PreUserPermission注解参数 */
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
@@ -35,19 +37,21 @@ public class PreUserPermissionAspect {
         PreUserPermission preUserPermission = method.getAnnotation(PreUserPermission.class);
         String[] paramValues = preUserPermission.value();
 
-        /* 未指定参数 */
+        /* 方法使用注解，但未指定参数，默认无权限控制 */
         if (Objects.isNull(paramValues) || 0 == paramValues.length) {
-            return ;
+            return;
         }
 
-        /* 获取客户权限，检查 */
+        /* 获取客户权限 */
         HashSet<String> permissionSet = userPermission.getPermissionList();
+
+        /* 检查客户权限是否满足访问权限 */
         for (String item:paramValues) {
             if (permissionSet.contains(item)) {
-                return ;
+                return;
             }
         }
 
-        throw  new Exception("您无权限访问");
+        throw  new HttpRequestException("you do not have unauthorized access");
     }
 }

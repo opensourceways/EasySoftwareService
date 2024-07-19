@@ -1,18 +1,22 @@
 package com.easysoftware.common.account;
 
+import cn.dev33.satoken.exception.NotLoginException;
 import com.easysoftware.common.constant.HttpConstant;
 import com.easysoftware.common.exception.HttpRequestException;
 import com.easysoftware.common.utils.HttpClientUtil;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class UserPermission {
@@ -36,8 +40,14 @@ public class UserPermission {
     private String permissionApi;
 
     /**
-     * Get user permission by user token and manage token
-     * @return
+     * Value injected for the cookie token name.
+     */
+    @Value("${cookie.token.name}")
+    private String cookieTokenName;
+
+    /**
+     * Get user permission by user token and manage token.
+     * @return Collection of user permissions.
      */
     public HashSet<String> getPermissionList() {
         // 使用获取userToken
@@ -47,13 +57,14 @@ public class UserPermission {
         String manageToken = getManageToken();
 
         // 使用userToke、manageToken查询用户权限
-        String response = HttpClientUtil.getHttpClient(permissionApi, manageToken, userToken, userToken);
+        Cookie cookie = getCookie(cookieTokenName);
+        String response = HttpClientUtil.getHttpClient(permissionApi, manageToken, userToken, cookie.getValue());
         JsonNode resJson = ObjectMapperUtil.toJsonNode(response);
 
-        String resStaus = resJson.get("status").asText();
+        String resCode = resJson.get("code").asText();
         // 查询权限失败
-        if (!resStaus.equals("200")) {
-            throw new HttpRequestException("query oneid failed");
+        if (!"200".equals(resCode)) {
+            throw new HttpRequestException("query user permissions failed");
         }
 
         // 空权限账户
@@ -62,7 +73,6 @@ public class UserPermission {
         }
 
         // 设置权限
-        //TODO 这个地方用Set可以吗？（方便外面的权限匹配）
         JsonNode permissions = resJson.get("data").get("permissions");
         HashSet<String> permissionSet = new HashSet<>();
         for (JsonNode per : permissions) {
@@ -73,8 +83,8 @@ public class UserPermission {
     }
 
     /**
-     * Get manage token
-     * @return manage token
+     * Get manage token.
+     * @return manage token.
      */
     private String getManageToken() {
         String response = HttpClientUtil.postHttpClient(manageTokenApi, manageApiBody);
@@ -83,23 +93,53 @@ public class UserPermission {
     }
 
     /**
-     * Get user token
-     * @return user token
+     * Get user token.
+     * @return user token.
      */
     private String getUserToken() {
         ServletRequestAttributes servletRequestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (Objects.isNull(servletRequestAttributes)) {
-            throw new HttpRequestException("unauthorized, missing token");
+            throw new HttpRequestException("http request content error");
         }
         HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
 
         String userToken = httpServletRequest.getHeader(HttpConstant.TOKEN);
         if (null == userToken) {
-            throw new HttpRequestException("unauthorized, missing token");
+            throw new NotLoginException("user token expired or no login", "", "");
         }
 
         return userToken;
+    }
+
+    /**
+     * Get a cookie from the HttpServletRequest.
+     *
+     * @param   cookieName  The name of the cookie to be obtained.
+     * @return  cookie .
+     */
+    private Cookie getCookie(String cookieName) {
+        ServletRequestAttributes servletRequestAttributes =
+                (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (Objects.isNull(servletRequestAttributes)) {
+            throw new HttpRequestException("http request content error");
+        }
+
+        Cookie[] cookies = servletRequestAttributes.getRequest().getCookies();
+        Cookie cookie = null;
+        if (null != cookies) {
+            // 获取cookie中的token
+            Optional<Cookie> first = Arrays.stream(cookies).filter(c -> cookieName.equals(c.getName()))
+                    .findFirst();
+            if (first.isPresent()) {
+                cookie = first.get();
+            }
+        }
+
+        if (null == cookie) {
+            throw new NotLoginException("user token expired or no login", "", "");
+        }
+        return cookie;
     }
 
 }

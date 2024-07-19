@@ -119,4 +119,38 @@ public final class PackageConstant {
      * table name of RPMPackageDO.
      */
     public static final String RPM_PKG_TABLE = "rpm_pkg_base";
+
+    /**
+     * Change the category of rpm.
+     */
+    public static final String RPM_PKG_TABLE_CHANGE = "UPDATE rpm_pkg_base SET category = ? WHERE name = ?";
+
+    /**
+     * Change the category of application.
+     */
+    public static final String APPLICATION_TABLE_CHANGE = "UPDATE application_package SET category = ? WHERE name = ?";
+
+    /**
+     * Change the category of oepkg.
+     */
+    public static final String OEPKG_CHANGE = "UPDATE oepkg SET category = ? WHERE name = ?";
+
+    /**
+     * Change the category of epkg.
+     */
+    public static final String EPKG_CHANGE = "UPDATE epkg_pkg SET category = ? WHERE name = ?";
+
+    /**
+     * Change the category of filed.
+     */
+    public static final String FIELD_CHANGE = "UPDATE field_package SET category = ? WHERE name = ?";
+
+    /**
+     * Change the category of filed.
+     */
+    public static final String DOMAIN_CHANGE = "UPDATE domain_package SET category = ? WHERE name = ?";
+    /**
+     * Constan refresh timer.
+     */
+    public static final long TIMER = 10 * 60000;
 }

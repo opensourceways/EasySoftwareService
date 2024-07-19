@@ -32,6 +32,12 @@ public class UserAdapter {
     private String cookieTokenName;
 
     /**
+     * Autowired redisGateway.
+     */
+    @Autowired
+    private RedisGateway redisGateway;
+
+    /**
      * Verify login status from oneid, and maintain session.
      *
      * @param httpServletRequest request of https.
@@ -52,6 +58,11 @@ public class UserAdapter {
             throw new NotLoginException("oneid unloggin, missing token", "", "");
         }
 
+        // 用户已经真正登录oneid 以usertoken登录 并维持会话
+        // 设置用户会话token
+        StpUtil.login(userToken);
+        redisGateway.setWithExpire(userToken, userToken, 300, TimeUnit.SECONDS);
+
         return ResultUtil.success(HttpStatus.OK);
     }
 
@@ -65,6 +76,10 @@ public class UserAdapter {
     public ResponseEntity<Object> logout(final HttpServletRequest httpServletRequest) {
         // 用户退出 删除token信息
         String userToken = httpServletRequest.getHeader(HttpConstant.TOKEN);
+
+        if (redisGateway.hasKey(userToken)) {
+            redisGateway.detele(userToken);
+        }
 
         StpUtil.logout();
 
