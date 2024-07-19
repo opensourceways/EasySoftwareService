@@ -26,7 +26,7 @@ FROM openeuler/openeuler:22.03-lts-sp1
 
 RUN sed -i "s|repo.openeuler.org|mirrors.nju.edu.cn/openeuler|g" /etc/yum.repos.d/openEuler.repo \
     && sed -i '/metalink/d' /etc/yum.repos.d/openEuler.repo \
-    && sed -i '/metadata_expire/d' /etc/yum.repos.d/openEuler.repo 
+    && sed -i '/metadata_expire/d' /etc/yum.repos.d/openEuler.repo
 
 RUN yum update -y \
     && yum install -y shadow passwd
