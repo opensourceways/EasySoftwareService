@@ -61,10 +61,10 @@ public class UserPermission {
         String response = HttpClientUtil.getHttpClient(permissionApi, manageToken, userToken, cookie.getValue());
         JsonNode resJson = ObjectMapperUtil.toJsonNode(response);
 
-        String resStaus = resJson.get("status").asText();
+        String resCode = resJson.get("code").asText();
         // 查询权限失败
-        if (!resStaus.equals("200")) {
-            throw new HttpRequestException("query oneid failed");
+        if (!"200".equals(resCode)) {
+            throw new HttpRequestException("query user permissions failed");
         }
 
         // 空权限账户
