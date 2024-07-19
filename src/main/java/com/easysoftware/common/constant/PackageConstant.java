@@ -22,7 +22,7 @@ public final class PackageConstant {
     /**
      * Maximum page number allowed.
      */
-    public static final int MAX_PAGE_NUM = 100000;
+    public static final int MAX_PAGE_NUM = 2000000;
 
     /**
      * Minimum page number allowed.
