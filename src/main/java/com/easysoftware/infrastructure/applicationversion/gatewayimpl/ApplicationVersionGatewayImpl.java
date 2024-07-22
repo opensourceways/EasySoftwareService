@@ -117,7 +117,7 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
     }
 
     private List<String> queryColumn(String column) {
-        List<String> allowedColumns = Arrays.asList("eulerOsVersion");
+        List<String> allowedColumns = Arrays.asList("eulerOsVersion", "type", "status");
         if (!allowedColumns.contains(column)) {
             throw new ParamErrorException("the value of parameter column: eulerOsVersion");
         }
