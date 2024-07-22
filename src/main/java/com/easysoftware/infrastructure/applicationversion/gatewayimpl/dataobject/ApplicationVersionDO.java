@@ -93,6 +93,11 @@ public class ApplicationVersionDO {
     private String eulerOsVersion;
 
     /**
+     * type of pkg.
+     */
+    private String type;
+
+    /**
      * get an ApplicationVersionDO entity createdAt field value.
      *
      * @return An Timestamp entity
