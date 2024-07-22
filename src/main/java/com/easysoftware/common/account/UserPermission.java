@@ -8,6 +8,8 @@ import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -20,6 +22,11 @@ import java.util.Optional;
 
 @Component
 public class UserPermission {
+
+    /**
+     * Logger for UserPermission.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserPermission.class);
 
     /**
      * Value injected for the manage token API.
@@ -64,6 +71,7 @@ public class UserPermission {
         String resCode = resJson.get("code").asText();
         // 查询权限失败
         if (!"200".equals(resCode)) {
+            LOGGER.error("query user permissions failed");
             throw new HttpRequestException("query user permissions failed");
         }
 
@@ -100,12 +108,15 @@ public class UserPermission {
         ServletRequestAttributes servletRequestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (Objects.isNull(servletRequestAttributes)) {
-            throw new HttpRequestException("http request content error");
+
+            LOGGER.error("Missing HTTP parameter");
+            throw new HttpRequestException("Missing HTTP parameter");
         }
         HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
 
         String userToken = httpServletRequest.getHeader(HttpConstant.TOKEN);
         if (null == userToken) {
+            LOGGER.error("Missing user token");
             throw new NotLoginException("user token expired or no login", "", "");
         }
 
@@ -122,7 +133,8 @@ public class UserPermission {
         ServletRequestAttributes servletRequestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (Objects.isNull(servletRequestAttributes)) {
-            throw new HttpRequestException("http request content error");
+            LOGGER.error("Missing HTTP parameter");
+            throw new HttpRequestException("Missing HTTP parameter");
         }
 
         Cookie[] cookies = servletRequestAttributes.getRequest().getCookies();
@@ -137,6 +149,7 @@ public class UserPermission {
         }
 
         if (null == cookie) {
+            LOGGER.error("Missing valid cookies");
             throw new NotLoginException("user token expired or no login", "", "");
         }
         return cookie;

@@ -133,6 +133,12 @@ public enum MessageCode {
     EC00019("EC00019", "Unauthorized ", "权限不足"),
 
     /**
+     * Error code EC00020: Authentication exception.
+     * Chinese: 鉴权失败.
+     */
+    EC00020("EC00020", "Authentication exception", "鉴权失败"),
+
+    /**
      * Error code ES0001: Internal Server Error.
      * Chinese: 服务异常.
      */
