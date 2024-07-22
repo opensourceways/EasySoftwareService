@@ -108,6 +108,7 @@ public class UserPermission {
         ServletRequestAttributes servletRequestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (Objects.isNull(servletRequestAttributes)) {
+
             LOGGER.error("Missing HTTP parameter");
             throw new HttpRequestException("Missing HTTP parameter");
         }
