@@ -65,7 +65,8 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
         List<FieldPkgVo> voList = FieldPkgConverter.toVo(list);
         long total = resPage.getTotal();
 
-        if (condition.getOs() == null && condition.getArch() == null && condition.getCategory() == null) {
+        if (condition.getOs() == null && condition.getArch() == null && condition.getCategory() == null
+                && condition.getNameOrder() == null) {
             voList = aggregateList(voList, condition, wrapper);
         }
 
