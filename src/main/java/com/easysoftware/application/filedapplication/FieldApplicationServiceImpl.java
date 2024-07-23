@@ -13,26 +13,20 @@ package com.easysoftware.application.filedapplication;
 
 import com.easysoftware.application.applicationpackage.dto.ApplicationPackageSearchCondition;
 import com.easysoftware.application.applicationpackage.vo.ApplicationPackageDetailVo;
-import com.easysoftware.application.applicationpackage.vo.ApplicationPackageMenuVo;
 import com.easysoftware.application.epkgpackage.EPKGPackageService;
 import com.easysoftware.application.epkgpackage.dto.EPKGPackageSearchCondition;
 import com.easysoftware.application.epkgpackage.vo.EPKGPackageDetailVo;
-import com.easysoftware.application.epkgpackage.vo.EPKGPackageMenuVo;
 import com.easysoftware.application.fieldpkg.dto.FieldPkgSearchCondition;
-import com.easysoftware.application.fieldpkg.vo.FieldPkgVo;
 import com.easysoftware.application.filedapplication.dto.FieldColumnSearchCondition;
 import com.easysoftware.application.filedapplication.dto.FieldDetailSearchCondition;
 import com.easysoftware.application.filedapplication.dto.FiledApplicationSerachCondition;
 import com.easysoftware.application.filedapplication.vo.EulerLifeCycleVo;
 import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
 import com.easysoftware.application.oepackage.dto.OEPackageSearchCondition;
-import com.easysoftware.application.oepackage.vo.OEPackageMenuVo;
 import com.easysoftware.application.rpmpackage.RPMPackageService;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
-import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.common.entity.MessageCode;
-import com.easysoftware.common.exception.NoneResException;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
 import com.easysoftware.common.utils.QueryWrapperUtil;
@@ -203,9 +197,7 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
 
         List<Map<String, Object>> mList = assembleMainPage(cateMap);
         List<Map<String, Object>> rList = ranker.rankingDomainPageByOperationConfig(mList);
-        if (rList.size() == 0) {
-            throw new NoneResException("the mainpage package does not exist");
-        }
+
         return rList;
     }
 
@@ -252,11 +244,6 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         FieldPkgSearchCondition con = FieldApplicationConverter.toFieldPkg(condition);
         Map<String, Object> map = fieldPkgGateway.queryMenuByPage(con);
 
-        Long total = (Long) map.get("total");
-        List<FieldPkgVo> list = (List<FieldPkgVo>) map.get("list");
-        if (total == 0 || list.size() == 0) {
-            throw new NoneResException("the domain package does not exist");
-        }
         return map;
     }
 
@@ -271,11 +258,6 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         EPKGPackageSearchCondition epkg = FieldApplicationConverter.toEpkg(condition);
         Map<String, Object> map = epkgGateway.queryMenuByName(epkg);
 
-        Long total = (Long) map.get("total");
-        List<EPKGPackageMenuVo> list = (List<EPKGPackageMenuVo>) map.get("list");
-        if (total == 0 || list.size() == 0) {
-            throw new NoneResException("the epkg package does not exist");
-        }
         return map;
     }
 
@@ -290,12 +272,6 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         RPMPackageSearchCondition rpm = FieldApplicationConverter.toRpm(condition);
         Map<String, Object> map = rpmGateway.queryMenuByName(rpm);
 
-        Long total = (Long) map.get("total");
-        List<RPMPackageMenuVo> list = (List<RPMPackageMenuVo>) map.get("list");
-
-        if (total == 0 || list.size() == 0) {
-            throw new NoneResException("the rpm package does not exist");
-        }
         return map;
     }
 
@@ -311,12 +287,6 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         OEPackageSearchCondition oep = FieldApplicationConverter.toOep(condition);
         Map<String, Object> map = oePkgGateway.queryMenuByName(oep);
 
-        Long total = (Long) map.get("total");
-        List<OEPackageMenuVo> list = (List<OEPackageMenuVo>) map.get("list");
-
-        if (total == 0 || list.size() == 0) {
-            throw new NoneResException("the rpm package does not exist");
-        }
         return map;
     }
 
@@ -331,11 +301,6 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         ApplicationPackageSearchCondition app = FieldApplicationConverter.toApp(condition);
         Map<String, Object> map = appGateway.queryMenuByName(app);
 
-        Long total = (Long) map.get("total");
-        List<ApplicationPackageMenuVo> list = (List<ApplicationPackageMenuVo>) map.get("list");
-        if (total == 0 || list.size() == 0) {
-            throw new NoneResException("the image package does not exist");
-        }
         return map;
     }
 
