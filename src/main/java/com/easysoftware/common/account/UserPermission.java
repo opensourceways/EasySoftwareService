@@ -53,6 +53,27 @@ public class UserPermission {
     private String cookieTokenName;
 
     /**
+     * check user permission.
+     * @param  requirePermissions required user Permissions.
+     * @return Permission matching results.
+     */
+    public boolean checkUserPermission(String[] requirePermissions) {
+        /* 访问权限要求为空 */
+        if (Objects.isNull(requirePermissions) || 0 == requirePermissions.length) {
+            return true;
+        }
+
+        /* 获取客户权限 */
+        HashSet<String> permissionSet = this.getPermissionList();
+        if (Objects.isNull(permissionSet) || permissionSet.isEmpty()) {
+            return false;
+        }
+
+        /* 检查客户权限是否满足访问权限 */
+        return Arrays.stream(requirePermissions).anyMatch(permissionSet::contains);
+    }
+
+    /**
      * Get user permission by user token and manage token.
      * @return Collection of user permissions.
      */

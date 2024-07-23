@@ -15,8 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
-import java.util.HashSet;
-import java.util.Objects;
 
 @Aspect
 @Component
@@ -48,24 +46,12 @@ public class PreUserPermissionAspect {
             PreUserPermission preUserPermission = method.getAnnotation(PreUserPermission.class);
             String[] paramValues = preUserPermission.value();
 
-            /* 方法使用注解，如果未指定参数，默认无权限控制；否则，进行权限检查 */
-            if (!Objects.isNull(paramValues) && 0 != paramValues.length) {
-                /* 获取客户权限 */
-                HashSet<String> permissionSet = userPermission.getPermissionList();
+            /* 检查客户权限是否满足访问权限 */
+            boolean permissionFlag = userPermission.checkUserPermission(paramValues);
 
-                /* 检查客户权限是否满足访问权限 */
-                boolean permissionFlag = false;
-                for (String item : paramValues) {
-                    if (permissionSet.contains(item)) {
-                        permissionFlag = true;
-                        break;
-                    }
-                }
-
-                if (!permissionFlag) {
-                    LOGGER.error("Insufficient permissions");
-                    return  ResultUtil.fail(HttpStatus.UNAUTHORIZED, MessageCode.EC00019);
-                }
+            if (!permissionFlag) {
+                LOGGER.error("Insufficient permissions");
+                return  ResultUtil.fail(HttpStatus.FORBIDDEN, MessageCode.EC00019);
             }
         } catch (Exception e) {
             LOGGER.error("Authentication exception");
