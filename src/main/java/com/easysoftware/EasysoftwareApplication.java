@@ -24,7 +24,7 @@ import java.util.List;
 
 @SpringBootApplication
 @EnableScheduling
-@ComponentScan(basePackages = {"com.easysoftware.*"})
+@ComponentScan(basePackages = { "com.easysoftware.*" })
 @MapperScan("com.easysoftware.infrastructure.mapper")
 public class EasysoftwareApplication {
 
