@@ -53,6 +53,20 @@ public class ApplicationVersionSearchCondition {
     private String eulerOsVersion;
 
     /**
+     * eulerOSVersion.
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
+    private String type;
+
+    /**
+     * eulerOSVersion.
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
+    private String status;
+
+    /**
      * column.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
