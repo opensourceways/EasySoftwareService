@@ -26,6 +26,7 @@ import com.easysoftware.application.oepackage.dto.OEPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.RPMPackageService;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
+import com.easysoftware.common.constant.PackageConstant;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
@@ -441,10 +442,10 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
     @Override
     public ResponseEntity<Object> queryStat() {
         Long appNum = appGateway.queryTableLength();
-        long oepkgNum = oePkgGateway.queryTableLength();
+
         Map<String, Long> res = new HashMap<>();
         res.put("apppkg", appNum);
-        res.put("total", oepkgNum);
+        res.put("total", PackageConstant.SOFTWARE_NUM);
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
