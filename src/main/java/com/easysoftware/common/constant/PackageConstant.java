@@ -158,4 +158,9 @@ public final class PackageConstant {
      * Constan aggerate page size.
      */
     public static final long AGGREATE_PAGE_SIZE = 30;
+
+    /**
+     * Constan software num.
+     */
+    public static final long SOFTWARE_NUM = 82782;
 }
