@@ -153,4 +153,9 @@ public final class PackageConstant {
      * Constan refresh timer.
      */
     public static final long TIMER = 10 * 60000;
+
+    /**
+     * Constan aggerate page size.
+     */
+    public static final long AGGREATE_PAGE_SIZE = 30;
 }

@@ -89,7 +89,7 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
 
         // 聚合后个数少于约定数目 查询下一页填充后聚合返回
         if (voList.size() < condition.getPageSize()) {
-            Page<FieldPkgDO> nextPage = new Page<>(condition.getPageNum() + 1, condition.getPageSize());
+            Page<FieldPkgDO> nextPage = new Page<>(condition.getPageNum() + 1, PackageConstant.AGGREATE_PAGE_SIZE);
             IPage<FieldPkgDO> nextResPage = mapper.selectPage(nextPage, wrapper);
             List<FieldPkgDO> nextPlist = nextResPage.getRecords();
             List<FieldPkgVo> nextVoList = FieldPkgConverter.toVo(nextPlist);
