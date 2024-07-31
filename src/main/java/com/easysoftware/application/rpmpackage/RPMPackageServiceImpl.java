@@ -34,6 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -116,9 +117,10 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
         RPMPackageNewestVersionVo res = RPMPackageNewestVersionVo.pickNewestOne(list);
 
         long total = res == null ? 0 : 1;
+        List<RPMPackageNewestVersionVo> resList = res == null ? Collections.emptyList() : List.of(res);
         return ResultUtil.success(HttpStatus.OK, Map.of(
             "total", total,
-            "list", List.of(res)
+            "list", List.of(resList)
         ));
     }
 
