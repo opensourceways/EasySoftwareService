@@ -14,6 +14,9 @@ package com.easysoftware.common.utils;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.entity.ResultMsgVo;
 import com.easysoftware.common.entity.ResultVo;
+
+import org.apache.commons.text.StringEscapeUtils;
+import org.owasp.esapi.codecs.HTMLEntityCodec;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +41,10 @@ public final class ResultUtil {
         ResultVo res = new ResultVo()
                 .setCode(status.value())
                 .setMsg(status.getReasonPhrase());
-        return new ResponseEntity<>(res, status);
+        HTMLEntityCodec codec = new HTMLEntityCodec();
+        String s1 = StringEscapeUtils.escapeHtml4(ObjectMapperUtil.writeValueAsString(res));
+        String s2 = codec.decode(s1);
+        return new ResponseEntity<>(s2, status);
     }
 
     /**
@@ -55,7 +61,10 @@ public final class ResultUtil {
                         .setCode(msgCode.getCode())
                         .setMsgEn(msgCode.getMsgEn())
                         .setMsgZh(msgCode.getMsgZh()));
-        return new ResponseEntity<>(res, status);
+        HTMLEntityCodec codec = new HTMLEntityCodec();
+        String s1 = StringEscapeUtils.escapeHtml4(ObjectMapperUtil.writeValueAsString(res));
+        String s2 = codec.decode(s1);
+        return new ResponseEntity<>(s2, status);
     }
 
     /**
@@ -67,7 +76,10 @@ public final class ResultUtil {
      * @return A ResponseEntity object representing success
      */
     public static ResponseEntity<Object> success(HttpStatus status, HttpHeaders headers, Object data) {
-        return new ResponseEntity<>(data, headers, status);
+        HTMLEntityCodec codec = new HTMLEntityCodec();
+        String s1 = StringEscapeUtils.escapeHtml4(ObjectMapperUtil.writeValueAsString(data));
+        String s2 = codec.decode(s1);
+        return new ResponseEntity<>(s2, headers, status);
     }
 
     /**
@@ -82,7 +94,10 @@ public final class ResultUtil {
                 .setCode(status.value())
                 .setMsg(status.getReasonPhrase())
                 .setData(data);
-        return new ResponseEntity<>(res, status);
+        HTMLEntityCodec codec = new HTMLEntityCodec();
+        String s1 = StringEscapeUtils.escapeHtml4(ObjectMapperUtil.writeValueAsString(res));
+        String s2 = codec.decode(s1);
+        return new ResponseEntity<>(s2, status);
     }
 
     /**
@@ -97,7 +112,10 @@ public final class ResultUtil {
                 .setCode(status.value())
                 .setMsg(status.getReasonPhrase())
                 .setError(msg);
-        return new ResponseEntity<>(res, status);
+        HTMLEntityCodec codec = new HTMLEntityCodec();
+        String s1 = StringEscapeUtils.escapeHtml4(ObjectMapperUtil.writeValueAsString(res));
+        String s2 = codec.decode(s1);
+        return new ResponseEntity<>(s2, status);
     }
 
         /**
@@ -114,7 +132,10 @@ public final class ResultUtil {
                         .setCode(msgCode.getCode())
                         .setMsgEn(msgCode.getMsgEn())
                         .setMsgZh(msgCode.getMsgZh()));
-        return new ResponseEntity<>(res, status);
+        HTMLEntityCodec codec = new HTMLEntityCodec();
+        String s1 = StringEscapeUtils.escapeHtml4(ObjectMapperUtil.writeValueAsString(res));
+        String s2 = codec.decode(s1);
+        return new ResponseEntity<>(s2, status);
     }
 
     /**
@@ -134,7 +155,10 @@ public final class ResultUtil {
                         .setMsgEn(msgCode.getMsgEn())
                         .setMsgZh(msgCode.getMsgZh()))
                 .setError(error);
-        return new ResponseEntity<>(res, status);
+        HTMLEntityCodec codec = new HTMLEntityCodec();
+        String s1 = StringEscapeUtils.escapeHtml4(ObjectMapperUtil.writeValueAsString(res));
+        String s2 = codec.decode(s1);
+        return new ResponseEntity<>(s2, status);
     }
 
     /**
@@ -149,7 +173,10 @@ public final class ResultUtil {
         if (status.value() == 200) {
             res.put("code", status.value());
             res.put("msg", status.getReasonPhrase());
-            return new ResponseEntity<>(res, status);
+            HTMLEntityCodec codec = new HTMLEntityCodec();
+            String s1 = StringEscapeUtils.escapeHtml4(ObjectMapperUtil.writeValueAsString(res));
+            String s2 = codec.decode(s1);
+            return new ResponseEntity<>(s2, status);
         }
 
         if (msgCode != null) {
@@ -159,7 +186,10 @@ public final class ResultUtil {
             msgMap.put("message_zh", msgCode.getMsgZh());
             res.put("msg", msgMap);
         }
-        return new ResponseEntity<>(res, status);
+        HTMLEntityCodec codec = new HTMLEntityCodec();
+        String s1 = StringEscapeUtils.escapeHtml4(ObjectMapperUtil.writeValueAsString(res));
+        String s2 = codec.decode(s1);
+        return new ResponseEntity<>(s2, status);
     }
 
     /**
@@ -176,7 +206,10 @@ public final class ResultUtil {
             res.put("code", status.value());
             res.put("msg", status.getReasonPhrase());
             res.put("error", error);
-            return new ResponseEntity<>(res, status);
+            HTMLEntityCodec codec = new HTMLEntityCodec();
+            String s1 = StringEscapeUtils.escapeHtml4(ObjectMapperUtil.writeValueAsString(res));
+            String s2 = codec.decode(s1);
+            return new ResponseEntity<>(s2, status);
         }
 
         if (msgCode != null) {
@@ -187,6 +220,9 @@ public final class ResultUtil {
             res.put("msg", msgMap);
             res.put("error", error);
         }
-        return new ResponseEntity<>(res, status);
+        HTMLEntityCodec codec = new HTMLEntityCodec();
+        String s1 = StringEscapeUtils.escapeHtml4(ObjectMapperUtil.writeValueAsString(res));
+        String s2 = codec.decode(s1);
+        return new ResponseEntity<>(s2, status);
     }
 }

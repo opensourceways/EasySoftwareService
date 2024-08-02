@@ -27,7 +27,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.easysoftware.common.entity.MessageCode;
 
 import com.easysoftware.common.utils.ClientUtil;
-import com.easysoftware.common.utils.LogUtil;
 import com.easysoftware.common.utils.ResultUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -118,8 +117,8 @@ public class RequestLimitRedisAspect {
 
         if (count != null && count > limitCount) {
             // 审计日志
-            LOGGER.error("the current uri is{}，the request frequency of uri exceeds the limited frequency: "
-                    + "{} times/{}s ,IP：{},type: GET", LogUtil.formatCodeString(uri), limitCount, period, ip);
+            // LOGGER.error("the current uri is{}，the request frequency of uri exceeds the limited frequency: "
+                    // + "{} times/{}s ,type: GET", LogUtil.formatCodeString(uri), limitCount, period);
             return ResultUtil.fail(HttpStatus.TOO_MANY_REQUESTS, MessageCode.EC00010);
         }
 
