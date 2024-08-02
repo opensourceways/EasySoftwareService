@@ -84,7 +84,7 @@ public final class LogUtil {
         log.setOperator("");
 
         String jsonLog = OBJECT_MAPPER.writeValueAsString(log);
-        LOGGER.info("operationLog:{}", jsonLog);
+        // LOGGER.info("operationLog:{}", jsonLog);
     }
 
     /**
