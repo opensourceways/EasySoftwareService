@@ -120,7 +120,7 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
         List<RPMPackageNewestVersionVo> resList = res == null ? Collections.emptyList() : List.of(res);
         return ResultUtil.success(HttpStatus.OK, Map.of(
             "total", total,
-            "list", List.of(resList)
+            "list", resList
         ));
     }
 
