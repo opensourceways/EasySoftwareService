@@ -53,7 +53,7 @@ public class UserPermission {
     private String userInfoApi;
 
     /**
-     * Value injected for the user info API.
+     * Value injected for the user repos API.
      */
     @Value("${oneid.userReposApi}")
     private String userReposApi;
@@ -108,7 +108,7 @@ public class UserPermission {
         String userToken = getUserToken();
         String manageToken = getManageToken();
 
-        // 使用userToke、manageToken查询用户信息
+        // 使用userToken、manageToken查询用户信息
         Cookie cookie = getCookie(cookieTokenName);
         String response = HttpClientUtil.getHttpClient(userInfoApi, manageToken, userToken, cookie.getValue());
         JsonNode resJson = ObjectMapperUtil.toJsonNode(response);
