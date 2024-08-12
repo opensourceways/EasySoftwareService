@@ -448,15 +448,15 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
      */
     @Override
     public ResponseEntity<Object> queryStat() {
-        Long appNum;
-        Long opekgNum = oePkgGateway.queryTableLength();
-        String appnumString = redisGateway.get(RedisConstant.DISTINCT_APP_PKG);
+        Long opekgNum;
+        Long appNum = appGateway.queryTableLength();
+        String opeknumString = redisGateway.get(RedisConstant.DISTINCT_OPEKGNUM);
 
-        if (appnumString != null) {
-            appNum = Long.parseLong(appnumString);
+        if (opeknumString != null) {
+            opekgNum = Long.parseLong(opeknumString);
         } else {
-            appNum = appGateway.queryTableLength();
-            redisGateway.setWithExpire(RedisConstant.DISTINCT_APP_PKG, String.valueOf(appNum), 90, TimeUnit.MINUTES);
+            opekgNum = oePkgGateway.queryTableLength();
+            redisGateway.setWithExpire(RedisConstant.DISTINCT_OPEKGNUM, String.valueOf(opekgNum), 90, TimeUnit.MINUTES);
         }
 
         Map<String, Long> res = new HashMap<>();

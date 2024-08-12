@@ -22,5 +22,5 @@ public final class RedisConstant {
     /**
      * Key of distinct application packages.
      */
-    public static final String DISTINCT_APP_PKG = "distinct_apppkg_num";
+    public static final String DISTINCT_OPEKGNUM = "distinct_opekg_num";
 }
