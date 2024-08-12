@@ -63,9 +63,7 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
         List<ApplicationVersionDO> appDOs = resPage.getRecords();
         List<ApplicationVersion> appDetails = ApplicationVersionConvertor.toEntity(appDOs);
 
-        Map<String, Object> res = Map.ofEntries(
-                Map.entry("total", resPage.getTotal()),
-                Map.entry("list", appDetails));
+        Map<String, Object> res = Map.ofEntries(Map.entry("total", resPage.getTotal()), Map.entry("list", appDetails));
 
         return res;
     }

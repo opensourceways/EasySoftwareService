@@ -61,4 +61,9 @@ public final class HttpConstant {
      * https protol type key.
      */
     public static final String HTTPS_PROTOL = "https";
+
+    /**
+     * Timeout duration in milliseconds.
+     */
+    public static final int ES_TIME_OUT = 100000;
 }
