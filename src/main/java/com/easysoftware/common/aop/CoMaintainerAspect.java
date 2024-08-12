@@ -65,7 +65,7 @@ public class CoMaintainerAspect {
                 return  ResultUtil.fail(HttpStatus.FORBIDDEN, MessageCode.EC00019);
             }
         } catch (Exception e) {
-            LOGGER.error("Authentication exception");
+            LOGGER.error("Authentication exception - {}", e.getMessage());
             return  ResultUtil.fail(HttpStatus.UNAUTHORIZED, MessageCode.EC00020);
         }
 
