@@ -24,15 +24,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.easysoftware.application.collaboration.CoMaintainerService;
+import com.easysoftware.application.collaboration.dto.PackageSearchCondition;
 import com.easysoftware.common.account.UserPermission;
 import com.easysoftware.common.annotation.CoMaintainerPermission;
+import com.easysoftware.common.annotation.CoUserRepoPermission;
 import com.easysoftware.common.aop.RequestLimitRedis;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ResultUtil;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/collaboration/maintainer")
 public class CoMaintainerAdapter {
+    /**
+     * Autowired service for handling package maintainer related operations.
+     */
+    @Autowired
+    private CoMaintainerService coMaintainerService;
 
     /**
      * Logger for CoMaintainerAdapter.
@@ -54,9 +64,23 @@ public class CoMaintainerAdapter {
      */
     @GetMapping()
     @RequestLimitRedis()
-    @CoMaintainerPermission()
+    @CoUserRepoPermission()
     public ResponseEntity<Object> queryRepos(@RequestParam(value = "repo") String repo) {
         return ResultUtil.success(HttpStatus.OK, "success");
+    }
+
+    /**
+     * Endpoint to search for repos based on the provided search
+     * condition.
+     *
+     * @param condition The search condition for querying packages.
+     * @return ResponseEntity<Object>.
+     */
+    @GetMapping("/user/repos")
+    @RequestLimitRedis()
+    @CoMaintainerPermission()
+    public ResponseEntity<Object> queryPackages(@Valid final PackageSearchCondition condition) {
+        return coMaintainerService.queryPackages(condition);
     }
 
     /**

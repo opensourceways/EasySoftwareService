@@ -24,11 +24,13 @@ import com.easysoftware.common.account.UserPermission;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ResultUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Aspect
 @Component
-public class CoMaintainerAspect {
+public class CoUserRepoAspect {
     /**
-     * Logger for CoMaintainerAspect.
+     * Logger for CoUserRepoAspect.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(CoMaintainerAspect.class);
 
@@ -39,6 +41,12 @@ public class CoMaintainerAspect {
     private UserPermission userPermission;
 
     /**
+     * Autowired HttpServletRequest for handling HTTP request information.
+     */
+    @Autowired
+    private HttpServletRequest request;
+
+    /**
      * Advice method called before a method with CoMaintainerPermission, and
      * authentication.
      * @param joinPoint The JoinPoint representing the intercepted method.
@@ -46,12 +54,13 @@ public class CoMaintainerAspect {
      *                   authentication fail.
      * @return Business processing results.
      */
-    @Around("@annotation(com.easysoftware.common.annotation.CoMaintainerPermission)")
+    @Around("@annotation(com.easysoftware.common.annotation.CoUserRepoPermission)")
     public Object around(final ProceedingJoinPoint joinPoint) throws Throwable {
         try {
+            String repo = request.getParameter("repo");
 
-            /* Check if the user has maintainer permission */
-            boolean permissionFlag = userPermission.checkUserMaintainerPermission();
+            /* Check if the user has repo permission */
+            boolean permissionFlag = userPermission.checkUserRepoPermission(repo);
 
             if (!permissionFlag) {
                 LOGGER.error("Insufficient permissions");
