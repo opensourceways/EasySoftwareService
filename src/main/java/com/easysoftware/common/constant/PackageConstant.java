@@ -163,4 +163,14 @@ public final class PackageConstant {
      * Constan software num.
      */
     public static final long SOFTWARE_NUM = 82782;
+
+    /**
+     * index name of package status.
+     */
+    public static final String PACKAGE_STATUS_INDEX = "package_status_20240525_test";
+
+    /**
+     * package status keyword format.
+     */
+    public static final String KEY_WORD_FORMAT = " AND %s.keyword:%s";
 }

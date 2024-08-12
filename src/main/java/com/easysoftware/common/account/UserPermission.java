@@ -101,6 +101,18 @@ public class UserPermission {
     }
 
     /**
+     * Check if user has maintainer permission.
+     * @return Permission matching results.
+     */
+    public boolean checkUserMaintainerPermission() {
+        HashSet<String> repoSet = this.getUserRepoList();
+        if (Objects.isNull(repoSet) || repoSet.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Get user login name by user token and manage token.
      * @return login name.
      */
