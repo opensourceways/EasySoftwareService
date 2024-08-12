@@ -47,6 +47,18 @@ public class UserPermission {
     private String permissionApi;
 
     /**
+     * Value injected for the user info API.
+     */
+    @Value("${oneid.userInfoApi}")
+    private String userInfoApi;
+
+    /**
+     * Value injected for the user repos API.
+     */
+    @Value("${oneid.userReposApi}")
+    private String userReposApi;
+
+    /**
      * Value injected for the cookie token name.
      */
     @Value("${cookie.token.name}")
@@ -71,6 +83,76 @@ public class UserPermission {
 
         /* 检查客户权限是否满足访问权限 */
         return Arrays.stream(requirePermissions).anyMatch(permissionSet::contains);
+    }
+
+    /**
+     * Check if user has repo permission.
+     * @param  repo repo required user permission.
+     * @return Permission matching results.
+     */
+    public boolean checkUserRepoPermission(String repo) {
+        HashSet<String> repoSet = this.getUserRepoList();
+        if (Objects.isNull(repoSet) || repoSet.isEmpty()) {
+            return false;
+        }
+
+        /* Check if user has repo permission */
+        return repoSet.contains(repo);
+    }
+
+    /**
+     * Get user login name by user token and manage token.
+     * @return login name.
+     */
+    public String getUserLogin() {
+        String userToken = getUserToken();
+        String manageToken = getManageToken();
+
+        // 使用userToken、manageToken查询用户信息
+        Cookie cookie = getCookie(cookieTokenName);
+        String response = HttpClientUtil.getHttpClient(userInfoApi, manageToken, userToken, cookie.getValue());
+        JsonNode resJson = ObjectMapperUtil.toJsonNode(response);
+
+        String resCode = resJson.get("code").asText();
+        if (!"200".equals(resCode)) {
+            LOGGER.error("query user login name failed");
+            throw new HttpRequestException("query user login name failed");
+        }
+        String loginName = null;
+        JsonNode identities = resJson.get("data").get("identities");
+        for (JsonNode identity : identities) {
+            if (identity.has("identity") && identity.get("identity").asText().equalsIgnoreCase("gitee")) {
+                loginName = identity.get("login_name").asText();
+            }
+        }
+        return loginName;
+    }
+
+    /**
+     * Get user repos.
+     * @return Collection of repos.
+     */
+    public HashSet<String> getUserRepoList() {
+        String login = getUserLogin();
+        if (login == null) {
+            throw new HttpRequestException("user login name is null");
+        }
+        String response = HttpClientUtil.getHttpClient(String.format(userReposApi, login), null, null, null);
+        JsonNode resJson = ObjectMapperUtil.toJsonNode(response);
+
+        String resCode = resJson.get("code").asText();
+
+        if (!"200".equals(resCode)) {
+            LOGGER.error("query user repos failed");
+            throw new HttpRequestException("query user repos failed");
+        }
+        HashSet<String> repoSet = new HashSet<>();
+        JsonNode repos = resJson.get("data");
+        for (JsonNode repo : repos) {
+            repoSet.add(repo.asText());
+        }
+
+        return repoSet;
     }
 
     /**
