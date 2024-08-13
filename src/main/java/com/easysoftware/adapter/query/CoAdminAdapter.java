@@ -13,6 +13,7 @@ package com.easysoftware.adapter.query;
 
 import java.util.HashMap;
 
+import com.easysoftware.application.apply.ApplyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,12 @@ public class CoAdminAdapter {
     private UserPermission userPermission;
 
     /**
+     * Autowired ApplyService for provide apply service.
+     */
+    @Autowired
+    private ApplyService applyService;
+
+    /**
      * Endpoint to search for repos based on the provided search
      * condition.
      *
@@ -80,10 +87,23 @@ public class CoAdminAdapter {
             } else {
                 result.put("allow_access", Boolean.FALSE);
             }
-            return  ResultUtil.success(HttpStatus.OK, result);
+            return ResultUtil.success(HttpStatus.OK, result);
         } catch (Exception e) {
             LOGGER.error("Authentication exception - {}", e.getMessage());
-            return  ResultUtil.fail(HttpStatus.UNAUTHORIZED, MessageCode.EC00020);
+            return ResultUtil.fail(HttpStatus.UNAUTHORIZED, MessageCode.EC00020);
         }
+    }
+
+
+    /**
+     * get apply handle records by appid.
+     * @param applyId The handle form content id.
+     * @return ResponseEntity<Object>.
+     */
+    @GetMapping("/query/apply")
+    @RequestLimitRedis()
+    @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
+    public ResponseEntity<Object> getApply(@RequestParam(value = "applyId") String applyId) {
+        return applyService.queryApplyHandleRecords(applyId);
     }
 }
