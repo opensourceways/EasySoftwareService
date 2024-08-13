@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 import com.easysoftware.application.collaboration.dto.PackageSearchCondition;
 import com.easysoftware.application.collaboration.vo.PackageStatusVO;
+import com.easysoftware.common.account.UserPermission;
 import com.easysoftware.common.constant.PackageConstant;
 import com.easysoftware.common.utils.EsAsyncHttpUtil;
 import com.easysoftware.common.utils.ObjectMapperUtil;
@@ -40,6 +41,12 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
      */
     @Autowired
     private EsAsyncHttpUtil esAsyncHttpUtil;
+
+    /**
+     * Autowired UserPermission for check user permission.
+     */
+    @Autowired
+    private UserPermission userPermission;
 
     /**
      * Logger instance for PackageStatusGatewayImpl.
@@ -59,7 +66,7 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
         try {
             Map<String, Object> query = ObjectMapperUtil.jsonToMap(condition);
             ListenableFuture<Response> future = esAsyncHttpUtil.executeSearch(PackageConstant.PACKAGE_STATUS_INDEX,
-                    query);
+                    query, userPermission.getUserLogin());
             String responseBody = future.get().getResponseBody(UTF_8);
             JsonNode dataNode = ObjectMapperUtil.toJsonNode(responseBody);
             JsonNode hits = dataNode.path("hits").path("hits");

@@ -108,13 +108,14 @@ public final class EsAsyncHttpUtil {
      * execute es search.
      * @param index es index name
      * @param obj   search condition
+     * @param login  gitee id of user
      * @return ListenableFuture<Response> the result of es search.
      */
-    public ListenableFuture<Response> executeSearch(String index, Map<String, Object> obj)
+    public ListenableFuture<Response> executeSearch(String index, Map<String, Object> obj, String login)
             throws NoSuchAlgorithmException, KeyManagementException {
         AsyncHttpClient client = getClient();
         RequestBuilder builder = getBuilder();
-        String query = convertQuery(obj);
+        String query = convertQuery(obj, login);
 
         builder.setUrl(esUrl + index + "/_search");
         builder.setBody(query);
@@ -125,9 +126,10 @@ public final class EsAsyncHttpUtil {
     /**
      * convert condition to query string.
      * @param obj search condition
+     * @param login  gitee id of user
      * @return query string.
      */
-    public String convertQuery(Map<String, Object> obj) {
+    public String convertQuery(Map<String, Object> obj, String login) {
         String queryString = "";
         for (Map.Entry<String, Object> entry : obj.entrySet()) {
             String field = entry.getKey();
@@ -140,7 +142,7 @@ public final class EsAsyncHttpUtil {
 
         int pageSize = Integer.parseInt(obj.get("pageSize").toString());
         int from = (Integer.parseInt(obj.get("pageNum").toString()) - 1) * pageSize;
-        String query = String.format(searchFormat, from, pageSize, queryString);
+        String query = String.format(searchFormat, from, pageSize, login, queryString);
         return query;
     }
 
