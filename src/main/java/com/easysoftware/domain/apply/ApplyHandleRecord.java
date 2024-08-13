@@ -61,8 +61,31 @@ public class ApplyHandleRecord {
      */
     private Byte applyStatus;
 
+
     /**
-     * updateAt.
+     * get an ApplyHandleRecord entity createdAt field value.
+     *
+     * @return An Timestamp entity
      */
-    private Timestamp updateAt;
+    public Timestamp getCreatedAt() {
+        if (this.createdAt != null) {
+            return (Timestamp) this.createdAt.clone();
+        } else {
+            return null;
+        }
+    }
+
+
+    /**
+     * set an ApplyHandleRecord entity createAt field value.
+     *
+     * @param createAt The ApplicationPackageDO entity  createAt field for set
+     */
+    public void setCreatedAt(Timestamp createAt) {
+        if (this.createdAt != null) {
+            this.createdAt = (Timestamp) createAt.clone();
+        } else {
+            this.createdAt = null;
+        }
+    }
 }
