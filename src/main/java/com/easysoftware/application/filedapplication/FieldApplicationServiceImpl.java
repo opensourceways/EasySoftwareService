@@ -27,6 +27,7 @@ import com.easysoftware.application.rpmpackage.RPMPackageService;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.common.constant.PackageConstant;
+import com.easysoftware.common.constant.RedisConstant;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.exception.enumvalid.AppCategoryEnum;
@@ -43,6 +44,7 @@ import com.easysoftware.domain.oepackage.gateway.OEPackageGateway;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 import com.easysoftware.infrastructure.fieldapplication.gatewayimpl.converter.FieldApplicationConverter;
 import com.easysoftware.ranking.Ranker;
+import com.easysoftware.redis.RedisGateway;
 
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
@@ -60,6 +62,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class FieldApplicationServiceImpl implements FieldApplicationService {
@@ -132,6 +135,11 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
      */
     @Resource
     private ArchNumGateway archNumGateway;
+    /**
+     * gateway.
+     */
+    @Resource
+    private RedisGateway redisGateway;
 
     /**
      * Query menu by name.
@@ -441,11 +449,24 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
      */
     @Override
     public ResponseEntity<Object> queryStat() {
+        Long opekgNum;
         Long appNum = appGateway.queryTableLength();
+        String opeknumString = redisGateway.get(RedisConstant.DISTINCT_OPEKGNUM);
+
+        if (opeknumString != null) {
+            opekgNum = Long.parseLong(opeknumString);
+        } else {
+            opekgNum = oePkgGateway.queryTableLength();
+            if (opekgNum != null && opekgNum > PackageConstant.SOFTWARE_NUM) {
+                String opekgNumString = String.valueOf(opekgNum);
+                redisGateway.setWithExpire(RedisConstant.DISTINCT_OPEKGNUM, opekgNumString, 90, TimeUnit.MINUTES);
+            }
+        }
 
         Map<String, Long> res = new HashMap<>();
         res.put("apppkg", appNum);
-        res.put("total", PackageConstant.SOFTWARE_NUM);
+        res.put("total", opekgNum);
+
         return ResultUtil.success(HttpStatus.OK, res);
     }
 

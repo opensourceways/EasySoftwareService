@@ -39,12 +39,17 @@ public class ApplyHandleRecord {
     /**
      * apply Id.
      */
-    private String applyId;
+    private Long applyId;
 
     /**
      * recordId.
      */
     private Long recordId;
+
+    /**
+     * comment.
+     */
+    private String comment;
 
     /**
      * maintainer.
@@ -82,7 +87,7 @@ public class ApplyHandleRecord {
      * @param createAt The ApplicationPackageDO entity  createAt field for set
      */
     public void setCreatedAt(Timestamp createAt) {
-        if (this.createdAt != null) {
+        if (createAt != null) {
             this.createdAt = (Timestamp) createAt.clone();
         } else {
             this.createdAt = null;

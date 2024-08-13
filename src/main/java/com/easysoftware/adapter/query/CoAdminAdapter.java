@@ -14,6 +14,7 @@ package com.easysoftware.adapter.query;
 import java.util.HashMap;
 
 import com.easysoftware.application.apply.ApplyService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,10 +101,10 @@ public class CoAdminAdapter {
      * @param applyId The handle form content id.
      * @return ResponseEntity<Object>.
      */
-    @GetMapping("/query/apply")
+    @GetMapping("/query/records")
     @RequestLimitRedis()
     @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
-    public ResponseEntity<Object> getApply(@RequestParam(value = "applyId") String applyId) {
+    public ResponseEntity<Object> getApply(@RequestParam(value = "applyId") Long applyId) {
         return applyService.queryApplyHandleRecords(applyId);
     }
 }

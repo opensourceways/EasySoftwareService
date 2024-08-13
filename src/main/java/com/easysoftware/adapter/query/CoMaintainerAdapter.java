@@ -20,15 +20,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.easysoftware.application.applyform.ApplyFormService;
+import com.easysoftware.application.applyform.dto.ApplyFormSearchMaintainerCondition;
 import com.easysoftware.application.collaboration.CoMaintainerService;
 import com.easysoftware.application.collaboration.dto.PackageSearchCondition;
 import com.easysoftware.common.account.UserPermission;
 import com.easysoftware.common.annotation.CoMaintainerPermission;
-import com.easysoftware.common.annotation.CoUserRepoPermission;
 import com.easysoftware.common.aop.RequestLimitRedis;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ResultUtil;
@@ -56,6 +58,12 @@ public class CoMaintainerAdapter {
     private UserPermission userPermission;
 
     /**
+     * Autowired service for search applyForm.
+     */
+    @Autowired
+    private ApplyFormService applyFormService;
+
+    /**
      * Endpoint to search for repos based on the provided search
      * condition.
      *
@@ -64,7 +72,7 @@ public class CoMaintainerAdapter {
      */
     @GetMapping()
     @RequestLimitRedis()
-    @CoUserRepoPermission()
+    @CoMaintainerPermission()
     public ResponseEntity<Object> queryRepos(@RequestParam(value = "repo") String repo) {
         return ResultUtil.success(HttpStatus.OK, "success");
     }
@@ -105,5 +113,30 @@ public class CoMaintainerAdapter {
             LOGGER.error("Authentication exception - {}", e.getMessage());
             return ResultUtil.fail(HttpStatus.UNAUTHORIZED, MessageCode.EC00020);
         }
+    }
+
+    /**
+     * Query apply form based on the provided search condition by.
+     *
+     * @param condition The search condition for querying apply form.
+     * @return ResponseEntity<Object>.
+     */
+    @GetMapping("/query/apply")
+   // @RequestLimitRedis()
+    public ResponseEntity<Object> queryApplyFromByMaintainer(@Valid final ApplyFormSearchMaintainerCondition
+    condition) {
+        return applyFormService.searchApplyFromByMaintainer(condition);
+    }
+
+    /**
+     * Query apply form based on the provided search condition by applyId.
+     *
+     * @param applyId The search condition for querying apply form.
+     * @return ResponseEntity<Object>.
+     */
+    @GetMapping("/query/apply/{applyId}")
+   // @RequestLimitRedis()
+    public ResponseEntity<Object> queryApplyFromByApplyId(@PathVariable("applyId") Long applyId) {
+        return applyFormService.searchApplyFromByApplyId(applyId);
     }
 }
