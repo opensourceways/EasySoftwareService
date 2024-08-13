@@ -8,16 +8,11 @@
  MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  See the Mulan PSL v2 for more details.
 */
-package com.easysoftware.application.apply;
+package com.easysoftware.infrastructure.mapper;
 
-import org.springframework.http.ResponseEntity;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.easysoftware.infrastructure.applyform.gatewayimpl.dataobject.ApplyFormDO;
 
-public interface ApplyService {
-    /**
-     * get apply handle records by appid.
-     *
-     * @param applyId The handle form content id.
-     * @return ResponseEntity<Object>.
-     */
-    ResponseEntity<Object> queryApplyHandleRecords(Long applyId);
+public interface ApplyFormDOMapper extends BaseMapper<ApplyFormDO> {
+
 }

@@ -178,4 +178,9 @@ public final class PackageConstant {
      * package status keyword format.
      */
     public static final String KEY_WORD_FORMAT = " AND %s.keyword:%s";
+
+    /**
+     * table name of ApplyForm.
+     */
+    public static final String APPLY_FORM_TABLE = "apply_form";
 }

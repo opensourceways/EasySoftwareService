@@ -8,16 +8,19 @@
  MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  See the Mulan PSL v2 for more details.
 */
-package com.easysoftware.application.apply;
 
-import org.springframework.http.ResponseEntity;
+package com.easysoftware.common.constant;
 
-public interface ApplyService {
+public final class RedisConstant {
+
+    // Private constructor to prevent instantiation of the RedisConstant class
+    private RedisConstant() {
+        // private constructor to hide the implicit public one
+        throw new AssertionError("RedisConstant class cannot be instantiated.");
+    }
+
     /**
-     * get apply handle records by appid.
-     *
-     * @param applyId The handle form content id.
-     * @return ResponseEntity<Object>.
+     * Key of distinct_opekg_nums.
      */
-    ResponseEntity<Object> queryApplyHandleRecords(Long applyId);
+    public static final String DISTINCT_OPEKGNUM = "distinct_opekg_num";
 }
