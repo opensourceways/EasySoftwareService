@@ -37,7 +37,7 @@ public class ApplyServiceImpl implements ApplyService {
      * @return ResponseEntity<Object>.
      */
     @Override
-    public ResponseEntity<Object> queryApplyHandleRecords(String applyId) {
+    public ResponseEntity<Object> queryApplyHandleRecords(Long applyId) {
 
         ApplyHandleConditon applyHandleConditon = new ApplyHandleConditon();
         applyHandleConditon.setApplyId(applyId);
