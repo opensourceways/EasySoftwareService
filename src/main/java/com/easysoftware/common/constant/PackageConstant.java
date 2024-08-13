@@ -121,6 +121,11 @@ public final class PackageConstant {
     public static final String RPM_PKG_TABLE = "rpm_pkg_base";
 
     /**
+     * table name of ApplyhandleRecordsDO.
+     */
+    public static final String APPLY_HANDLE_RECORDS = "apply_handle_records";
+
+    /**
      * Change the category of rpm.
      */
     public static final String RPM_PKG_TABLE_CHANGE = "UPDATE rpm_pkg_base SET category = ? WHERE name = ?";
