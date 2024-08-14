@@ -19,23 +19,36 @@ import com.easysoftware.application.applyform.dto.ApplyFormSearchAdminCondition;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.applyform.dto.ApplyFormSearchMaintainerCondition;
+import com.easysoftware.application.applyform.dto.ProcessApply;
 import com.easysoftware.application.applyform.vo.ApplyFormContentVO;
 import com.easysoftware.application.applyform.vo.ApplyFormSearchMaintainerVO;
+import com.easysoftware.common.constant.PackageConstant;
+import com.easysoftware.common.exception.UpdateException;
 import com.easysoftware.common.account.UserPermission;
 import com.easysoftware.domain.applyform.gateway.ApplyFormGateway;
+import com.easysoftware.domain.collaboration.gateway.PackageStatusGateway;
 import com.easysoftware.infrastructure.apply.gatewayimpl.dataobject.ApplyhandleRecordsDO;
 import com.easysoftware.infrastructure.applyform.gatewayimpl.converter.ApplyFormConvertor;
 import com.easysoftware.infrastructure.applyform.gatewayimpl.dataobject.ApplyFormDO;
 import com.easysoftware.infrastructure.mapper.ApplyFormDOMapper;
 import com.easysoftware.infrastructure.mapper.ApplyHandleRecordsDOMapper;
 
+import jakarta.annotation.Resource;
+
 @Component
 public class ApplyFormGatewayImpl implements ApplyFormGateway {
+    /**
+     * Resource for interacting with package status Gateway.
+     */
+    @Resource
+    private PackageStatusGateway pkgStatusGateway;
 
     /**
      * Autowired field for the ApplicationVersionDOMapper.
@@ -118,6 +131,32 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         res.put("list", applyFormContentVOs);
 
         return res;
+    }
+
+    /**
+     * process apply based on the provided condition.
+     *
+     * @param processApply The update info for querying apply.
+     * @return A map containing relevant information
+     */
+    @Override
+    @Transactional(rollbackFor = UpdateException.class)
+    public boolean processApply(ProcessApply processApply) {
+        ApplyFormDO applyFormDO = ApplyFormConvertor.toApplyFormDO(processApply);
+        UpdateWrapper<ApplyFormDO> wrapper = new UpdateWrapper<>();
+        wrapper.eq("apply_id", processApply.getApplyId());
+
+        int mark = applyFormDOMapper.update(applyFormDO, wrapper);
+        boolean result = mark == 1;
+
+        if (result && PackageConstant.APPLY_APPROVED.equalsIgnoreCase(processApply.getApplyStatus())) {
+            applyFormDO = applyFormDOMapper.selectOne(wrapper);
+            result = pkgStatusGateway.updateByMetric(applyFormDO);
+            if (!result) {
+                throw new UpdateException("update failed");
+            }
+        }
+        return result;
     }
 
     /**

@@ -20,13 +20,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.easysoftware.application.applyform.dto.ApplyFormSearchMaintainerCondition;
+import com.easysoftware.application.applyform.dto.ProcessApply;
 import com.easysoftware.application.applyform.vo.ApplyFormContentVO;
 import com.easysoftware.application.applyform.vo.ApplyFormSearchMaintainerVO;
 import com.easysoftware.common.exception.NoneResException;
 import com.easysoftware.common.exception.ParamErrorException;
+import com.easysoftware.common.exception.UpdateException;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.applyform.gateway.ApplyFormGateway;
-
+import com.easysoftware.domain.collaboration.gateway.PackageStatusGateway;
 import jakarta.annotation.Resource;
 
 @Service
@@ -37,6 +39,12 @@ public class ApplyFormServiceImpl implements ApplyFormService {
      */
     @Resource
     private ApplyFormGateway applyFormGateway;
+
+    /**
+     * Resource for interacting with Package Status Gateway.
+     */
+    @Resource
+    private PackageStatusGateway pkgageStatusGateway;
 
     /**
      * Search for apply form based on the provided search condition.
@@ -112,6 +120,21 @@ public class ApplyFormServiceImpl implements ApplyFormService {
 
         return res;
 
+    }
+
+    /**
+     * Process apply based on the provided condition.
+     *
+     * @param processApply The process condition for querying apply form by applyId.
+     * @return ResponseEntity<Object>.
+     */
+    @Override
+    public ResponseEntity<Object> processApply(ProcessApply processApply) {
+        boolean flag = applyFormGateway.processApply(processApply);
+        if (!flag) {
+            throw new UpdateException("process apply failed");
+        }
+        return ResultUtil.success(HttpStatus.OK);
     }
 
 }

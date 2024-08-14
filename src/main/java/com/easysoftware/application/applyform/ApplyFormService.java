@@ -15,6 +15,7 @@ import com.easysoftware.application.applyform.dto.ApplyFormSearchAdminCondition;
 import org.springframework.http.ResponseEntity;
 
 import com.easysoftware.application.applyform.dto.ApplyFormSearchMaintainerCondition;
+import com.easysoftware.application.applyform.dto.ProcessApply;
 
 public interface ApplyFormService {
 
@@ -27,7 +28,15 @@ public interface ApplyFormService {
     ResponseEntity<Object> searchApplyFromByMaintainer(ApplyFormSearchMaintainerCondition condition);
 
     /**
-     * Search for apply form based on the provided search condition by admin.
+     * process apply by applyid.
+     *
+     * @param processApply process apply.
+     * @return ResponseEntity<Object>.
+     */
+    ResponseEntity<Object> processApply(ProcessApply processApply);
+
+    /**
+     * Query apply form based on the provided search condition by.
      *
      * @param condition The search condition for querying apply form.
      * @return ResponseEntity<Object>.
