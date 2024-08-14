@@ -16,7 +16,7 @@ import java.util.HashMap;
 import com.easysoftware.application.apply.ApplyService;
 
 import com.easysoftware.application.applyform.ApplyFormService;
-import com.easysoftware.application.applyform.dto.ApplyFormSearchMaintainerCondition;
+import com.easysoftware.application.applyform.dto.ApplyFormSearchAdminCondition;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,7 +127,7 @@ public class CoAdminAdapter {
     @GetMapping("/query/apply")
     @RequestLimitRedis()
     @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
-    public ResponseEntity<Object> getApplyFrom(@Valid final ApplyFormSearchMaintainerCondition condition) {
-        return applyFormService.searchApplyFromByMaintainer(condition);
+    public ResponseEntity<Object> getApplyFrom(@Valid final ApplyFormSearchAdminCondition condition) {
+        return applyFormService.searchApplyFromByAdmin(condition);
     }
 }
