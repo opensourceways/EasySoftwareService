@@ -122,9 +122,9 @@ public class CoMaintainerAdapter {
      * @return ResponseEntity<Object>.
      */
     @GetMapping("/query/apply")
-   // @RequestLimitRedis()
+    @RequestLimitRedis()
     public ResponseEntity<Object> queryApplyFromByMaintainer(@Valid final ApplyFormSearchMaintainerCondition
-    condition) {
+                                                                     condition) {
         return applyFormService.searchApplyFromByMaintainer(condition);
     }
 
@@ -135,7 +135,7 @@ public class CoMaintainerAdapter {
      * @return ResponseEntity<Object>.
      */
     @GetMapping("/query/apply/{applyId}")
-   // @RequestLimitRedis()
+    @RequestLimitRedis()
     public ResponseEntity<Object> queryApplyFromByApplyId(@PathVariable("applyId") Long applyId) {
         return applyFormService.searchApplyFromByApplyId(applyId);
     }
