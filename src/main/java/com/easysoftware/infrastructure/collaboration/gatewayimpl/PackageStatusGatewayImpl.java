@@ -29,6 +29,7 @@ import com.easysoftware.common.constant.PackageConstant;
 import com.easysoftware.common.utils.EsAsyncHttpUtil;
 import com.easysoftware.common.utils.ObjectMapperUtil;
 import com.easysoftware.domain.collaboration.gateway.PackageStatusGateway;
+import com.easysoftware.infrastructure.applyform.gatewayimpl.dataobject.ApplyFormDO;
 import com.easysoftware.infrastructure.collaboration.gatewayimpl.converter.PackageStatusConverter;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -65,8 +66,9 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
         int total = 0;
         try {
             Map<String, Object> query = ObjectMapperUtil.jsonToMap(condition);
+            String login = userPermission.getUserLogin();
             ListenableFuture<Response> future = esAsyncHttpUtil.executeSearch(PackageConstant.PACKAGE_STATUS_INDEX,
-                    query, userPermission.getUserLogin());
+                    query, login);
             String responseBody = future.get().getResponseBody(UTF_8);
             JsonNode dataNode = ObjectMapperUtil.toJsonNode(responseBody);
             JsonNode hits = dataNode.path("hits").path("hits");
@@ -76,5 +78,69 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
             LOGGER.error("search package error - {}", e.getMessage());
         }
         return Map.ofEntries(Map.entry("total", total), Map.entry("list", pkgs));
+    }
+
+    /**
+     * update package status based on the provided condition.
+     *
+     * @param applyFormDO apply content
+     * @return A map containing relevant information
+     */
+    @Override
+    public boolean updateByMetric(final ApplyFormDO applyFormDO) {
+        boolean flag = false;
+        try {
+            PackageSearchCondition condition = new PackageSearchCondition();
+            condition.setRepo(applyFormDO.getRepo());
+            String jsonStr = ObjectMapperUtil.writeValueAsString(queryByCondition(condition).get("list"));
+            List<PackageStatusVO> pkgs = ObjectMapperUtil.toObjectList(PackageStatusVO.class, jsonStr);
+            if (pkgs.size() != 1) {
+                LOGGER.error("Duplicate src repo or no repo");
+                return flag;
+            }
+            String status = computeMetric(pkgs.get(0));
+            ListenableFuture<Response> future = esAsyncHttpUtil.executeUpdate(PackageConstant.PACKAGE_STATUS_INDEX,
+                    applyFormDO, status);
+
+            String responseBody = future.get().getResponseBody(UTF_8);
+            int total = ObjectMapperUtil.toJsonNode(responseBody).path("total").asInt();
+            if (total == 0) {
+                LOGGER.error("No update permission");
+            }
+            int code = future.get().getStatusCode();
+            flag = code == 200 && total == 1;
+        } catch (Exception e) {
+            LOGGER.error("update package error - {}", e.getMessage());
+        }
+        return flag;
+    }
+
+    /**
+     * compute package status.
+     *
+     * @param pkgStatus package status
+     * @return A map containing relevant information
+     */
+    public String computeMetric(PackageStatusVO pkgStatus) {
+        String status = "Other";
+        if (PackageConstant.CVE_ALL_NO_FIXED.equals(pkgStatus.getCveStatus())
+                && PackageConstant.ISSUE_ALL_NO_FIXED.equals(pkgStatus.getIssueStatus())) {
+            status = PackageConstant.NO_MAINTAINENANCE;
+        } else if (PackageConstant.CVE_ALL_NO_FIXED.equals(pkgStatus.getCveStatus())) {
+            status = PackageConstant.LACK_OF_MAINTAINENANCE;
+        } else if (PackageConstant.CVE_ALL_FIXED.equals(pkgStatus.getCveStatus())) {
+            status = PackageConstant.HEALTH;
+        } else if (PackageConstant.NO_CVE.equals(pkgStatus.getCveStatus())
+                && PackageConstant.PR_NO_UPDATED.equals(pkgStatus.getPrStatus())
+                && PackageConstant.LATEST_VERSION.equals(pkgStatus.getVersionStatus())) {
+            status = PackageConstant.HEALTH;
+        } else if (PackageConstant.NO_CVE.equals(pkgStatus.getCveStatus())
+                && PackageConstant.PR_NO_UPDATED.equals(pkgStatus.getPrStatus())
+                && PackageConstant.OUTDATED_VERSION.equals(pkgStatus.getVersionStatus())) {
+            status = PackageConstant.INACTIVE;
+        } else if (PackageConstant.NO_CVE.equals(pkgStatus.getCveStatus())) {
+            status = PackageConstant.ACTIVE;
+        }
+        return status;
     }
 }

@@ -41,7 +41,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 import com.easysoftware.common.constant.HttpConstant;
+import com.easysoftware.common.constant.MapConstant;
 import com.easysoftware.common.constant.PackageConstant;
+import com.easysoftware.infrastructure.applyform.gatewayimpl.dataobject.ApplyFormDO;
 
 @Component
 public final class EsAsyncHttpUtil {
@@ -68,6 +70,12 @@ public final class EsAsyncHttpUtil {
      */
     @Value("${es.searchFormat}")
     private String searchFormat;
+
+    /**
+     * Value injected for the es updateFormat.
+     */
+    @Value("${es.updateFormat}")
+    private String updateFormat;
 
     /**
      * AsyncHttpClient.
@@ -124,6 +132,29 @@ public final class EsAsyncHttpUtil {
     }
 
     /**
+     * execute es update by query.
+     *
+     * @param index  es index name
+     * @param applyFormDO apply content
+     * @param status package status
+     * @return ListenableFuture<Response> the result of es update.
+     */
+    public ListenableFuture<Response> executeUpdate(String index, ApplyFormDO applyFormDO, String status)
+            throws NoSuchAlgorithmException, KeyManagementException {
+        AsyncHttpClient client = getClient();
+        RequestBuilder builder = getBuilder();
+        String metric = MapConstant.METRIC_MAP.get(applyFormDO.getMetric());
+
+        String query = String.format(updateFormat, metric, metric, applyFormDO.getMetricStatus(), status,
+                applyFormDO.getMaintainer(), applyFormDO.getRepo());
+
+        builder.setUrl(esUrl + index + "/_update_by_query");
+        builder.setBody(query);
+
+        return client.executeRequest(builder.build());
+    }
+
+    /**
      * convert condition to query string.
      * @param obj search condition
      * @param login  gitee id of user
@@ -139,9 +170,10 @@ public final class EsAsyncHttpUtil {
             String value = entry.getValue().toString();
             queryString += String.format(PackageConstant.KEY_WORD_FORMAT, field, value);
         }
-
-        int pageSize = Integer.parseInt(obj.get("pageSize").toString());
-        int from = (Integer.parseInt(obj.get("pageNum").toString()) - 1) * pageSize;
+        String pageStr = obj.get("pageSize") == null ? "1" : obj.get("pageSize").toString();
+        String fromStr = obj.get("pageNum") == null ? "10" : obj.get("pageNum").toString();
+        int pageSize = Integer.parseInt(pageStr);
+        int from = (Integer.parseInt(fromStr) - 1) * pageSize;
         String query = String.format(searchFormat, from, pageSize, login, queryString);
         return query;
     }

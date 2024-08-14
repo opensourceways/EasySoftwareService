@@ -172,7 +172,7 @@ public final class PackageConstant {
     /**
      * index name of package status.
      */
-    public static final String PACKAGE_STATUS_INDEX = "package_status_20240525_test";
+    public static final String PACKAGE_STATUS_INDEX = "package_status_20240813_test";
 
     /**
      * package status keyword format.
@@ -183,4 +183,74 @@ public final class PackageConstant {
      * table name of ApplyForm.
      */
     public static final String APPLY_FORM_TABLE = "apply_form";
+
+    /**
+     * cve status.
+     */
+    public static final String CVE_ALL_FIXED = "有CVE且全部修复";
+
+    /**
+     * cve status.
+     */
+    public static final String CVE_ALL_NO_FIXED = "有CVE全部未修复";
+
+    /**
+     * cve status.
+     */
+    public static final String CVE_SOME_FIXED = "有CVE部分修复";
+
+    /**
+     * cve status.
+     */
+    public static final String NO_CVE = "没有CVE问题";
+
+    /**
+     * issue status.
+     */
+    public static final String ISSUE_ALL_NO_FIXED = "没有Issue修复";
+
+    /**
+     * package version status.
+     */
+    public static final String LATEST_VERSION = "最新版本";
+
+    /**
+     * package version status.
+     */
+    public static final String OUTDATED_VERSION = "落后版本";
+
+    /**
+     * package update status.
+     */
+    public static final String PR_NO_UPDATED = "没有PR提交";
+
+    /**
+     * package maintainenance status.
+     */
+    public static final String NO_MAINTAINENANCE = "没有人维护";
+
+    /**
+     * package maintainenance status.
+     */
+    public static final String LACK_OF_MAINTAINENANCE = "缺人维护";
+
+    /**
+     * package maintainenance status.
+     */
+    public static final String HEALTH = "健康";
+
+    /**
+     * package maintainenance status.
+     */
+    public static final String ACTIVE = "活跃";
+
+    /**
+     * package maintainenance status.
+     */
+    public static final String INACTIVE = "静止";
+
+    /**
+     * apply status.
+     */
+    public static final String APPLY_APPROVED = "approved";
 }

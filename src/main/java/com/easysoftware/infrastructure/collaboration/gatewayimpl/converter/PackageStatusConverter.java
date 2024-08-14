@@ -44,16 +44,18 @@ public final class PackageStatusConverter {
         for (JsonNode hit : hits) {
             PackageStatusVO pkg = new PackageStatusVO();
             JsonNode source = hit.path("_source");
-            pkg.setIssueStatus(source.path("issue").path("status").asText());
-            pkg.setPrStatus(source.path("package_update").path("status").asText());
-            pkg.setCveStatus(source.path("cve").path("status").asText());
-            pkg.setVersionStatus(source.path("package_version").path("status").asText());
-            pkg.setOrgStatus(source.path("company").path("status").asText());
-            pkg.setContributorStatus(source.path("participant").path("status").asText());
             pkg.setRepo(source.path("repo").asText());
             pkg.setKind(source.path("kind").asText());
             pkg.setSigName(source.path("sig_names").asText());
-            pkg.setStatus(source.path("status").asText());
+
+            JsonNode collaboration = source.path("collaboration");
+            pkg.setIssueStatus(collaboration.path("issue").path("status").asText());
+            pkg.setPrStatus(collaboration.path("package_update").path("status").asText());
+            pkg.setCveStatus(collaboration.path("cve").path("status").asText());
+            pkg.setVersionStatus(collaboration.path("package_version").path("status").asText());
+            pkg.setOrgStatus(collaboration.path("company").path("status").asText());
+            pkg.setContributorStatus(collaboration.path("participant").path("status").asText());
+            pkg.setStatus(collaboration.path("status").asText());
             pkgs.add(pkg);
         }
         return pkgs;
