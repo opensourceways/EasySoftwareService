@@ -12,6 +12,7 @@ package com.easysoftware.domain.applyform.gateway;
 
 import java.util.Map;
 
+import com.easysoftware.application.applyform.dto.ApplyFormSearchAdminCondition;
 import org.springframework.stereotype.Component;
 
 import com.easysoftware.application.applyform.dto.ApplyFormSearchMaintainerCondition;
@@ -35,4 +36,13 @@ public interface ApplyFormGateway {
      * @return A map containing relevant information
      */
     Map<String, Object> queryApplyFormByApplyId(Long applyId);
+
+
+    /**
+     * Query information based on the provided search condition.
+     *
+     * @param condition The search condition for querying apply form
+     * @return A map containing relevant information
+     */
+    Map<String, Object> queryApplyFormByCondition(ApplyFormSearchAdminCondition condition);
 }
