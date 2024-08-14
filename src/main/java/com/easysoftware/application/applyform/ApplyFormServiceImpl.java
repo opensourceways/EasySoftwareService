@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.easysoftware.application.applyform.dto.ApplyFormSearchAdminCondition;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class ApplyFormServiceImpl implements ApplyFormService {
      * @return ResponseEntity<Object>.
      */
     @Override
-    public ResponseEntity<Object>  searchApplyFromByMaintainer(ApplyFormSearchMaintainerCondition condition) {
+    public ResponseEntity<Object> searchApplyFromByMaintainer(ApplyFormSearchMaintainerCondition condition) {
         Map<String, Object> res = new HashMap<>();
         if (condition.getName().equals("formPage")) {
             res = searchApplyFromByPage(condition);
@@ -52,6 +53,18 @@ public class ApplyFormServiceImpl implements ApplyFormService {
             res = searchApplyFromByApplyId(condition);
         }
 
+        return ResultUtil.success(HttpStatus.OK, res);
+    }
+
+    /**
+     * Search for apply form based on the provided search condition by admin.
+     *
+     * @param condition The search condition for querying apply form.
+     * @return ResponseEntity<Object>.
+     */
+    @Override
+    public ResponseEntity<Object> searchApplyFromByAdmin(ApplyFormSearchAdminCondition condition) {
+        Map<String, Object> res = applyFormGateway.queryApplyFormByCondition(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }
 

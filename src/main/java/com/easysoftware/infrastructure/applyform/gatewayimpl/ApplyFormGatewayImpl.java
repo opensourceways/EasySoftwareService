@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.easysoftware.application.applyform.dto.ApplyFormSearchAdminCondition;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -117,6 +118,56 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         res.put("list", applyFormContentVOs);
 
         return res;
+    }
+
+    /**
+     * Query information based on the provided search condition.
+     *
+     * @param condition The search condition for querying apply form
+     * @return A map containing relevant information
+     */
+    @Override
+    public Map<String, Object> queryApplyFormByCondition(ApplyFormSearchAdminCondition condition) {
+        int pageNum = condition.getPageNum();
+        int pageSize = condition.getPageSize();
+        Page<ApplyFormDO> page = new Page<>(pageNum, pageSize);
+        QueryWrapper<ApplyFormDO> wrapper = initWrapperByCondition(condition);
+
+        IPage<ApplyFormDO> resPage = applyFormDOMapper.selectPage(page, wrapper);
+        long total = resPage.getTotal();
+        List<ApplyFormDO> applyFormDOs = resPage.getRecords();
+        List<ApplyFormSearchMaintainerVO> applyFormVOs = ApplyFormConvertor.toApplyFormVO(applyFormDOs);
+
+        Map<String, Object> res = new HashMap<>();
+        res.put("total", total);
+        res.put("list", applyFormVOs);
+
+        return res;
+    }
+
+    /**
+     * initWrapperByCondition.
+     *
+     * @param condition The search condition for querying apply form
+     * @return A QueryWrapper
+     */
+    private QueryWrapper<ApplyFormDO> initWrapperByCondition(ApplyFormSearchAdminCondition condition) {
+        QueryWrapper<ApplyFormDO> wrapper = new QueryWrapper<>();
+        if (condition.getApplyStatus() != null) {
+            wrapper.eq("apply_status", condition.getApplyStatus());
+        }
+        if (condition.getRepo() != null) {
+            wrapper.eq("repo", condition.getRepo());
+        }
+        if (condition.getMetric() != null) {
+            wrapper.eq("metric", condition.getMetric());
+        }
+        if ("desc".equals(condition.getTimeOrder())) {
+            wrapper.orderByDesc("created_at");
+        } else if ("asc".equals(condition.getTimeOrder())) {
+            wrapper.orderByAsc("created_at");
+        }
+        return wrapper;
     }
 
 }
