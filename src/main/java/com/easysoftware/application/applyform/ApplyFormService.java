@@ -25,11 +25,4 @@ public interface ApplyFormService {
      */
     ResponseEntity<Object> searchApplyFromByMaintainer(ApplyFormSearchMaintainerCondition condition);
 
-    /**
-     *Search for apply form based on the provided search condition by applyId.
-     *
-     * @param applyId The search id for querying apply form.
-     * @return ResponseEntity<Object>.
-     */
-    ResponseEntity<Object> searchApplyFromByApplyId(Long applyId);
 }
