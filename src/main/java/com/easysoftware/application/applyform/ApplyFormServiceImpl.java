@@ -45,7 +45,24 @@ public class ApplyFormServiceImpl implements ApplyFormService {
      */
     @Override
     public ResponseEntity<Object>  searchApplyFromByMaintainer(ApplyFormSearchMaintainerCondition condition) {
-        Map<String, Object> map = applyFormGateway.queryApplyFormByMaintainer(condition);
+        Map<String, Object> res = new HashMap<>();
+        if (condition.getName().equals("formPage")) {
+            res = searchApplyFromByPage(condition);
+        } else if (condition.getName().equals("formContent")) {
+            res = searchApplyFromByApplyId(condition);
+        }
+
+        return ResultUtil.success(HttpStatus.OK, res);
+    }
+
+    /**
+     * Search for apply form based on the provided page condition.
+     *
+     * @param condition The page condition for querying apply form.
+     * @return ResponseEntity<Object>.
+     */
+    private Map<String, Object> searchApplyFromByPage(ApplyFormSearchMaintainerCondition condition) {
+        Map<String, Object> map = applyFormGateway.queryApplyFormByPage(condition);
         Long total = (Long) map.get("total");
         List<ApplyFormSearchMaintainerVO> appylFormVOs = (List<ApplyFormSearchMaintainerVO>) map.get("list");
         if (total == 0 || appylFormVOs.size() == 0) {
@@ -56,22 +73,21 @@ public class ApplyFormServiceImpl implements ApplyFormService {
         res.put("total", total);
         res.put("list", appylFormVOs);
 
-        return ResultUtil.success(HttpStatus.OK, res);
+        return res;
     }
 
     /**
      * Search for apply form based on the provided search condition.
      *
-     * @param applyId The search condition for querying apply form by applyId.
+     * @param condition The search condition for querying apply form by applyId.
      * @return ResponseEntity<Object>.
      */
-    @Override
-    public ResponseEntity<Object> searchApplyFromByApplyId(Long applyId) {
-        if (applyId == null) {
+    private Map<String, Object> searchApplyFromByApplyId(ApplyFormSearchMaintainerCondition condition) {
+        if (condition.getApplyId() == null) {
             throw new ParamErrorException("the applyId can not be null");
         }
 
-        Map<String, Object> res = applyFormGateway.queryApplyFormByApplyId(applyId);
+        Map<String, Object> res = applyFormGateway.queryApplyFormByApplyId(condition.getApplyId());
 
         Long total = (Long) res.get("total");
 
@@ -81,7 +97,7 @@ public class ApplyFormServiceImpl implements ApplyFormService {
             throw new ParamErrorException("the apply form content does not exist");
         }
 
-        return ResultUtil.success(HttpStatus.OK, res);
+        return res;
 
     }
 

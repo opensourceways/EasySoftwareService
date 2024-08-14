@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -122,21 +121,10 @@ public class CoMaintainerAdapter {
      * @return ResponseEntity<Object>.
      */
     @GetMapping("/query/apply")
-   // @RequestLimitRedis()
+    @RequestLimitRedis()
+    @CoMaintainerPermission()
     public ResponseEntity<Object> queryApplyFromByMaintainer(@Valid final ApplyFormSearchMaintainerCondition
     condition) {
         return applyFormService.searchApplyFromByMaintainer(condition);
-    }
-
-    /**
-     * Query apply form based on the provided search condition by applyId.
-     *
-     * @param applyId The search condition for querying apply form.
-     * @return ResponseEntity<Object>.
-     */
-    @GetMapping("/query/apply/{applyId}")
-   // @RequestLimitRedis()
-    public ResponseEntity<Object> queryApplyFromByApplyId(@PathVariable("applyId") Long applyId) {
-        return applyFormService.searchApplyFromByApplyId(applyId);
     }
 }
