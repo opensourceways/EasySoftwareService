@@ -125,13 +125,13 @@ public class UserPermission {
         String response = HttpClientUtil.getHttpClient(userInfoApi, manageToken, userToken, cookie.getValue());
         JsonNode resJson = ObjectMapperUtil.toJsonNode(response);
 
-        String resCode = resJson.get("code").asText();
+        String resCode = resJson.path("code").asText();
         if (!"200".equals(resCode)) {
             LOGGER.error("query user login name failed");
             throw new HttpRequestException("query user login name failed");
         }
         String loginName = null;
-        JsonNode identities = resJson.get("data").get("identities");
+        JsonNode identities = resJson.path("data").path("identities");
         for (JsonNode identity : identities) {
             if (identity.has("identity") && identity.get("identity").asText().equalsIgnoreCase("gitee")) {
                 loginName = identity.get("login_name").asText();

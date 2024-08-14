@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
+import com.easysoftware.application.applyform.dto.ProcessApply;
 import com.easysoftware.application.applyform.vo.ApplyFormSearchMaintainerVO;
 import com.easysoftware.domain.applyform.ApplyForm;
 import com.easysoftware.infrastructure.applyform.gatewayimpl.dataobject.ApplyFormDO;
@@ -37,6 +38,18 @@ public final class ApplyFormConvertor {
     public static ApplyForm toEntity(final ApplyFormDO applyFormDO) {
         ApplyForm applyForm = new ApplyForm();
         BeanUtils.copyProperties(applyFormDO, applyForm);
+        return applyForm;
+    }
+
+    /**
+     * Convert an ProcessApply object to an ApplyFormDO entity.
+     *
+     * @param processApply The ProcessApply object to convert
+     * @return An ApplyForm entity
+     */
+    public static ApplyFormDO toApplyFormDO(final ProcessApply processApply) {
+        ApplyFormDO applyForm = new ApplyFormDO();
+        BeanUtils.copyProperties(processApply, applyForm);
         return applyForm;
     }
 

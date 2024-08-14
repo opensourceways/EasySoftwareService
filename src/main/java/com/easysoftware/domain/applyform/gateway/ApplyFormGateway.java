@@ -15,6 +15,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import com.easysoftware.application.applyform.dto.ApplyFormSearchMaintainerCondition;
+import com.easysoftware.application.applyform.dto.ProcessApply;
 
 
 @Component
@@ -35,4 +36,12 @@ public interface ApplyFormGateway {
      * @return A map containing relevant information
      */
     Map<String, Object> queryApplyFormByApplyId(Long applyId);
+
+    /**
+     * Process apply based on the provided condition..
+     *
+     * @param processApply The process result for apply.
+     * @return A map containing relevant information
+     */
+    boolean processApply(ProcessApply processApply);
 }

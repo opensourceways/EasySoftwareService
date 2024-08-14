@@ -14,6 +14,7 @@ package com.easysoftware.application.applyform;
 import org.springframework.http.ResponseEntity;
 
 import com.easysoftware.application.applyform.dto.ApplyFormSearchMaintainerCondition;
+import com.easysoftware.application.applyform.dto.ProcessApply;
 
 public interface ApplyFormService {
 
@@ -32,4 +33,12 @@ public interface ApplyFormService {
      * @return ResponseEntity<Object>.
      */
     ResponseEntity<Object> searchApplyFromByApplyId(Long applyId);
+
+    /**
+     * process apply by applyid.
+     *
+     * @param processApply process apply.
+     * @return ResponseEntity<Object>.
+     */
+    ResponseEntity<Object> processApply(ProcessApply processApply);
 }
