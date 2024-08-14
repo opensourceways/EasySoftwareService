@@ -25,6 +25,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.applyform.dto.ApplyFormSearchMaintainerCondition;
 import com.easysoftware.application.applyform.vo.ApplyFormContentVO;
 import com.easysoftware.application.applyform.vo.ApplyFormSearchMaintainerVO;
+import com.easysoftware.common.account.UserPermission;
 import com.easysoftware.domain.applyform.gateway.ApplyFormGateway;
 import com.easysoftware.infrastructure.apply.gatewayimpl.dataobject.ApplyhandleRecordsDO;
 import com.easysoftware.infrastructure.applyform.gatewayimpl.converter.ApplyFormConvertor;
@@ -48,17 +49,27 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
     private ApplyHandleRecordsDOMapper applyHandleRecordsDOMapper;
 
     /**
+     * Autowired permission for the UserPermission.
+     */
+    @Autowired
+    private UserPermission userPermission;
+
+    /**
      * Query information based on the provided search condition.
      *
      * @param condition The search condition for querying apply form
      * @return A map containing relevant information
      */
     @Override
-    public Map<String, Object> queryApplyFormByMaintainer(ApplyFormSearchMaintainerCondition condition) {
+    public Map<String, Object> queryApplyFormByPage(ApplyFormSearchMaintainerCondition condition) {
         int pageNum = condition.getPageNum();
         int pageSize = condition.getPageSize();
+        String maintainer = userPermission.getUserLogin();
+
         Page<ApplyFormDO> page = new Page<>(pageNum, pageSize);
-        IPage<ApplyFormDO> resPage = applyFormDOMapper.selectPage(page, null);
+        QueryWrapper<ApplyFormDO> wrapper = new QueryWrapper<>();
+        wrapper.eq("maintainer", maintainer);
+        IPage<ApplyFormDO> resPage = applyFormDOMapper.selectPage(page, wrapper);
 
         long total = resPage.getTotal();
         List<ApplyFormDO> applyFormDOs = resPage.getRecords();
@@ -79,14 +90,17 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
      * @return A map containing relevant information
      */
     public Map<String, Object> queryApplyFormByApplyId(Long applyId) {
+        String maintainer = userPermission.getUserLogin();
         QueryWrapper<ApplyFormDO> queryWrapperForm = new QueryWrapper<>();
         queryWrapperForm.eq("apply_id", applyId);
+        queryWrapperForm.eq("maintainer", maintainer);
 
         List<ApplyFormDO> applyFormListDOs = applyFormDOMapper.selectList(queryWrapperForm);
         List<ApplyFormSearchMaintainerVO> applyFormListVOs = ApplyFormConvertor.toApplyFormVO(applyFormListDOs);
 
         QueryWrapper<ApplyhandleRecordsDO> queryWrapperRecords = new QueryWrapper<>();
         queryWrapperRecords.eq("apply_id", applyId);
+        queryWrapperRecords.eq("maintainer", maintainer);
 
         List<ApplyhandleRecordsDO> applyhandleRecordsDOs = applyHandleRecordsDOMapper.selectList(queryWrapperRecords);
 

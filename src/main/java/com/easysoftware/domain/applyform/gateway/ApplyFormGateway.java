@@ -26,7 +26,7 @@ public interface ApplyFormGateway {
      * @param condition The search condition for querying apply form
      * @return A map containing relevant information
      */
-    Map<String, Object> queryApplyFormByMaintainer(ApplyFormSearchMaintainerCondition condition);
+    Map<String, Object> queryApplyFormByPage(ApplyFormSearchMaintainerCondition condition);
 
     /**
      * Query information based on the provided search condition by appId.
