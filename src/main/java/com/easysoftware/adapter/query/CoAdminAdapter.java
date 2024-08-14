@@ -15,6 +15,9 @@ import java.util.HashMap;
 
 import com.easysoftware.application.apply.ApplyService;
 
+import com.easysoftware.application.applyform.ApplyFormService;
+import com.easysoftware.application.applyform.dto.ApplyFormSearchMaintainerCondition;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +59,12 @@ public class CoAdminAdapter {
      */
     @Autowired
     private ApplyService applyService;
+
+    /**
+     * Autowired service for search applyForm.
+     */
+    @Autowired
+    private ApplyFormService applyFormService;
 
     /**
      * Endpoint to search for repos based on the provided search
@@ -106,5 +115,19 @@ public class CoAdminAdapter {
     @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
     public ResponseEntity<Object> getApply(@RequestParam(value = "applyId") Long applyId) {
         return applyService.queryApplyHandleRecords(applyId);
+    }
+
+
+    /**
+     * Query apply form based on the provided search condition by.
+     *
+     * @param condition The search condition for querying apply form.
+     * @return ResponseEntity<Object>.
+     */
+    @GetMapping("/query/apply")
+    @RequestLimitRedis()
+    @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
+    public ResponseEntity<Object> getApplyFrom(@Valid final ApplyFormSearchMaintainerCondition condition) {
+        return applyFormService.searchApplyFromByMaintainer(condition);
     }
 }

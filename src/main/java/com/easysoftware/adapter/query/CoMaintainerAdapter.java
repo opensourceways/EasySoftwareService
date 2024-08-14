@@ -124,7 +124,7 @@ public class CoMaintainerAdapter {
     @RequestLimitRedis()
     @CoMaintainerPermission()
     public ResponseEntity<Object> queryApplyFromByMaintainer(@Valid final ApplyFormSearchMaintainerCondition
-    condition) {
+                                                                     condition) {
         return applyFormService.searchApplyFromByMaintainer(condition);
     }
 }
