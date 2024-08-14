@@ -14,16 +14,18 @@ package com.easysoftware.adapter.query;
 import java.util.HashMap;
 
 import com.easysoftware.application.apply.ApplyService;
-
 import com.easysoftware.application.applyform.ApplyFormService;
+import com.easysoftware.application.applyform.dto.ProcessApply;
+
 import com.easysoftware.application.applyform.dto.ApplyFormSearchAdminCondition;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +36,8 @@ import com.easysoftware.common.annotation.PreUserPermission;
 import com.easysoftware.common.aop.RequestLimitRedis;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ResultUtil;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/collaboration/admin")
@@ -46,7 +50,7 @@ public class CoAdminAdapter {
     /**
      * Define current functional permissions.
      */
-    private static final String[] REQUIRE_PERMISSIONS = {UerPermissionDef.COLLABORATION_PERMISSION_ADMIN};
+    private static final String[] REQUIRE_PERMISSIONS = {UerPermissionDef.COLLABORATION_PERMISSION_ADMIN };
 
     /**
      * Autowired UserPermission for check user permission.
@@ -104,9 +108,9 @@ public class CoAdminAdapter {
         }
     }
 
-
     /**
      * get apply handle records by appid.
+     *
      * @param applyId The handle form content id.
      * @return ResponseEntity<Object>.
      */
@@ -115,6 +119,19 @@ public class CoAdminAdapter {
     @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
     public ResponseEntity<Object> getApply(@RequestParam(value = "applyId") Long applyId) {
         return applyService.queryApplyHandleRecords(applyId);
+    }
+
+    /**
+     * process apply by applyid.
+     *
+     * @param processApply process apply.
+     * @return ResponseEntity<Object>.
+     */
+    @PostMapping("/process")
+    @RequestLimitRedis()
+    @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
+    public ResponseEntity<Object> processApply(@Valid @RequestBody ProcessApply processApply) {
+        return applyFormService.processApply(processApply);
     }
 
 

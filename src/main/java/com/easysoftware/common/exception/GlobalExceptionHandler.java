@@ -138,6 +138,19 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Handles exceptions of type UpdateException.
+     *
+     * @param e The UpdateException to handle
+     * @return ResponseEntity containing details about the exception
+     */
+    @ExceptionHandler(UpdateException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> exception(final UpdateException e) {
+        LOGGER.error(MessageCode.EC0004.getMsgEn());
+        return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0004);
+    }
+
+    /**
      * Handles general exceptions.
      *
      * @param e The Exception to handle

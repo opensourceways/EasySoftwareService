@@ -14,6 +14,7 @@ package com.easysoftware.domain.collaboration.gateway;
 import java.util.Map;
 
 import com.easysoftware.application.collaboration.dto.PackageSearchCondition;
+import com.easysoftware.infrastructure.applyform.gatewayimpl.dataobject.ApplyFormDO;
 
 public interface PackageStatusGateway {
     /**
@@ -23,4 +24,12 @@ public interface PackageStatusGateway {
      * @return A map containing detailed information
      */
     Map<String, Object> queryByCondition(PackageSearchCondition condition);
+
+    /**
+     * update package status based on the provided condition.
+     *
+     * @param applyFormDO apply content
+     * @return A map containing relevant information
+     */
+    boolean updateByMetric(ApplyFormDO applyFormDO);
 }
