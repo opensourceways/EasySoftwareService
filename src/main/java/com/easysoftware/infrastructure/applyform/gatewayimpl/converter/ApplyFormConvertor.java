@@ -10,6 +10,7 @@
 */
 package com.easysoftware.infrastructure.applyform.gatewayimpl.converter;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,9 +49,11 @@ public final class ApplyFormConvertor {
      * @return An ApplyForm entity
      */
     public static ApplyFormDO toApplyFormDO(final ProcessApply processApply) {
-        ApplyFormDO applyForm = new ApplyFormDO();
-        BeanUtils.copyProperties(processApply, applyForm);
-        return applyForm;
+        ApplyFormDO applyFormDO = new ApplyFormDO();
+        BeanUtils.copyProperties(processApply, applyFormDO);
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+        applyFormDO.setUpdateAt(currentTime);
+        return applyFormDO;
     }
 
     /**

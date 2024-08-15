@@ -12,6 +12,7 @@ package com.easysoftware.infrastructure.applyform.gatewayimpl.dataobject;
 
 import java.sql.Timestamp;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.easysoftware.common.constant.PackageConstant;
@@ -64,10 +65,15 @@ public class ApplyFormDO {
      */
     private String adminstrator;
 
+    /**
+     * comment of the process apply.
+     */
+    private String comment;
 
     /**
      * Approval status.
      */
+    @TableField(value = "apply_status")
     private String applyStatus;
 
     /**
