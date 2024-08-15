@@ -32,6 +32,8 @@ import com.easysoftware.application.applyform.vo.ApplyFormSearchMaintainerVO;
 import com.easysoftware.common.constant.PackageConstant;
 import com.easysoftware.common.exception.UpdateException;
 import com.easysoftware.common.account.UserPermission;
+import com.easysoftware.domain.apply.ApplyHandleRecord;
+import com.easysoftware.domain.apply.gateway.ApplyGateway;
 import com.easysoftware.domain.applyform.gateway.ApplyFormGateway;
 import com.easysoftware.domain.collaboration.gateway.PackageStatusGateway;
 import com.easysoftware.infrastructure.apply.gatewayimpl.dataobject.ApplyhandleRecordsDO;
@@ -49,6 +51,12 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
      */
     @Resource
     private PackageStatusGateway pkgStatusGateway;
+
+    /**
+     * Resource for interacting with Apply Gateway.
+     */
+    @Resource
+    private ApplyGateway applyGateway;
 
     /**
      * Autowired field for the ApplicationVersionDOMapper.
@@ -147,16 +155,35 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         wrapper.eq("apply_id", processApply.getApplyId());
 
         int mark = applyFormDOMapper.update(applyFormDO, wrapper);
-        boolean result = mark == 1;
+        if (mark != 1) {
+            throw new UpdateException("update apply status failed");
+        }
 
-        if (result && PackageConstant.APPLY_APPROVED.equalsIgnoreCase(processApply.getApplyStatus())) {
-            applyFormDO = applyFormDOMapper.selectOne(wrapper);
-            result = pkgStatusGateway.updateByMetric(applyFormDO);
-            if (!result) {
-                throw new UpdateException("update failed");
+        applyFormDO = applyFormDOMapper.selectOne(wrapper);
+
+        ApplyHandleRecord record = new ApplyHandleRecord();
+        BeanUtils.copyProperties(applyFormDO, record);
+        if (!applyGateway.savehandleRecord(record)) {
+            throw new UpdateException("save record failed");
+        }
+
+        if (PackageConstant.APPLY_APPROVED.equalsIgnoreCase(processApply.getApplyStatus())) {
+            if (!updatePackageStatus(applyFormDO)) {
+                throw new UpdateException("update package status failed");
             }
         }
-        return result;
+
+        return true;
+    }
+
+    /**
+     * update package based on the provided condition.
+     *
+     * @param applyFormDO apply content.
+     * @return update result
+     */
+    private boolean updatePackageStatus(ApplyFormDO applyFormDO) {
+        return pkgStatusGateway.updateByMetric(applyFormDO);
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.easysoftware.infrastructure.apply.gatewayimpl.dataobject;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.easysoftware.common.constant.PackageConstant;
@@ -22,7 +23,6 @@ public class ApplyhandleRecordsDO {
     /**
      * Name of the entity (ID: name).
      */
-    @TableId(value = "id")
     private Long id;
 
     /**
@@ -39,6 +39,7 @@ public class ApplyhandleRecordsDO {
     /**
      * recordId.
      */
+    @TableId(value = "id")
     private Long recordId;
 
     /**
@@ -59,7 +60,8 @@ public class ApplyhandleRecordsDO {
     /**
      * applyStatus.
      */
-    private Byte applyStatus;
+    @TableField(value = "apply_status")
+    private String applyStatus;
 
 
     /**

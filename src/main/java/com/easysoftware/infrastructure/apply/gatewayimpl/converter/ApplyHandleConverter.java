@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +47,6 @@ public final class ApplyHandleConverter {
         return res;
     }
 
-
     /**
      * Convert an ApplyhandleRecordsDO object to an ApplyHandleRecord entity.
      *
@@ -57,5 +57,22 @@ public final class ApplyHandleConverter {
         ApplyHandleRecord applyHandleRecord = new ApplyHandleRecord();
         BeanUtils.copyProperties(arecordDo, applyHandleRecord);
         return applyHandleRecord;
+    }
+
+    /**
+     * Convert an ApplyHandleRecord entity to an ApplyhandleRecordsDO data object
+     * specifically for creation.
+     *
+     * @param record The ApplyHandleRecord entity to convert
+     * @return An ApplyhandleRecordsDO data object tailored for creation
+     */
+    public static ApplyhandleRecordsDO toDataObjectForCreate(final ApplyHandleRecord record) {
+        ApplyhandleRecordsDO recordDO = new ApplyhandleRecordsDO();
+        BeanUtils.copyProperties(record, recordDO);
+
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+        recordDO.setCreatedAt(currentTime);
+
+        return recordDO;
     }
 }

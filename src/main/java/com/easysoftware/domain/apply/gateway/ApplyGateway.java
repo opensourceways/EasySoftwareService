@@ -24,4 +24,12 @@ public interface ApplyGateway {
      * @return A map containing relevant information
      */
     List<ApplyHandleRecord> queryApplyhandleRecords(ApplyHandleConditon condition);
+
+    /**
+     * save apply handle record.
+     *
+     * @param record apply handle record.
+     * @return save result
+     */
+    boolean savehandleRecord(ApplyHandleRecord record);
 }
