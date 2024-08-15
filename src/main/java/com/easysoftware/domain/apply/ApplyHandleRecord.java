@@ -64,7 +64,7 @@ public class ApplyHandleRecord {
     /**
      * applyStatus.
      */
-    private Byte applyStatus;
+    private String applyStatus;
 
 
     /**

@@ -53,4 +53,17 @@ public class ApplyGatewayImpl implements ApplyGateway {
 
         return applyHandleRecords;
     }
+
+    /**
+     * save apply handle record.
+     *
+     * @param record apply handle record.
+     * @return save result
+     */
+    @Override
+    public boolean savehandleRecord(ApplyHandleRecord record) {
+        ApplyhandleRecordsDO recordDO = ApplyHandleConverter.toDataObjectForCreate(record);
+        int mark = applyHandleRecordsDOMapper.insert(recordDO);
+        return mark == 1;
+    }
 }
