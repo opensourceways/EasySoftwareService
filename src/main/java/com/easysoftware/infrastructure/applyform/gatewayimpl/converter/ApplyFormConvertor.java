@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
+import com.easysoftware.application.applyform.dto.MyApply;
 import com.easysoftware.application.applyform.dto.ProcessApply;
 import com.easysoftware.application.applyform.vo.ApplyFormSearchMaintainerVO;
 import com.easysoftware.domain.applyform.ApplyForm;
@@ -54,6 +55,18 @@ public final class ApplyFormConvertor {
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
         applyFormDO.setUpdateAt(currentTime);
         return applyFormDO;
+    }
+
+    /**
+     * Convert an myApply object to an ApplyFormDO entity.
+     *
+     * @param myApply The myApply object to convert
+     * @return An ApplyForm entity
+     */
+    public static ApplyFormDO toApplyFormDO(final MyApply myApply) {
+        ApplyFormDO applyForm = new ApplyFormDO();
+        BeanUtils.copyProperties(myApply, applyForm);
+        return applyForm;
     }
 
     /**

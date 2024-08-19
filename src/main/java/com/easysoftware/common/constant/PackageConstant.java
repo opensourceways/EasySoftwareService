@@ -253,4 +253,14 @@ public final class PackageConstant {
      * apply status.
      */
     public static final String APPLY_APPROVED = "approved";
+
+    /**
+     * applytId in apply_form table.
+     */
+    public static final String APPLY_FORM_ID = "apply_id";
+
+    /**
+     * maintainer in apply_form table.
+     */
+    public static final String APPLY_FORM_MAINTAINER = "maintainer";
 }
