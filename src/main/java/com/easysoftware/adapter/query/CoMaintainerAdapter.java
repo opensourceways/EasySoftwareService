@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.easysoftware.application.applyform.ApplyFormService;
 import com.easysoftware.application.applyform.dto.ApplyFormSearchMaintainerCondition;
+import com.easysoftware.application.applyform.dto.MyApply;
 import com.easysoftware.application.collaboration.CoMaintainerService;
 import com.easysoftware.application.collaboration.dto.PackageSearchCondition;
 import com.easysoftware.common.account.UserPermission;
@@ -35,6 +36,9 @@ import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ResultUtil;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/collaboration/maintainer")
@@ -115,7 +119,7 @@ public class CoMaintainerAdapter {
     }
 
     /**
-     * Query apply form based on the provided search condition by.
+     * Query apply form based on the provided search condition.
      *
      * @param condition The search condition for querying apply form.
      * @return ResponseEntity<Object>.
@@ -127,4 +131,44 @@ public class CoMaintainerAdapter {
                                                                      condition) {
         return applyFormService.searchApplyFromByMaintainer(condition);
     }
+
+    /**
+     * Submit apply form based on the provided body.
+     *
+     * @param myApply The submit condition for querying apply form.
+     * @return ResponseEntity<Object>.
+     */
+    @PostMapping("/apply")
+    @RequestLimitRedis()
+    @CoMaintainerPermission()
+    public ResponseEntity<Object> submitMyApply(@Valid @RequestBody MyApply myApply) {
+        return applyFormService.submitMyApplyWithLimit(myApply);
+    }
+
+    /**
+     * Revoke apply form based on the provided body.
+     *
+     * @param myApply The revoke condition for querying apply form.
+     * @return ResponseEntity<Object>.
+     */
+    @PostMapping("/revoke")
+    @RequestLimitRedis()
+    @CoMaintainerPermission()
+    public ResponseEntity<Object> revokeMyApply(@Valid @RequestBody MyApply myApply) {
+        return applyFormService.revokeMyApplyWithLimit(myApply);
+    }
+
+    /**
+     * Update apply form based on the provided body.
+     *
+     * @param myApply The update condition for querying apply form.
+     * @return ResponseEntity<Object>.
+     */
+    @PostMapping("/update")
+    @RequestLimitRedis()
+    @CoMaintainerPermission()
+    public ResponseEntity<Object> updateMyApply(@Valid @RequestBody MyApply myApply) {
+        return applyFormService.updateMyApplyWithLimit(myApply);
+    }
+
 }
