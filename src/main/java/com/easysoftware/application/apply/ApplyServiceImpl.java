@@ -14,7 +14,10 @@ import com.easysoftware.application.apply.dto.ApplyHandleConditon;
 import com.easysoftware.common.utils.ResultUtil;
 import com.easysoftware.domain.apply.ApplyHandleRecord;
 import com.easysoftware.domain.apply.gateway.ApplyGateway;
+
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,7 @@ public class ApplyServiceImpl implements ApplyService {
     /**
      * Resource for interacting with Apply  Gateway.
      */
+    @Resource
     private final ApplyGateway applyGateway;
 
     /**

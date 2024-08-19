@@ -16,6 +16,7 @@ import com.easysoftware.application.applyform.dto.ApplyFormSearchAdminCondition;
 import org.springframework.stereotype.Component;
 
 import com.easysoftware.application.applyform.dto.ApplyFormSearchMaintainerCondition;
+import com.easysoftware.application.applyform.dto.MyApply;
 import com.easysoftware.application.applyform.dto.ProcessApply;
 
 
@@ -53,4 +54,37 @@ public interface ApplyFormGateway {
      * @return A map containing relevant information
      */
     Map<String, Object> queryApplyFormByCondition(ApplyFormSearchAdminCondition condition);
+
+    /**
+     * MyApply apply based on the provided condition..
+     *
+     * @param myApply The submit process result for apply.
+     * @return A boolean
+     */
+    boolean submitMyApplyWithLimit(MyApply myApply);
+
+    /**
+     * MyApply apply based on the provided condition.
+     *
+     * @param myApply The revoke process result for apply.
+     * @return A boolean
+     */
+    boolean revokeMyApplyWithLimit(MyApply myApply);
+
+    /**
+     * MyApply apply based on the provided condition.
+     *
+     * @param myApply The update process result for apply.
+     * @return A boolean
+     */
+    boolean updateMyApplyWithLimit(MyApply myApply);
+
+    /**
+     * MyApply apply based on the provided condition.
+     *
+     * @param applyId check the maintainer's limits of authority.
+     * @param maintainer check the maintainer's limits of authority.
+     * @return A boolean .
+     */
+    boolean checkMaintainerLimit(Long applyId, String maintainer);
 }

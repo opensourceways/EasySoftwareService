@@ -50,7 +50,7 @@ public class ApplyFormSearchMaintainerCondition {
     private String name;
 
     /**
-     * Application number.
+     * apply number.
      */
     private Long applyId;
 }

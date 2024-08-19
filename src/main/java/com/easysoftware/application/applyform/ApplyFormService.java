@@ -15,6 +15,7 @@ import com.easysoftware.application.applyform.dto.ApplyFormSearchAdminCondition;
 import org.springframework.http.ResponseEntity;
 
 import com.easysoftware.application.applyform.dto.ApplyFormSearchMaintainerCondition;
+import com.easysoftware.application.applyform.dto.MyApply;
 import com.easysoftware.application.applyform.dto.ProcessApply;
 
 public interface ApplyFormService {
@@ -42,4 +43,28 @@ public interface ApplyFormService {
      * @return ResponseEntity<Object>.
      */
     ResponseEntity<Object> searchApplyFromByAdmin(ApplyFormSearchAdminCondition condition);
+
+    /**
+     * Submit my apply.
+     *
+     * @param myApply The condition for submiting apply form.
+     * @return ResponseEntity<Object>.
+     */
+    ResponseEntity<Object> submitMyApplyWithLimit(MyApply myApply);
+
+    /**
+     * Revoke my apply.
+     *
+     * @param myApply The condition for revoking apply form.
+     * @return ResponseEntity<Object>.
+     */
+    ResponseEntity<Object> revokeMyApplyWithLimit(MyApply myApply);
+
+    /**
+     * Update my apply.
+     *
+     * @param myApply The condition for update apply form.
+     * @return ResponseEntity<Object>.
+     */
+    ResponseEntity<Object> updateMyApplyWithLimit(MyApply myApply);
 }

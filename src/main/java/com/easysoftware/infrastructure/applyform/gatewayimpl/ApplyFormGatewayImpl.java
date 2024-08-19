@@ -10,12 +10,16 @@
 */
 package com.easysoftware.infrastructure.applyform.gatewayimpl;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.easysoftware.application.applyform.dto.ApplyFormSearchAdminCondition;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,10 +30,13 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.applyform.dto.ApplyFormSearchMaintainerCondition;
+import com.easysoftware.application.applyform.dto.MyApply;
 import com.easysoftware.application.applyform.dto.ProcessApply;
 import com.easysoftware.application.applyform.vo.ApplyFormContentVO;
 import com.easysoftware.application.applyform.vo.ApplyFormSearchMaintainerVO;
 import com.easysoftware.common.constant.PackageConstant;
+import com.easysoftware.common.exception.DeleteException;
+import com.easysoftware.common.exception.InsertException;
 import com.easysoftware.common.exception.UpdateException;
 import com.easysoftware.common.account.UserPermission;
 import com.easysoftware.domain.apply.ApplyHandleRecord;
@@ -46,6 +53,12 @@ import jakarta.annotation.Resource;
 
 @Component
 public class ApplyFormGatewayImpl implements ApplyFormGateway {
+
+    /**
+     * Logger for ApplicationVersionQueryAdapter.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplyFormGatewayImpl.class);
+
     /**
      * Resource for interacting with package status Gateway.
      */
@@ -113,16 +126,17 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
      */
     public Map<String, Object> queryApplyFormByApplyId(Long applyId) {
         String maintainer = userPermission.getUserLogin();
+
         QueryWrapper<ApplyFormDO> queryWrapperForm = new QueryWrapper<>();
-        queryWrapperForm.eq("apply_id", applyId);
-        queryWrapperForm.eq("maintainer", maintainer);
+        queryWrapperForm.eq(PackageConstant.APPLY_FORM_ID, applyId);
+        queryWrapperForm.eq(PackageConstant.APPLY_FORM_MAINTAINER, maintainer);
 
         List<ApplyFormDO> applyFormListDOs = applyFormDOMapper.selectList(queryWrapperForm);
         List<ApplyFormSearchMaintainerVO> applyFormListVOs = ApplyFormConvertor.toApplyFormVO(applyFormListDOs);
 
         QueryWrapper<ApplyhandleRecordsDO> queryWrapperRecords = new QueryWrapper<>();
-        queryWrapperRecords.eq("apply_id", applyId);
-        queryWrapperRecords.eq("maintainer", maintainer);
+        queryWrapperRecords.eq(PackageConstant.APPLY_FORM_ID, applyId);
+        queryWrapperRecords.eq(PackageConstant.APPLY_FORM_MAINTAINER, maintainer);
 
         List<ApplyhandleRecordsDO> applyhandleRecordsDOs = applyHandleRecordsDOMapper.selectList(queryWrapperRecords);
 
@@ -234,6 +248,137 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
             wrapper.orderByAsc("created_at");
         }
         return wrapper;
+    }
+
+    /**
+     * MyApply apply based on the provided condition..
+     *
+     * @param myApply The process result for apply.
+     * @return A boolean
+     */
+    @Override
+    @Transactional(rollbackFor = InsertException.class)
+    public boolean submitMyApplyWithLimit(MyApply myApply) {
+        boolean result = true;
+        ApplyFormDO applyFormDO = ApplyFormConvertor.toApplyFormDO(myApply);
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        applyFormDO.setCreatedAt(now);
+        applyFormDO.setUpdateAt(now);
+
+        String maintainer = userPermission.getUserLogin();
+        applyFormDO.setMaintainer(maintainer);
+
+        int count = applyFormDOMapper.insert(applyFormDO);
+        if (count != 1) {
+            LOGGER.info(
+                "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
+                    + applyFormDO.getApplyId() + " Result: failure.");
+            throw new InsertException("insert failed");
+        }
+        LOGGER.info(
+                "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
+                    + applyFormDO.getApplyId() + " Result: success.");
+
+        return result;
+    }
+
+    /**
+     * MyApply apply based on the provided condition..
+     *
+     * @param myApply The process result for apply.
+     * @return A boolean
+     */
+    @Override
+    @Transactional(rollbackFor = DeleteException.class)
+    public boolean revokeMyApplyWithLimit(MyApply myApply) {
+        boolean result = true;
+        Long id = myApply.getApplyId();
+        String maintainer = userPermission.getUserLogin();
+
+        if (!checkMaintainerLimit(myApply.getApplyId(), maintainer)) {
+            LOGGER.info(
+                "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
+                    + id + " Result: failure.");
+            throw new DeleteException("permission authentication failed");
+        }
+
+        int deleteNum = applyFormDOMapper.deleteByMap(Map.of(
+            PackageConstant.APPLY_FORM_ID, id,
+            PackageConstant.APPLY_FORM_MAINTAINER, maintainer));
+        if (deleteNum != 1) {
+            LOGGER.info(
+                "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
+                    + id + " Result: failure.");
+            throw new DeleteException("revoke failed");
+        }
+        LOGGER.info(
+                "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
+                    + id + " Result: success.");
+
+        return result;
+    }
+
+    /**
+     * MyApply apply based on the provided condition..
+     *
+     * @param myApply The process result for apply.
+     * @return A boolean
+     */
+    @Override
+    @Transactional(rollbackFor = UpdateException.class)
+    public boolean updateMyApplyWithLimit(MyApply myApply) {
+        boolean result = true;
+        ApplyFormDO applyFormDO = ApplyFormConvertor.toApplyFormDO(myApply);
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        applyFormDO.setUpdateAt(now);
+
+        String maintainer = userPermission.getUserLogin();
+        applyFormDO.setMaintainer(maintainer);
+
+        if (!checkMaintainerLimit(applyFormDO.getApplyId(), maintainer)) {
+            LOGGER.info(
+                "UserName:" + maintainer + " Client Ip: localhost" + " Type: Update" + " ApplyID:"
+                    + applyFormDO.getApplyId() + " Result: failuer.");
+            throw new UpdateException("permission authentication failed");
+        }
+
+        UpdateWrapper<ApplyFormDO> wrapper = new UpdateWrapper<>();
+        wrapper.eq(PackageConstant.APPLY_FORM_ID, myApply.getApplyId());
+        wrapper.eq(PackageConstant.APPLY_FORM_MAINTAINER, maintainer);
+
+        int count = applyFormDOMapper.update(applyFormDO, wrapper);
+        if (count != 1) {
+            LOGGER.info(
+                "UserName:" + maintainer + " Client Ip: localhost" + " Type: Update" + " ApplyID:"
+                    + applyFormDO.getApplyId() + " Result: failuer.");
+            throw new UpdateException("update failed");
+        }
+        LOGGER.info(
+                "UserName:" + maintainer + " Client Ip: localhost" + " Type: Update" + " ApplyID:"
+                    + applyFormDO.getApplyId() + " Result: success.");
+
+        return result;
+    }
+
+    /**
+     * MyApply apply based on the provided condition.
+     *
+     * @param applyId  check the maintainer's limits of authority.
+     * @param maintainer check the maintainer's limits of authority.
+     * @return A boolean .
+     */
+    @Override
+    public boolean checkMaintainerLimit(Long applyId, String maintainer) {
+        List<ApplyFormDO> list = applyFormDOMapper.selectByMap(Map.of("apply_id", applyId));
+        if (list.size() == 0) {
+            return false;
+        }
+        for (ApplyFormDO applyFormDO : list) {
+            if (!applyFormDO.getMaintainer().equals(maintainer)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
