@@ -168,6 +168,7 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         UpdateWrapper<ApplyFormDO> wrapper = new UpdateWrapper<>();
         wrapper.eq("apply_id", processApply.getApplyId());
 
+        applyFormDO.setAdminstrator(userPermission.getUserName());
         int mark = applyFormDOMapper.update(applyFormDO, wrapper);
         if (mark != 1) {
             throw new UpdateException("update apply status failed");

@@ -62,11 +62,33 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
      */
     @Override
     public Map<String, Object> queryByCondition(final PackageSearchCondition condition) {
+        String login = userPermission.getUserLogin();
+        return queryRepoByCondition(condition, login);
+    }
+
+    /**
+     * Query information based on the provided search condition.
+     *
+     * @param condition The search condition for querying package
+     * @return A map containing relevant information
+     */
+    @Override
+    public Map<String, Object> queryAllByCondition(final PackageSearchCondition condition) {
+        return queryRepoByCondition(condition, "*");
+    }
+
+    /**
+     * Query repos based on the provided search condition.
+     *
+     * @param condition The search condition for querying package
+     * @param login user gitee id
+     * @return A map containing relevant information
+     */
+    public Map<String, Object> queryRepoByCondition(final PackageSearchCondition condition, String login) {
         List<PackageStatusVO> pkgs = new ArrayList<>();
         int total = 0;
         try {
             Map<String, Object> query = ObjectMapperUtil.jsonToMap(condition);
-            String login = userPermission.getUserLogin();
             ListenableFuture<Response> future = esAsyncHttpUtil.executeSearch(PackageConstant.PACKAGE_STATUS_INDEX,
                     query, login);
             String responseBody = future.get().getResponseBody(UTF_8);

@@ -26,6 +26,14 @@ public interface PackageStatusGateway {
     Map<String, Object> queryByCondition(PackageSearchCondition condition);
 
     /**
+     * Query information based on the provided search condition.
+     *
+     * @param condition The search condition for querying package
+     * @return A map containing relevant information
+     */
+    Map<String, Object> queryAllByCondition(PackageSearchCondition condition);
+
+    /**
      * update package status based on the provided condition.
      *
      * @param applyFormDO apply content

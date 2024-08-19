@@ -141,6 +141,28 @@ public class UserPermission {
     }
 
     /**
+     * Get user name by user token and manage token.
+     * @return user name.
+     */
+    public String getUserName() {
+        String userToken = getUserToken();
+        String manageToken = getManageToken();
+
+        // 使用userToken、manageToken查询用户信息
+        Cookie cookie = getCookie(cookieTokenName);
+        String response = HttpClientUtil.getHttpClient(userInfoApi, manageToken, userToken, cookie.getValue());
+        JsonNode resJson = ObjectMapperUtil.toJsonNode(response);
+
+        String resCode = resJson.path("code").asText();
+        if (!"200".equals(resCode)) {
+            LOGGER.error("query user login name failed");
+            throw new HttpRequestException("query user login name failed");
+        }
+        String userName = resJson.path("data").path("username").asText();
+        return userName;
+    }
+
+    /**
      * Get user repos.
      * @return Collection of repos.
      */
@@ -152,7 +174,7 @@ public class UserPermission {
         String response = HttpClientUtil.getHttpClient(String.format(userReposApi, login), null, null, null);
         JsonNode resJson = ObjectMapperUtil.toJsonNode(response);
 
-        String resCode = resJson.get("code").asText();
+        String resCode = resJson.path("code").asText();
 
         if (!"200".equals(resCode)) {
             LOGGER.error("query user repos failed");
@@ -183,7 +205,7 @@ public class UserPermission {
         String response = HttpClientUtil.getHttpClient(permissionApi, manageToken, userToken, cookie.getValue());
         JsonNode resJson = ObjectMapperUtil.toJsonNode(response);
 
-        String resCode = resJson.get("code").asText();
+        String resCode = resJson.path("code").asText();
         // 查询权限失败
         if (!"200".equals(resCode)) {
             LOGGER.error("query user permissions failed");
