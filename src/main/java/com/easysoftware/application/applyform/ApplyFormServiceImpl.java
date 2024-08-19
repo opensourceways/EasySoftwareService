@@ -22,11 +22,9 @@ import org.springframework.stereotype.Service;
 import com.easysoftware.application.applyform.dto.ApplyFormSearchMaintainerCondition;
 import com.easysoftware.application.applyform.dto.MyApply;
 import com.easysoftware.application.applyform.dto.ProcessApply;
-import com.easysoftware.application.applyform.vo.ApplyFormContentVO;
 import com.easysoftware.application.applyform.vo.ApplyFormSearchMaintainerVO;
 import com.easysoftware.common.exception.DeleteException;
 import com.easysoftware.common.exception.InsertException;
-import com.easysoftware.common.exception.NoneResException;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.exception.UpdateException;
 import com.easysoftware.common.utils.ResultUtil;
@@ -75,7 +73,15 @@ public class ApplyFormServiceImpl implements ApplyFormService {
      */
     @Override
     public ResponseEntity<Object> searchApplyFromByAdmin(ApplyFormSearchAdminCondition condition) {
-        Map<String, Object> res = applyFormGateway.queryApplyFormByCondition(condition);
+        Map<String, Object> res = new HashMap<>();
+        if (condition.getName().equals("formPage")) {
+           res = applyFormGateway.queryApplyFormByConditionAdmin(condition);
+        } else if (condition.getName().equals("formContent")) {
+           res = applyFormGateway.queryApplyFormContentByConditionAdmin(condition);
+        } else if (condition.getName().equals("approved")) {
+           res = applyFormGateway.queryApprovedApplyFormByConditionAdmin(condition);
+        }
+
         return ResultUtil.success(HttpStatus.OK, res);
     }
 
@@ -89,10 +95,6 @@ public class ApplyFormServiceImpl implements ApplyFormService {
         Map<String, Object> map = applyFormGateway.queryApplyFormByPage(condition);
         Long total = (Long) map.get("total");
         List<ApplyFormSearchMaintainerVO> appylFormVOs = (List<ApplyFormSearchMaintainerVO>) map.get("list");
-        if (total == 0 || appylFormVOs.size() == 0) {
-            throw new NoneResException("the apply forms is null");
-        }
-
         Map<String, Object> res = new HashMap<>();
         res.put("total", total);
         res.put("list", appylFormVOs);
@@ -113,16 +115,7 @@ public class ApplyFormServiceImpl implements ApplyFormService {
 
         Map<String, Object> res = applyFormGateway.queryApplyFormByApplyId(condition.getApplyId());
 
-        Long total = (Long) res.get("total");
-
-        List<ApplyFormContentVO> list = (List<ApplyFormContentVO>) res.get("list");
-
-        if (total == 0 || list.size() == 0) {
-            throw new ParamErrorException("the apply form content does not exist");
-        }
-
         return res;
-
     }
 
     /**
