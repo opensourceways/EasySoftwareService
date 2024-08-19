@@ -67,4 +67,15 @@ public class ApplyFormSearchAdminCondition {
     @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
     private String timeOrder;
 
+    /**
+     * Name (maximum length: PackageConstant.MAX_FIELD_LENGTH).
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
+    private String name;
+
+    /**
+     * Apply form number.
+     */
+    private Long applyId;
 }

@@ -208,13 +208,75 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
      * @return A map containing relevant information
      */
     @Override
-    public Map<String, Object> queryApplyFormByCondition(ApplyFormSearchAdminCondition condition) {
+    public Map<String, Object> queryApplyFormByConditionAdmin(ApplyFormSearchAdminCondition condition) {
         int pageNum = condition.getPageNum();
         int pageSize = condition.getPageSize();
         Page<ApplyFormDO> page = new Page<>(pageNum, pageSize);
         QueryWrapper<ApplyFormDO> wrapper = initWrapperByCondition(condition);
 
         IPage<ApplyFormDO> resPage = applyFormDOMapper.selectPage(page, wrapper);
+        long total = resPage.getTotal();
+        List<ApplyFormDO> applyFormDOs = resPage.getRecords();
+        List<ApplyFormSearchMaintainerVO> applyFormVOs = ApplyFormConvertor.toApplyFormVO(applyFormDOs);
+
+        Map<String, Object> res = new HashMap<>();
+        res.put("total", total);
+        res.put("list", applyFormVOs);
+
+        return res;
+    }
+
+    /**
+     * Query information based on the provided search condition.
+     *
+     * @param condition The search condition for querying apply form
+     * @return A map containing relevant information
+     */
+    @Override
+    public Map<String, Object> queryApplyFormContentByConditionAdmin(ApplyFormSearchAdminCondition condition) {
+
+        QueryWrapper<ApplyFormDO> queryWrapperForm = new QueryWrapper<>();
+        queryWrapperForm.eq(PackageConstant.APPLY_FORM_ID, condition.getApplyId());
+        List<ApplyFormDO> applyFormListDOs = applyFormDOMapper.selectList(queryWrapperForm);
+        List<ApplyFormSearchMaintainerVO> applyFormListVOs = ApplyFormConvertor.toApplyFormVO(applyFormListDOs);
+
+        QueryWrapper<ApplyhandleRecordsDO> queryWrapperRecords = new QueryWrapper<>();
+        queryWrapperRecords.eq(PackageConstant.APPLY_FORM_ID, condition.getApplyId());
+
+        List<ApplyhandleRecordsDO> applyhandleRecordsDOs = applyHandleRecordsDOMapper.selectList(queryWrapperRecords);
+
+        List<ApplyFormContentVO> applyFormContentVOs = new ArrayList<>();
+        for (ApplyFormSearchMaintainerVO applyFormVO : applyFormListVOs) {
+            ApplyFormContentVO applyFormContentVO = new ApplyFormContentVO();
+            BeanUtils.copyProperties(applyFormVO, applyFormContentVO);
+            applyFormContentVO.setComment(applyhandleRecordsDOs.get(0).getComment());
+            applyFormContentVOs.add(applyFormContentVO);
+        }
+
+        Map<String, Object> res = new HashMap<>();
+        res.put("total", (long) applyFormContentVOs.size());
+        res.put("list", applyFormContentVOs);
+
+        return res;
+    }
+
+    /**
+     * Query apporved apply form based on the provided search condition.
+     *
+     * @param condition The search condition for querying apply form
+     * @return A map containing relevant information
+     */
+    @Override
+    public Map<String, Object> queryApprovedApplyFormByConditionAdmin(ApplyFormSearchAdminCondition condition) {
+        String userName = userPermission.getUserName();
+
+        int pageNum = condition.getPageNum();
+        int pageSize = condition.getPageSize();
+        Page<ApplyFormDO> page = new Page<>(pageNum, pageSize);
+        QueryWrapper<ApplyFormDO> queryWrapperForm = new QueryWrapper<>();
+        queryWrapperForm.eq(PackageConstant.APPLY_FORM_ADMIN, userName);
+
+        IPage<ApplyFormDO> resPage = applyFormDOMapper.selectPage(page, queryWrapperForm);
         long total = resPage.getTotal();
         List<ApplyFormDO> applyFormDOs = resPage.getRecords();
         List<ApplyFormSearchMaintainerVO> applyFormVOs = ApplyFormConvertor.toApplyFormVO(applyFormDOs);
