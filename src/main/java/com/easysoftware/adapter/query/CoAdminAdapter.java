@@ -16,7 +16,8 @@ import java.util.HashMap;
 import com.easysoftware.application.apply.ApplyService;
 import com.easysoftware.application.applyform.ApplyFormService;
 import com.easysoftware.application.applyform.dto.ProcessApply;
-
+import com.easysoftware.application.collaboration.CoAdminService;
+import com.easysoftware.application.collaboration.dto.PackageSearchCondition;
 import com.easysoftware.application.applyform.dto.ApplyFormSearchAdminCondition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,17 +72,23 @@ public class CoAdminAdapter {
     private ApplyFormService applyFormService;
 
     /**
+     * Autowired service for CoAdminService.
+     */
+    @Autowired
+    private CoAdminService coAdminService;
+
+    /**
      * Endpoint to search for repos based on the provided search
      * condition.
      *
-     * @param repo The search condition for querying repos.
+     * @param condition The search condition for querying repos.
      * @return ResponseEntity<Object>.
      */
-    @GetMapping()
+    @GetMapping("/user/repos")
     @RequestLimitRedis()
     @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
-    public ResponseEntity<Object> queryRepos(@RequestParam(value = "repo") String repo) {
-        return ResultUtil.success(HttpStatus.OK, "success");
+    public ResponseEntity<Object> queryRepos(@Valid final PackageSearchCondition condition) {
+        return coAdminService.queryAdminPackages(condition);
     }
 
     /**
