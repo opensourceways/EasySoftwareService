@@ -63,4 +63,39 @@ public class PackageSearchCondition {
     @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
     private String sigName;
 
+    /**
+     * cve status.
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
+    private String cveStatus;
+
+    /**
+     * issue status.
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
+    private String issueStatus;
+
+    /**
+     * pr status.
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
+    private String prStatus;
+
+    /**
+     * contributor status.
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
+    private String contributorStatus;
+
+    /**
+     * org status.
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
+    private String orgStatus;
+
 }

@@ -30,14 +30,16 @@ public final class MapConstant {
 
     static {
         Map<String, String> item = new HashMap<>();
-        item.put("cveStatus", "cve");
-        item.put("prStatus", "package_update");
-        item.put("issueStatus", "issue");
-        item.put("versionStatus", "package_version");
-        item.put("orgStatus", "company");
-        item.put("contributorStatus", "participant");
+        item.put("cveStatus", "collaboration.cve.status");
+        item.put("prStatus", "collaboration.package_update.status");
+        item.put("issueStatus", "collaboration.issue.status");
+        item.put("versionStatus", "collaboration.package_version.status");
+        item.put("orgStatus", "collaboration.company.status");
+        item.put("contributorStatus", "collaboration.participant.status");
         item.put("sigName", "sig_names");
-        item.put("finalStatus", "final_status");
+        item.put("status", "status");
+        item.put("repo", "repo");
+        item.put("kind", "kind");
         METRIC_MAP = Collections.unmodifiableMap(item);
     }
 
