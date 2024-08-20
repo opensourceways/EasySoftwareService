@@ -144,8 +144,9 @@ public final class EsAsyncHttpUtil {
         AsyncHttpClient client = getClient();
         RequestBuilder builder = getBuilder();
         String metric = MapConstant.METRIC_MAP.get(applyFormDO.getMetric());
+        String field = metric.split(".status")[0];
 
-        String query = String.format(updateFormat, metric, metric, applyFormDO.getMetricStatus(), status,
+        String query = String.format(updateFormat, metric, field, applyFormDO.getMetricStatus(), status,
                 applyFormDO.getMaintainer(), applyFormDO.getRepo());
 
         builder.setUrl(esUrl + index + "/_update_by_query");
@@ -168,7 +169,7 @@ public final class EsAsyncHttpUtil {
                 continue;
             }
             String value = entry.getValue().toString();
-            queryString += String.format(PackageConstant.KEY_WORD_FORMAT, field, value);
+            queryString += String.format(PackageConstant.KEY_WORD_FORMAT, MapConstant.METRIC_MAP.get(field), value);
         }
         String pageStr = obj.get("pageSize") == null ? "1" : obj.get("pageSize").toString();
         String fromStr = obj.get("pageNum") == null ? "10" : obj.get("pageNum").toString();
