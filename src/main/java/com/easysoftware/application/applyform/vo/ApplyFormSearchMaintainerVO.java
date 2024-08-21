@@ -66,6 +66,10 @@ public class ApplyFormSearchMaintainerVO {
      */
     private Long applyId;
 
+    /**
+     * comment of the process apply.
+     */
+    private String comment;
 
     /**
      * get an ApplyFormSearchMaintainerVO entity updateAt field value.
