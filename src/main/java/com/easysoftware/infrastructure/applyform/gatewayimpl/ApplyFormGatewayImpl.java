@@ -11,6 +11,7 @@
 package com.easysoftware.infrastructure.applyform.gatewayimpl;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -297,7 +298,7 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
     private QueryWrapper<ApplyFormDO> initWrapperByCondition(ApplyFormSearchAdminCondition condition) {
         QueryWrapper<ApplyFormDO> wrapper = new QueryWrapper<>();
         if (condition.getApplyStatus() != null) {
-            wrapper.eq("apply_status", condition.getApplyStatus());
+            wrapper.in("apply_status", Arrays.asList(condition.getApplyStatus().split(",")));
         }
         if (condition.getRepo() != null) {
             wrapper.eq("repo", condition.getRepo());
@@ -334,13 +335,13 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         int count = applyFormDOMapper.insert(applyFormDO);
         if (count != 1) {
             LOGGER.info(
-                "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
-                    + applyFormDO.getApplyId() + " Result: failure.");
+                    "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
+                            + applyFormDO.getApplyId() + " Result: failure.");
             throw new InsertException("insert failed");
         }
         LOGGER.info(
                 "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
-                    + applyFormDO.getApplyId() + " Result: success.");
+                        + applyFormDO.getApplyId() + " Result: success.");
 
         return result;
     }
@@ -360,23 +361,23 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
 
         if (!checkMaintainerLimit(myApply.getApplyId(), maintainer)) {
             LOGGER.info(
-                "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
-                    + id + " Result: failure.");
+                    "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
+                            + id + " Result: failure.");
             throw new DeleteException("permission authentication failed");
         }
 
         int deleteNum = applyFormDOMapper.deleteByMap(Map.of(
-            PackageConstant.APPLY_FORM_ID, id,
-            PackageConstant.APPLY_FORM_MAINTAINER, maintainer));
+                PackageConstant.APPLY_FORM_ID, id,
+                PackageConstant.APPLY_FORM_MAINTAINER, maintainer));
         if (deleteNum != 1) {
             LOGGER.info(
-                "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
-                    + id + " Result: failure.");
+                    "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
+                            + id + " Result: failure.");
             throw new DeleteException("revoke failed");
         }
         LOGGER.info(
                 "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
-                    + id + " Result: success.");
+                        + id + " Result: success.");
 
         return result;
     }
@@ -400,8 +401,8 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
 
         if (!checkMaintainerLimit(applyFormDO.getApplyId(), maintainer)) {
             LOGGER.info(
-                "UserName:" + maintainer + " Client Ip: localhost" + " Type: Update" + " ApplyID:"
-                    + applyFormDO.getApplyId() + " Result: failuer.");
+                    "UserName:" + maintainer + " Client Ip: localhost" + " Type: Update" + " ApplyID:"
+                            + applyFormDO.getApplyId() + " Result: failuer.");
             throw new UpdateException("permission authentication failed");
         }
 
@@ -412,13 +413,13 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         int count = applyFormDOMapper.update(applyFormDO, wrapper);
         if (count != 1) {
             LOGGER.info(
-                "UserName:" + maintainer + " Client Ip: localhost" + " Type: Update" + " ApplyID:"
-                    + applyFormDO.getApplyId() + " Result: failuer.");
+                    "UserName:" + maintainer + " Client Ip: localhost" + " Type: Update" + " ApplyID:"
+                            + applyFormDO.getApplyId() + " Result: failuer.");
             throw new UpdateException("update failed");
         }
         LOGGER.info(
                 "UserName:" + maintainer + " Client Ip: localhost" + " Type: Update" + " ApplyID:"
-                    + applyFormDO.getApplyId() + " Result: success.");
+                        + applyFormDO.getApplyId() + " Result: success.");
 
         return result;
     }
@@ -426,7 +427,7 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
     /**
      * MyApply apply based on the provided condition.
      *
-     * @param applyId  check the maintainer's limits of authority.
+     * @param applyId    check the maintainer's limits of authority.
      * @param maintainer check the maintainer's limits of authority.
      * @return A boolean .
      */
