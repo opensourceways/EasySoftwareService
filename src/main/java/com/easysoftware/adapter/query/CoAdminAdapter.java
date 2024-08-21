@@ -11,8 +11,6 @@
 
 package com.easysoftware.adapter.query;
 
-import java.util.HashMap;
-
 import com.easysoftware.application.apply.ApplyService;
 import com.easysoftware.application.applyform.ApplyFormService;
 import com.easysoftware.application.applyform.dto.ProcessApply;
@@ -22,7 +20,6 @@ import com.easysoftware.application.applyform.dto.ApplyFormSearchAdminCondition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,12 +29,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.easysoftware.common.account.UerPermissionDef;
-import com.easysoftware.common.account.UserPermission;
 import com.easysoftware.common.annotation.PreUserPermission;
 import com.easysoftware.common.aop.RequestLimitRedis;
-import com.easysoftware.common.entity.MessageCode;
-import com.easysoftware.common.utils.ResultUtil;
-
 import jakarta.validation.Valid;
 
 @RestController
@@ -47,17 +40,6 @@ public class CoAdminAdapter {
      * Logger for ApplicationVersionQueryAdapter.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(CoAdminAdapter.class);
-
-    /**
-     * Define current functional permissions.
-     */
-    private static final String[] REQUIRE_PERMISSIONS = {UerPermissionDef.COLLABORATION_PERMISSION_ADMIN };
-
-    /**
-     * Autowired UserPermission for check user permission.
-     */
-    @Autowired
-    private UserPermission userPermission;
 
     /**
      * Autowired ApplyService for provide apply service.
@@ -89,30 +71,6 @@ public class CoAdminAdapter {
     @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
     public ResponseEntity<Object> queryRepos(@Valid final PackageSearchCondition condition) {
         return coAdminService.queryAdminPackages(condition);
-    }
-
-    /**
-     * Check if the user has permission to access.
-     *
-     * @return ResponseEntity<Object>.
-     */
-    @GetMapping("/permission")
-    @RequestLimitRedis()
-    public ResponseEntity<Object> checkPermission() {
-        HashMap<String, Boolean> result = new HashMap<>();
-        try {
-            boolean permissionFlag = userPermission.checkUserPermission(REQUIRE_PERMISSIONS);
-
-            if (permissionFlag) {
-                result.put("allow_access", Boolean.TRUE);
-            } else {
-                result.put("allow_access", Boolean.FALSE);
-            }
-            return ResultUtil.success(HttpStatus.OK, result);
-        } catch (Exception e) {
-            LOGGER.error("Authentication exception - {}", e.getMessage());
-            return ResultUtil.fail(HttpStatus.UNAUTHORIZED, MessageCode.EC00020);
-        }
     }
 
     /**
