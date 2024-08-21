@@ -29,16 +29,17 @@ import com.easysoftware.application.applyform.dto.ApplyFormSearchMaintainerCondi
 import com.easysoftware.application.applyform.dto.MyApply;
 import com.easysoftware.application.collaboration.CoMaintainerService;
 import com.easysoftware.application.collaboration.dto.PackageSearchCondition;
+import com.easysoftware.common.account.UerPermissionDef;
 import com.easysoftware.common.account.UserPermission;
 import com.easysoftware.common.annotation.CoMaintainerPermission;
 import com.easysoftware.common.aop.RequestLimitRedis;
+import com.easysoftware.common.constant.PackageConstant;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ResultUtil;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 
 @RestController
 @RequestMapping("/collaboration/maintainer")
@@ -53,6 +54,11 @@ public class CoMaintainerAdapter {
      * Logger for CoMaintainerAdapter.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(CoMaintainerAdapter.class);
+
+    /**
+     * Define current functional permissions.
+     */
+    private static final String[] REQUIRE_PERMISSIONS = {UerPermissionDef.COLLABORATION_PERMISSION_ADMIN};
 
     /**
      * Autowired UserPermission for check user permission.
@@ -99,18 +105,21 @@ public class CoMaintainerAdapter {
      *
      * @return ResponseEntity<Object>.
      */
-    @GetMapping("/permission")
+    @GetMapping("/permissions")
     @RequestLimitRedis()
     public ResponseEntity<Object> checkPermission() {
-        HashMap<String, Boolean> result = new HashMap<>();
+        HashMap<String, Object> result = new HashMap<>();
+        HashSet<String> permissions = new HashSet<>();
         try {
             HashSet<String> permissionRepos = userPermission.getUserRepoList();
-
             if (permissionRepos.size() > 0) {
-                result.put("allow_access", Boolean.TRUE);
-            } else {
-                result.put("allow_access", Boolean.FALSE);
+                permissions.add(PackageConstant.APPLY_FORM_MAINTAINER);
             }
+            boolean permissionAdmin = userPermission.checkUserPermission(REQUIRE_PERMISSIONS);
+            if (permissionAdmin) {
+                permissions.add(PackageConstant.APPLY_FORM_ADMIN);
+            }
+            result.put("permissions", permissions);
             return ResultUtil.success(HttpStatus.OK, result);
         } catch (Exception e) {
             LOGGER.error("Authentication exception - {}", e.getMessage());
@@ -127,8 +136,8 @@ public class CoMaintainerAdapter {
     @GetMapping("/query/apply")
     @RequestLimitRedis()
     @CoMaintainerPermission()
-    public ResponseEntity<Object> queryApplyFromByMaintainer(@Valid final ApplyFormSearchMaintainerCondition
-                                                                     condition) {
+    public ResponseEntity<Object> queryApplyFromByMaintainer(
+            @Valid final ApplyFormSearchMaintainerCondition condition) {
         return applyFormService.searchApplyFromByMaintainer(condition);
     }
 
