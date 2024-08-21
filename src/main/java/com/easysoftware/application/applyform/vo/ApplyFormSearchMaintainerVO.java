@@ -67,6 +67,11 @@ public class ApplyFormSearchMaintainerVO {
     private Long applyId;
 
     /**
+     * applyIdString number.
+     */
+    private String applyIdString;
+
+    /**
      * comment of the process apply.
      */
     private String comment;

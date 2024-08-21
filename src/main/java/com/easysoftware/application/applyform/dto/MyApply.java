@@ -60,4 +60,9 @@ public class MyApply {
      * Apply form number.
      */
     private Long applyId;
+
+    /**
+     * applyIdString number.
+     */
+    private String applyIdString;
 }

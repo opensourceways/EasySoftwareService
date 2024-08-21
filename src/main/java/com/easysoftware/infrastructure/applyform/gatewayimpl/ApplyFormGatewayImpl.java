@@ -12,6 +12,8 @@ package com.easysoftware.infrastructure.applyform.gatewayimpl;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -105,11 +107,22 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         Page<ApplyFormDO> page = new Page<>(pageNum, pageSize);
         QueryWrapper<ApplyFormDO> wrapper = new QueryWrapper<>();
         wrapper.eq("maintainer", maintainer);
+        if (condition.getRepo() != null) {
+            wrapper.eq("repo", condition.getRepo());
+        }
+        if (condition.getMetric() != null) {
+            wrapper.eq("metric", condition.getMetric());
+        }
         IPage<ApplyFormDO> resPage = applyFormDOMapper.selectPage(page, wrapper);
 
         long total = resPage.getTotal();
         List<ApplyFormDO> applyFormDOs = resPage.getRecords();
         List<ApplyFormSearchMaintainerVO> applyFormVOs = ApplyFormConvertor.toApplyFormVO(applyFormDOs);
+        Collections.sort(applyFormVOs, new Comparator<ApplyFormSearchMaintainerVO>() {
+            public int compare(ApplyFormSearchMaintainerVO v1, ApplyFormSearchMaintainerVO v2) {
+                return Long.compare(v1.getUpdateAt().getTime(), v2.getUpdateAt().getTime());
+            }
+        });
 
         Map<String, Object> res = new HashMap<>();
         res.put("total", total);
@@ -145,7 +158,7 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         for (ApplyFormSearchMaintainerVO applyFormVO : applyFormListVOs) {
             ApplyFormContentVO applyFormContentVO = new ApplyFormContentVO();
             BeanUtils.copyProperties(applyFormVO, applyFormContentVO);
-            applyFormContentVO.setComment(applyhandleRecordsDOs.get(0).getComment());
+            applyFormContentVO.setApprovalTime(applyhandleRecordsDOs.get(0).getCreatedAt());
             applyFormContentVOs.add(applyFormContentVO);
         }
 
@@ -331,9 +344,12 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
 
         String maintainer = userPermission.getUserLogin();
         applyFormDO.setMaintainer(maintainer);
+        int countapplyForm = applyFormDOMapper.insert(applyFormDO);
 
-        int count = applyFormDOMapper.insert(applyFormDO);
-        if (count != 1) {
+        ApplyhandleRecordsDO applyhandleRecordsDO = ApplyFormConvertor.toHandleRecordsDO(applyFormDO);
+        int countapplyHandle = applyHandleRecordsDOMapper.insert(applyhandleRecordsDO);
+
+        if (countapplyForm != 1 ||  countapplyHandle != 1) {
             LOGGER.info(
                     "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
                             + applyFormDO.getApplyId() + " Result: failure.");
@@ -365,10 +381,11 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
                             + id + " Result: failure.");
             throw new DeleteException("permission authentication failed");
         }
+        UpdateWrapper<ApplyFormDO> wrapper = new UpdateWrapper<>();
+        wrapper.eq(PackageConstant.APPLY_FORM_MAINTAINER, maintainer).eq(PackageConstant.APPLY_FORM_ID,
+        id).set("apply_status", PackageConstant.APPLY_REVOKED);
 
-        int deleteNum = applyFormDOMapper.deleteByMap(Map.of(
-                PackageConstant.APPLY_FORM_ID, id,
-                PackageConstant.APPLY_FORM_MAINTAINER, maintainer));
+        int deleteNum = applyFormDOMapper.update(null, wrapper);
         if (deleteNum != 1) {
             LOGGER.info(
                     "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"

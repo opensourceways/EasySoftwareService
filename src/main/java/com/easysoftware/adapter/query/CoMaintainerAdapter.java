@@ -32,6 +32,7 @@ import com.easysoftware.application.collaboration.dto.PackageSearchCondition;
 import com.easysoftware.common.account.UerPermissionDef;
 import com.easysoftware.common.account.UserPermission;
 import com.easysoftware.common.annotation.CoMaintainerPermission;
+import com.easysoftware.common.annotation.CoUserRepoPermission;
 import com.easysoftware.common.aop.RequestLimitRedis;
 import com.easysoftware.common.constant.PackageConstant;
 import com.easysoftware.common.entity.MessageCode;
@@ -145,12 +146,15 @@ public class CoMaintainerAdapter {
      * Submit apply form based on the provided body.
      *
      * @param myApply The submit condition for querying apply form.
+     * @param repo The submit condition for checking authority.
      * @return ResponseEntity<Object>.
      */
     @PostMapping("/apply")
     @RequestLimitRedis()
-    @CoMaintainerPermission()
-    public ResponseEntity<Object> submitMyApply(@Valid @RequestBody MyApply myApply) {
+    @CoUserRepoPermission()
+    public ResponseEntity<Object> submitMyApply(@Valid @RequestBody MyApply myApply,
+    @RequestParam(value = "repo") String repo) {
+        myApply.setApplyId(Long.valueOf(myApply.getApplyIdString()));
         return applyFormService.submitMyApplyWithLimit(myApply);
     }
 
