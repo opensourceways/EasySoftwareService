@@ -250,9 +250,24 @@ public final class PackageConstant {
     public static final String INACTIVE = "静止";
 
     /**
-     * apply status.
+     * apply status approved.
      */
-    public static final String APPLY_APPROVED = "approved";
+    public static final String APPLY_APPROVED = "APPROVED";
+
+    /**
+     * apply status open.
+     */
+    public static final String APPLY_OPEN = "OPEN";
+
+    /**
+     * apply status rejected.
+     */
+    public static final String APPLY_REJECTED = "REJECTED";
+
+    /**
+     * apply status revoked.
+     */
+    public static final String APPLY_REVOKED = "REVOKED";
 
     /**
      * applytId in apply_form table.
