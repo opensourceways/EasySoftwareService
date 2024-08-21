@@ -20,6 +20,7 @@ import com.easysoftware.application.applyform.dto.MyApply;
 import com.easysoftware.application.applyform.dto.ProcessApply;
 import com.easysoftware.application.applyform.vo.ApplyFormSearchMaintainerVO;
 import com.easysoftware.domain.applyform.ApplyForm;
+import com.easysoftware.infrastructure.apply.gatewayimpl.dataobject.ApplyhandleRecordsDO;
 import com.easysoftware.infrastructure.applyform.gatewayimpl.dataobject.ApplyFormDO;
 
 
@@ -40,6 +41,7 @@ public final class ApplyFormConvertor {
     public static ApplyForm toEntity(final ApplyFormDO applyFormDO) {
         ApplyForm applyForm = new ApplyForm();
         BeanUtils.copyProperties(applyFormDO, applyForm);
+        applyForm.setApplyIdString(String.valueOf(applyForm.getApplyId()));
         return applyForm;
     }
 
@@ -95,15 +97,16 @@ public final class ApplyFormConvertor {
     public static ApplyFormSearchMaintainerVO toApplyFormVO(final ApplyFormDO applyFormDO) {
         ApplyFormSearchMaintainerVO applyFormVO = new ApplyFormSearchMaintainerVO();
         BeanUtils.copyProperties(applyFormDO, applyFormVO);
+        applyFormVO.setApplyIdString(String.valueOf(applyFormVO.getApplyId()));
         return applyFormVO;
     }
 
     /**
-     * Convert a list of ApplicationVersionDO objects to a list of
+     * Convert a list of ApplicationVersionDO objects to a list of.
      * ApplyFormVOs Lists.
      *
-     * @param applyFormDOs The list of ApplyFormSearchMaintainerVO objects to convert
-     * @return A list of ApplyForm entities
+     * @param applyFormDOs The list of ApplyFormSearchMaintainerVO objects to convert.
+     * @return A list of ApplyForm entities.
      */
     public static List<ApplyFormSearchMaintainerVO> toApplyFormVO(final List<ApplyFormDO> applyFormDOs) {
         List<ApplyFormSearchMaintainerVO> res = new ArrayList<>();
@@ -112,6 +115,18 @@ public final class ApplyFormConvertor {
             res.add(applyFormVO);
         }
         return res;
+    }
+
+    /**
+     * Convert ApplyFormDO objects to ApplyhandleRecordsDO.
+     *
+     * @param applyFormDO The list of ApplyFormSearchMaintainerVO objects to convert.
+     * @return A list of ApplyForm entities.
+     */
+    public static ApplyhandleRecordsDO toHandleRecordsDO(ApplyFormDO applyFormDO) {
+        ApplyhandleRecordsDO applyhandleRecordsDO = new ApplyhandleRecordsDO();
+        BeanUtils.copyProperties(applyFormDO, applyhandleRecordsDO);
+        return applyhandleRecordsDO;
     }
 
 }

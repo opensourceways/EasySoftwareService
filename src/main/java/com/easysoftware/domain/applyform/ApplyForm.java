@@ -66,6 +66,11 @@ public class ApplyForm {
      */
     private Long applyId;
 
+    /**
+     * applyIdString number.
+     */
+    private String applyIdString;
+
 
     /**
      * get an ApplyForm entity updateAt field value.

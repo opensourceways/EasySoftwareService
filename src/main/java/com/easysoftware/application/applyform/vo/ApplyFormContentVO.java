@@ -51,19 +51,29 @@ public class ApplyFormContentVO {
     private String maintainer;
 
     /**
-     * Approval status.
+     * apply status.
      */
     private String applyStatus;
 
     /**
-     * Application number.
+     * applyId number.
      */
     private Long applyId;
+
+    /**
+     * applyIdString number.
+     */
+    private String applyIdString;
 
     /**
      * comment.
      */
     private String comment;
+
+    /**
+     * comment.
+     */
+    private Timestamp approvalTime;
 
     /**
      * get an ApplyFormContentVO entity updateAt field value.

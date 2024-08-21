@@ -34,12 +34,13 @@ public class ApplyhandleRecordsDO {
     /**
      * apply Id.
      */
+    @TableField(value = "apply_id")
     private Long applyId;
 
     /**
      * recordId.
      */
-    @TableId(value = "id")
+    @TableId(value = "record_id")
     private Long recordId;
 
     /**
