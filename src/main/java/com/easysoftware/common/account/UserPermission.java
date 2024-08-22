@@ -169,7 +169,8 @@ public class UserPermission {
     public HashSet<String> getUserRepoList() {
         String login = getUserLogin();
         if (login == null) {
-            throw new HttpRequestException("user login name is null");
+            LOGGER.info("user login name is null");
+            return new HashSet<String>();
         }
         String response = HttpClientUtil.getHttpClient(String.format(userReposApi, login), null, null, null);
         JsonNode resJson = ObjectMapperUtil.toJsonNode(response);
