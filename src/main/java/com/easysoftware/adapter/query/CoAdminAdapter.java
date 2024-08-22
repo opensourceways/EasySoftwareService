@@ -117,4 +117,16 @@ public class CoAdminAdapter {
         }
         return applyFormService.searchApplyFromByAdmin(condition);
     }
+
+    /**
+     * query all repos applied to modify.
+     *
+     * @return ResponseEntity<Object>.
+     */
+    @GetMapping("/apply/repos")
+    @RequestLimitRedis()
+    @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
+    public ResponseEntity<Object> queryApplyRepos() {
+        return applyFormService.queryApplyReposByAdmin();
+    }
 }
