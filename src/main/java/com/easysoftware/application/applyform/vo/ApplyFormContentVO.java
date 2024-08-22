@@ -51,6 +51,11 @@ public class ApplyFormContentVO {
     private String maintainer;
 
     /**
+     * adminstrator of the entity.
+     */
+    private String adminstrator;
+
+    /**
      * apply status.
      */
     private String applyStatus;
