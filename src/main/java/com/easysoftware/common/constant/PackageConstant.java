@@ -283,4 +283,9 @@ public final class PackageConstant {
      * maintainer in apply_form table.
      */
     public static final String APPLY_FORM_ADMIN = "adminstrator";
+
+    /**
+     * maintainer in apply_form table.
+     */
+    public static final String PARAMETER_SEP = ",";
 }
