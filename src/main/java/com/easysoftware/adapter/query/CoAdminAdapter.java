@@ -112,7 +112,9 @@ public class CoAdminAdapter {
     @RequestLimitRedis()
     @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
     public ResponseEntity<Object> getApplyFrom(@Valid final ApplyFormSearchAdminCondition condition) {
-        condition.setApplyId(Long.valueOf(condition.getApplyIdString()));
+        if (condition.getApplyIdString() != null) {
+            condition.setApplyId(Long.valueOf(condition.getApplyIdString()));
+        }
         return applyFormService.searchApplyFromByAdmin(condition);
     }
 }
