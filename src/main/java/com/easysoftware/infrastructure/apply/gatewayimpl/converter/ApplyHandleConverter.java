@@ -56,6 +56,7 @@ public final class ApplyHandleConverter {
     public static ApplyHandleRecord toEntity(final ApplyhandleRecordsDO arecordDo) {
         ApplyHandleRecord applyHandleRecord = new ApplyHandleRecord();
         BeanUtils.copyProperties(arecordDo, applyHandleRecord);
+        applyHandleRecord.setApplyIdString(String.valueOf(applyHandleRecord.getApplyId()));
         return applyHandleRecord;
     }
 

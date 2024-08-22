@@ -73,5 +73,12 @@ public class ApplyFormSearchMaintainerCondition {
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
     @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
+    private String applyStatus;
+
+    /**
+     * Name (maximum length: PackageConstant.MAX_FIELD_LENGTH).
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
     private String applyIdString;
 }

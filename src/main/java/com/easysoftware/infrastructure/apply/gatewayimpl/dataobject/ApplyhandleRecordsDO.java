@@ -21,11 +21,6 @@ public class ApplyhandleRecordsDO {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Name of the entity (ID: name).
-     */
-    private Long id;
-
-    /**
      * create time.
      */
 
