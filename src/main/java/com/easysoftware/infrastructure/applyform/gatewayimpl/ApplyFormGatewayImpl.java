@@ -12,8 +12,6 @@ package com.easysoftware.infrastructure.applyform.gatewayimpl;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -116,16 +114,12 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         if (condition.getApplyStatus() != null) {
             wrapper.in("apply_status", Arrays.asList(condition.getApplyStatus().split(",")));
         }
+        wrapper.orderByDesc("update_at");
         IPage<ApplyFormDO> resPage = applyFormDOMapper.selectPage(page, wrapper);
 
         long total = resPage.getTotal();
         List<ApplyFormDO> applyFormDOs = resPage.getRecords();
         List<ApplyFormSearchMaintainerVO> applyFormVOs = ApplyFormConvertor.toApplyFormVO(applyFormDOs);
-        Collections.sort(applyFormVOs, new Comparator<ApplyFormSearchMaintainerVO>() {
-            public int compare(ApplyFormSearchMaintainerVO v1, ApplyFormSearchMaintainerVO v2) {
-                return Long.compare(v1.getUpdateAt().getTime(), v2.getUpdateAt().getTime());
-            }
-        });
 
         Map<String, Object> res = new HashMap<>();
         res.put("total", total);
