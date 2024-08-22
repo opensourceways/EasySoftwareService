@@ -137,8 +137,11 @@ public class CoMaintainerAdapter {
     @GetMapping("/query/apply")
     @RequestLimitRedis()
     @CoMaintainerPermission()
-    public ResponseEntity<Object> queryApplyFromByMaintainer(
-            @Valid final ApplyFormSearchMaintainerCondition condition) {
+    public ResponseEntity<Object> queryApplyFromByMaintainer(@Valid final
+        ApplyFormSearchMaintainerCondition condition) {
+        if (condition.getApplyIdString() != null) {
+            condition.setApplyId(Long.valueOf(condition.getApplyIdString()));
+        }
         return applyFormService.searchApplyFromByMaintainer(condition);
     }
 
@@ -151,10 +154,9 @@ public class CoMaintainerAdapter {
      */
     @PostMapping("/apply")
     @RequestLimitRedis()
-    @CoUserRepoPermission()
+    //@CoUserRepoPermission()
     public ResponseEntity<Object> submitMyApply(@Valid @RequestBody MyApply myApply,
     @RequestParam(value = "repo") String repo) {
-        myApply.setApplyId(Long.valueOf(myApply.getApplyIdString()));
         return applyFormService.submitMyApplyWithLimit(myApply);
     }
 
@@ -168,6 +170,7 @@ public class CoMaintainerAdapter {
     @RequestLimitRedis()
     @CoMaintainerPermission()
     public ResponseEntity<Object> revokeMyApply(@Valid @RequestBody MyApply myApply) {
+        myApply.setApplyId(Long.valueOf(myApply.getApplyIdString()));
         return applyFormService.revokeMyApplyWithLimit(myApply);
     }
 
@@ -181,6 +184,7 @@ public class CoMaintainerAdapter {
     @RequestLimitRedis()
     @CoMaintainerPermission()
     public ResponseEntity<Object> updateMyApply(@Valid @RequestBody MyApply myApply) {
+        myApply.setApplyId(Long.valueOf(myApply.getApplyIdString()));
         return applyFormService.updateMyApplyWithLimit(myApply);
     }
 
