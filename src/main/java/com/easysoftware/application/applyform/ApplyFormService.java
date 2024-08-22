@@ -67,4 +67,18 @@ public interface ApplyFormService {
      * @return ResponseEntity<Object>.
      */
     ResponseEntity<Object> updateMyApplyWithLimit(MyApply myApply);
+
+    /**
+     * query repos by maintainer.
+     *
+     * @return ResponseEntity<Object>.
+     */
+    ResponseEntity<Object> queryApplyReposByMaintainer();
+
+    /**
+     * query repos by admin.
+     *
+     * @return ResponseEntity<Object>.
+     */
+    ResponseEntity<Object> queryApplyReposByAdmin();
 }

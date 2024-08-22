@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -459,4 +460,46 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         return true;
     }
 
+    /**
+     * Query repos by maintainer.
+     *
+     * @return A map containing relevant information
+     */
+    @Override
+    public Map<String, Object> queryApplyReposByMaintainer() {
+        String maintainer = userPermission.getUserLogin();
+        QueryWrapper<ApplyFormDO> wrapper = new QueryWrapper<>();
+        wrapper.eq(PackageConstant.APPLY_FORM_MAINTAINER, maintainer);
+        return queryApplyRepos(wrapper);
+    }
+
+    /**
+     * query repos by admin.
+     *
+     * @return A map containing relevant information.
+     */
+    @Override
+    public Map<String, Object> queryApplyReposByAdmin() {
+        QueryWrapper<ApplyFormDO> wrapper = new QueryWrapper<>();
+        return queryApplyRepos(wrapper);
+    }
+
+    /**
+     * query repos.
+     *
+     * @param wrapper select condition
+     * @return A map containing relevant information.
+     */
+    public Map<String, Object> queryApplyRepos(QueryWrapper<ApplyFormDO> wrapper) {
+        wrapper.select("repo");
+        List<ApplyFormDO> applyFormListDOs = applyFormDOMapper.selectList(wrapper);
+        Map<String, Object> res = new HashMap<>();
+        HashSet<String> repos = new HashSet<>();
+        for (ApplyFormDO apply : applyFormListDOs) {
+            repos.add(apply.getRepo());
+        }
+        res.put("total", (long) repos.size());
+        res.put("list", repos);
+        return res;
+    }
 }

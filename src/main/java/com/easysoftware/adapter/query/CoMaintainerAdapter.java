@@ -188,4 +188,14 @@ public class CoMaintainerAdapter {
         return applyFormService.updateMyApplyWithLimit(myApply);
     }
 
+    /**
+     * query repos maintainer applied to modify.
+     *
+     * @return ResponseEntity<Object>.
+     */
+    @GetMapping("/apply/repos")
+    @RequestLimitRedis()
+    public ResponseEntity<Object> queryApplyRepos() {
+        return applyFormService.queryApplyReposByMaintainer();
+    }
 }

@@ -103,4 +103,18 @@ public interface ApplyFormGateway {
      * @return A boolean .
      */
     boolean checkMaintainerLimit(Long applyId, String maintainer);
+
+    /**
+     * Query repos by maintainer.
+     *
+     * @return A map containing relevant information
+     */
+    Map<String, Object> queryApplyReposByMaintainer();
+
+    /**
+     * query repos by admin.
+     *
+     * @return A map containing relevant information
+     */
+    Map<String, Object> queryApplyReposByAdmin();
 }
