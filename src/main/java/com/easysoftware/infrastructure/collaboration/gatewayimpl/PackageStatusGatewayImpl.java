@@ -150,6 +150,8 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
             status = PackageConstant.NO_MAINTAINENANCE;
         } else if (PackageConstant.CVE_ALL_NO_FIXED.equals(pkgStatus.getCveStatus())) {
             status = PackageConstant.LACK_OF_MAINTAINENANCE;
+        } else if (PackageConstant.CVE_SOME_FIXED.equals(pkgStatus.getCveStatus())) {
+            status = PackageConstant.LACK_OF_MAINTAINENANCE;
         } else if (PackageConstant.CVE_ALL_FIXED.equals(pkgStatus.getCveStatus())) {
             status = PackageConstant.HEALTH;
         } else if (PackageConstant.NO_CVE.equals(pkgStatus.getCveStatus())
