@@ -169,7 +169,12 @@ public final class EsAsyncHttpUtil {
                 continue;
             }
             String value = entry.getValue().toString();
-            queryString += String.format(PackageConstant.KEY_WORD_FORMAT, MapConstant.METRIC_MAP.get(field), value);
+            if (value.isBlank() || value.isEmpty()) {
+                continue;
+            }
+            String valueString = getFilterList(value.split(PackageConstant.PARAMETER_SEP));
+            queryString += String.format(PackageConstant.KEY_WORD_FORMAT, MapConstant.METRIC_MAP.get(field),
+                    valueString);
         }
         String pageStr = obj.get("pageSize") == null ? "1" : obj.get("pageSize").toString();
         String fromStr = obj.get("pageNum") == null ? "10" : obj.get("pageNum").toString();
@@ -177,6 +182,21 @@ public final class EsAsyncHttpUtil {
         int from = (Integer.parseInt(fromStr) - 1) * pageSize;
         String query = String.format(searchFormat, from, pageSize, login, queryString);
         return query;
+    }
+
+    /**
+     * convert condition to query string.
+     *
+     * @param valueList query value list.
+     * @return query string.
+     */
+    public String getFilterList(String[] valueList) {
+        String result = "(";
+        for (String value : valueList) {
+            result += "\\\"" + value + "\\\",";
+        }
+        result += ")";
+        return result;
     }
 
     /**
