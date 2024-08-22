@@ -154,7 +154,7 @@ public class CoMaintainerAdapter {
      */
     @PostMapping("/apply")
     @RequestLimitRedis()
-    //@CoUserRepoPermission()
+    @CoUserRepoPermission()
     public ResponseEntity<Object> submitMyApply(@Valid @RequestBody MyApply myApply,
     @RequestParam(value = "repo") String repo) {
         return applyFormService.submitMyApplyWithLimit(myApply);
