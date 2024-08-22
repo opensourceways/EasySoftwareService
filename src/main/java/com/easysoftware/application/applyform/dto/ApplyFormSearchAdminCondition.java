@@ -78,4 +78,11 @@ public class ApplyFormSearchAdminCondition {
      * Apply form number.
      */
     private Long applyId;
+
+    /**
+     * Apply form number string.
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
+    private String applyIdString;
 }

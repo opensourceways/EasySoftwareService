@@ -108,10 +108,13 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         QueryWrapper<ApplyFormDO> wrapper = new QueryWrapper<>();
         wrapper.eq("maintainer", maintainer);
         if (condition.getRepo() != null) {
-            wrapper.eq("repo", condition.getRepo());
+            wrapper.in("repo", Arrays.asList(condition.getRepo().split(",")));
         }
         if (condition.getMetric() != null) {
-            wrapper.eq("metric", condition.getMetric());
+            wrapper.in("metric", Arrays.asList(condition.getMetric().split(",")));
+        }
+        if (condition.getApplyStatus() != null) {
+            wrapper.in("apply_status", Arrays.asList(condition.getApplyStatus().split(",")));
         }
         IPage<ApplyFormDO> resPage = applyFormDOMapper.selectPage(page, wrapper);
 
@@ -263,7 +266,7 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         for (ApplyFormSearchMaintainerVO applyFormVO : applyFormListVOs) {
             ApplyFormContentVO applyFormContentVO = new ApplyFormContentVO();
             BeanUtils.copyProperties(applyFormVO, applyFormContentVO);
-            applyFormContentVO.setComment(applyhandleRecordsDOs.get(0).getComment());
+            applyFormContentVO.setApprovalTime(applyhandleRecordsDOs.get(0).getCreatedAt());
             applyFormContentVOs.add(applyFormContentVO);
         }
 
@@ -314,10 +317,10 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
             wrapper.in("apply_status", Arrays.asList(condition.getApplyStatus().split(",")));
         }
         if (condition.getRepo() != null) {
-            wrapper.eq("repo", condition.getRepo());
+            wrapper.in("repo", Arrays.asList(condition.getRepo().split(",")));
         }
         if (condition.getMetric() != null) {
-            wrapper.eq("metric", condition.getMetric());
+            wrapper.in("metric", Arrays.asList(condition.getMetric().split(",")));
         }
         if ("desc".equals(condition.getTimeOrder())) {
             wrapper.orderByDesc("created_at");

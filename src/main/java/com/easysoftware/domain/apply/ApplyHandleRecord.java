@@ -26,11 +26,6 @@ public class ApplyHandleRecord {
     private static final long serialVersionUID = 1L;
 
     /**
-     * id.
-     */
-    private Long id;
-
-    /**
      * create time.
      */
 
@@ -65,6 +60,11 @@ public class ApplyHandleRecord {
      * applyStatus.
      */
     private String applyStatus;
+
+    /**
+     * applyIdString.
+     */
+    private String applyIdString;
 
 
     /**

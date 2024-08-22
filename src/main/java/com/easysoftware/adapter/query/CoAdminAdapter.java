@@ -76,13 +76,14 @@ public class CoAdminAdapter {
     /**
      * get apply handle records by appid.
      *
-     * @param applyId The handle form content id.
+     * @param applyIdString The handle form content id.
      * @return ResponseEntity<Object>.
      */
     @GetMapping("/query/records")
     @RequestLimitRedis()
     @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
-    public ResponseEntity<Object> getApply(@RequestParam(value = "applyId") Long applyId) {
+    public ResponseEntity<Object> getApply(@RequestParam(value = "applyIdString") String applyIdString) {
+        Long applyId = Long.valueOf(applyIdString);
         return applyService.queryApplyHandleRecords(applyId);
     }
 
@@ -96,6 +97,7 @@ public class CoAdminAdapter {
     @RequestLimitRedis()
     @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
     public ResponseEntity<Object> processApply(@Valid @RequestBody ProcessApply processApply) {
+        processApply.setApplyId(Long.valueOf(processApply.getApplyIdString()));
         return applyFormService.processApply(processApply);
     }
 
@@ -110,6 +112,7 @@ public class CoAdminAdapter {
     @RequestLimitRedis()
     @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
     public ResponseEntity<Object> getApplyFrom(@Valid final ApplyFormSearchAdminCondition condition) {
+        condition.setApplyId(Long.valueOf(condition.getApplyIdString()));
         return applyFormService.searchApplyFromByAdmin(condition);
     }
 }
