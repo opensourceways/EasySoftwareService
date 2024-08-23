@@ -171,7 +171,7 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
      * process apply based on the provided condition.
      *
      * @param processApply The update info for querying apply.
-     * @return A map containing relevant information
+     * @return The result of processing apply
      */
     @Override
     @Transactional(rollbackFor = UpdateException.class)
