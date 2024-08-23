@@ -106,7 +106,7 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
      * update package status based on the provided condition.
      *
      * @param applyFormDO apply content
-     * @return A map containing relevant information
+     * @return The result of update
      */
     @Override
     public boolean updateByMetric(final ApplyFormDO applyFormDO) {
@@ -114,7 +114,7 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
         try {
             PackageSearchCondition condition = new PackageSearchCondition();
             condition.setRepo(applyFormDO.getRepo());
-            String jsonStr = ObjectMapperUtil.writeValueAsString(queryByCondition(condition).get("list"));
+            String jsonStr = ObjectMapperUtil.writeValueAsString(queryAllByCondition(condition).get("list"));
             List<PackageStatusVO> pkgs = ObjectMapperUtil.toObjectList(PackageStatusVO.class, jsonStr);
             if (pkgs.size() != 1) {
                 LOGGER.error("Duplicate src repo or no repo");
@@ -140,8 +140,8 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
     /**
      * compute package status.
      *
-     * @param pkgStatus package status
-     * @return A map containing relevant information
+     * @param pkgStatus package metric status
+     * @return package status
      */
     public String computeMetric(PackageStatusVO pkgStatus) {
         String status = "Other";
