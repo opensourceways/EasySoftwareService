@@ -23,4 +23,14 @@ public final class RedisConstant {
      * Key of distinct_opekg_nums.
      */
     public static final String DISTINCT_OPEKGNUM = "distinct_opekg_num";
+
+    /**
+     * Key of manager token.
+     */
+    public static final String MANAGER_TOKEN = "manager_token";
+
+    /**
+     * Time to token expire .
+     */
+    public static final long TOKEN_EXPIRE = 30;
 }

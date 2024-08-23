@@ -2,10 +2,14 @@ package com.easysoftware.common.account;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import com.easysoftware.common.constant.HttpConstant;
+import com.easysoftware.common.constant.RedisConstant;
 import com.easysoftware.common.exception.HttpRequestException;
 import com.easysoftware.common.utils.HttpClientUtil;
 import com.easysoftware.common.utils.ObjectMapperUtil;
+import com.easysoftware.redis.RedisGateway;
 import com.fasterxml.jackson.databind.JsonNode;
+
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -19,6 +23,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class UserPermission {
@@ -63,6 +68,12 @@ public class UserPermission {
      */
     @Value("${cookie.token.name}")
     private String cookieTokenName;
+
+    /**
+     * RedisGateway instance for interacting with Redis.
+     */
+    @Resource
+    private RedisGateway redisGateway;
 
     /**
      * check user permission.
@@ -230,12 +241,22 @@ public class UserPermission {
 
     /**
      * Get manage token.
+     *
      * @return manage token.
      */
     private String getManageToken() {
-        String response = HttpClientUtil.postHttpClient(manageTokenApi, manageApiBody);
-        JsonNode resJson = ObjectMapperUtil.toJsonNode(response);
-        return resJson.get("token").asText();
+        String token = redisGateway.get(RedisConstant.MANAGER_TOKEN);
+        if (token == null) {
+            String response = HttpClientUtil.postHttpClient(manageTokenApi, manageApiBody);
+            JsonNode resJson = ObjectMapperUtil.toJsonNode(response);
+            if (resJson.path("status").asInt() == 200) {
+                token = resJson.get("token").asText();
+                long expire = resJson.path("token_expire").asLong();
+                long tokenExpire = expire == 0 ? RedisConstant.TOKEN_EXPIRE : expire - RedisConstant.TOKEN_EXPIRE;
+                redisGateway.setWithExpire(RedisConstant.MANAGER_TOKEN, token, tokenExpire, TimeUnit.SECONDS);
+            }
+        }
+        return token;
     }
 
     /**
