@@ -82,6 +82,11 @@ public class ApplyFormDO {
     @TableId(value = "apply_id")
     private Long applyId;
 
+    /**
+     * Timestamp for approval.
+     */
+    private Timestamp approvalTime;
+
 
     /**
      * get an ApplyFormDO entity updateAt field value.
