@@ -55,7 +55,7 @@ public final class ApplyFormConvertor {
         ApplyFormDO applyFormDO = new ApplyFormDO();
         BeanUtils.copyProperties(processApply, applyFormDO);
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        applyFormDO.setUpdateAt(currentTime);
+        applyFormDO.setApprovalTime(currentTime);
         return applyFormDO;
     }
 
