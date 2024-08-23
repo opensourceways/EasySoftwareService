@@ -61,9 +61,9 @@ public class ApplyFormDO {
     private String maintainer;
 
     /**
-     * adminstrator of the entity.
+     * administrator of the entity.
      */
-    private String adminstrator;
+    private String administrator;
 
     /**
      * comment of the process apply.
