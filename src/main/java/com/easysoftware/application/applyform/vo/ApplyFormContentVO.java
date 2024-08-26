@@ -21,6 +21,11 @@ import java.sql.Timestamp;
 public class ApplyFormContentVO {
 
     /**
+     * Timestamp for last update.
+     */
+    private Timestamp createdAt;
+
+    /**
      * Package name.
      */
     private String repo;
