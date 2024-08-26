@@ -23,7 +23,6 @@ import com.easysoftware.application.applyform.dto.ApplyFormSearchMaintainerCondi
 import com.easysoftware.application.applyform.dto.MyApply;
 import com.easysoftware.application.applyform.dto.ProcessApply;
 import com.easysoftware.application.applyform.vo.ApplyFormSearchMaintainerVO;
-import com.easysoftware.common.constant.PackageConstant;
 import com.easysoftware.common.exception.DeleteException;
 import com.easysoftware.common.exception.InsertException;
 import com.easysoftware.common.exception.ParamErrorException;
@@ -79,8 +78,6 @@ public class ApplyFormServiceImpl implements ApplyFormService {
            res = applyFormGateway.queryApplyFormByConditionAdmin(condition);
         } else if (condition.getName().equals("formContent")) {
            res = applyFormGateway.queryApplyFormContentByConditionAdmin(condition);
-        } else if (condition.getName().equals(PackageConstant.APPLY_APPROVED)) {
-           res = applyFormGateway.queryApprovedApplyFormByConditionAdmin(condition);
         }
 
         return ResultUtil.success(HttpStatus.OK, res);

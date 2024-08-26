@@ -64,14 +64,6 @@ public interface ApplyFormGateway {
     Map<String, Object> queryApplyFormContentByConditionAdmin(ApplyFormSearchAdminCondition condition);
 
     /**
-     * Query apporved apply form based on the provided search condition.
-     *
-     * @param condition The search condition for querying apply form
-     * @return A map containing relevant information
-     */
-    Map<String, Object> queryApprovedApplyFormByConditionAdmin(ApplyFormSearchAdminCondition condition);
-
-    /**
      * MyApply apply based on the provided condition..
      *
      * @param myApply The submit process result for apply.

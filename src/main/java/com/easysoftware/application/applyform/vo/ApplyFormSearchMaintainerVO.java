@@ -20,6 +20,12 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 public class ApplyFormSearchMaintainerVO {
+
+    /**
+     * Timestamp for last update.
+     */
+    private Timestamp createdAt;
+
     /**
      * Package name.
      */
@@ -75,6 +81,11 @@ public class ApplyFormSearchMaintainerVO {
      * comment of the process apply.
      */
     private String comment;
+
+    /**
+     * approvalTime.
+     */
+    private Timestamp approvalTime;
 
     /**
      * get an ApplyFormSearchMaintainerVO entity updateAt field value.
