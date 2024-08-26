@@ -333,12 +333,7 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         id).set("apply_status", PackageConstant.APPLY_REVOKED);
         int countapplyForm = applyFormDOMapper.update(null, wrapperForm);
 
-        UpdateWrapper<ApplyhandleRecordsDO> wrapperHandle = new UpdateWrapper<>();
-        wrapperForm.eq(PackageConstant.APPLY_FORM_MAINTAINER, maintainer).eq(PackageConstant.APPLY_FORM_ID,
-        id).set("apply_status", PackageConstant.APPLY_REVOKED);
-        int countapplyHandle = applyHandleRecordsDOMapper.update(null, wrapperHandle);
-
-        if (countapplyForm != 1 || countapplyHandle != 1) {
+        if (countapplyForm != 1) {
             LOGGER.info(
                     "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
                             + id + " Result: failure.");
