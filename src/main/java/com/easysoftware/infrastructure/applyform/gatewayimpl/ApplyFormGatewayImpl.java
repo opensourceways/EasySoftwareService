@@ -211,7 +211,11 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         int pageSize = condition.getPageSize();
         Page<ApplyFormDO> page = new Page<>(pageNum, pageSize);
         QueryWrapper<ApplyFormDO> wrapper = initWrapperByCondition(condition);
-        wrapper.orderByDesc("approval_time");
+        if (condition.getApplyStatus().equals("OPEN")) {
+            wrapper.orderByDesc("created_time");
+        } else {
+            wrapper.orderByDesc("approval_time");
+        }
 
         IPage<ApplyFormDO> resPage = applyFormDOMapper.selectPage(page, wrapper);
         long total = resPage.getTotal();
