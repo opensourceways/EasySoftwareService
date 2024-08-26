@@ -71,6 +71,11 @@ public class ApplyForm {
      */
     private String applyIdString;
 
+    /**
+     * approvalTime.
+     */
+    private Timestamp approvalTime;
+
 
     /**
      * get an ApplyForm entity updateAt field value.

@@ -115,7 +115,7 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         if (condition.getApplyStatus() != null) {
             wrapper.in("apply_status", Arrays.asList(condition.getApplyStatus().split(",")));
         }
-        wrapper.orderByDesc("update_at");
+        wrapper.orderByDesc("created_at");
         IPage<ApplyFormDO> resPage = applyFormDOMapper.selectPage(page, wrapper);
 
         long total = resPage.getTotal();
@@ -146,23 +146,9 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         List<ApplyFormDO> applyFormListDOs = applyFormDOMapper.selectList(queryWrapperForm);
         List<ApplyFormSearchMaintainerVO> applyFormListVOs = ApplyFormConvertor.toApplyFormVO(applyFormListDOs);
 
-        QueryWrapper<ApplyhandleRecordsDO> queryWrapperRecords = new QueryWrapper<>();
-        queryWrapperRecords.eq(PackageConstant.APPLY_FORM_ID, applyId);
-        queryWrapperRecords.eq(PackageConstant.APPLY_FORM_MAINTAINER, maintainer);
-
-        List<ApplyhandleRecordsDO> applyhandleRecordsDOs = applyHandleRecordsDOMapper.selectList(queryWrapperRecords);
-
-        List<ApplyFormContentVO> applyFormContentVOs = new ArrayList<>();
-        for (ApplyFormSearchMaintainerVO applyFormVO : applyFormListVOs) {
-            ApplyFormContentVO applyFormContentVO = new ApplyFormContentVO();
-            BeanUtils.copyProperties(applyFormVO, applyFormContentVO);
-            applyFormContentVO.setApprovalTime(applyhandleRecordsDOs.get(0).getCreatedAt());
-            applyFormContentVOs.add(applyFormContentVO);
-        }
-
         Map<String, Object> res = new HashMap<>();
-        res.put("total", (long) applyFormContentVOs.size());
-        res.put("list", applyFormContentVOs);
+        res.put("total", (long) applyFormListVOs.size());
+        res.put("list", applyFormListVOs);
 
         return res;
     }
@@ -225,6 +211,7 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         int pageSize = condition.getPageSize();
         Page<ApplyFormDO> page = new Page<>(pageNum, pageSize);
         QueryWrapper<ApplyFormDO> wrapper = initWrapperByCondition(condition);
+        wrapper.orderByDesc("approval_time");
 
         IPage<ApplyFormDO> resPage = applyFormDOMapper.selectPage(page, wrapper);
         long total = resPage.getTotal();
@@ -252,50 +239,17 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         List<ApplyFormDO> applyFormListDOs = applyFormDOMapper.selectList(queryWrapperForm);
         List<ApplyFormSearchMaintainerVO> applyFormListVOs = ApplyFormConvertor.toApplyFormVO(applyFormListDOs);
 
-        QueryWrapper<ApplyhandleRecordsDO> queryWrapperRecords = new QueryWrapper<>();
-        queryWrapperRecords.eq(PackageConstant.APPLY_FORM_ID, condition.getApplyId());
-
-        List<ApplyhandleRecordsDO> applyhandleRecordsDOs = applyHandleRecordsDOMapper.selectList(queryWrapperRecords);
 
         List<ApplyFormContentVO> applyFormContentVOs = new ArrayList<>();
         for (ApplyFormSearchMaintainerVO applyFormVO : applyFormListVOs) {
             ApplyFormContentVO applyFormContentVO = new ApplyFormContentVO();
             BeanUtils.copyProperties(applyFormVO, applyFormContentVO);
-            applyFormContentVO.setApprovalTime(applyhandleRecordsDOs.get(0).getCreatedAt());
             applyFormContentVOs.add(applyFormContentVO);
         }
 
         Map<String, Object> res = new HashMap<>();
         res.put("total", (long) applyFormContentVOs.size());
         res.put("list", applyFormContentVOs);
-
-        return res;
-    }
-
-    /**
-     * Query apporved apply form based on the provided search condition.
-     *
-     * @param condition The search condition for querying apply form
-     * @return A map containing relevant information
-     */
-    @Override
-    public Map<String, Object> queryApprovedApplyFormByConditionAdmin(ApplyFormSearchAdminCondition condition) {
-        String userName = userPermission.getUserName();
-
-        int pageNum = condition.getPageNum();
-        int pageSize = condition.getPageSize();
-        Page<ApplyFormDO> page = new Page<>(pageNum, pageSize);
-        QueryWrapper<ApplyFormDO> queryWrapperForm = new QueryWrapper<>();
-        queryWrapperForm.eq(PackageConstant.APPLY_FORM_ADMIN, userName);
-
-        IPage<ApplyFormDO> resPage = applyFormDOMapper.selectPage(page, queryWrapperForm);
-        long total = resPage.getTotal();
-        List<ApplyFormDO> applyFormDOs = resPage.getRecords();
-        List<ApplyFormSearchMaintainerVO> applyFormVOs = ApplyFormConvertor.toApplyFormVO(applyFormDOs);
-
-        Map<String, Object> res = new HashMap<>();
-        res.put("total", total);
-        res.put("list", applyFormVOs);
 
         return res;
     }
@@ -316,11 +270,6 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         }
         if (condition.getMetric() != null) {
             wrapper.in("metric", Arrays.asList(condition.getMetric().split(",")));
-        }
-        if ("desc".equals(condition.getTimeOrder())) {
-            wrapper.orderByDesc("created_at");
-        } else if ("asc".equals(condition.getTimeOrder())) {
-            wrapper.orderByAsc("created_at");
         }
         return wrapper;
     }
@@ -379,12 +328,17 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
                             + id + " Result: failure.");
             throw new DeleteException("permission authentication failed");
         }
-        UpdateWrapper<ApplyFormDO> wrapper = new UpdateWrapper<>();
-        wrapper.eq(PackageConstant.APPLY_FORM_MAINTAINER, maintainer).eq(PackageConstant.APPLY_FORM_ID,
+        UpdateWrapper<ApplyFormDO> wrapperForm = new UpdateWrapper<>();
+        wrapperForm.eq(PackageConstant.APPLY_FORM_MAINTAINER, maintainer).eq(PackageConstant.APPLY_FORM_ID,
         id).set("apply_status", PackageConstant.APPLY_REVOKED);
+        int countapplyForm = applyFormDOMapper.update(null, wrapperForm);
 
-        int deleteNum = applyFormDOMapper.update(null, wrapper);
-        if (deleteNum != 1) {
+        UpdateWrapper<ApplyhandleRecordsDO> wrapperHandle = new UpdateWrapper<>();
+        wrapperForm.eq(PackageConstant.APPLY_FORM_MAINTAINER, maintainer).eq(PackageConstant.APPLY_FORM_ID,
+        id).set("apply_status", PackageConstant.APPLY_REVOKED);
+        int countapplyHandle = applyHandleRecordsDOMapper.update(null, wrapperHandle);
+
+        if (countapplyForm != 1 || countapplyHandle != 1) {
             LOGGER.info(
                     "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
                             + id + " Result: failure.");
