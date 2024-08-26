@@ -144,7 +144,7 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
      * @return package status
      */
     public String computeMetric(PackageStatusVO pkgStatus) {
-        String status = "Other";
+        String status = PackageConstant.ACTIVE;
         if (PackageConstant.CVE_ALL_NO_FIXED.equals(pkgStatus.getCveStatus())
                 && PackageConstant.ISSUE_ALL_NO_FIXED.equals(pkgStatus.getIssueStatus())) {
             status = PackageConstant.NO_MAINTAINENANCE;

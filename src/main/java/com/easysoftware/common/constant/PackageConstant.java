@@ -192,7 +192,7 @@ public final class PackageConstant {
     /**
      * cve status.
      */
-    public static final String CVE_ALL_NO_FIXED = "有CVE全部未修复";
+    public static final String CVE_ALL_NO_FIXED = "有CVE且全部未修复";
 
     /**
      * cve status.
@@ -280,12 +280,17 @@ public final class PackageConstant {
     public static final String APPLY_FORM_MAINTAINER = "maintainer";
 
     /**
-     * maintainer in apply_form table.
+     * administrator in apply_form table.
      */
     public static final String APPLY_FORM_ADMIN = "administrator";
 
     /**
-     * maintainer in apply_form table.
+     * parameter sep in apply_form table.
      */
     public static final String PARAMETER_SEP = ",";
+
+    /**
+     * VALID_APPROVAL_REG used to match input string.
+     */
+    public static final String VALID_APPROVAL_REG = APPLY_APPROVED + "|" + APPLY_REJECTED;
 }

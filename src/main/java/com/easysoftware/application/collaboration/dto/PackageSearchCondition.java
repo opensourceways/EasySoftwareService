@@ -98,4 +98,11 @@ public class PackageSearchCondition {
     @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
     private String orgStatus;
 
+    /**
+     * version status.
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
+    private String versionStatus;
+
 }
