@@ -212,7 +212,7 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         Page<ApplyFormDO> page = new Page<>(pageNum, pageSize);
         QueryWrapper<ApplyFormDO> wrapper = initWrapperByCondition(condition);
         if (condition.getApplyStatus().equals("OPEN")) {
-            wrapper.orderByDesc("created_time");
+            wrapper.orderByDesc("created_at");
         } else {
             wrapper.orderByDesc("approval_time");
         }
