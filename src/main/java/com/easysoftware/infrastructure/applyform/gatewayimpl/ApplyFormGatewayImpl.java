@@ -211,7 +211,8 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         int pageSize = condition.getPageSize();
         Page<ApplyFormDO> page = new Page<>(pageNum, pageSize);
         QueryWrapper<ApplyFormDO> wrapper = initWrapperByCondition(condition);
-        if (condition.getApplyStatus().equals("OPEN")) {
+
+        if (condition.getApplyStatus() != null && condition.getApplyStatus().equals("OPEN")) {
             wrapper.orderByDesc("created_at");
         } else {
             wrapper.orderByDesc("approval_time");
@@ -326,12 +327,14 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         Long id = myApply.getApplyId();
         String maintainer = userPermission.getUserLogin();
 
-        if (!checkMaintainerLimit(myApply.getApplyId(), maintainer)) {
+        if (!checkMaintainerLimit(myApply.getApplyId(), maintainer)
+        || !myApply.getApplyStatus().equals(PackageConstant.APPLY_OPEN)) {
             LOGGER.info(
                     "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
                             + id + " Result: failure.");
             throw new DeleteException("permission authentication failed");
         }
+
         UpdateWrapper<ApplyFormDO> wrapperForm = new UpdateWrapper<>();
         wrapperForm.eq(PackageConstant.APPLY_FORM_MAINTAINER, maintainer).eq(PackageConstant.APPLY_FORM_ID,
         id).set("apply_status", PackageConstant.APPLY_REVOKED);
@@ -367,7 +370,8 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         String maintainer = userPermission.getUserLogin();
         applyFormDO.setMaintainer(maintainer);
 
-        if (!checkMaintainerLimit(applyFormDO.getApplyId(), maintainer)) {
+        if (!checkMaintainerLimit(applyFormDO.getApplyId(), maintainer)
+        || !myApply.getApplyStatus().equals(PackageConstant.APPLY_OPEN)) {
             LOGGER.info(
                     "UserName:" + maintainer + " Client Ip: localhost" + " Type: Update" + " ApplyID:"
                             + applyFormDO.getApplyId() + " Result: failuer.");
