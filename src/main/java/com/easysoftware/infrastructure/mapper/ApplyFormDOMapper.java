@@ -10,9 +10,19 @@
 */
 package com.easysoftware.infrastructure.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.easysoftware.infrastructure.applyform.gatewayimpl.dataobject.ApplyFormDO;
 
 public interface ApplyFormDOMapper extends BaseMapper<ApplyFormDO> {
-
+    /**
+     * process apply if apply status is OPEN.
+     *
+     * @param tableName apply form table.
+     * @param status apply status.
+     * @param applyFormDO apply content.
+     * @return process result
+     */
+    int updateIfApplyOpen(@Param("tableName") String tableName, @Param("status") String status,
+            @Param("applyForm") ApplyFormDO applyFormDO);
 }
