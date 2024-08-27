@@ -120,7 +120,10 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
                 LOGGER.error("Duplicate src repo or no repo");
                 return flag;
             }
-            String status = computeMetric(pkgs.get(0));
+            PackageStatusVO pkg = pkgs.get(0);
+            updatePackageStatus(pkg, applyFormDO);
+
+            String status = computeMetric(pkg);
             ListenableFuture<Response> future = esAsyncHttpUtil.executeUpdate(PackageConstant.PACKAGE_STATUS_INDEX,
                     applyFormDO, status);
 
@@ -166,5 +169,23 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
             status = PackageConstant.ACTIVE;
         }
         return status;
+    }
+
+    /**
+     * compute package status.
+     *
+     * @param pkgStatus   package metric status
+     * @param applyFormDO apply content
+     * @return package status
+     */
+    public PackageStatusVO updatePackageStatus(PackageStatusVO pkgStatus, ApplyFormDO applyFormDO) {
+        if (PackageConstant.PKG_CVE_METRIC.equalsIgnoreCase(applyFormDO.getMetric())) {
+            pkgStatus.setCveStatus(applyFormDO.getMetricStatus());
+        } else if (PackageConstant.PKG_VERSION_METRIC.equalsIgnoreCase(applyFormDO.getMetric())) {
+            pkgStatus.setVersionStatus(applyFormDO.getMetricStatus());
+        } else {
+            LOGGER.error("update error - metric {} cannot be updated", applyFormDO.getMetric());
+        }
+        return pkgStatus;
     }
 }

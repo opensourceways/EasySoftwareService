@@ -32,7 +32,7 @@ public class MyApply {
      * Apply type (maximum length: PackageConstant.MAX_FIELD_LENGTH).
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
-    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
+    @Pattern(regexp = PackageConstant.VALID_METRIC_REG, message = PackageConstant.VALID_MESSAGE)
     private String metric;
 
     /**
