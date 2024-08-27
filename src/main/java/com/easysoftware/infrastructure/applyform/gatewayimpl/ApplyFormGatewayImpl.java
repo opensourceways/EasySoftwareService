@@ -336,6 +336,12 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
             throw new DeleteException("permission authentication failed");
         }
 
+        List<ApplyFormDO> list = applyFormDOMapper.selectByMap(Map.of(PackageConstant.APPLY_FORM_MAINTAINER,
+        maintainer, PackageConstant.APPLY_FORM_ID, id));
+        if (!list.get(0).getApplyStatus().equals("OPEN")) {
+            throw new UpdateException("can only delete apply which has open_status");
+        }
+
         UpdateWrapper<ApplyFormDO> wrapperForm = new UpdateWrapper<>();
         wrapperForm.eq(PackageConstant.APPLY_FORM_MAINTAINER, maintainer).eq(PackageConstant.APPLY_FORM_ID,
         id).set("apply_status", PackageConstant.APPLY_REVOKED);
@@ -377,6 +383,12 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
                     "UserName:" + maintainer + " Client Ip: localhost" + " Type: Update" + " ApplyID:"
                             + applyFormDO.getApplyId() + " Result: failuer.");
             throw new UpdateException("permission authentication failed");
+        }
+
+        List<ApplyFormDO> list = applyFormDOMapper.selectByMap(Map.of(PackageConstant.APPLY_FORM_MAINTAINER,
+        maintainer, PackageConstant.APPLY_FORM_ID, applyFormDO.getApplyId()));
+        if (!list.get(0).getApplyStatus().equals("OPEN")) {
+            throw new UpdateException("can only update apply which has open_status");
         }
 
         UpdateWrapper<ApplyFormDO> wrapper = new UpdateWrapper<>();
