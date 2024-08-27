@@ -293,4 +293,19 @@ public final class PackageConstant {
      * VALID_APPROVAL_REG used to match input string.
      */
     public static final String VALID_APPROVAL_REG = APPLY_APPROVED + "|" + APPLY_REJECTED;
+
+    /**
+     * cve metric in apply_form table.
+     */
+    public static final String PKG_CVE_METRIC = "cveStatus";
+
+    /**
+     * version metric in apply_form table.
+     */
+    public static final String PKG_VERSION_METRIC = "versionStatus";
+
+    /**
+     * VALID_METRIC_REG used to match input string.
+     */
+    public static final String VALID_METRIC_REG = PKG_CVE_METRIC + "|" + PKG_VERSION_METRIC;
 }
