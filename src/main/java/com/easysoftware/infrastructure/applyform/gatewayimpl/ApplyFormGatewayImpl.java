@@ -294,6 +294,7 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         applyFormDO.setCreatedAt(now);
         applyFormDO.setUpdateAt(now);
+        applyFormDO.setApplyStatus(PackageConstant.APPLY_OPEN);
 
         String maintainer = userPermission.getUserLogin();
         applyFormDO.setMaintainer(maintainer);
@@ -338,7 +339,7 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
 
         List<ApplyFormDO> list = applyFormDOMapper.selectByMap(Map.of(PackageConstant.APPLY_FORM_MAINTAINER,
         maintainer, PackageConstant.APPLY_FORM_ID, id));
-        if (!list.get(0).getApplyStatus().equals("OPEN")) {
+        if (!list.get(0).getApplyStatus().equals(PackageConstant.APPLY_OPEN)) {
             throw new UpdateException("can only delete apply which has open_status");
         }
 
@@ -387,7 +388,7 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
 
         List<ApplyFormDO> list = applyFormDOMapper.selectByMap(Map.of(PackageConstant.APPLY_FORM_MAINTAINER,
         maintainer, PackageConstant.APPLY_FORM_ID, applyFormDO.getApplyId()));
-        if (!list.get(0).getApplyStatus().equals("OPEN")) {
+        if (!list.get(0).getApplyStatus().equals(PackageConstant.APPLY_OPEN)) {
             throw new UpdateException("can only update apply which has open_status");
         }
 
