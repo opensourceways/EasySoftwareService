@@ -294,6 +294,7 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         applyFormDO.setCreatedAt(now);
         applyFormDO.setUpdateAt(now);
+        applyFormDO.setApplyStatus(PackageConstant.APPLY_OPEN);
 
         String maintainer = userPermission.getUserLogin();
         applyFormDO.setMaintainer(maintainer);
@@ -334,6 +335,12 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
                     "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
                             + id + " Result: failure.");
             throw new DeleteException("permission authentication failed");
+        }
+
+        List<ApplyFormDO> list = applyFormDOMapper.selectByMap(Map.of(PackageConstant.APPLY_FORM_MAINTAINER,
+        maintainer, PackageConstant.APPLY_FORM_ID, id));
+        if (!list.get(0).getApplyStatus().equals(PackageConstant.APPLY_OPEN)) {
+            throw new UpdateException("can only delete apply which has open_status");
         }
 
         UpdateWrapper<ApplyFormDO> wrapperForm = new UpdateWrapper<>();
@@ -377,6 +384,12 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
                     "UserName:" + maintainer + " Client Ip: localhost" + " Type: Update" + " ApplyID:"
                             + applyFormDO.getApplyId() + " Result: failuer.");
             throw new UpdateException("permission authentication failed");
+        }
+
+        List<ApplyFormDO> list = applyFormDOMapper.selectByMap(Map.of(PackageConstant.APPLY_FORM_MAINTAINER,
+        maintainer, PackageConstant.APPLY_FORM_ID, applyFormDO.getApplyId()));
+        if (!list.get(0).getApplyStatus().equals(PackageConstant.APPLY_OPEN)) {
+            throw new UpdateException("can only update apply which has open_status");
         }
 
         UpdateWrapper<ApplyFormDO> wrapper = new UpdateWrapper<>();
