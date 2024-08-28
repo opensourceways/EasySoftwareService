@@ -303,4 +303,9 @@ public final class PackageConstant {
      * VALID_METRIC_REG used to match input string.
      */
     public static final String VALID_METRIC_REG = PKG_CVE_METRIC + "|" + PKG_VERSION_METRIC;
+
+    /**
+     * VALID_BODY_STR_REG used to match input string.
+     */
+    public static final String VALID_BODY_STR_REG = "^[^<>%&$]+$";
 }
