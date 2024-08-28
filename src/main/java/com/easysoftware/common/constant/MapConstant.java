@@ -37,7 +37,7 @@ public final class MapConstant {
         item.put("orgStatus", "collaboration.company.status");
         item.put("contributorStatus", "collaboration.participant.status");
         item.put("sigName", "sig_names");
-        item.put("status", "status");
+        item.put("status", "collaboration.status");
         item.put("repo", "repo");
         item.put("kind", "kind");
         METRIC_MAP = Collections.unmodifiableMap(item);
