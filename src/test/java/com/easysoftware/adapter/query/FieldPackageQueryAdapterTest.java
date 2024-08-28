@@ -52,6 +52,13 @@ public class FieldPackageQueryAdapterTest {
         }
     }
 
+    @Test
+    void test_stat() throws Exception {
+        ResultVo res = CommonUtil.executeGet(mockMvc, "/field/stat", null);
+        System.out.println(res);
+        CommonUtil.assertOk(res);
+    }
+
     void assertColumn(MultiValueMap<String, String> paramMap) throws Exception {
         ResultVo res = CommonUtil.executeGet(mockMvc, "/field/column", paramMap);
         CommonUtil.assertOk(res);
