@@ -28,7 +28,7 @@ public class ProcessApply {
      * Field comment with a maximum length of PackageConstant.MAX_FIELD_LENGTH.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
-    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
+    @Pattern(regexp = PackageConstant.VALID_BODY_STR_REG, message = PackageConstant.VALID_MESSAGE)
     @NotNull
     private String comment;
 
