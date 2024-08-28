@@ -20,6 +20,7 @@ import org.asynchttpclient.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.easysoftware.application.collaboration.dto.PackageSearchCondition;
@@ -48,6 +49,12 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
      */
     @Autowired
     private UserPermission userPermission;
+
+    /**
+     * Value injected for the es package status index name.
+     */
+    @Value("${es.pkgIndex}")
+    private String pkgIndex;
 
     /**
      * Logger instance for PackageStatusGatewayImpl.
@@ -89,8 +96,7 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
         int total = 0;
         try {
             Map<String, Object> query = ObjectMapperUtil.jsonToMap(condition);
-            ListenableFuture<Response> future = esAsyncHttpUtil.executeSearch(PackageConstant.PACKAGE_STATUS_INDEX,
-                    query, login);
+            ListenableFuture<Response> future = esAsyncHttpUtil.executeSearch(pkgIndex, query, login);
             String responseBody = future.get().getResponseBody(UTF_8);
             JsonNode dataNode = ObjectMapperUtil.toJsonNode(responseBody);
             JsonNode hits = dataNode.path("hits").path("hits");
@@ -124,8 +130,7 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
             updatePackageStatus(pkg, applyFormDO);
 
             String status = computeMetric(pkg);
-            ListenableFuture<Response> future = esAsyncHttpUtil.executeUpdate(PackageConstant.PACKAGE_STATUS_INDEX,
-                    applyFormDO, status);
+            ListenableFuture<Response> future = esAsyncHttpUtil.executeUpdate(pkgIndex, applyFormDO, status);
 
             String responseBody = future.get().getResponseBody(UTF_8);
             int total = ObjectMapperUtil.toJsonNode(responseBody).path("total").asInt();

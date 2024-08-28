@@ -74,7 +74,7 @@ public final class HttpClientUtil {
             HttpResponse response = httpClient.execute(httpGet);
             responseRes = EntityUtils.toString(response.getEntity());
         } catch (IOException e) {
-            LOGGER.error("error haapend in get request");
+            LOGGER.error("error happend in get request");
         }
         return responseRes;
     }
@@ -99,7 +99,7 @@ public final class HttpClientUtil {
             HttpResponse response = httpClient.execute(httpPost);
             responseRes = EntityUtils.toString(response.getEntity());
         } catch (IOException e) {
-            LOGGER.error("error haapend in post request");
+            LOGGER.error("error happend in post request");
         }
         return responseRes;
     }
