@@ -146,8 +146,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UpdateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Object> exception(final UpdateException e) {
-        LOGGER.error(MessageCode.EC0004.getMsgEn());
-        return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0004);
+        LOGGER.error(e.getMessage());
+        return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0004, e.getMessage());
     }
 
     /**

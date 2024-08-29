@@ -2,6 +2,7 @@ package com.easysoftware.common.account;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import com.easysoftware.common.constant.HttpConstant;
+import com.easysoftware.common.constant.PackageConstant;
 import com.easysoftware.common.constant.RedisConstant;
 import com.easysoftware.common.exception.HttpRequestException;
 import com.easysoftware.common.utils.HttpClientUtil;
@@ -20,7 +21,9 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -155,7 +158,7 @@ public class UserPermission {
      * Get user name by user token and manage token.
      * @return user name.
      */
-    public String getUserName() {
+    public Map<String, String> getUserName() {
         String userToken = getUserToken();
         String manageToken = getManageToken();
 
@@ -170,7 +173,18 @@ public class UserPermission {
             throw new HttpRequestException("query user login name failed");
         }
         String userName = resJson.path("data").path("username").asText();
-        return userName;
+        String loginName = "";
+        JsonNode identities = resJson.path("data").path("identities");
+        for (JsonNode identity : identities) {
+            if (identity.has("identity") && identity.get("identity").asText().equalsIgnoreCase("gitee")) {
+                loginName = identity.get("login_name").asText();
+            }
+        }
+        Map<String, String> info = new HashMap<>();
+        info.put(PackageConstant.LOGIN_NAME, loginName);
+        info.put(PackageConstant.USER_NAME, userName);
+
+        return info;
     }
 
     /**

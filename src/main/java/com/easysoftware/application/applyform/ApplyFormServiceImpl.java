@@ -162,6 +162,21 @@ public class ApplyFormServiceImpl implements ApplyFormService {
     }
 
     /**
+     * revoke apply based on the provided condition.
+     *
+     * @param myApply The process condition for revoke apply form by applyId.
+     * @return ResponseEntity<Object>.
+     */
+    @Override
+    public ResponseEntity<Object> revokeMyApply(MyApply myApply) {
+        boolean flag = applyFormGateway.revokeMyApply(myApply);
+        if (!flag) {
+            throw new DeleteException("revoke apply failed");
+        }
+        return ResultUtil.success(HttpStatus.OK);
+    }
+
+    /**
      * update apply based on the provided condition.
      *
      * @param myApply The process condition for update apply form by applyId.

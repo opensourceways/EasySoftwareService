@@ -82,6 +82,14 @@ public interface ApplyFormGateway {
     /**
      * MyApply apply based on the provided condition.
      *
+     * @param myApply The revoke process result for apply.
+     * @return A boolean
+     */
+    boolean revokeMyApply(MyApply myApply);
+
+    /**
+     * MyApply apply based on the provided condition.
+     *
      * @param myApply The update process result for apply.
      * @return A boolean
      */

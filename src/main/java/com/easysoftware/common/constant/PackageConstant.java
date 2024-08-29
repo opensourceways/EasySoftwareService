@@ -308,4 +308,14 @@ public final class PackageConstant {
      * VALID_BODY_STR_REG used to match input string.
      */
     public static final String VALID_BODY_STR_REG = "^[^<>%&$]+$";
+
+    /**
+     * gitee id field.
+     */
+    public static final String LOGIN_NAME = "loginName";
+
+    /**
+     * authing user name field.
+     */
+    public static final String USER_NAME = "userName";
 }
