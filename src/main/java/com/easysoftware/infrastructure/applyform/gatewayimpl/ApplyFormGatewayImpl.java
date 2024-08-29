@@ -495,8 +495,11 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
      * @return A map containing relevant information.
      */
     @Override
-    public Map<String, Object> queryApplyReposByAdmin() {
+    public Map<String, Object> queryApplyReposByAdmin(String applyStatus) {
         QueryWrapper<ApplyFormDO> wrapper = new QueryWrapper<>();
+        if (applyStatus != null) {
+            wrapper.in("apply_status", Arrays.asList(applyStatus.split(",")));
+        }
         return queryApplyRepos(wrapper);
     }
 

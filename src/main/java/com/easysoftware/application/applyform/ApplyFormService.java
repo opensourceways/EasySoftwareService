@@ -86,7 +86,8 @@ public interface ApplyFormService {
     /**
      * query repos by admin.
      *
+     * @param applyStatus condition for querying apply repos.
      * @return ResponseEntity<Object>.
      */
-    ResponseEntity<Object> queryApplyReposByAdmin();
+    ResponseEntity<Object> queryApplyReposByAdmin(String applyStatus);
 }

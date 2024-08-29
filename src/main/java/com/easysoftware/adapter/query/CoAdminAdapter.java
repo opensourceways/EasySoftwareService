@@ -121,18 +121,19 @@ public class CoAdminAdapter {
     }
 
     /**
-     * query all repos applied to modify.
+     * query repos applied to modify.
      *
+     * @param applyStatus condition for querying apply repos.
      * @return ResponseEntity<Object>.
      */
     @GetMapping("/apply/repos")
     @RequestLimitRedis()
     @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
-    public ResponseEntity<Object> queryApplyRepos() {
-        return applyFormService.queryApplyReposByAdmin();
+    public ResponseEntity<Object> queryApplyRepos(@RequestParam(value = "apply_status") String applyStatus) {
+        return applyFormService.queryApplyReposByAdmin(applyStatus);
     }
 
-        /**
+    /**
      * Submit apply form based on the provided body.
      *
      * @param myApply The submit condition for querying apply form.

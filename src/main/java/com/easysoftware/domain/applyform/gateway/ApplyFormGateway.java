@@ -114,7 +114,8 @@ public interface ApplyFormGateway {
     /**
      * query repos by admin.
      *
+     * @param applyStatus condition for querying apply repos.
      * @return A map containing relevant information
      */
-    Map<String, Object> queryApplyReposByAdmin();
+    Map<String, Object> queryApplyReposByAdmin(String applyStatus);
 }
