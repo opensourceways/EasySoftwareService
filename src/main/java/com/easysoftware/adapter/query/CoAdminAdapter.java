@@ -129,7 +129,8 @@ public class CoAdminAdapter {
     @GetMapping("/apply/repos")
     @RequestLimitRedis()
     @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
-    public ResponseEntity<Object> queryApplyRepos(@RequestParam(value = "apply_status") String applyStatus) {
+    public ResponseEntity<Object> queryApplyRepos(
+            @RequestParam(value = "apply_status", required = false) String applyStatus) {
         return applyFormService.queryApplyReposByAdmin(applyStatus);
     }
 
