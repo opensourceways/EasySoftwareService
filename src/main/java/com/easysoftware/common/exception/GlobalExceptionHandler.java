@@ -160,7 +160,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Object> exception(final InsertException e) {
         LOGGER.error(e.getMessage());
-        return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0004, e.getMessage());
+        return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0006, e.getMessage());
     }
 
     /**
