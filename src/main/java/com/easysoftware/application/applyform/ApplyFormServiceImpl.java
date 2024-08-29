@@ -208,8 +208,8 @@ public class ApplyFormServiceImpl implements ApplyFormService {
      * @return ResponseEntity<Object>.
      */
     @Override
-    public ResponseEntity<Object> queryApplyReposByAdmin() {
-        Map<String, Object> res =  applyFormGateway.queryApplyReposByAdmin();
+    public ResponseEntity<Object> queryApplyReposByAdmin(String applyStatus) {
+        Map<String, Object> res =  applyFormGateway.queryApplyReposByAdmin(applyStatus);
         return ResultUtil.success(HttpStatus.OK, res);
     }
 }

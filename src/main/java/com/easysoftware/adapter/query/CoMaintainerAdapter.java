@@ -112,13 +112,14 @@ public class CoMaintainerAdapter {
         HashMap<String, Object> result = new HashMap<>();
         HashSet<String> permissions = new HashSet<>();
         try {
-            HashSet<String> permissionRepos = userPermission.getUserRepoList();
-            if (permissionRepos.size() > 0) {
-                permissions.add(PackageConstant.APPLY_FORM_MAINTAINER);
-            }
             boolean permissionAdmin = userPermission.checkUserPermission(REQUIRE_PERMISSIONS);
             if (permissionAdmin) {
                 permissions.add(PackageConstant.APPLY_FORM_ADMIN);
+            } else {
+                HashSet<String> permissionRepos = userPermission.getUserRepoList();
+                if (permissionRepos.size() > 0) {
+                    permissions.add(PackageConstant.APPLY_FORM_MAINTAINER);
+                }
             }
             result.put("permissions", permissions);
             return ResultUtil.success(HttpStatus.OK, result);
