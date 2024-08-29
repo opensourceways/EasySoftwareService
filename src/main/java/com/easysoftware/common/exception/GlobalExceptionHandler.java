@@ -151,6 +151,19 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Handles exceptions of type InsertException.
+     *
+     * @param e The InsertExceptionInsertException to handle
+     * @return ResponseEntity containing details about the exception
+     */
+    @ExceptionHandler(InsertException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> exception(final InsertException e) {
+        LOGGER.error(e.getMessage());
+        return ResultUtil.fail(HttpStatus.BAD_REQUEST, MessageCode.EC0004, e.getMessage());
+    }
+
+    /**
      * Handles general exceptions.
      *
      * @param e The Exception to handle
