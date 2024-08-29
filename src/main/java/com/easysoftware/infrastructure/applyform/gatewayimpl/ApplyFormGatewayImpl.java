@@ -218,10 +218,10 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         QueryWrapper<ApplyFormDO> wrapper = initWrapperByCondition(condition);
 
         if (condition.getApplyStatus() != null && condition.getApplyStatus().equals(
-            PackageConstant.APPLY_OPEN + "," + PackageConstant.APPLY_REVOKED)) {
-            wrapper.orderByDesc("created_at");
-        } else {
+            PackageConstant.APPLY_APPROVED + "," + PackageConstant.APPLY_REJECTED)) {
             wrapper.orderByDesc("approval_time");
+        } else {
+            wrapper.orderByDesc("created_at");
         }
 
         IPage<ApplyFormDO> resPage = applyFormDOMapper.selectPage(page, wrapper);
