@@ -17,14 +17,22 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.easysoftware.common.constant.PackageConstant;
+import com.easysoftware.common.constant.RedisConstant;
 import com.easysoftware.common.entity.ResultVo;
 import com.easysoftware.common.utils.CommonUtil;
+import com.easysoftware.redis.RedisGateway;
+
+import jakarta.annotation.Resource;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class FieldPackageQueryAdapterTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
+
+    @Resource
+    RedisGateway redisGateway;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -50,6 +58,16 @@ public class FieldPackageQueryAdapterTest {
             paramMap.put("column", List.of("arch", "category", "os"));
             assertColumn(paramMap);
         }
+    }
+
+    @Test
+    void test_stat() throws Exception {
+        ResultVo res = CommonUtil.executeGet(mockMvc, "/field/stat", null);
+        Map<String, Object> data = (Map<String, Object>) res.getData();
+        if((int) data.get("total") > PackageConstant.SOFTWARE_NUM) {
+            assertTrue(redisGateway.hasKey(RedisConstant.DISTINCT_OPEKGNUM));
+        }
+        CommonUtil.assertOk(res);
     }
 
     void assertColumn(MultiValueMap<String, String> paramMap) throws Exception {
