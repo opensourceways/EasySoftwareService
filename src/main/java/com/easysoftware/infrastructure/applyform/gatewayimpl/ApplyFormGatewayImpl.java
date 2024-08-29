@@ -301,6 +301,9 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         applyFormDO.setApplyStatus(PackageConstant.APPLY_OPEN);
 
         String maintainer = userPermission.getUserLogin();
+        if (maintainer == null) {
+            throw new InsertException("Please bind your Gitee ID");
+        }
         applyFormDO.setMaintainer(maintainer);
         int countapplyForm = applyFormDOMapper.insert(applyFormDO);
 
