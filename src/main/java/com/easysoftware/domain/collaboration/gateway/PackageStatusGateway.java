@@ -40,4 +40,18 @@ public interface PackageStatusGateway {
      * @return A map containing relevant information
      */
     boolean updateByMetric(ApplyFormDO applyFormDO);
+
+    /**
+     * query repos and sigs based on condition.
+     *
+     * @return A map containing relevant information
+     */
+    Map<String, Object> queryRepoSigsByAdmin();
+
+    /**
+     * query repos and sigs based on condition.
+     *
+     * @return A map containing relevant information
+     */
+    Map<String, Object> queryRepoSigsByMaintainer();
 }

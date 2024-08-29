@@ -72,6 +72,12 @@ public final class EsAsyncHttpUtil {
     private String searchFormat;
 
     /**
+     * Value injected for the es searchRepoFormat.
+     */
+    @Value("${es.searchRepoFormat}")
+    private String searchRepoFormat;
+
+    /**
      * Value injected for the es updateFormat.
      */
     @Value("${es.updateFormat}")
@@ -124,6 +130,25 @@ public final class EsAsyncHttpUtil {
         AsyncHttpClient client = getClient();
         RequestBuilder builder = getBuilder();
         String query = convertQuery(obj, login);
+
+        builder.setUrl(esUrl + index + "/_search");
+        builder.setBody(query);
+
+        return client.executeRequest(builder.build());
+    }
+
+    /**
+     * execute es search.
+     *
+     * @param index es index name
+     * @param login  gitee id of user
+     * @return ListenableFuture<Response> the result of es search.
+     */
+    public ListenableFuture<Response> executeSearch(String index, String login)
+            throws NoSuchAlgorithmException, KeyManagementException {
+        AsyncHttpClient client = getClient();
+        RequestBuilder builder = getBuilder();
+        String query = String.format(searchRepoFormat, login);
 
         builder.setUrl(esUrl + index + "/_search");
         builder.setBody(query);

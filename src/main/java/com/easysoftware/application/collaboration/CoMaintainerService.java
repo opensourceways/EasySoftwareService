@@ -23,4 +23,11 @@ public interface CoMaintainerService {
      * @return ResponseEntity<Object>.
      */
     ResponseEntity<Object> queryPackages(PackageSearchCondition condition);
+
+    /**
+     * query repos and sigs based on condition.
+     *
+     * @return ResponseEntity<Object>.
+     */
+    ResponseEntity<Object> queryRepoSigs();
 }

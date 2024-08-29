@@ -43,4 +43,15 @@ public class CoAdminServiceImpl implements CoAdminService {
         Map<String, Object> res = pkgStatusGateway.queryAllByCondition(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }
+
+    /**
+     * query repos and sigs based on condition.
+     *
+     * @return ResponseEntity<Object>.
+     */
+    @Override
+    public ResponseEntity<Object> queryRepoSigs() {
+        Map<String, Object> res = pkgStatusGateway.queryRepoSigsByAdmin();
+        return ResultUtil.success(HttpStatus.OK, res);
+    }
 }

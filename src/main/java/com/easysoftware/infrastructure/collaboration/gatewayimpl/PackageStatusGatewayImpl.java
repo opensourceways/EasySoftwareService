@@ -12,6 +12,7 @@
 package com.easysoftware.infrastructure.collaboration.gatewayimpl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -192,5 +193,54 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
             LOGGER.error("update error - metric {} cannot be updated", applyFormDO.getMetric());
         }
         return pkgStatus;
+    }
+
+    /**
+     * query repos and sigs based on condition.
+     *
+     * @return A map containing relevant information
+     */
+    @Override
+    public Map<String, Object> queryRepoSigsByAdmin() {
+        Map<String, Object> res = queryRepoSigs(null);
+        return res;
+    }
+
+    /**
+     * query repos and sigs based on condition.
+     *
+     * @return A map containing relevant information
+     */
+    @Override
+    public Map<String, Object> queryRepoSigsByMaintainer() {
+        String maintainer = userPermission.getUserLogin();
+        Map<String, Object> res = queryRepoSigs(maintainer);
+        return res;
+    }
+
+    /**
+     * query repos and sigs based on condition.
+     *
+     * @param login user gitee id
+     * @return A map containing relevant information
+     */
+    public Map<String, Object> queryRepoSigs(String login) {
+        login = login == null ? "*" : login;
+        Map<String, Object> res = new HashMap<>();
+        try {
+            ListenableFuture<Response> future = esAsyncHttpUtil.executeSearch(pkgIndex, login);
+            String responseBody = future.get().getResponseBody(UTF_8);
+            JsonNode dataNode = ObjectMapperUtil.toJsonNode(responseBody);
+            JsonNode sigs = dataNode.path("aggregations").path("sigs").path("buckets");
+            for (JsonNode sig : sigs) {
+                JsonNode repos = sig.path("repos").path("buckets");
+                for (JsonNode repo : repos) {
+                    res.put(repo.path("key").asText(), sig.path("key"));
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.error("search repo error");
+        }
+        return res;
     }
 }

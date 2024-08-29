@@ -199,4 +199,16 @@ public class CoMaintainerAdapter {
     public ResponseEntity<Object> queryApplyRepos() {
         return applyFormService.queryApplyReposByMaintainer();
     }
+
+    /**
+     * query repos and sigs based on condition.
+     *
+     * @return ResponseEntity<Object>.
+     */
+    @GetMapping("/query/repos")
+    @RequestLimitRedis()
+    @CoMaintainerPermission()
+    public ResponseEntity<Object> queryRepoSigs() {
+        return coMaintainerService.queryRepoSigs();
+    }
 }

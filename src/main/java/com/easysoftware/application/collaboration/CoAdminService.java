@@ -22,4 +22,11 @@ public interface CoAdminService {
      * @return ResponseEntity<Object>.
      */
     ResponseEntity<Object> queryAdminPackages(PackageSearchCondition condition);
+
+    /**
+     * query repos and sigs based on condition.
+     *
+     * @return ResponseEntity<Object>.
+     */
+    ResponseEntity<Object> queryRepoSigs();
 }
