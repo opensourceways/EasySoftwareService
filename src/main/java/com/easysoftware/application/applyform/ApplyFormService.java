@@ -61,6 +61,14 @@ public interface ApplyFormService {
     ResponseEntity<Object> revokeMyApplyWithLimit(MyApply myApply);
 
     /**
+     * Revoke my apply.
+     *
+     * @param myApply The condition for revoking apply form.
+     * @return ResponseEntity<Object>.
+     */
+    ResponseEntity<Object> revokeMyApply(MyApply myApply);
+
+    /**
      * Update my apply.
      *
      * @param myApply The condition for update apply form.

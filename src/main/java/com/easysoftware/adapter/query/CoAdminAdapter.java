@@ -17,6 +17,8 @@ import com.easysoftware.application.applyform.dto.ProcessApply;
 import com.easysoftware.application.collaboration.CoAdminService;
 import com.easysoftware.application.collaboration.dto.PackageSearchCondition;
 import com.easysoftware.application.applyform.dto.ApplyFormSearchAdminCondition;
+import com.easysoftware.application.applyform.dto.MyApply;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,5 +130,34 @@ public class CoAdminAdapter {
     @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
     public ResponseEntity<Object> queryApplyRepos() {
         return applyFormService.queryApplyReposByAdmin();
+    }
+
+        /**
+     * Submit apply form based on the provided body.
+     *
+     * @param myApply The submit condition for querying apply form.
+     * @param repo The submit condition for checking authority.
+     * @return ResponseEntity<Object>.
+     */
+    @PostMapping("/apply")
+    @RequestLimitRedis()
+    @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
+    public ResponseEntity<Object> submitMyApply(@Valid @RequestBody MyApply myApply,
+    @RequestParam(value = "repo") String repo) {
+        return applyFormService.submitMyApplyWithLimit(myApply);
+    }
+
+    /**
+     * Revoke apply form based on the provided body.
+     *
+     * @param myApply The revoke condition for querying apply form.
+     * @return ResponseEntity<Object>.
+     */
+    @PostMapping("/revoke")
+    @RequestLimitRedis()
+    @PreUserPermission(UerPermissionDef.COLLABORATION_PERMISSION_ADMIN)
+    public ResponseEntity<Object> revokeMyApply(@Valid @RequestBody MyApply myApply) {
+        myApply.setApplyId(Long.valueOf(myApply.getApplyIdString()));
+        return applyFormService.revokeMyApply(myApply);
     }
 }

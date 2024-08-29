@@ -166,7 +166,8 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         UpdateWrapper<ApplyFormDO> wrapper = new UpdateWrapper<>();
         wrapper.eq("apply_id", processApply.getApplyId());
 
-        applyFormDO.setAdministrator(userPermission.getUserName());
+        Map<String, String> info = userPermission.getUserName();
+        applyFormDO.setAdministrator(info.get(PackageConstant.USER_NAME));
         int mark = applyFormDOMapper.updateIfApplyOpen(PackageConstant.APPLY_FORM_TABLE, PackageConstant.APPLY_OPEN,
                 applyFormDO);
         if (mark != 1) {
@@ -174,6 +175,9 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         }
 
         applyFormDO = applyFormDOMapper.selectOne(wrapper);
+        if (applyFormDO.getMaintainer().equals(info.get(PackageConstant.LOGIN_NAME))) {
+            throw new UpdateException("Cannot process the apply form submitted by yourself");
+        }
 
         ApplyHandleRecord record = new ApplyHandleRecord();
         BeanUtils.copyProperties(applyFormDO, record);
@@ -356,6 +360,47 @@ public class ApplyFormGatewayImpl implements ApplyFormGateway {
         }
         LOGGER.info(
                 "UserName:" + maintainer + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
+                        + id + " Result: success.");
+
+        return result;
+    }
+
+    /**
+     * MyApply apply based on the provided condition..
+     *
+     * @param myApply The process result for apply.
+     * @return A boolean
+     */
+    @Override
+    @Transactional(rollbackFor = DeleteException.class)
+    public boolean revokeMyApply(MyApply myApply) {
+        boolean result = true;
+        Long id = myApply.getApplyId();
+        if (!myApply.getApplyStatus().equals(PackageConstant.APPLY_OPEN)) {
+            LOGGER.info(
+                    "Admin revoke:" + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
+                            + id + " Result: failure.");
+            throw new DeleteException("permission authentication failed");
+        }
+
+        List<ApplyFormDO> list = applyFormDOMapper.selectByMap(Map.of(PackageConstant.APPLY_FORM_ID, id));
+        if (!list.get(0).getApplyStatus().equals(PackageConstant.APPLY_OPEN)) {
+            throw new UpdateException("can only delete apply which has open_status");
+        }
+
+        UpdateWrapper<ApplyFormDO> wrapperForm = new UpdateWrapper<>();
+        wrapperForm.eq(PackageConstant.APPLY_FORM_ID,
+        id).set("apply_status", PackageConstant.APPLY_REVOKED);
+        int countapplyForm = applyFormDOMapper.update(null, wrapperForm);
+
+        if (countapplyForm != 1) {
+            LOGGER.info(
+                    "Admin revoke:" + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
+                            + id + " Result: failure.");
+            throw new DeleteException("revoke failed");
+        }
+        LOGGER.info(
+                "Admin revoke:" + " Client Ip: localhost" + " Type: Delete" + " ApplyID:"
                         + id + " Result: success.");
 
         return result;
