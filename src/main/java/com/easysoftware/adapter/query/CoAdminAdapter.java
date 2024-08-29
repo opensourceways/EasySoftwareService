@@ -134,6 +134,17 @@ public class CoAdminAdapter {
     }
 
     /**
+     * query repos and sigs based on condition.
+     *
+     * @return ResponseEntity<Object>.
+     */
+    @GetMapping("/query/repos")
+    @RequestLimitRedis()
+    public ResponseEntity<Object> queryRepoSigs() {
+        return coAdminService.queryRepoSigs();
+    }
+
+    /**
      * Submit apply form based on the provided body.
      *
      * @param myApply The submit condition for querying apply form.

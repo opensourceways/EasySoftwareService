@@ -42,4 +42,15 @@ public class CoMaintainerServiceImpl implements CoMaintainerService {
         Map<String, Object> res = pkgStatusGateway.queryByCondition(condition);
         return ResultUtil.success(HttpStatus.OK, res);
     }
+
+    /**
+     * query repos and sigs based on condition.
+     *
+     * @return ResponseEntity<Object>.
+     */
+    @Override
+    public ResponseEntity<Object> queryRepoSigs() {
+        Map<String, Object> res = pkgStatusGateway.queryRepoSigsByMaintainer();
+        return ResultUtil.success(HttpStatus.OK, res);
+    }
 }
