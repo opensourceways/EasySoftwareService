@@ -171,8 +171,8 @@ public final class EsAsyncHttpUtil {
         String metric = MapConstant.METRIC_MAP.get(applyFormDO.getMetric());
         String field = metric.split(".status")[0];
 
-        String query = String.format(updateFormat, metric, field, applyFormDO.getMetricStatus(), status,
-                applyFormDO.getMaintainer(), applyFormDO.getRepo());
+        String query = String.format(updateFormat, metric, field, applyFormDO.getMetricStatus(), status, "*",
+                applyFormDO.getRepo());
 
         builder.setUrl(esUrl + index + "/_update_by_query");
         builder.setBody(query);
