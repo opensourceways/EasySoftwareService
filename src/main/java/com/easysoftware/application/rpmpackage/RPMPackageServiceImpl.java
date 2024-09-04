@@ -14,9 +14,11 @@ package com.easysoftware.application.rpmpackage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
+import com.easysoftware.application.rpmpackage.dto.RPMVersionCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageNewestVersionVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackgeVersionVo;
 import com.easysoftware.common.exception.NoneResException;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ResultUtil;
@@ -121,6 +123,25 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
         return ResultUtil.success(HttpStatus.OK, Map.of(
             "total", total,
             "list", List.of(resList)
+        ));
+    }
+
+    /**
+     * Queries newest version of RPM package.
+     *
+     * @param condition The search condition.
+     * @return Map containing the RPM package menu.
+     */
+    @Override
+    public ResponseEntity<Object> queryRpmVersion(final RPMVersionCondition condition) {
+        Map<String, List<RPMPackgeVersionVo>> rpmRes = null;
+        if ("batchQuery".equals(condition.getType())) {
+            rpmRes = rPMPkgGateway.queryRpmVersionByOs(condition);
+        }
+
+        return ResultUtil.success(HttpStatus.OK, Map.of(
+            "total", rpmRes.size(),
+            "res", rpmRes
         ));
     }
 

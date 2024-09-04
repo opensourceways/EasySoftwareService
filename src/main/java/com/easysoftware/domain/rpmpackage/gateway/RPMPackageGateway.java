@@ -13,9 +13,11 @@ package com.easysoftware.domain.rpmpackage.gateway;
 
 import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
+import com.easysoftware.application.rpmpackage.dto.RPMVersionCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageNewestVersionVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackgeVersionVo;
 
 import java.util.List;
 import java.util.Map;
@@ -86,7 +88,6 @@ public interface RPMPackageGateway {
      * @return A map containing tags information
      */
     Map<String, Object> queryEulerVersionByName(RPMPackageNameSearchCondition condition);
-
     /**
      * Query the RPM newest version based on the provided search condition.
      *
@@ -94,7 +95,13 @@ public interface RPMPackageGateway {
      * @return List of RPM newest version
      */
     List<RPMPackageNewestVersionVo> queryNewstRpmVersion(RPMPackageNameSearchCondition condition);
-
+    /**
+     * Query the RPM version based on the provided search condition by os.
+     *
+     * @param condition The search condition for querying RPM newest version
+     * @return List of RPM newest version
+     */
+    Map<String, List<RPMPackgeVersionVo>> queryRpmVersionByOs(RPMVersionCondition condition);
     /**
      * query pkg num of arch by os.
      * @param os os.
