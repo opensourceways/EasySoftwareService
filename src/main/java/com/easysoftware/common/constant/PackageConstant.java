@@ -71,6 +71,11 @@ public final class PackageConstant {
     public static final String HTTPS_PREFIX = "https://";
 
     /**
+     * official repo addres.
+     */
+    public static final String OFFICIAL_REPO = "gitee.com/src-openEuler/";
+
+    /**
      * table name of ApplicationPackageDO.
      */
     public static final String APP_PKG_TABLE = "application_package";
@@ -303,6 +308,11 @@ public final class PackageConstant {
      * VALID_METRIC_REG used to match input string.
      */
     public static final String VALID_METRIC_REG = PKG_CVE_METRIC + "|" + PKG_VERSION_METRIC;
+
+     /**
+     * official repo addrres prefix.
+     */
+    public static final String OFFICIAL_REPO_PREFIX = HTTPS_PREFIX + OFFICIAL_REPO;
 
     /**
      * VALID_BODY_STR_REG used to match input string.

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.easysoftware.application.rpmpackage.RPMPackageService;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
+import com.easysoftware.application.rpmpackage.dto.RPMVersionCondition;
 import com.easysoftware.common.aop.RequestLimitRedis;
 
 import jakarta.validation.Valid;
@@ -69,6 +70,19 @@ public class RPMPackageQueryAdapter {
     @RequestLimitRedis()
     public ResponseEntity<Object> queryNewstRpmVersion(@Valid final RPMPackageNameSearchCondition condition) {
         return rPMPkgService.queryNewstRpmVersion(condition);
+    }
+
+    /**
+     * Endpoint to query for all newst version of RPM packages based
+     * on the provided search condition.
+     *
+     * @param condition The search condition for querying versions of RPM packages.
+     * @return ResponseEntity<Object>.
+     */
+    @GetMapping("/version")
+    @RequestLimitRedis()
+    public ResponseEntity<Object> queryRpmVersion(@Valid final RPMVersionCondition condition) {
+        return rPMPkgService.queryRpmVersion(condition);
     }
 
 }

@@ -14,8 +14,12 @@ package com.easysoftware.application.rpmpackage;
 import com.easysoftware.application.BaseIService;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
+import com.easysoftware.application.rpmpackage.dto.RPMVersionCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
+
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +56,14 @@ public interface RPMPackageService extends BaseIService<RPMPackageDO> {
      * @return A map containing RPM newest version
      */
     ResponseEntity<Object> queryNewstRpmVersion(RPMPackageNameSearchCondition condition);
+
+    /**
+     * Query the version of rpm based on the provided search condition.
+     *
+     * @param condition The search condition for querying RPM newest version
+     * @return A map containing RPM newest version
+     */
+    ResponseEntity<Object> queryRpmVersion(@Valid RPMVersionCondition condition);
 
     /**
      * Queries part of the application package menu.

@@ -16,6 +16,7 @@ import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageEulerVersionVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageNewestVersionVo;
+import com.easysoftware.application.rpmpackage.vo.RPMPackgeVersionVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
@@ -28,7 +29,9 @@ import org.springframework.beans.BeanUtils;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class RPMPackageConverter {
 
@@ -227,6 +230,35 @@ public final class RPMPackageConverter {
         version.setNewestVersion(newestVersion);
         version.setOs(os);
         res.add(version);
+        return res;
+    }
+
+    /**
+     * Converts a list of RPMPackageDO objects to a list of
+     * RPMPackgeVersionVo
+     * view
+     * objects.
+     *
+     * @param rpmPkgDOs The list of RPMPackageDO objects to convert.
+     * @return A list of RPMPackageNewestVersionVo view objects.
+     */
+    public static Map<String, List<RPMPackgeVersionVo>> toRPMVersions(final Map<String, List<RPMPackageDO>> rpmPkgDOs) {
+        if (rpmPkgDOs == null || rpmPkgDOs.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        Map<String, List<RPMPackgeVersionVo>> res = new HashMap<>();
+
+        for (Map.Entry<String, List<RPMPackageDO>> entry : rpmPkgDOs.entrySet()) {
+            List<RPMPackageDO> packages = entry.getValue();
+            for (RPMPackageDO pkg: packages) {
+                RPMPackgeVersionVo vo = new RPMPackgeVersionVo();
+                vo.setName(pkg.getName());
+                vo.setVersion(pkg.getVersion());
+                vo.setOs(pkg.getOs());
+                res.computeIfAbsent(entry.getKey(), k -> new ArrayList<>()).add(vo);
+            }
+        }
         return res;
     }
 

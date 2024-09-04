@@ -16,8 +16,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.easysoftware.common.constant.PackageConstant;
+import com.easysoftware.common.utils.ObjectMapperUtil;
 
 import lombok.Data;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.Serial;
 import java.sql.Timestamp;
@@ -258,6 +260,21 @@ public class RPMPackageDO {
             this.updateAt = (Timestamp) updateAt.clone();
         } else {
             this.updateAt = null;
+        }
+    }
+
+    /**
+     * get an getRepoName from data obejct.
+     *
+     * @return reponame of data obejct
+     */
+    public String getRepoName() {
+        JsonNode rootNode = ObjectMapperUtil.toJsonNode(this.repo);
+        JsonNode urlNode = rootNode.get("url");
+        if (urlNode != null && !urlNode.isMissingNode()) {
+            return urlNode.asText().replace(PackageConstant.OFFICIAL_REPO_PREFIX, "");
+        } else {
+            return null;
         }
     }
 }

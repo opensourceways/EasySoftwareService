@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
+import com.easysoftware.application.rpmpackage.dto.RPMVersionCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageEulerVersionVo;
@@ -37,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Component;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -244,6 +246,25 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         wrapper.select(columns);
         List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
         return RPMPackageConverter.toRPMVersion(rpmList);
+    }
+
+    /**
+     * Query the RPM newest version based on the provided search condition.
+     *
+     * @param condition The search condition for querying a part of the RPM
+     *                  newest version
+     * @return A map containing relevant information
+     */
+    @Override
+    public Map<String, List<RPMPackgeVersionVo>> queryRpmVersionByOs(final RPMVersionCondition condition) {
+        LambdaQueryWrapper<RPMPackageDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(RPMPackageDO::getName, RPMPackageDO::getVersion, RPMPackageDO::getOs, RPMPackageDO::getRepo);
+        wrapper.eq(RPMPackageDO::getOs, condition.getOs());
+        wrapper.eq(RPMPackageDO::getArch, "x86_64");
+        List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
+        Map<String, List<RPMPackageDO>> res = rpmList.stream().collect(
+                                                            Collectors.groupingBy(RPMPackageDO::getRepoName));
+        return RPMPackageConverter.toRPMVersions(res);
     }
 
     /**

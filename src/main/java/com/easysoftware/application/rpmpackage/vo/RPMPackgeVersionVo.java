@@ -19,6 +19,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RPMPackgeVersionVo {
     /**
+     * name of the rpm package.
+     */
+    private String name;
+
+    /**
      * versions of the rpm package.
      */
     private String version;
