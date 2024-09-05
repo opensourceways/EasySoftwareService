@@ -201,7 +201,11 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         List<FiledApplicationVo> fList = domainGateway.queryVoList();
         for (FiledApplicationVo field : fList) {
             String cate = field.getCategory();
-            cateMap.get(cate).add(field);
+            if (cateMap.containsKey(cate)) {
+                cateMap.get(cate).add(field);
+            } else {
+                cateMap.put(cate, new ArrayList<>());
+            }
         }
 
         List<Map<String, Object>> mList = assembleMainPage(cateMap);
