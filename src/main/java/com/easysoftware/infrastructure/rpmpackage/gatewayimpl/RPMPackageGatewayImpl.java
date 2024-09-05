@@ -39,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -260,10 +261,24 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
         LambdaQueryWrapper<RPMPackageDO> wrapper = new LambdaQueryWrapper<>();
         wrapper.select(RPMPackageDO::getName, RPMPackageDO::getVersion, RPMPackageDO::getOs, RPMPackageDO::getRepo);
         wrapper.eq(RPMPackageDO::getOs, condition.getOs());
-        wrapper.eq(RPMPackageDO::getArch, "x86_64");
         List<RPMPackageDO> rpmList = rPMPkgMapper.selectList(wrapper);
         Map<String, List<RPMPackageDO>> res = rpmList.stream().collect(
-                                                            Collectors.groupingBy(RPMPackageDO::getRepoName));
+                                            Collectors.groupingBy(RPMPackageDO::getRepoName,
+                                            Collectors.collectingAndThen(Collectors.toList(), list -> {
+                                            Map<String, RPMPackageDO> uniqueByName = new HashMap<>();
+                                            for (RPMPackageDO packageDO : list) {
+                                                if (uniqueByName.containsKey(packageDO.getName())) {
+                                                    RPMPackageDO prevDo = uniqueByName.get(packageDO.getName());
+                                                    if (prevDo.getVersion().compareTo(packageDO.getVersion()) <= 0) {
+                                                        uniqueByName.put(packageDO.getName(), packageDO);
+                                                    }
+                                                } else {
+                                                    uniqueByName.put(packageDO.getName(), packageDO);
+                                                }
+                                            }
+                                            return new ArrayList<>(uniqueByName.values());
+                                        }
+        )));
         return RPMPackageConverter.toRPMVersions(res);
     }
 
