@@ -207,7 +207,7 @@ public final class PackageConstant {
     /**
      * package version status.
      */
-    public static final String LATEST_VERSION = "最新版本";
+    public static final String LATEST_VERSION = "正常版本";
 
     /**
      * package version status.
@@ -318,4 +318,14 @@ public final class PackageConstant {
      * authing user name field.
      */
     public static final String USER_NAME = "userName";
+
+    /**
+     * cve status suggestion.
+     */
+    public static final String CVE_SUGGESTION = "请完成CVE修复";
+
+    /**
+     * version status suggestion.
+     */
+    public static final String VERSION_SUGGESTION = "请检查版本是否合适";
 }

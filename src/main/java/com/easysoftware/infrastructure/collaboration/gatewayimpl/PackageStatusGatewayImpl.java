@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.easysoftware.application.collaboration.dto.PackageSearchCondition;
-import com.easysoftware.application.collaboration.vo.PackageStatusVO;
+import com.easysoftware.application.collaboration.vo.PackageStatusVo;
 import com.easysoftware.common.account.UserPermission;
 import com.easysoftware.common.constant.PackageConstant;
 import com.easysoftware.common.utils.EsAsyncHttpUtil;
@@ -93,7 +93,7 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
      * @return A map containing relevant information
      */
     public Map<String, Object> queryRepoByCondition(final PackageSearchCondition condition, String login) {
-        List<PackageStatusVO> pkgs = new ArrayList<>();
+        List<PackageStatusVo> pkgs = new ArrayList<>();
         int total = 0;
         try {
             Map<String, Object> query = ObjectMapperUtil.jsonToMap(condition);
@@ -122,12 +122,12 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
             PackageSearchCondition condition = new PackageSearchCondition();
             condition.setRepo(applyFormDO.getRepo());
             String jsonStr = ObjectMapperUtil.writeValueAsString(queryAllByCondition(condition).get("list"));
-            List<PackageStatusVO> pkgs = ObjectMapperUtil.toObjectList(PackageStatusVO.class, jsonStr);
+            List<PackageStatusVo> pkgs = ObjectMapperUtil.toObjectList(PackageStatusVo.class, jsonStr);
             if (pkgs.size() != 1) {
                 LOGGER.error("Duplicate src repo or no repo");
                 return flag;
             }
-            PackageStatusVO pkg = pkgs.get(0);
+            PackageStatusVo pkg = pkgs.get(0);
             updatePackageStatus(pkg, applyFormDO);
 
             String status = computeMetric(pkg);
@@ -152,7 +152,7 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
      * @param pkgStatus package metric status
      * @return package status
      */
-    public String computeMetric(PackageStatusVO pkgStatus) {
+    public String computeMetric(PackageStatusVo pkgStatus) {
         String status = PackageConstant.ACTIVE;
         if (PackageConstant.CVE_ALL_NO_FIXED.equals(pkgStatus.getCveStatus())
                 && PackageConstant.ISSUE_ALL_NO_FIXED.equals(pkgStatus.getIssueStatus())) {
@@ -184,7 +184,7 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
      * @param applyFormDO apply content
      * @return package status
      */
-    public PackageStatusVO updatePackageStatus(PackageStatusVO pkgStatus, ApplyFormDO applyFormDO) {
+    public PackageStatusVo updatePackageStatus(PackageStatusVo pkgStatus, ApplyFormDO applyFormDO) {
         if (PackageConstant.PKG_CVE_METRIC.equalsIgnoreCase(applyFormDO.getMetric())) {
             pkgStatus.setCveStatus(applyFormDO.getMetricStatus());
         } else if (PackageConstant.PKG_VERSION_METRIC.equalsIgnoreCase(applyFormDO.getMetric())) {

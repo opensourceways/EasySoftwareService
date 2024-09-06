@@ -11,12 +11,13 @@
 
 package com.easysoftware.application.collaboration.vo;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class PackageStatusVO {
+public class PackageStatusVo {
     /**
      * Name of the package. Restricted by length and character pattern.
      */
@@ -66,4 +67,14 @@ public class PackageStatusVO {
      * version status.
      */
     private String versionStatus;
+
+    /**
+     * pkg version detail.
+     */
+    private List<PackageVersionVo> versionDetail;
+
+    /**
+     * suggestions list.
+     */
+    private List<String> suggestions;
 }
