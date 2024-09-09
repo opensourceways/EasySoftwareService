@@ -11,6 +11,7 @@
 
 package com.easysoftware.infrastructure.applicationversion.gatewayimpl.converter;
 
+import com.easysoftware.application.rpmpackage.vo.PackgeVersionVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.domain.applicationversion.ApplicationVersion;
 import com.easysoftware.infrastructure.applicationversion.gatewayimpl.dataobject.ApplicationVersionDO;
@@ -61,6 +62,25 @@ public final class ApplicationVersionConvertor {
         for (ApplicationVersionDO appDO : appDOs) {
             ApplicationVersion app = toEntity(appDO);
             res.add(app);
+        }
+        return res;
+    }
+
+/**
+     * Convert a list of ApplicationVersionDO objects to a list of
+     * PackgeVersionVo entities.
+     *
+     * @param appDOs The list of ApplicationVersionDO objects to convert
+     * @return A list of PackgeVersionVo entities
+     */
+    public static List<PackgeVersionVo> toPackgeVersionVo(final List<ApplicationVersionDO> appDOs) {
+        List<PackgeVersionVo> res = new ArrayList<>();
+        for (ApplicationVersionDO appDO : appDOs) {
+            PackgeVersionVo pkgVo = new PackgeVersionVo();
+            pkgVo.setName(appDO.getName());
+            pkgVo.setOs(appDO.getEulerOsVersion());
+            pkgVo.setVersion(appDO.getUpstreamVersion());
+            res.add(pkgVo);
         }
         return res;
     }

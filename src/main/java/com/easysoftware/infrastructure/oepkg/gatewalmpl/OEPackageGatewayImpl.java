@@ -22,7 +22,7 @@ import com.easysoftware.application.oepackage.vo.OEPackageMenuVo;
 import com.easysoftware.application.oepackage.vo.OepkgEulerVersionVo;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageNameSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageNewestVersionVo;
-import com.easysoftware.application.rpmpackage.vo.RPMPackgeVersionVo;
+import com.easysoftware.application.rpmpackage.vo.PackgeVersionVo;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
@@ -249,7 +249,7 @@ public class OEPackageGatewayImpl implements OEPackageGateway {
     public List<RPMPackageNewestVersionVo> queryNewstRpmVersion(RPMPackageNameSearchCondition condition) {
         QueryWrapper<OepkgDO> wrapper = new QueryWrapper<>();
         String name = condition.getName();
-        List<String> columns = ClassField.getFieldNames(new RPMPackgeVersionVo());
+        List<String> columns = ClassField.getFieldNames(new PackgeVersionVo());
         if (!StringUtils.isBlank(name)) {
             wrapper.eq("lower(name)", name.toLowerCase());
         }

@@ -23,7 +23,7 @@ import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageEulerVersionVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageNewestVersionVo;
-import com.easysoftware.application.rpmpackage.vo.RPMPackgeVersionVo;
+import com.easysoftware.application.rpmpackage.vo.PackgeVersionVo;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
@@ -239,7 +239,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
     public List<RPMPackageNewestVersionVo> queryNewstRpmVersion(final RPMPackageNameSearchCondition condition) {
         QueryWrapper<RPMPackageDO> wrapper = QueryWrapperUtil.createQueryWrapper(new RPMPackageDO(),
                 condition, "");
-        RPMPackgeVersionVo pkgVo = new RPMPackgeVersionVo();
+        PackgeVersionVo pkgVo = new PackgeVersionVo();
         List<String> columns = ClassField.getFieldNames(pkgVo);
         if (condition.getName() != null) {
             wrapper.eq("name", condition.getName().toLowerCase());
@@ -257,7 +257,7 @@ public class RPMPackageGatewayImpl implements RPMPackageGateway {
      * @return A map containing relevant information
      */
     @Override
-    public Map<String, List<RPMPackgeVersionVo>> queryRpmVersionByOs(final RPMVersionCondition condition) {
+    public Map<String, List<PackgeVersionVo>> queryRpmVersionByOs(final RPMVersionCondition condition) {
         LambdaQueryWrapper<RPMPackageDO> wrapper = new LambdaQueryWrapper<>();
         wrapper.select(RPMPackageDO::getName, RPMPackageDO::getVersion, RPMPackageDO::getOs, RPMPackageDO::getRepo);
         wrapper.eq(RPMPackageDO::getOs, condition.getOs());

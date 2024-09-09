@@ -17,7 +17,7 @@ import com.easysoftware.application.rpmpackage.dto.RPMVersionCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageNewestVersionVo;
-import com.easysoftware.application.rpmpackage.vo.RPMPackgeVersionVo;
+import com.easysoftware.application.rpmpackage.vo.PackgeVersionVo;
 
 import java.util.List;
 import java.util.Map;
@@ -101,7 +101,7 @@ public interface RPMPackageGateway {
      * @param condition The search condition for querying RPM newest version
      * @return List of RPM newest version
      */
-    Map<String, List<RPMPackgeVersionVo>> queryRpmVersionByOs(RPMVersionCondition condition);
+    Map<String, List<PackgeVersionVo>> queryRpmVersionByOs(RPMVersionCondition condition);
     /**
      * query pkg num of arch by os.
      * @param os os.

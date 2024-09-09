@@ -12,6 +12,8 @@
 package com.easysoftware.domain.applicationversion.gateway;
 
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
+import com.easysoftware.application.rpmpackage.vo.PackgeVersionVo;
+
 import java.util.List;
 import java.util.Map;
 
@@ -40,4 +42,11 @@ public interface ApplicationVersionGateway {
      * @return A collection of ApplicationVersionDO objects
      */
     Map<String, List<String>> queryColumn(List<String> columns);
+
+    /**
+     * Query all upstream package version.
+     *
+     * @return A map containing relevant information
+     */
+    Map<String, List<PackgeVersionVo>> queryUpstreamVersions();
 }

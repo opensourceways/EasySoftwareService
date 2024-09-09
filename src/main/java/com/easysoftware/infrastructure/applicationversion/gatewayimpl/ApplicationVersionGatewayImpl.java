@@ -11,9 +11,11 @@
 
 package com.easysoftware.infrastructure.applicationversion.gatewayimpl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.applicationversion.dto.ApplicationVersionSearchCondition;
+import com.easysoftware.application.rpmpackage.vo.PackgeVersionVo;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.QueryWrapperUtil;
 import com.easysoftware.common.utils.SortUtil;
@@ -31,6 +33,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway {
@@ -133,5 +136,23 @@ public class ApplicationVersionGatewayImpl implements ApplicationVersionGateway 
 
         String underlineToCamelColumn = StringUtil.underlineToCamel(column);
         return ApplicationVersionConvertor.toColumn(columnList, underlineToCamelColumn);
+    }
+
+    /**
+     * Query all upstream package version.
+     *
+     * @return A map containing relevant information
+     */
+    @Override
+    public Map<String, List<PackgeVersionVo>> queryUpstreamVersions() {
+        LambdaQueryWrapper<ApplicationVersionDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(ApplicationVersionDO::getName,
+                       ApplicationVersionDO::getUpstreamVersion,
+                       ApplicationVersionDO::getEulerOsVersion);
+        List<ApplicationVersionDO> doList = appVersionMapper.selectList(wrapper);
+        List<PackgeVersionVo> voList = ApplicationVersionConvertor.toPackgeVersionVo(doList);
+        Map<String, List<PackgeVersionVo>> res = voList.stream().
+                                                 collect(Collectors.groupingBy(PackgeVersionVo::getName));
+        return res;
     }
 }

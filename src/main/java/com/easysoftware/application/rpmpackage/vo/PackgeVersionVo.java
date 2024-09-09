@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RPMPackgeVersionVo {
+public class PackgeVersionVo {
     /**
      * name of the rpm package.
      */
