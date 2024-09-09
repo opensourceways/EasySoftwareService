@@ -204,7 +204,7 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
             if (cateMap.containsKey(cate)) {
                 cateMap.get(cate).add(field);
             } else {
-                cateMap.put(cate, new ArrayList<>());
+                cateMap.computeIfAbsent(cate, k -> new ArrayList<>()).add(field);
             }
         }
 
