@@ -18,10 +18,11 @@ import com.easysoftware.application.rpmpackage.dto.RPMVersionCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageNewestVersionVo;
-import com.easysoftware.application.rpmpackage.vo.RPMPackgeVersionVo;
+import com.easysoftware.application.rpmpackage.vo.PackgeVersionVo;
 import com.easysoftware.common.exception.NoneResException;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ResultUtil;
+import com.easysoftware.domain.applicationversion.gateway.ApplicationVersionGateway;
 import com.easysoftware.domain.oepackage.gateway.OEPackageGateway;
 import com.easysoftware.domain.rpmpackage.gateway.RPMPackageGateway;
 import com.easysoftware.infrastructure.mapper.RPMPackageDOMapper;
@@ -48,6 +49,12 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
      */
     @Resource
     private RPMPackageGateway rPMPkgGateway;
+
+    /**
+     * Resource for interacting with Application Version Gateway.
+     */
+    @Resource
+    private ApplicationVersionGateway appVersionGateway;
 
     /**
      * gateway.
@@ -134,14 +141,16 @@ public class RPMPackageServiceImpl extends ServiceImpl<RPMPackageDOMapper, RPMPa
      */
     @Override
     public ResponseEntity<Object> queryRpmVersion(final RPMVersionCondition condition) {
-        Map<String, List<RPMPackgeVersionVo>> rpmRes = null;
+        Map<String, List<PackgeVersionVo>> versionRes = Collections.emptyMap();
         if ("batchQuery".equals(condition.getType())) {
-            rpmRes = rPMPkgGateway.queryRpmVersionByOs(condition);
+            versionRes = rPMPkgGateway.queryRpmVersionByOs(condition);
+        } else if ("batchQueryUpstream".equals(condition.getType())) {
+            versionRes = appVersionGateway.queryUpstreamVersions();
         }
 
         return ResultUtil.success(HttpStatus.OK, Map.of(
-            "total", rpmRes.size(),
-            "res", rpmRes
+            "total", versionRes.size(),
+            "res", versionRes
         ));
     }
 

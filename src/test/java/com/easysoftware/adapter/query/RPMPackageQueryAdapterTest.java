@@ -42,7 +42,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.easysoftware.application.rpmpackage.RPMPackageService;
 import com.easysoftware.application.rpmpackage.dto.RPMVersionCondition;
-import com.easysoftware.application.rpmpackage.vo.RPMPackgeVersionVo;
+import com.easysoftware.application.rpmpackage.vo.PackgeVersionVo;
 import com.easysoftware.common.entity.ResultVo;
 import com.easysoftware.common.utils.CommonUtil;
 import com.easysoftware.common.utils.ResultUtil;
@@ -118,6 +118,22 @@ public class RPMPackageQueryAdapterTest {
     }
 
     @Test
+    void test_VersionUpstreamRequest() throws Exception {
+        MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
+        // test case1 :
+        paramMap.add("type", "batchQueryUpstream");
+        ResultVo comres = CommonUtil.executeGet(mockMvc, "/rpmpkg/version", paramMap);
+        CommonUtil.assertOk(comres);
+
+         // test case1 :
+         paramMap.add("type", "batchQueryUpstreame");
+         ResultVo errores = CommonUtil.executeGet(mockMvc, "/rpmpkg/version", paramMap);
+         Map<String, Object> data = (Map<String, Object>) errores.getData();
+         assertEquals(data.get("total"), 0);
+    }
+    
+
+    @Test
     void test_VersionWithErrorTypeException() throws Exception {
         RPMVersionCondition condition = new RPMVersionCondition(); 
         condition.setType("errorType");
@@ -138,8 +154,8 @@ public class RPMPackageQueryAdapterTest {
         RPMVersionCondition condition = new RPMVersionCondition(); 
         condition.setType("ee");
 
-        Map<String, List<RPMPackgeVersionVo>> gateWayReturn = new HashMap<>();
-        RPMPackgeVersionVo testVo = new RPMPackgeVersionVo();
+        Map<String, List<PackgeVersionVo>> gateWayReturn = new HashMap<>();
+        PackgeVersionVo testVo = new PackgeVersionVo();
         testVo.setName("testRpm");
         gateWayReturn.computeIfAbsent("test", k -> new ArrayList<>()).add(testVo);
     

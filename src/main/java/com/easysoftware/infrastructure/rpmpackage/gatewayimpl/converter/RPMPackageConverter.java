@@ -16,7 +16,7 @@ import com.easysoftware.application.rpmpackage.vo.RPMPackageDomainVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageEulerVersionVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageMenuVo;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageNewestVersionVo;
-import com.easysoftware.application.rpmpackage.vo.RPMPackgeVersionVo;
+import com.easysoftware.application.rpmpackage.vo.PackgeVersionVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.SortUtil;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
@@ -242,17 +242,17 @@ public final class RPMPackageConverter {
      * @param rpmPkgDOs The list of RPMPackageDO objects to convert.
      * @return A list of RPMPackageNewestVersionVo view objects.
      */
-    public static Map<String, List<RPMPackgeVersionVo>> toRPMVersions(final Map<String, List<RPMPackageDO>> rpmPkgDOs) {
+    public static Map<String, List<PackgeVersionVo>> toRPMVersions(final Map<String, List<RPMPackageDO>> rpmPkgDOs) {
         if (rpmPkgDOs == null || rpmPkgDOs.isEmpty()) {
             return Collections.emptyMap();
         }
 
-        Map<String, List<RPMPackgeVersionVo>> res = new HashMap<>();
+        Map<String, List<PackgeVersionVo>> res = new HashMap<>();
 
         for (Map.Entry<String, List<RPMPackageDO>> entry : rpmPkgDOs.entrySet()) {
             List<RPMPackageDO> packages = entry.getValue();
             for (RPMPackageDO pkg: packages) {
-                RPMPackgeVersionVo vo = new RPMPackgeVersionVo();
+                PackgeVersionVo vo = new PackgeVersionVo();
                 vo.setName(pkg.getName());
                 vo.setVersion(pkg.getVersion());
                 vo.setOs(pkg.getOs());
