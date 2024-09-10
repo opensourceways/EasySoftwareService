@@ -129,7 +129,8 @@ public class RankerImpl implements Ranker {
         PreparedStatement exsitmt = null;
         PreparedStatement refreshtmt = null;
         try {
-            String sql = "INSERT into domain_package SELECT * from field_package WHERE name = ? GROUP BY name";
+            String sql = "INSERT into domain_package SELECT * from field_package WHERE name = ?"
+                        + "order by length(tags) desc limit 1";
             String exsitSql = "SELECT name from domain_package WHERE name = ?";
             for (OperationConfigVo config : changeConfig) {
                 exsitmt = conn.prepareStatement(exsitSql);
@@ -141,11 +142,11 @@ public class RankerImpl implements Ranker {
                     refreshtmt.setString(1, config.getCategorys());
                     refreshtmt.setString(2, config.getRecommend());
                     refreshtmt.executeUpdate();
-                    continue;
+                } else {
+                    pstmt = conn.prepareStatement(sql);
+                    pstmt.setString(1, config.getRecommend());
+                    pstmt.executeUpdate();
                 }
-                pstmt = conn.prepareStatement(sql);
-                pstmt.setString(1, config.getRecommend());
-                pstmt.executeUpdate();
             }
 
             conn.commit();
