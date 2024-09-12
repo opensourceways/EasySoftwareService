@@ -77,4 +77,29 @@ public class PackageStatusVo {
      * suggestions list.
      */
     private List<String> suggestions;
+
+    /**
+     * level.
+     */
+    private String level;
+
+    /**
+     * cve detail url.
+     */
+    private String cveDetailUrl;
+
+    /**
+     * pr detail url.
+     */
+    private String prDetailUrl;
+
+    /**
+     * issue detail url.
+     */
+    private String issueDetailUrl;
+
+    /**
+     * version detail url.
+     */
+    private String versionDetailUrl;
 }

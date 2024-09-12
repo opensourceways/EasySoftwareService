@@ -18,7 +18,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import com.easysoftware.application.collaboration.vo.PackageDetailUrlVo;
 import com.easysoftware.application.collaboration.vo.PackageStatusVo;
 import com.easysoftware.application.collaboration.vo.PackageVersionVo;
 import com.easysoftware.common.constant.PackageConstant;
@@ -41,15 +41,17 @@ public final class PackageStatusConverter {
      * objects.
      *
      * @param hits JsonNode to convert
+     * @param pkgDetailUrl package detail url
      * @return A list of PackageStatusVO objects
      */
-    public static List<PackageStatusVo> toDetail(final JsonNode hits) {
+    public static List<PackageStatusVo> toDetail(final JsonNode hits, final PackageDetailUrlVo pkgDetailUrl) {
         List<PackageStatusVo> pkgs = new ArrayList<>();
         for (JsonNode hit : hits) {
             PackageStatusVo pkg = new PackageStatusVo();
             JsonNode source = hit.path("_source");
             pkg.setRepo(source.path("repo").asText());
             pkg.setKind(source.path("kind").asText());
+            pkg.setLevel(source.path("level").asText());
             pkg.setSigName(source.path("sig_names").asText());
 
             JsonNode collaboration = source.path("collaboration");
@@ -66,6 +68,7 @@ public final class PackageStatusConverter {
             pkg.setVersionDetail(version);
             List<String> suggestions = fixSuggestion(pkg);
             pkg.setSuggestions(suggestions);
+            pkg = getStatusDetail(pkg, pkgDetailUrl);
             pkgs.add(pkg);
         }
         return pkgs;
@@ -114,5 +117,36 @@ public final class PackageStatusConverter {
             itemMap.put(name, pkg);
         }
         return new ArrayList<>(itemMap.values());
+    }
+
+    /**
+     * get package status detail.
+     *
+     * @param pkgStatus package metric status
+     * @param pkgDetailUrl package detail url
+     * @return pkgStatus
+     */
+    public static PackageStatusVo getStatusDetail(PackageStatusVo pkgStatus, PackageDetailUrlVo pkgDetailUrl) {
+        if (PackageConstant.CVE_ALL_NO_FIXED.equals(pkgStatus.getCveStatus())
+                || PackageConstant.CVE_SOME_FIXED.equals(pkgStatus.getIssueStatus())) {
+            String url = String.format(pkgDetailUrl.getCveDetailUrl(), pkgStatus.getRepo());
+            pkgStatus.setCveDetailUrl(url);
+        }
+        if (PackageConstant.ISSUE_ALL_NO_FIXED.equals(pkgStatus.getIssueStatus())
+                || PackageConstant.ISSUE_SOME_FIXED.equals(pkgStatus.getIssueStatus())) {
+            String url = String.format(pkgDetailUrl.getIssueDetailUrl(), pkgStatus.getRepo(), "issues");
+            pkgStatus.setIssueDetailUrl(url);
+        }
+        if (PackageConstant.PR_NO_MERGED.equals(pkgStatus.getPrStatus())) {
+            String url = String.format(pkgDetailUrl.getPrDetailUrl(), pkgStatus.getRepo(), "pulls");
+            pkgStatus.setPrDetailUrl(url);
+        }
+
+        if (PackageConstant.OUTDATED_VERSION.equals(pkgStatus.getVersionStatus())) {
+            String url = String.format(pkgDetailUrl.getVersionDetailUrl(), pkgStatus.getRepo());
+            pkgStatus.setVersionDetailUrl(url);
+        }
+
+        return pkgStatus;
     }
 }

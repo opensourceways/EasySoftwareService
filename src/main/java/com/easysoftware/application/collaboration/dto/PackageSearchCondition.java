@@ -50,6 +50,13 @@ public class PackageSearchCondition {
     private String kind;
 
     /**
+     * repo level.
+     */
+    @Size(max = PackageConstant.MAX_FIELD_LENGTH)
+    @Pattern(regexp = PackageConstant.VALID_STR_REG, message = PackageConstant.VALID_MESSAGE)
+    private String level;
+
+    /**
      * repo status.
      */
     @Size(max = PackageConstant.MAX_FIELD_LENGTH)
