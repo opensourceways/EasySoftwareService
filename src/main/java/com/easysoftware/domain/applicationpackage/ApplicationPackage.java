@@ -120,7 +120,7 @@ public class ApplicationPackage {
     /**
      * Security level information.
      */
-    private String securityLevel;
+    private String security;
 
     /**
      * Safety label details.
