@@ -40,6 +40,7 @@ public final class MapConstant {
         item.put("status", "collaboration.status");
         item.put("repo", "repo");
         item.put("kind", "kind");
+        item.put("level", "level");
         METRIC_MAP = Collections.unmodifiableMap(item);
     }
 

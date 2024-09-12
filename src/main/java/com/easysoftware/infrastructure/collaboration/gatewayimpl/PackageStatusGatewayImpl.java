@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.easysoftware.application.collaboration.dto.PackageSearchCondition;
+import com.easysoftware.application.collaboration.vo.PackageDetailUrlVo;
 import com.easysoftware.application.collaboration.vo.PackageStatusVo;
 import com.easysoftware.common.account.UserPermission;
 import com.easysoftware.common.constant.PackageConstant;
@@ -56,6 +57,24 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
      */
     @Value("${es.pkgIndex}")
     private String pkgIndex;
+
+    /**
+     * Value injected for the es package status index name.
+     */
+    @Value("${status_detail_url.repo_detail_url}")
+    private String repoDetailUrl;
+
+    /**
+     * Value injected for the es package status index name.
+     */
+    @Value("${status_detail_url.unfixed_cve_url}")
+    private String unfixedCveUrl;
+
+    /**
+     * Value injected for the es package status index name.
+     */
+    @Value("${status_detail_url.version_url}")
+    private String versionUrl;
 
     /**
      * Logger instance for PackageStatusGatewayImpl.
@@ -102,7 +121,9 @@ public class PackageStatusGatewayImpl implements PackageStatusGateway {
             JsonNode dataNode = ObjectMapperUtil.toJsonNode(responseBody);
             JsonNode hits = dataNode.path("hits").path("hits");
             total = dataNode.path("hits").path("total").path("value").asInt();
-            pkgs = PackageStatusConverter.toDetail(hits);
+            PackageDetailUrlVo pkgDetailUrl = new PackageDetailUrlVo(unfixedCveUrl, repoDetailUrl, repoDetailUrl,
+                    versionUrl);
+            pkgs = PackageStatusConverter.toDetail(hits, pkgDetailUrl);
         } catch (Exception e) {
             LOGGER.error("search package error - {}", e.getMessage());
         }

@@ -205,6 +205,11 @@ public final class PackageConstant {
     public static final String ISSUE_ALL_NO_FIXED = "没有Issue修复";
 
     /**
+     * issue status.
+     */
+    public static final String ISSUE_SOME_FIXED = "有部分Issue修复";
+
+    /**
      * package version status.
      */
     public static final String LATEST_VERSION = "正常版本";
@@ -218,6 +223,11 @@ public final class PackageConstant {
      * package update status.
      */
     public static final String PR_NO_UPDATED = "没有PR提交";
+
+    /**
+     * package update status.
+     */
+    public static final String PR_NO_MERGED = "有PR提交未合入";
 
     /**
      * package maintainenance status.
