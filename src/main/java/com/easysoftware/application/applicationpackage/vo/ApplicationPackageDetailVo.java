@@ -103,7 +103,7 @@ public class ApplicationPackageDetailVo {
     /**
      * Security level associated with the software package.
      */
-    private String securityLevel;
+    private String security;
     /**
      * Safe label information for the software package.
      */

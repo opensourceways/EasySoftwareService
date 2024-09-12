@@ -144,7 +144,7 @@ public class ApplicationPackageDO {
     /**
      * Security level information.
      */
-    private String securityLevel;
+    private String security;
 
     /**
      * Safety label information.
