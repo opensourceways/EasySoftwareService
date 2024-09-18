@@ -23,6 +23,7 @@ import com.easysoftware.application.filedapplication.dto.FiledApplicationSerachC
 import com.easysoftware.application.filedapplication.vo.EulerLifeCycleVo;
 import com.easysoftware.application.filedapplication.vo.FiledApplicationVo;
 import com.easysoftware.application.oepackage.dto.OEPackageSearchCondition;
+import com.easysoftware.application.oepackage.vo.OEPackageDetailVo;
 import com.easysoftware.application.rpmpackage.RPMPackageService;
 import com.easysoftware.application.rpmpackage.dto.RPMPackageSearchCondition;
 import com.easysoftware.application.rpmpackage.vo.RPMPackageDetailVo;
@@ -359,6 +360,7 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
         String appPkgId = StringUtils.trimToEmpty(condition.getAppPkgId());
         String rpmPkgId = StringUtils.trimToEmpty(condition.getRpmPkgId());
         String epkgPkgId = StringUtils.trimToEmpty(condition.getEpkgPkgId());
+        String oepkgPkgId = StringUtils.trimToEmpty(condition.getOepkgPkgId());
 
         Map<String, Object> res = new HashMap<>();
         Set<String> tags = new HashSet<>();
@@ -381,9 +383,35 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
             tags.add("EPKG");
         }
 
+        OEPackageDetailVo oepkg = searchOepkgDetail(oepkgPkgId);
+        if (oepkg != null) {
+            res.put("OEPKG", oepkg);
+            tags.add("OEPKG");
+        }
+
         List<String> sortedTags = SortUtil.sortTags(tags);
         res.put("tags", sortedTags);
         return ResultUtil.success(HttpStatus.OK, res);
+    }
+
+    /**
+     * Search OEPKG package detail by the specified OEPKG package ID.
+     *
+     * @param oepkgPkgId The ID of the RPM package to search for.
+     * @return An RPMPackageDetailVo object containing the details of the OEPKG
+     *         package.
+     */
+    private OEPackageDetailVo searchOepkgDetail(final String oepkgPkgId) {
+        if (StringUtils.isBlank(oepkgPkgId)) {
+            return null;
+        }
+
+        List<OEPackageDetailVo> pkgList = oePkgGateway.queryDetailByPkgId(oepkgPkgId);
+        if (pkgList.size() >= 1) {
+            return pkgList.get(0);
+        }
+        LOGGER.error(String.format(Locale.ROOT, MessageCode.EC00014.getMsgEn(), "oepkgPkgId"));
+        return null;
     }
 
     /**
