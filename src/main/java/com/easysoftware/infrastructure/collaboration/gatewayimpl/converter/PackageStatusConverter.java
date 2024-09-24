@@ -127,8 +127,7 @@ public final class PackageStatusConverter {
      * @return pkgStatus
      */
     public static PackageStatusVo getStatusDetail(PackageStatusVo pkgStatus, PackageDetailUrlVo pkgDetailUrl) {
-        if (PackageConstant.CVE_ALL_NO_FIXED.equals(pkgStatus.getCveStatus())
-                || PackageConstant.CVE_SOME_FIXED.equals(pkgStatus.getIssueStatus())) {
+        if (!PackageConstant.NO_CVE.equals(pkgStatus.getCveStatus())) {
             String url = String.format(pkgDetailUrl.getCveDetailUrl(), pkgStatus.getRepo());
             pkgStatus.setCveDetailUrl(url);
         }
