@@ -172,7 +172,7 @@ public final class PackageConstant {
     /**
      * Constan software num.
      */
-    public static final long SOFTWARE_NUM = 82782;
+    public static final long SOFTWARE_NUM = 80782;
 
     /**
      * package status keyword format.
