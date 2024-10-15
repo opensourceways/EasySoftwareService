@@ -111,6 +111,11 @@ public final class PackageConstant {
     public static final String FIELD_PKG_TABLE = "field_package";
 
     /**
+     * table name of FieldPkgDO.
+     */
+    public static final String FIELD_PKG_PARTITION_TABLE = "field_package_partition_by_os";
+
+    /**
      * table name of OepkgDO.
      */
     public static final String OEPKG_TABLE = "oepkg";
