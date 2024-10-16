@@ -60,7 +60,6 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
 
         columns.remove("count");
         columns.remove("tagsLength");
-        columns.remove("id");
         wrapper.select(columns);
         wrapper.orderByDesc("tags_length");
 

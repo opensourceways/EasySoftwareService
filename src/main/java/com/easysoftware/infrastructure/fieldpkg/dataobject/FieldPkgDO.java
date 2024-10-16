@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName(PackageConstant.FIELD_PKG_PARTITION_TABLE)
+@TableName(PackageConstant.FIELD_PKG_TABLE)
 public class FieldPkgDO {
         /**
      * Serializable class with a defined serial version UID.
@@ -89,8 +89,4 @@ public class FieldPkgDO {
      */
     private String maintainers;
 
-    /**
-     * id to the entity.
-     */
-    private int id;
 }
