@@ -122,62 +122,76 @@ public class RankerImpl implements Ranker {
             conn = DriverManager.getConnection(url, user, password);
             // 关闭自动提交
             conn.setAutoCommit(false);
+            PreparedStatement pstmt = null;
+            PreparedStatement exsitmt = null;
+            PreparedStatement refreshtmt = null;
+            ResultSet rs = null;
+            try {
+                String sql = "INSERT into domain_package SELECT * from field_package WHERE name = ?"
+                        + "order by length(tags) desc limit 1";
+                String exsitSql = "SELECT name from domain_package WHERE name = ?";
+                for (OperationConfigVo config : changeConfig) {
+                    exsitmt = conn.prepareStatement(exsitSql);
+                    exsitmt.setString(1, config.getRecommend());
+                    rs = exsitmt.executeQuery();
+                    // 已存在数据则刷新 不插入
+                    if (rs.next()) {
+                        refreshtmt = conn.prepareStatement(PackageConstant.DOMAIN_CHANGE);
+                        refreshtmt.setString(1, config.getCategorys());
+                        refreshtmt.setString(2, config.getRecommend());
+                        refreshtmt.executeUpdate();
+                    } else {
+                        pstmt = conn.prepareStatement(sql);
+                        pstmt.setString(1, config.getRecommend());
+                        pstmt.executeUpdate();
+                    }
+                }
+
+                conn.commit();
+
+            } catch (SQLException e) {
+                try {
+                    if (conn != null) {
+                        conn.rollback();
+                        LOGGER.error("error hanpend in transaction. trans roll back");
+                    }
+                } catch (SQLException ex) {
+                    throw new ParamErrorException("trans roll back");
+                }
+
+                throw new ParamErrorException("sql excute error");
+            } finally {
+                try {
+                    if (exsitmt != null) {
+                        exsitmt.close();
+                    }
+                    if (refreshtmt != null) {
+                        refreshtmt.close();
+                    }
+                    if (pstmt != null) {
+                        pstmt.close();
+                    }
+                    if (conn != null) {
+                        conn.close();
+                    }
+                    if (rs != null) {
+                        rs.close();
+                    }
+                } catch (SQLException e) {
+                    LOGGER.error("sql cloesd error", e);
+                }
+            }
         } catch (SQLException e) {
             throw new ParamErrorException("get sql seesion failed");
-        }
-        PreparedStatement pstmt = null;
-        PreparedStatement exsitmt = null;
-        PreparedStatement refreshtmt = null;
-        try {
-            String sql = "INSERT into domain_package SELECT * from field_package WHERE name = ?"
-                        + "order by length(tags) desc limit 1";
-            String exsitSql = "SELECT name from domain_package WHERE name = ?";
-            for (OperationConfigVo config : changeConfig) {
-                exsitmt = conn.prepareStatement(exsitSql);
-                exsitmt.setString(1, config.getRecommend());
-                ResultSet rs = exsitmt.executeQuery();
-                // 已存在数据则刷新 不插入
-                if (rs.next()) {
-                    refreshtmt = conn.prepareStatement(PackageConstant.DOMAIN_CHANGE);
-                    refreshtmt.setString(1, config.getCategorys());
-                    refreshtmt.setString(2, config.getRecommend());
-                    refreshtmt.executeUpdate();
-                } else {
-                    pstmt = conn.prepareStatement(sql);
-                    pstmt.setString(1, config.getRecommend());
-                    pstmt.executeUpdate();
-                }
-            }
-
-            conn.commit();
-
-        } catch (SQLException e) {
-            try {
-                if (conn != null) {
-                    conn.rollback();
-                    LOGGER.error("error hanpend in transaction. trans roll back");
-                }
-            } catch (SQLException ex) {
-                throw new ParamErrorException("trans roll back");
-            }
-
-            throw new ParamErrorException("sql excute error");
         } finally {
-            try {
-                if (exsitmt != null) {
-                    exsitmt.close();
+            // 关闭连接  
+            if (conn != null) {
+                try {
+                    conn.close();  
+                } catch (SQLException e) {
+                    // 记录关闭连接时发生的错误  
+                    LOGGER.error("Error closing connection", e);  
                 }
-                if (refreshtmt != null) {
-                    refreshtmt.close();
-                }
-                if (pstmt != null) {
-                    pstmt.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                throw new ParamErrorException("sql cloesd error");
             }
         }
 
@@ -200,6 +214,16 @@ public class RankerImpl implements Ranker {
             conn.setAutoCommit(false);
         } catch (SQLException e) {
             throw new ParamErrorException("get sql seesion failed");
+        } finally {  
+            // 关闭连接  
+            if (conn != null) {  
+                try {  
+                    conn.close();  
+                } catch (SQLException e) {  
+                    // 记录关闭连接时发生的错误  
+                    LOGGER.error("Error closing connection", e);  
+                }  
+            }  
         }
         PreparedStatement pstmt = null;
         try {
@@ -233,7 +257,7 @@ public class RankerImpl implements Ranker {
                     conn.close();
                 }
             } catch (SQLException e) {
-                throw new ParamErrorException("sql cloesd error");
+                LOGGER.error("sql cloesd error", e); 
             }
         }
 
