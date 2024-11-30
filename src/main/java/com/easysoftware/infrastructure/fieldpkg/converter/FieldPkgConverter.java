@@ -21,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import java.util.Comparator;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,21 +64,13 @@ public final class FieldPkgConverter {
      */
     public static List<FieldPkgVo> aggregateVoByName(final List<FieldPkgVo> doList) {
         List<FieldPkgVo> res = new ArrayList<>();
-
-        Map<String, List<FieldPkgVo>> groupedByName = doList.stream()
-                .collect(Collectors.groupingBy(FieldPkgVo::getName));
-
-        for (Map.Entry<String, List<FieldPkgVo>> entry : groupedByName.entrySet()) {
-            List<FieldPkgVo> voList = entry.getValue();
-            List<FieldPkgVo> sortedVoList = voList.stream()
-                    .sorted(Comparator.comparing(FieldPkgVo::getOs).reversed())
-                    .toList();
-            // 取最新OS
-            if (!sortedVoList.isEmpty()) {
-                res.add(sortedVoList.get(0));
+        Map<String, FieldPkgVo> groupedByName = new HashMap<>();
+        for (FieldPkgVo fieldPkgVo : doList) {
+            if (!groupedByName.containsKey(fieldPkgVo.getName())) {
+                groupedByName.put(fieldPkgVo.getName(), fieldPkgVo);
+                res.add(fieldPkgVo);
             }
         }
-
         return res;
     }
 

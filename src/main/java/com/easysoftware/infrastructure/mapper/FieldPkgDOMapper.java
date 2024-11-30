@@ -11,8 +11,23 @@
 
 package com.easysoftware.infrastructure.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.easysoftware.application.fieldpkg.dto.FieldPkgSearchCondition;
 import com.easysoftware.infrastructure.fieldpkg.dataobject.FieldPkgDO;
 
 public interface FieldPkgDOMapper extends BaseMapper<FieldPkgDO> {
+    /**
+     * process apply if apply status is OPEN.
+     *
+     * @param pageSize pageSize.
+     * @param offset offset.
+     * @param condition condition.
+     * @return List<FieldPkgDO> result
+     */
+    List<FieldPkgDO> selectCustomPageByCondition(@Param("pageSize") int pageSize,
+    @Param("offset") int offset, @Param("condition") FieldPkgSearchCondition condition);
 }
