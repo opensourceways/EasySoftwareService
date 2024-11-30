@@ -17,7 +17,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.fieldpkg.dto.FieldPkgSearchCondition;
 import com.easysoftware.application.fieldpkg.vo.FieldPkgVo;
-import com.easysoftware.common.constant.PackageConstant;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
 import com.easysoftware.common.utils.QueryWrapperUtil;
@@ -27,10 +26,12 @@ import com.easysoftware.infrastructure.fieldpkg.converter.FieldPkgConverter;
 import com.easysoftware.infrastructure.fieldpkg.dataobject.FieldPkgDO;
 import com.easysoftware.infrastructure.mapper.FieldPkgDOMapper;
 import com.power.common.util.StringUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -65,12 +66,12 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
 
         IPage<FieldPkgDO> resPage = mapper.selectPage(page, wrapper);
         List<FieldPkgDO> list = resPage.getRecords();
+        int total = (int) resPage.getTotal();
         List<FieldPkgVo> voList = FieldPkgConverter.toVo(list);
-        long total = resPage.getTotal();
 
         if (condition.getOs() == null && condition.getArch() == null && condition.getCategory() == null
                 && condition.getNameOrder() == null) {
-            voList = aggregateList(voList, condition, wrapper);
+            voList = aggregateList(total, new ArrayList<>(), condition, wrapper);
         }
 
         return Map.ofEntries(
@@ -81,30 +82,25 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
     /**
      * aggreate the list.
      *
-     * @param voList    list.
+     * @param total int.
+     * @param voAggreList FieldPkgVo.
      * @param condition condition.
      * @param wrapper   wrapper.
      * @return list.
      */
-    public List<FieldPkgVo> aggregateList(List<FieldPkgVo> voList, FieldPkgSearchCondition condition,
+    public List<FieldPkgVo> aggregateList(int total, List<FieldPkgVo> voAggreList, FieldPkgSearchCondition condition,
             QueryWrapper<FieldPkgDO> wrapper) {
-        voList = FieldPkgConverter.aggregateVoByName(voList);
+        int pageSize = condition.getPageSize() * 10;
+        int offset = (condition.getPageNum() - 1) * condition.getPageSize();
+        // 防止limit超过剩下总数目
+        pageSize = Math.min(pageSize, total - offset);
 
-        // 聚合后个数少于约定数目 查询下一页填充后聚合返回
-        if (voList.size() < condition.getPageSize()) {
-            Page<FieldPkgDO> nextPage = new Page<>(condition.getPageNum() + 1, PackageConstant.AGGREATE_PAGE_SIZE);
-            IPage<FieldPkgDO> nextResPage = mapper.selectPage(nextPage, wrapper);
-            List<FieldPkgDO> nextPlist = nextResPage.getRecords();
-            List<FieldPkgVo> nextVoList = FieldPkgConverter.toVo(nextPlist);
-            List<FieldPkgVo> candidateVo = FieldPkgConverter.aggregateVoByName(nextVoList);
-            int missNum = condition.getPageSize() - voList.size();
-            for (FieldPkgVo vo : candidateVo) {
-                if (missNum <= PackageConstant.ZERO) {
-                    break;
-                }
-                voList.add(vo);
-                missNum--;
-            }
+        List<FieldPkgDO> doPreAggreList = mapper.selectCustomPageByCondition(pageSize, offset, condition);
+        voAggreList = FieldPkgConverter.toVo(doPreAggreList);
+        voAggreList = FieldPkgConverter.aggregateVoByName(voAggreList);
+        List<FieldPkgVo> voList = new ArrayList<>();
+        for (int i = 0; i < Math.min(condition.getPageSize(), pageSize); i++) {
+            voList.add(voAggreList.get(i));
         }
         return voList;
     }
