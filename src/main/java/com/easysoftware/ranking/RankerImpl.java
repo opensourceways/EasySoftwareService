@@ -177,7 +177,7 @@ public class RankerImpl implements Ranker {
                     conn.close();
                 }
             } catch (SQLException e) {
-                throw new ParamErrorException("sql cloesd error");
+                LOGGER.error("sql cloesd error", e);
             }
         }
 
@@ -233,7 +233,7 @@ public class RankerImpl implements Ranker {
                     conn.close();
                 }
             } catch (SQLException e) {
-                throw new ParamErrorException("sql cloesd error");
+                LOGGER.error("sql cloesd error", e);
             }
         }
 
