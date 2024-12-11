@@ -39,4 +39,11 @@ public interface FieldPkgGateway {
      * @return pkg nums of arch.
      */
     Map<String, Object> queryArchNum(String os);
+
+    /**
+    * query pkg of filed by name.
+    * @param name name of pkg.
+    * @return pkg nums of arch.
+    */
+    Map<String, Object> queryByName(String name);
 }
