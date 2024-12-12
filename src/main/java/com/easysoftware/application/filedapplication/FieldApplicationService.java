@@ -35,6 +35,13 @@ public interface FieldApplicationService {
     ResponseEntity<Object> queryDetailByName(FieldDetailSearchCondition condition);
 
     /**
+     * Query detail by name.
+     *
+     * @param condition The search condition for querying the detail.
+     * @return ResponseEntity object containing the query results.
+     */
+    ResponseEntity<Object> queryByName(FiledApplicationSerachCondition condition);
+    /**
      * Search column.
      *
      * @param condition The search condition for column search.

@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.easysoftware.application.fieldpkg.dto.FieldPkgSearchCondition;
+import com.easysoftware.application.fieldpkg.vo.CommandPkgVo;
 import com.easysoftware.application.fieldpkg.vo.FieldPkgVo;
 import com.easysoftware.common.exception.ParamErrorException;
 import com.easysoftware.common.utils.ClassField;
@@ -103,6 +104,23 @@ public class FieldPkgGatewayImpl implements FieldPkgGateway {
             voList.add(voAggreList.get(i));
         }
         return voList;
+    }
+
+    /**
+    * query pkg of filed by name.
+    * @param name name of pkg.
+    * @return pkg nums of arch.
+    */
+    public Map<String, Object> queryByName(String name) {
+        LambdaQueryWrapper<FieldPkgDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(FieldPkgDO::getName, FieldPkgDO::getOs, FieldPkgDO::getDescription,
+        FieldPkgDO::getMaintainers, FieldPkgDO::getOs, FieldPkgDO::getArch, FieldPkgDO::getTags,
+        FieldPkgDO::getVersion, FieldPkgDO::getCategory);
+        wrapper.eq(FieldPkgDO::getName, name);
+        List<FieldPkgDO> doList = mapper.selectList(wrapper);
+        List<CommandPkgVo> voList = FieldPkgConverter.toCommandVo(doList);
+        return Map.ofEntries(Map.entry("list", voList));
+
     }
 
     /**

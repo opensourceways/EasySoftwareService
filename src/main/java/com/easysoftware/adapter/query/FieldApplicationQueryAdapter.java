@@ -69,6 +69,17 @@ public class FieldApplicationQueryAdapter {
     public ResponseEntity<Object> searchDetail(@Valid final FieldDetailSearchCondition condition) {
         return service.queryDetailByName(condition);
     }
+/**
+     * Endpoint to search for field details.
+     *
+     * @param condition The search condition for querying field details.
+     * @return ResponseEntity<Object>.
+     */
+    @GetMapping("/detailname")
+    @RequestLimitRedis()
+    public ResponseEntity<Object> queryDetailByName(@Valid final FiledApplicationSerachCondition condition) {
+        return service.queryByName(condition);
+    }
 
     /**
      * Endpoint to search for field statistics.

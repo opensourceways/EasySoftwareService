@@ -11,6 +11,7 @@
 
 package com.easysoftware.infrastructure.fieldpkg.converter;
 
+import com.easysoftware.application.fieldpkg.vo.CommandPkgVo;
 import com.easysoftware.application.fieldpkg.vo.FieldPkgVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.ObjectMapperUtil;
@@ -100,6 +101,34 @@ public final class FieldPkgConverter {
         opVo.setMaintainers(maintainersMap);
         return opVo;
     }
+
+    /**
+     * Converts a list of FieldPkgDO objects to a list of CommandPkgVo
+     * view objects.
+     *
+     * @param doList The list of FieldPkgDO objects to convert.
+     * @return A list of FieldPkgDO view objects.
+     */
+    public static List<CommandPkgVo> toCommandVo(final List<FieldPkgDO> doList) {
+        List<CommandPkgVo> res = new ArrayList<>();
+        for (FieldPkgDO op : doList) {
+            CommandPkgVo vo = new CommandPkgVo();
+            BeanUtils.copyProperties(op, vo);
+            try {
+                String foramtMain = op.getMaintainers().replace("\"", "").
+                replace("{", "[").replace("}", "]");
+                vo.setMaintainers(foramtMain);
+                vo.setTags(op.getTags().replace("\"", ""));
+            } catch (NullPointerException e) {
+                vo.setTags("");
+                vo.setMaintainers("");
+                LOGGER.warn("format error, set to empty");
+            }
+            res.add(vo);
+        }
+        return res;
+    }
+
 
     /**
      * Extracts a specific column from a list of FieldApplicationDO objects and

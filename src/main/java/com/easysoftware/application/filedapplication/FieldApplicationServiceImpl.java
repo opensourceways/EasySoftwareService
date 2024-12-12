@@ -356,6 +356,19 @@ public class FieldApplicationServiceImpl implements FieldApplicationService {
      * @return ResponseEntity object containing the query results.
      */
     @Override
+    public ResponseEntity<Object> queryByName(FiledApplicationSerachCondition condition) {
+        Map<String, Object> res = fieldPkgGateway.queryByName(condition.getName());
+        return ResultUtil.success(HttpStatus.OK, res);
+    }
+
+
+    /**
+     * Query detail by name.
+     *
+     * @param condition The search condition for querying the detail.
+     * @return ResponseEntity object containing the query results.
+     */
+    @Override
     public ResponseEntity<Object> queryDetailByName(final FieldDetailSearchCondition condition) {
         String appPkgId = StringUtils.trimToEmpty(condition.getAppPkgId());
         String rpmPkgId = StringUtils.trimToEmpty(condition.getRpmPkgId());
