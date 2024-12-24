@@ -19,6 +19,7 @@ import com.easysoftware.application.rpmpackage.vo.RPMPackageNewestVersionVo;
 import com.easysoftware.application.rpmpackage.vo.PackgeVersionVo;
 import com.easysoftware.common.entity.MessageCode;
 import com.easysoftware.common.utils.SortUtil;
+import com.easysoftware.common.utils.VersionUtil;
 import com.easysoftware.domain.rpmpackage.RPMPackage;
 import com.easysoftware.infrastructure.oepkg.gatewalmpl.dataobject.OepkgDO;
 import com.easysoftware.infrastructure.rpmpackage.gatewayimpl.dataobject.RPMPackageDO;
@@ -220,7 +221,7 @@ public final class RPMPackageConverter {
         }
 
         for (RPMPackageDO rpm : rpmPkgDOs) {
-            if (newestVersion.compareTo(rpm.getVersion()) <= 0) {
+            if (VersionUtil.compareVersion(newestVersion, rpm.getVersion()) <= 0) {
                 newestVersion = rpm.getVersion();
                 os = rpm.getOs();
             }
